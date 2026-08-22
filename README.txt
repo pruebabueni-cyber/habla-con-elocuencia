@@ -1,4 +1,4 @@
-Habla con Elocuencia — Premium Mobile v3
+Habla con Elocuencia — Premium Mobile v4
 
-Versión refinada para móvil con encabezado premium y consistencia visual en los 15 días.
-Sube estos 3 archivos al repositorio de GitHub para que Vercel publique la actualización automáticamente.
+Incluye: botón 'Completar Día', centrado automático del día activo y avance al inicio de la siguiente lección.
+Sube estos 3 archivos al mismo repositorio de GitHub; Vercel publicará la actualización automáticamente.

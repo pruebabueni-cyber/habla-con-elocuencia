@@ -317,9 +317,13 @@ body{overflow-x:hidden}
         backBtn.style.opacity=idx===0?'.45':'1';
         nextBtn.disabled=false;
         nextBtn.style.opacity='1';
-        nextBtn.textContent=idx===lesson.steps.length-1?`Cerrar Día ${currentDay+1}`:'Continuar';
+        nextBtn.textContent=idx===lesson.steps.length-1?`Completar Día ${currentDay+1}`:'Continuar';
         dayButtons.forEach((btn,i)=>btn.classList.toggle('active',i===currentDay));
         updateProgressUI();
+        const activeDayButton=dayButtons[currentDay];
+        if(activeDayButton&&typeof activeDayButton.scrollIntoView==='function'){
+          activeDayButton.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+        }
       }
 
       function renderComplete(){
@@ -352,6 +356,7 @@ body{overflow-x:hidden}
           idx=0;
           render();
           saveState();
+          root.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
         }else{
           nextBtn.disabled=true;
           nextBtn.style.opacity='.65';
