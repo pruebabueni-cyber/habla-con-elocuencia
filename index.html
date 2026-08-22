@@ -355,6 +355,25 @@ body{overflow-x:hidden}
         return `tester-${Date.now().toString(36)}-${rand}`;
       }
 
+      const SUPABASE_URL='https://nnfcppwruhethardmmvq.supabase.co';
+      const SUPABASE_KEY='sb_publishable_1EYhImZLjFH-Z9jgQf7f_Q_VMCBbY6f';
+
+      async function supabaseRequest(path,options={}){
+        const response=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
+          ...options,
+          headers:{
+            'apikey':SUPABASE_KEY,
+            'Authorization':`Bearer ${SUPABASE_KEY}`,
+            'Content-Type':'application/json',
+            'Prefer':'return=minimal',
+            ...(options.headers||{})
+          },
+          keepalive:true
+        });
+        if(!response.ok) throw new Error('No se pudo sincronizar el progreso');
+        return response;
+      }
+
       async function syncProgress(eventName){
         if(!testerProfile) return;
         const payload={
@@ -368,11 +387,33 @@ body{overflow-x:hidden}
           updatedAt:new Date().toISOString()
         };
         try{
-          await fetch('/api/progress',{
+          const progressRow={
+            tester_id:payload.testerId,
+            tester_name:payload.testerName,
+            current_day:payload.currentDay,
+            current_step:payload.currentStep,
+            completed_days:payload.completedDays,
+            completed_count:payload.completedCount,
+            last_event:payload.event,
+            last_activity:payload.updatedAt
+          };
+          const eventRow={
+            tester_id:payload.testerId,
+            tester_name:payload.testerName,
+            event:payload.event,
+            current_day:payload.currentDay,
+            current_step:payload.currentStep,
+            completed_count:payload.completedCount,
+            completed_days:payload.completedDays
+          };
+          await supabaseRequest('tester_progress?on_conflict=tester_id',{
             method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body:JSON.stringify(payload),
-            keepalive:true
+            headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
+            body:JSON.stringify(progressRow)
+          });
+          await supabaseRequest('tester_events',{
+            method:'POST',
+            body:JSON.stringify(eventRow)
           });
         }catch(error){
         }
