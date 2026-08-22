@@ -1,7 +1,7 @@
 const SUPABASE_URL = 'https://nnfcppwruhethardmmvq.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_1EYhImZLjFH-Z9jgQf7f_Q_VMCBbY6f';
 
-function json(res, status, data) {
+function sendJson(res, status, data) {
   res.status(status).setHeader('Content-Type', 'application/json; charset=utf-8');
   return res.end(JSON.stringify(data));
 }
@@ -17,20 +17,18 @@ async function supabase(path, options = {}) {
     },
   });
   const text = await response.text();
-  if (!response.ok) {
-    throw new Error(`Supabase ${response.status}: ${text}`);
-  }
+  if (!response.ok) throw new Error(`Supabase ${response.status}: ${text}`);
   return text ? JSON.parse(text) : null;
 }
 
 export default async function handler(req, res) {
   if (req.method === 'GET') {
-    return json(res, 200, { ok: true, service: 'progress-api' });
+    return sendJson(res, 200, { ok: true, service: 'progress-api' });
   }
 
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
-    return json(res, 405, { ok: false, error: 'Method not allowed' });
+    return sendJson(res, 405, { ok: false, error: 'Method not allowed' });
   }
 
   try {
@@ -40,7 +38,7 @@ export default async function handler(req, res) {
     const event = String(body.event || '').trim();
 
     if (!testerId || !testerName || !event) {
-      return json(res, 400, { ok: false, error: 'Missing tester data' });
+      return sendJson(res, 400, { ok: false, error: 'Missing tester data' });
     }
 
     const currentDay = Math.max(1, Math.min(15, Number(body.currentDay) || 1));
@@ -51,46 +49,38 @@ export default async function handler(req, res) {
     const completedCount = Math.max(0, Math.min(15, Number(body.completedCount) || completedDays.length));
     const now = new Date().toISOString();
 
-    const progressPayload = [{
-      tester_id: testerId,
-      tester_name: testerName,
-      current_day: currentDay,
-      current_step: currentStep,
-      completed_days: completedDays,
-      completed_count: completedCount,
-      last_event: event,
-      last_activity: now,
-    }];
-
     await supabase('/rest/v1/tester_progress?on_conflict=tester_id', {
       method: 'POST',
-      headers: {
-        Prefer: 'resolution=merge-duplicates,return=minimal',
-      },
-      body: JSON.stringify(progressPayload),
+      headers: { Prefer: 'resolution=merge-duplicates,return=minimal' },
+      body: JSON.stringify([{
+        tester_id: testerId,
+        tester_name: testerName,
+        current_day: currentDay,
+        current_step: currentStep,
+        completed_days: completedDays,
+        completed_count: completedCount,
+        last_event: event,
+        last_activity: now
+      }]),
     });
-
-    const eventPayload = [{
-      tester_id: testerId,
-      tester_name: testerName,
-      event,
-      current_day: currentDay,
-      current_step: currentStep,
-      completed_count: completedCount,
-      completed_days: completedDays,
-    }];
 
     await supabase('/rest/v1/tester_events', {
       method: 'POST',
-      headers: {
-        Prefer: 'return=minimal',
-      },
-      body: JSON.stringify(eventPayload),
+      headers: { Prefer: 'return=minimal' },
+      body: JSON.stringify([{
+        tester_id: testerId,
+        tester_name: testerName,
+        event,
+        current_day: currentDay,
+        current_step: currentStep,
+        completed_count: completedCount,
+        completed_days: completedDays
+      }]),
     });
 
-    return json(res, 200, { ok: true });
+    return sendJson(res, 200, { ok: true });
   } catch (error) {
     console.error(error);
-    return json(res, 500, { ok: false, error: 'Progress sync failed' });
+    return sendJson(res, 500, { ok: false, error: 'Progress sync failed' });
   }
 }
