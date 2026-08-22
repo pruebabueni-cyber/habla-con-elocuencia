@@ -363,7 +363,6 @@ body{overflow-x:hidden}
           ...options,
           headers:{
             'apikey':SUPABASE_KEY,
-            'Authorization':`Bearer ${SUPABASE_KEY}`,
             'Content-Type':'application/json',
             'Prefer':'return=minimal',
             ...(options.headers||{})
