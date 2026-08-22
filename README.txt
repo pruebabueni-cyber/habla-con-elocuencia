@@ -1,4 +1,4 @@
-Habla con Elocuencia — Cloud Tracking v8
+Habla con Elocuencia — API Tracking v9
 
-Versión reforzada de sincronización con Supabase para registrar progreso y eventos de testers.
-Sube estos 3 archivos al mismo repositorio de GitHub para que Vercel publique la actualización automáticamente.
+Incluye la función serverless /api/progress para guardar progreso en Supabase.
+Sube TODO el contenido del paquete al mismo repositorio de GitHub, incluyendo la carpeta api.

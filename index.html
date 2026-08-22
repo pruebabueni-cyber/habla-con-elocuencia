@@ -355,31 +355,6 @@ body{overflow-x:hidden}
         return `tester-${Date.now().toString(36)}-${rand}`;
       }
 
-      const SUPABASE_URL='https://nnfcppwruhethardmmvq.supabase.co';
-      const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5uZmNwcHdydWhldGhhcmRtbXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0MTQzMjMsImV4cCI6MjEwMjk5MDMyM30.MkbBLzjYLWFZw8D5ZQuVfI8dORR8CDL3lSe9nHGlrlI';
-
-      async function supabaseRequest(path,options={}){
-        const response=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{
-          ...options,
-          mode:'cors',
-          cache:'no-store',
-          headers:{
-            'apikey':SUPABASE_KEY,
-            'Authorization':`Bearer ${SUPABASE_KEY}`,
-            'Content-Type':'application/json',
-            'Accept':'application/json',
-            'Prefer':'return=minimal',
-            ...(options.headers||{})
-          }
-        });
-        if(!response.ok){
-          const detail=await response.text().catch(()=>"");
-          console.warn('Supabase sync error',response.status,detail);
-          throw new Error('No se pudo sincronizar el progreso');
-        }
-        return response;
-      }
-
       async function syncProgress(eventName){
         if(!testerProfile) return;
         const payload={
@@ -393,34 +368,20 @@ body{overflow-x:hidden}
           updatedAt:new Date().toISOString()
         };
         try{
-          const progressRow={
-            tester_id:payload.testerId,
-            tester_name:payload.testerName,
-            current_day:payload.currentDay,
-            current_step:payload.currentStep,
-            completed_days:payload.completedDays,
-            completed_count:payload.completedCount,
-            last_event:payload.event,
-            last_activity:payload.updatedAt
-          };
-          const eventRow={
-            tester_id:payload.testerId,
-            tester_name:payload.testerName,
-            event:payload.event,
-            current_day:payload.currentDay,
-            current_step:payload.currentStep,
-            completed_count:payload.completedCount,
-            completed_days:payload.completedDays
-          };
-          await supabaseRequest('tester_progress?on_conflict=tester_id',{
+          const response=await fetch('/api/progress',{
             method:'POST',
-            headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},
-            body:JSON.stringify(progressRow)
+            cache:'no-store',
+            headers:{'Content-Type':'application/json','Accept':'application/json'},
+            body:JSON.stringify(payload)
           });
-          await supabaseRequest('tester_events',{
-            method:'POST',
-            body:JSON.stringify(eventRow)
-          });
+          if(!response.ok) throw new Error('No se pudo sincronizar el progreso');
+        }catch(error){
+        }
+      }
+
+      async function pingProgressAPI(){
+        try{
+          await fetch('/api/progress',{method:'GET',cache:'no-store'});
         }catch(error){
         }
       }
@@ -549,6 +510,7 @@ body{overflow-x:hidden}
           });
         }
         render();
+        pingProgressAPI();
         if(!testerProfile) openTesterGate();
         else syncProgress('session_opened');
       })();
