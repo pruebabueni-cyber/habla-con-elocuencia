@@ -1,4 +1,4 @@
-Habla con Elocuencia — Cloud Tracking v7
+Habla con Elocuencia — Cloud Tracking v8
 
-Corrige la conexión del navegador con Supabase para registrar progreso y eventos del tester.
+Versión reforzada de sincronización con Supabase para registrar progreso y eventos de testers.
 Sube estos 3 archivos al mismo repositorio de GitHub para que Vercel publique la actualización automáticamente.
