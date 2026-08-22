@@ -51,6 +51,15 @@ body{overflow-x:hidden}
     #eloquence-app .rep{padding:12px 14px;border-radius:12px;background:light-dark(#f4f1ea,#242529);font-size:14px}
     #eloquence-app .done{font-size:15px;color:#7a683f;font-weight:700;margin-top:12px}
     #eloquence-app .footer-note{font-size:12px;color:light-dark(#767169,#9b9b9b);margin-top:14px}
+    #eloquence-app .tester-gate{position:absolute;inset:0;z-index:20;display:none;align-items:flex-start;justify-content:center;padding:24px;background:rgba(17,18,20,.92)}
+    #eloquence-app .tester-gate.open{display:flex}
+    #eloquence-app .tester-panel{width:min(520px,100%);margin-top:8vh;background:light-dark(#fff,#1b1c1e);border:1px solid light-dark(#ddd7cb,#36383d);border-radius:22px;padding:24px;box-shadow:0 18px 60px rgba(0,0,0,.28)}
+    #eloquence-app .tester-panel h2{margin:0 0 8px;font-size:26px;line-height:1.1}
+    #eloquence-app .tester-panel p{margin:0 0 18px;color:light-dark(#625e57,#c7c7c7);line-height:1.55}
+    #eloquence-app .tester-panel label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.09em;color:#9b7b3f;font-weight:800;margin-bottom:8px}
+    #eloquence-app .tester-panel input{width:100%;min-height:50px;border:1px solid light-dark(#cfc7ba,#3a3c40);border-radius:12px;padding:0 14px;font-size:16px;background:light-dark(#fff,#202124);color:inherit;margin-bottom:14px}
+    #eloquence-app .tester-panel .primary{width:100%}
+    #eloquence-app .tester-error{min-height:20px;font-size:13px;color:#9a4040;margin-top:8px}
     @media (max-width:760px){
       #eloquence-app{padding:0;background:light-dark(#f6f2e9,#111214);min-height:100%}
       #eloquence-app .shell{display:block;max-width:none;width:100%;margin:0}
@@ -79,6 +88,20 @@ body{overflow-x:hidden}
       #eloquence-app .controls button{width:100%;min-height:50px;font-size:15px}
     }
   </style>
+
+  <div class="tester-gate" id="tester-gate" aria-hidden="true">
+    <div class="tester-panel" role="dialog" aria-modal="true" aria-labelledby="tester-title">
+      <div class="program-label">Acceso de prueba</div>
+      <h2 id="tester-title">Identifica tu progreso</h2>
+      <p>Escribe tu nombre o el código que te dieron para esta prueba. Solo tendrás que hacerlo una vez en este dispositivo.</p>
+      <form id="tester-form">
+        <label for="tester-name">Nombre o código</label>
+        <input id="tester-name" name="testerName" autocomplete="name" maxlength="40" placeholder="Ej.: Carlos o Tester 03" required>
+        <button type="submit" class="primary">Comenzar entrenamiento</button>
+        <div class="tester-error" id="tester-error" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
 
   <div class="shell">
     <aside class="sidebar">
@@ -242,10 +265,16 @@ body{overflow-x:hidden}
       const heroTitle=root.querySelector('#hero-title');
       const heroSubtitle=root.querySelector('#hero-subtitle');
       const dayButtons=[...root.querySelectorAll('[data-day]')];
+      const testerGate=root.querySelector('#tester-gate');
+      const testerForm=root.querySelector('#tester-form');
+      const testerNameInput=root.querySelector('#tester-name');
+      const testerError=root.querySelector('#tester-error');
 
       const DB_NAME='habla-con-elocuencia';
       const STORE_NAME='progress';
       const STATE_KEY='course-state-v1';
+      const TESTER_KEY='tester-profile-v1';
+      let testerProfile=null;
 
       function openDB(){
         return new Promise((resolve,reject)=>{
@@ -290,6 +319,89 @@ body{overflow-x:hidden}
         }catch(error){
         }
       }
+
+      async function getStoredValue(key){
+        try{
+          const db=await openDB();
+          const value=await new Promise((resolve,reject)=>{
+            const tx=db.transaction(STORE_NAME,'readonly');
+            const req=tx.objectStore(STORE_NAME).get(key);
+            req.onsuccess=()=>resolve(req.result||null);
+            req.onerror=()=>reject(req.error);
+          });
+          db.close();
+          return value;
+        }catch(error){
+          return null;
+        }
+      }
+
+      async function setStoredValue(key,value){
+        try{
+          const db=await openDB();
+          await new Promise((resolve,reject)=>{
+            const tx=db.transaction(STORE_NAME,'readwrite');
+            tx.objectStore(STORE_NAME).put(value,key);
+            tx.oncomplete=resolve;
+            tx.onerror=()=>reject(tx.error);
+          });
+          db.close();
+        }catch(error){
+        }
+      }
+
+      function makeTesterId(){
+        const rand=Math.random().toString(36).slice(2,10);
+        return `tester-${Date.now().toString(36)}-${rand}`;
+      }
+
+      async function syncProgress(eventName){
+        if(!testerProfile) return;
+        const payload={
+          testerId:testerProfile.id,
+          testerName:testerProfile.name,
+          event:eventName,
+          currentDay:currentDay+1,
+          currentStep:idx+1,
+          completedDays:[...completedDays].map(day=>day+1),
+          completedCount:completedDays.size,
+          updatedAt:new Date().toISOString()
+        };
+        try{
+          await fetch('/api/progress',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(payload),
+            keepalive:true
+          });
+        }catch(error){
+        }
+      }
+
+      function openTesterGate(){
+        testerGate.classList.add('open');
+        testerGate.setAttribute('aria-hidden','false');
+        setTimeout(()=>testerNameInput.focus(),0);
+      }
+
+      function closeTesterGate(){
+        testerGate.classList.remove('open');
+        testerGate.setAttribute('aria-hidden','true');
+      }
+
+      testerForm.addEventListener('submit',async(event)=>{
+        event.preventDefault();
+        const name=testerNameInput.value.trim();
+        if(name.length<2){
+          testerError.textContent='Escribe al menos 2 caracteres.';
+          return;
+        }
+        testerError.textContent='';
+        testerProfile={id:makeTesterId(),name,createdAt:new Date().toISOString()};
+        await setStoredValue(TESTER_KEY,testerProfile);
+        closeTesterGate();
+        syncProgress('tester_started');
+      });
 
       function updateProgressUI(){
         progressText.textContent=`${completedDays.size} / 15`;
@@ -338,7 +450,7 @@ body{overflow-x:hidden}
       }
 
       backBtn.addEventListener('click',()=>{
-        if(idx>0){idx--;render();saveState();}
+        if(idx>0){idx--;render();saveState();syncProgress('step_back');}
       });
 
       nextBtn.addEventListener('click',()=>{
@@ -347,15 +459,18 @@ body{overflow-x:hidden}
           idx++;
           render();
           saveState();
+          syncProgress('step_advanced');
           root.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
         }else if(!completedDays.has(currentDay)){
           renderComplete();
           saveState();
+          syncProgress('day_completed');
         }else if(currentDay<14){
           currentDay++;
           idx=0;
           render();
           saveState();
+          syncProgress('day_started');
           root.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
         }else{
           nextBtn.disabled=true;
@@ -370,10 +485,12 @@ body{overflow-x:hidden}
         idx=0;
         render();
         saveState();
+        syncProgress('day_opened');
         root.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
       }));
 
       (async()=>{
+        testerProfile=await getStoredValue(TESTER_KEY);
         const saved=await loadState();
         if(saved){
           const savedDay=Number(saved.currentDay);
@@ -385,6 +502,8 @@ body{overflow-x:hidden}
           });
         }
         render();
+        if(!testerProfile) openTesterGate();
+        else syncProgress('session_opened');
       })();
     })();
   </script>

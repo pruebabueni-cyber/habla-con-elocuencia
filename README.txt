@@ -1,4 +1,4 @@
-Habla con Elocuencia — Premium Mobile v4
+Habla con Elocuencia — Tester Tracking v5
 
-Incluye: botón 'Completar Día', centrado automático del día activo y avance al inicio de la siguiente lección.
-Sube estos 3 archivos al mismo repositorio de GitHub; Vercel publicará la actualización automáticamente.
+Incluye identificación por nombre/código de tester y preparación para seguimiento central del progreso.
+Sube estos 3 archivos al mismo repositorio de GitHub para que Vercel publique la actualización automáticamente.
