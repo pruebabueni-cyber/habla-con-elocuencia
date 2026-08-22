@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#111214">
+<title>Habla con Elocuencia</title>
+<style>
+html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
+</style>
+</head>
+<body>
+<div id="eloquence-app" style="background:light-dark(#f4f1ea,#111214);color:light-dark(#171717,#f4f4f4);min-height:100%;padding:24px;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <style>
+    #eloquence-app *{box-sizing:border-box}
+    #eloquence-app .shell{max-width:980px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:22px}
+    #eloquence-app .sidebar{background:light-dark(#1c1c1c,#090a0b);color:#fff;border-radius:22px;padding:22px;align-self:start}
+    #eloquence-app .brand{font-size:20px;font-weight:800;letter-spacing:.02em;margin-bottom:4px}
+    #eloquence-app .subtitle{font-size:12px;color:#b9b9b9;line-height:1.45;margin-bottom:24px}
+    #eloquence-app .progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:#d7d7d7}
+    #eloquence-app .bar{height:8px;background:#333;border-radius:999px;overflow:hidden;margin-bottom:22px}
+    #eloquence-app .bar > span{display:block;height:100%;width:6.666%;background:#c9a35d;transition:width .35s ease}
+    #eloquence-app .day{width:100%;text-align:left;padding:11px 12px;border-radius:12px;font-size:13px;color:#c8c8c8;margin-bottom:5px;background:transparent}
+    #eloquence-app .day.active{background:#2a2a2a;color:#fff;font-weight:700}
+    #eloquence-app .day.locked{opacity:.45}
+    #eloquence-app .day.completed::after{content:'✓';float:right;color:#c9a35d;font-weight:900}
+    #eloquence-app .main{min-width:0}
+    #eloquence-app .hero{background:light-dark(#252525,#18191b);color:#fff;border-radius:22px;padding:24px;margin-bottom:18px}
+    #eloquence-app .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#c9a35d;font-weight:800;margin-bottom:10px}
+    #eloquence-app h1{font-size:34px;line-height:1.05;margin:0 0 10px}
+    #eloquence-app .hero p{margin:0;color:#d6d6d6;font-size:15px;line-height:1.6;max-width:680px}
+    #eloquence-app .card{background:light-dark(#ffffff,#1b1c1e);border:1px solid light-dark(#ddd7cb,#2b2d31);border-radius:22px;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+    #eloquence-app .step-count{font-size:12px;color:light-dark(#6f6b63,#aaa);margin-bottom:10px}
+    #eloquence-app .section-title{font-size:13px;text-transform:uppercase;letter-spacing:.1em;color:#9b7b3f;font-weight:800;margin-bottom:12px}
+    #eloquence-app .lesson-text{font-size:19px;line-height:1.55;margin-bottom:18px}
+    #eloquence-app .quote{border-left:4px solid #c9a35d;padding:14px 16px;background:light-dark(#f6f1e7,#242529);border-radius:10px;font-size:18px;line-height:1.5;margin:14px 0 18px}
+    #eloquence-app .bad{border-left-color:#8e4747}
+    #eloquence-app .tip{font-size:14px;line-height:1.6;color:light-dark(#555149,#c5c5c5);margin-top:8px}
+    #eloquence-app .rule{font-size:28px;font-weight:900;letter-spacing:.02em;text-align:center;padding:22px 10px;border:1px solid light-dark(#d9d1c3,#34363a);border-radius:16px;background:light-dark(#faf8f3,#202124);margin:18px 0}
+    #eloquence-app .controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    #eloquence-app button{min-height:46px;border-radius:12px;padding:0 18px;font-size:15px;font-weight:800;border:1px solid transparent;cursor:pointer}
+    #eloquence-app .primary{background:#c9a35d;color:#161616}
+    #eloquence-app .secondary{background:transparent;color:inherit;border-color:light-dark(#bbb3a6,#3a3c40)}
+    #eloquence-app button:focus-visible{outline:3px solid #c9a35d;outline-offset:2px}
+    #eloquence-app .practice-box{display:grid;gap:10px;margin-top:14px}
+    #eloquence-app .rep{padding:12px 14px;border-radius:12px;background:light-dark(#f4f1ea,#242529);font-size:14px}
+    #eloquence-app .done{font-size:15px;color:#7a683f;font-weight:700;margin-top:12px}
+    #eloquence-app .footer-note{font-size:12px;color:light-dark(#767169,#9b9b9b);margin-top:14px}
+    @media (max-width:760px){
+      #eloquence-app{padding:0;background:light-dark(#f6f2e9,#111214);min-height:100%}
+      #eloquence-app .shell{display:block;max-width:none;width:100%;margin:0}
+      #eloquence-app .sidebar{border-radius:0;padding:18px 16px 14px;position:sticky;top:0;z-index:5}
+      #eloquence-app .brand{font-size:18px}
+      #eloquence-app .subtitle{font-size:11px;margin-bottom:14px}
+      #eloquence-app .bar{margin-bottom:14px}
+      #eloquence-app .day-list{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+      #eloquence-app .day-list::-webkit-scrollbar{display:none}
+      #eloquence-app .day{flex:0 0 auto;width:auto;margin:0;text-align:center;padding:9px 13px;font-size:12px;white-space:nowrap;min-height:40px}
+      #eloquence-app .day.completed::after{float:none;margin-left:6px}
+      #eloquence-app .main{width:100%;padding:12px}
+      #eloquence-app .hero{border-radius:18px;padding:18px;margin-bottom:12px}
+      #eloquence-app .eyebrow{font-size:10px;margin-bottom:8px}
+      #eloquence-app h1{font-size:30px;line-height:1.08}
+      #eloquence-app .hero p{font-size:14px;line-height:1.5}
+      #eloquence-app .card{border-radius:18px;padding:18px;box-shadow:none}
+      #eloquence-app .step-count{font-size:11px}
+      #eloquence-app .section-title{font-size:12px}
+      #eloquence-app .lesson-text{font-size:17px;line-height:1.5}
+      #eloquence-app .quote{font-size:16px;line-height:1.45;padding:13px 14px}
+      #eloquence-app .rule{font-size:21px;padding:18px 10px}
+      #eloquence-app .rep{font-size:14px}
+      #eloquence-app .controls{position:sticky;bottom:0;background:light-dark(#ffffff,#1b1c1e);padding-top:12px;margin-top:18px;display:grid;grid-template-columns:1fr 1.35fr;gap:8px}
+      #eloquence-app .controls button{width:100%;min-height:50px;font-size:15px}
+    }
+  </style>
+
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">HABLA CON ELOCUENCIA</div>
+      <div class="subtitle">15 días para comunicar con seguridad, influir y conectar mejor.</div>
+      <div class="progress-label"><span>Progreso</span><strong id="progress-text">0 / 15</strong></div>
+      <div class="bar"><span id="progress-bar"></span></div>
+      <div class="day-list">
+        <button type="button" class="day active" data-day="0">Día 1</button>
+        <button type="button" class="day" data-day="1">Día 2</button>
+        <button type="button" class="day" data-day="2">Día 3</button>
+        <button type="button" class="day" data-day="3">Día 4</button>
+        <button type="button" class="day" data-day="4">Día 5</button>
+        <button type="button" class="day" data-day="5">Día 6</button>
+        <button type="button" class="day" data-day="6">Día 7</button>
+        <button type="button" class="day" data-day="7">Día 8</button>
+        <button type="button" class="day" data-day="8">Día 9</button>
+        <button type="button" class="day" data-day="9">Día 10</button>
+        <button type="button" class="day" data-day="10">Día 11</button>
+        <button type="button" class="day" data-day="11">Día 12</button>
+        <button type="button" class="day" data-day="12">Día 13</button>
+        <button type="button" class="day" data-day="13">Día 14</button>
+        <button type="button" class="day" data-day="14">Día 15</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="eyebrow" id="hero-day">Master · Día 1</div>
+        <h1 id="hero-title">Hablar con seguridad</h1>
+        <p id="hero-subtitle">Aprende a ir al punto, eliminar frases débiles y dejar de explicar de más.</p>
+      </section>
+
+      <section class="card" aria-live="polite">
+        <div class="step-count" id="step-count">Paso 1 de 8</div>
+        <div id="content"></div>
+        <div class="controls">
+          <button type="button" class="secondary" id="back-btn">Atrás</button>
+          <button type="button" class="primary" id="next-btn">Continuar</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (()=>{
+      const root=document.getElementById('eloquence-app');
+      if(root.dataset.ready==='1') return;
+      root.dataset.ready='1';
+
+      const lessons=[
+        {title:'Hablar con seguridad',subtitle:'Aprende a ir al punto, eliminar frases débiles y dejar de explicar de más.',rule:'IDEA → PUNTO → SILENCIO',steps:[
+          ['La situación','<div class="lesson-text">Estás frente a una persona que toma decisiones. Tiene poco tiempo y te dice:</div><div class="quote">“Tengo poco tiempo. ¿Qué necesitas?”</div><div class="tip">El objetivo no es hablar rápido. El objetivo es sonar claro desde la primera frase.</div>'],
+          ['Lo que suelen decir','<div class="quote bad">“Bueno… quería hablar con usted porque tengo una idea y pensé que quizás podría interesarle…”</div><div class="lesson-text"><strong>Por qué no funciona:</strong> “quería”, “pensé” y “quizás” debilitan el mensaje antes de que la idea empiece.</div>'],
+          ['Qué decir','<div class="quote">“Perfecto, voy directo al punto. Tengo una idea que puede ayudarle a generar más negocio sin complicar su operación. Déme 60 segundos para explicársela y usted decide si vale la pena continuar.”</div><div class="lesson-text"><strong>Por qué funciona:</strong> respeta su tiempo, comunica un beneficio y reduce el compromiso a solo 60 segundos.</div>'],
+          ['Cómo decirlo','<div class="lesson-text">No aceleres porque la otra persona esté apurada.</div><div class="practice-box"><div class="rep"><strong>“Perfecto…”</strong> — pausa.</div><div class="rep"><strong>“Voy directo al punto.”</strong> — pausa.</div><div class="rep">Continúa con voz tranquila y sin disculparte.</div></div>'],
+          ['Práctica','<div class="lesson-text">Repite la frase correcta tres veces en voz alta.</div><div class="practice-box"><div class="rep">1. Normal.</div><div class="rep">2. 20% más despacio.</div><div class="rep">3. Con pausas y tono tranquilo.</div></div>'],
+          ['Cierre','<div class="lesson-text">No sigas hablando después de decir lo importante.</div><div class="quote">“Creo que aquí hay una oportunidad para conseguir más clientes.”</div><div class="tip">Di la frase y guarda silencio 3 segundos.</div>']
+        ]},
+        {title:'Primera impresión',subtitle:'Transmite confianza desde los primeros segundos.',rule:'PRESENCIA → SALUDO → CONEXIÓN',steps:[
+          ['La situación','<div class="lesson-text">Conoces a alguien por primera vez y necesitas generar confianza rápido.</div>'],
+          ['Lo que suelen decir','<div class="quote bad">Entrar mirando el teléfono, hablar demasiado bajo o presentarse sin energía.</div><div class="lesson-text"><strong>Por qué no funciona:</strong> antes de escuchar tus palabras, la otra persona ya está leyendo tu presencia.</div>'],
+          ['Qué decir','<div class="quote">“Hola, soy ____. Gracias por recibirme. ¿Cómo le ha ido recientemente?”</div><div class="lesson-text">Es simple, directo y abre la conversación sin parecer ensayado.</div>'],
+          ['Cómo decirlo','<div class="practice-box"><div class="rep">Sonríe ligeramente.</div><div class="rep">Mira a los ojos 2–3 segundos.</div><div class="rep">Di el nombre de la persona si lo conoces.</div></div>'],
+          ['Práctica','<div class="lesson-text">Repite el saludo 3 veces hasta que suene natural, no ceremonial.</div>']
+        ]},
+        {title:'Escuchar y leer a la persona',subtitle:'Detecta qué realmente le importa.',rule:'ESCUCHA → CONFIRMA → RESPONDE',steps:[
+          ['La situación','<div class="lesson-text">La otra persona explica un problema y tú quieres mostrar que entiendes.</div>'],
+          ['Lo que suelen decir','<div class="quote bad">Interrumpir, asumir la solución o esperar el turno para hablar.</div>'],
+          ['Qué decir','<div class="quote">“Entiendo. Entonces, lo que más le importa ahora es ____, ¿correcto?”</div><div class="lesson-text">Confirmar primero evita responder al problema equivocado.</div>'],
+          ['Cómo decirlo','<div class="practice-box"><div class="rep">Escucha 70%.</div><div class="rep">Pregunta y confirma.</div><div class="rep">Habla 30%.</div></div>'],
+          ['Práctica','<div class="lesson-text">Escucha una explicación de alguien y resume su prioridad en una sola frase antes de opinar.</div>']
+        ]},
+        {title:'Voz y lenguaje corporal',subtitle:'Usa ritmo, pausas, mirada y postura con intención.',rule:'CALMA → PAUSA → PRESENCIA',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Hablar rápido, mirar hacia abajo, cruzarse de brazos o llenar cada silencio.</div>'],
+          ['Qué hacer','<div class="lesson-text">Baja ligeramente la velocidad, mantén postura abierta y deja pausas naturales entre ideas.</div>'],
+          ['Por qué funciona','<div class="lesson-text">La calma transmite control. Una pausa bien puesta hace que una frase parezca más importante.</div>'],
+          ['Práctica','<div class="quote">“Tengo una propuesta concreta.”</div><div class="tip">Dila, pausa dos segundos y continúa sin mover las manos innecesariamente.</div>']
+        ]},
+        {title:'Carisma natural',subtitle:'Conecta sin tratar de impresionar.',rule:'INTERÉS REAL > IMPRESIONAR',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Hablar demasiado de sí mismos, exagerar o intentar ser graciosos todo el tiempo.</div>'],
+          ['Qué decir','<div class="quote">“Me gusta lo que han construido aquí. ¿Qué ha sido lo más difícil de lograr?”</div>'],
+          ['Por qué funciona','<div class="lesson-text">El carisma no es llamar la atención; es hacer que la otra persona se sienta vista y escuchada.</div>'],
+          ['Práctica','<div class="lesson-text">Haz una pregunta genuina y escucha la respuesta completa sin convertirla en una historia sobre ti.</div>']
+        ]},
+        {title:'Persuadir sin presionar',subtitle:'Consigue que consideren tu idea sin sentirse empujados.',rule:'VALOR → CURIOSIDAD → ELECCIÓN',steps:[
+          ['Lo que suelen decir','<div class="quote bad">“Tiene que hacerlo. Es lo mejor.”</div>'],
+          ['Qué decir','<div class="quote">“Esto ha funcionado bien en situaciones como la suya. ¿Le muestro cómo funcionaría aquí?”</div>'],
+          ['Por qué funciona','<div class="lesson-text">Presenta valor y pide permiso para avanzar. La otra persona conserva control.</div>'],
+          ['Práctica','<div class="lesson-text">Repite la frase sin tono insistente. La meta es invitar, no empujar.</div>']
+        ]},
+        {title:'Explicar una idea claramente',subtitle:'Convierte algo complejo en algo sencillo.',rule:'PROBLEMA → SOLUCIÓN → BENEFICIO',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Dar demasiados detalles antes de explicar la idea principal.</div>'],
+          ['Qué decir','<div class="quote">“En sencillo: hoy pasa ____. Nosotros hacemos ____. El resultado es ____.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">La estructura le da a la otra persona un mapa mental rápido.</div>'],
+          ['Práctica','<div class="lesson-text">Explica una idea de tu trabajo en tres frases: problema, solución y beneficio.</div>']
+        ]},
+        {title:'Decir NO y poner límites',subtitle:'Sé firme sin crear conflicto.',rule:'RESPETO → LÍMITE → ALTERNATIVA',steps:[
+          ['Lo que suelen decir','<div class="quote bad">Decir que sí para quedar bien y arrepentirse después.</div>'],
+          ['Qué decir','<div class="quote">“Entiendo. En este momento no puedo comprometerme con eso. Lo que sí puedo hacer es ____.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">No discutes, no te justificas de más y mantienes la relación abierta.</div>'],
+          ['Práctica','<div class="lesson-text">Dilo con voz amable, pero sin convertir el límite en una pregunta.</div>']
+        ]},
+        {title:'Negociar',subtitle:'Defiende precio, condiciones y concesiones con criterio.',rule:'NO DESCUENTES → INTERCAMBIA',steps:[
+          ['Lo que suelen decir','<div class="quote bad">“Está bien, le bajo el precio.”</div>'],
+          ['Qué decir','<div class="quote">“Entiendo su punto. Si ajustamos ____, puedo hacer ____ para que ambos ganemos.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">Cada concesión tiene una condición. Eso protege valor y evita regalar margen.</div>'],
+          ['Práctica','<div class="lesson-text">Piensa en una concesión real y vincúlala a algo que también necesites de la otra parte.</div>']
+        ]},
+        {title:'Responder objeciones',subtitle:'Convierte “está caro” o “déjame pensarlo” en conversación.',rule:'VALIDA → ACLARA → REENFOCA',steps:[
+          ['Lo que suelen decir','<div class="quote bad">“No, no es caro. Confíe en mí.”</div>'],
+          ['Qué decir','<div class="quote">“Entiendo su preocupación. ¿Lo que más le frena es el precio o todavía no ve suficiente valor?”</div>'],
+          ['Por qué funciona','<div class="lesson-text">No peleas la objeción: descubres qué hay detrás.</div>'],
+          ['Práctica','<div class="lesson-text">Di la pregunta con curiosidad, no a la defensiva.</div>']
+        ]},
+        {title:'Manejar conversaciones difíciles',subtitle:'Mantén el control cuando la otra persona se altera.',rule:'BAJA TENSIÓN → DEFINE → RESUELVE',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Subir la voz, interrumpir o defenderse inmediatamente.</div>'],
+          ['Qué decir','<div class="quote">“Entiendo que esto le moleste. Quiero resolverlo. Vamos a separar qué pasó y qué podemos hacer ahora.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">Valida la emoción sin aceptar culpas automáticamente y mueve la conversación hacia solución.</div>'],
+          ['Práctica','<div class="lesson-text">Repite la frase con una voz más baja de la que usarías normalmente.</div>']
+        ]},
+        {title:'Hablar sin miedo',subtitle:'Reuniones, llamadas y personas con autoridad.',rule:'PREPARA → RESPIRA → DI TU PUNTO',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Pedir disculpas antes de opinar: “Quizás estoy equivocado, pero…”</div>'],
+          ['Qué decir','<div class="quote">“Mi punto de vista es este: ____.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">No necesitas sonar dominante. Necesitas sonar claro.</div>'],
+          ['Práctica','<div class="lesson-text">Respira una vez, endereza la postura y di tu punto en una sola frase.</div>']
+        ]},
+        {title:'Contar historias breves',subtitle:'Haz memorable una idea usando una historia corta.',rule:'INICIO → PROBLEMA → CAMBIO → RESULTADO',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Contar demasiados detalles y perder el punto.</div>'],
+          ['Qué decir','<div class="quote">“Déjeme contarle algo que nos pasó con un cliente…”</div>'],
+          ['Cómo estructurarla','<div class="practice-box"><div class="rep">1. Qué estaba pasando.</div><div class="rep">2. Qué problema apareció.</div><div class="rep">3. Qué se hizo diferente.</div><div class="rep">4. Qué resultado produjo.</div></div>'],
+          ['Práctica','<div class="lesson-text">Cuenta una historia real en menos de 45 segundos.</div>']
+        ]},
+        {title:'Hablar con autoridad',subtitle:'Suena preparado sin arrogancia.',rule:'EVIDENCIA → RECOMENDACIÓN → CALMA',steps:[
+          ['Lo que suelen hacer','<div class="quote bad">Hablar en absolutos o aparentar saber lo que no saben.</div>'],
+          ['Qué decir','<div class="quote">“Por lo que hemos visto en situaciones similares, la opción que mejor suele funcionar es ____.”</div>'],
+          ['Por qué funciona','<div class="lesson-text">La autoridad creíble combina experiencia con humildad.</div>'],
+          ['Práctica','<div class="lesson-text">Da una recomendación firme y añade la razón en una sola frase.</div>']
+        ]},
+        {title:'La conversación completa',subtitle:'Abre, conecta, persuade, maneja objeciones y cierra.',rule:'ABRE → ENTIENDE → PROPÓN → RESUELVE → CIERRA',steps:[
+          ['Apertura','<div class="quote">“Gracias por su tiempo. Voy directo al punto.”</div>'],
+          ['Conexión','<div class="quote">“Antes de explicarle la idea, quiero entender qué es lo más importante para usted ahora.”</div>'],
+          ['Propuesta','<div class="quote">“En sencillo: hoy pasa ____. Nosotros hacemos ____. El beneficio sería ____.”</div>'],
+          ['Objeción','<div class="quote">“Entiendo. ¿Qué es lo que más le preocupa de eso?”</div>'],
+          ['Cierre','<div class="quote">“Perfecto. Entonces el siguiente paso sería ____. ¿Le parece bien avanzar así?”</div>'],
+          ['Práctica final','<div class="lesson-text">Haz la conversación completa de principio a fin sin añadir explicaciones innecesarias.</div>']
+        ]}
+      ];
+
+      let currentDay=0;
+      let idx=0;
+      const completedDays=new Set();
+      const content=root.querySelector('#content');
+      const stepCount=root.querySelector('#step-count');
+      const backBtn=root.querySelector('#back-btn');
+      const nextBtn=root.querySelector('#next-btn');
+      const progressText=root.querySelector('#progress-text');
+      const progressBar=root.querySelector('#progress-bar');
+      const heroDay=root.querySelector('#hero-day');
+      const heroTitle=root.querySelector('#hero-title');
+      const heroSubtitle=root.querySelector('#hero-subtitle');
+      const dayButtons=[...root.querySelectorAll('[data-day]')];
+
+      const DB_NAME='habla-con-elocuencia';
+      const STORE_NAME='progress';
+      const STATE_KEY='course-state-v1';
+
+      function openDB(){
+        return new Promise((resolve,reject)=>{
+          if(!('indexedDB' in window)){reject(new Error('IndexedDB no disponible'));return;}
+          const request=indexedDB.open(DB_NAME,1);
+          request.onupgradeneeded=()=>{
+            const db=request.result;
+            if(!db.objectStoreNames.contains(STORE_NAME)) db.createObjectStore(STORE_NAME);
+          };
+          request.onsuccess=()=>resolve(request.result);
+          request.onerror=()=>reject(request.error);
+        });
+      }
+
+      async function loadState(){
+        try{
+          const db=await openDB();
+          const state=await new Promise((resolve,reject)=>{
+            const tx=db.transaction(STORE_NAME,'readonly');
+            const req=tx.objectStore(STORE_NAME).get(STATE_KEY);
+            req.onsuccess=()=>resolve(req.result||null);
+            req.onerror=()=>reject(req.error);
+          });
+          db.close();
+          return state;
+        }catch(error){
+          return null;
+        }
+      }
+
+      async function saveState(){
+        const state={currentDay,idx,completedDays:[...completedDays],updatedAt:Date.now()};
+        try{
+          const db=await openDB();
+          await new Promise((resolve,reject)=>{
+            const tx=db.transaction(STORE_NAME,'readwrite');
+            tx.objectStore(STORE_NAME).put(state,STATE_KEY);
+            tx.oncomplete=resolve;
+            tx.onerror=()=>reject(tx.error);
+          });
+          db.close();
+        }catch(error){
+        }
+      }
+
+      function updateProgressUI(){
+        progressText.textContent=`${completedDays.size} / 15`;
+        progressBar.style.width=`${(completedDays.size/15)*100}%`;
+        const nextUnlocked=Math.min(completedDays.size,lessons.length-1);
+        dayButtons.forEach((btn,i)=>{
+          const isCompleted=completedDays.has(i);
+          const isUnlocked=i===0||isCompleted||i===nextUnlocked;
+          btn.classList.toggle('completed',isCompleted);
+          btn.classList.toggle('locked',!isUnlocked);
+          btn.disabled=!isUnlocked;
+          btn.setAttribute('aria-disabled',String(!isUnlocked));
+        });
+      }
+
+      function render(){
+        const lesson=lessons[currentDay];
+        const step=lesson.steps[idx];
+        heroDay.textContent=`Master · Día ${currentDay+1}`;
+        heroTitle.textContent=lesson.title;
+        heroSubtitle.textContent=lesson.subtitle;
+        stepCount.textContent=`Paso ${idx+1} de ${lesson.steps.length+1}`;
+        content.innerHTML=`<div class="section-title">${step[0]}</div>${step[1]}`;
+        backBtn.disabled=idx===0;
+        backBtn.style.opacity=idx===0?'.45':'1';
+        nextBtn.disabled=false;
+        nextBtn.style.opacity='1';
+        nextBtn.textContent=idx===lesson.steps.length-1?`Cerrar Día ${currentDay+1}`:'Continuar';
+        dayButtons.forEach((btn,i)=>btn.classList.toggle('active',i===currentDay));
+        updateProgressUI();
+      }
+
+      function renderComplete(){
+        const lesson=lessons[currentDay];
+        completedDays.add(currentDay);
+        updateProgressUI();
+        stepCount.textContent=`Día ${currentDay+1} completado`;
+        content.innerHTML=`<div class="section-title">Regla Master</div><div class="rule">${lesson.rule}</div><div class="lesson-text">No necesitas memorizar toda la lección. Quédate con esta regla y úsala en conversaciones reales.</div><div class="done">Día ${currentDay+1} completado ✓</div>`;
+        backBtn.disabled=false;
+        backBtn.style.opacity='1';
+        nextBtn.textContent=currentDay<14?'Siguiente día':'Programa completado';
+      }
+
+      backBtn.addEventListener('click',()=>{
+        if(idx>0){idx--;render();saveState();}
+      });
+
+      nextBtn.addEventListener('click',()=>{
+        const lesson=lessons[currentDay];
+        if(idx<lesson.steps.length-1){
+          idx++;
+          render();
+          saveState();
+          root.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
+        }else if(!completedDays.has(currentDay)){
+          renderComplete();
+          saveState();
+        }else if(currentDay<14){
+          currentDay++;
+          idx=0;
+          render();
+          saveState();
+        }else{
+          nextBtn.disabled=true;
+          nextBtn.style.opacity='.65';
+        }
+      });
+
+      dayButtons.forEach(btn=>btn.addEventListener('click',()=>{
+        const targetDay=Number(btn.dataset.day);
+        if(btn.disabled) return;
+        currentDay=targetDay;
+        idx=0;
+        render();
+        saveState();
+        root.querySelector('.hero').scrollIntoView({behavior:'smooth',block:'start'});
+      }));
+
+      (async()=>{
+        const saved=await loadState();
+        if(saved){
+          const savedDay=Number(saved.currentDay);
+          const savedIdx=Number(saved.idx);
+          if(Number.isInteger(savedDay)&&savedDay>=0&&savedDay<lessons.length) currentDay=savedDay;
+          if(Number.isInteger(savedIdx)&&savedIdx>=0&&savedIdx<lessons[currentDay].steps.length) idx=savedIdx;
+          if(Array.isArray(saved.completedDays)) saved.completedDays.forEach(day=>{
+            if(Number.isInteger(day)&&day>=0&&day<lessons.length) completedDays.add(day);
+          });
+        }
+        render();
+      })();
+    })();
+  </script>
+</div>
+</body>
+</html>
