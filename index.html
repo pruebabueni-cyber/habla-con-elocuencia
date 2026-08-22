@@ -4,9 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#111214">
+<meta name="description" content="Habla con Elocuencia — programa Master de 15 días para comunicar con seguridad, influir con claridad y conectar mejor.">
 <title>Habla con Elocuencia</title>
 <style>
 html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
+body{overflow-x:hidden}
 </style>
 </head>
 <body>
@@ -14,9 +16,11 @@ html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
   <style>
     #eloquence-app *{box-sizing:border-box}
     #eloquence-app .shell{max-width:980px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,1fr);gap:22px}
-    #eloquence-app .sidebar{background:light-dark(#1c1c1c,#090a0b);color:#fff;border-radius:22px;padding:22px;align-self:start}
-    #eloquence-app .brand{font-size:20px;font-weight:800;letter-spacing:.02em;margin-bottom:4px}
-    #eloquence-app .subtitle{font-size:12px;color:#b9b9b9;line-height:1.45;margin-bottom:24px}
+    #eloquence-app .sidebar{background:linear-gradient(180deg,#171717 0%,#0d0e10 100%);color:#fff;border-radius:22px;padding:22px;align-self:start;border:1px solid rgba(201,163,93,.18)}
+    #eloquence-app .brand{font-size:20px;font-weight:900;letter-spacing:.03em;margin-bottom:4px}
+    #eloquence-app .brand-accent{color:#c9a35d}
+    #eloquence-app .subtitle{font-size:12px;color:#c3c3c3;line-height:1.5;margin-bottom:22px}
+    #eloquence-app .program-label{text-transform:uppercase;letter-spacing:.14em;font-size:10px;color:#c9a35d;font-weight:800;margin-bottom:8px}
     #eloquence-app .progress-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:8px;color:#d7d7d7}
     #eloquence-app .bar{height:8px;background:#333;border-radius:999px;overflow:hidden;margin-bottom:22px}
     #eloquence-app .bar > span{display:block;height:100%;width:6.666%;background:#c9a35d;transition:width .35s ease}
@@ -25,7 +29,8 @@ html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
     #eloquence-app .day.locked{opacity:.45}
     #eloquence-app .day.completed::after{content:'✓';float:right;color:#c9a35d;font-weight:900}
     #eloquence-app .main{min-width:0}
-    #eloquence-app .hero{background:light-dark(#252525,#18191b);color:#fff;border-radius:22px;padding:24px;margin-bottom:18px}
+    #eloquence-app .hero{background:linear-gradient(135deg,#262626 0%,#17181a 100%);color:#fff;border-radius:22px;padding:26px;margin-bottom:18px;border:1px solid rgba(201,163,93,.14);position:relative;overflow:hidden}
+    #eloquence-app .hero::after{content:'';position:absolute;right:-54px;top:-54px;width:170px;height:170px;border-radius:50%;border:1px solid rgba(201,163,93,.12)}
     #eloquence-app .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#c9a35d;font-weight:800;margin-bottom:10px}
     #eloquence-app h1{font-size:34px;line-height:1.05;margin:0 0 10px}
     #eloquence-app .hero p{margin:0;color:#d6d6d6;font-size:15px;line-height:1.6;max-width:680px}
@@ -49,16 +54,17 @@ html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
     @media (max-width:760px){
       #eloquence-app{padding:0;background:light-dark(#f6f2e9,#111214);min-height:100%}
       #eloquence-app .shell{display:block;max-width:none;width:100%;margin:0}
-      #eloquence-app .sidebar{border-radius:0;padding:18px 16px 14px;position:sticky;top:0;z-index:5}
+      #eloquence-app .sidebar{border-radius:0;padding:16px 16px 14px;position:sticky;top:0;z-index:5;border-left:0;border-right:0;border-top:0}
       #eloquence-app .brand{font-size:18px}
-      #eloquence-app .subtitle{font-size:11px;margin-bottom:14px}
+      #eloquence-app .subtitle{font-size:11px;margin-bottom:12px}
+      #eloquence-app .program-label{font-size:9px;margin-bottom:6px}
       #eloquence-app .bar{margin-bottom:14px}
       #eloquence-app .day-list{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
       #eloquence-app .day-list::-webkit-scrollbar{display:none}
       #eloquence-app .day{flex:0 0 auto;width:auto;margin:0;text-align:center;padding:9px 13px;font-size:12px;white-space:nowrap;min-height:40px}
       #eloquence-app .day.completed::after{float:none;margin-left:6px}
       #eloquence-app .main{width:100%;padding:12px}
-      #eloquence-app .hero{border-radius:18px;padding:18px;margin-bottom:12px}
+      #eloquence-app .hero{border-radius:20px;padding:20px 18px;margin-bottom:12px}
       #eloquence-app .eyebrow{font-size:10px;margin-bottom:8px}
       #eloquence-app h1{font-size:30px;line-height:1.08}
       #eloquence-app .hero p{font-size:14px;line-height:1.5}
@@ -76,8 +82,9 @@ html,body{margin:0;padding:0;min-width:320px;min-height:100%;background:#111214}
 
   <div class="shell">
     <aside class="sidebar">
-      <div class="brand">HABLA CON ELOCUENCIA</div>
-      <div class="subtitle">15 días para comunicar con seguridad, influir y conectar mejor.</div>
+      <div class="program-label">Programa Master · 15 días</div>
+      <div class="brand">HABLA <span class="brand-accent">CON ELOCUENCIA</span></div>
+      <div class="subtitle">Comunica con seguridad. Influye con claridad. Conecta mejor.</div>
       <div class="progress-label"><span>Progreso</span><strong id="progress-text">0 / 15</strong></div>
       <div class="bar"><span id="progress-bar"></span></div>
       <div class="day-list">

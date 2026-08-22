@@ -1,5 +1,4 @@
-Habla con Elocuencia — versión móvil v2
+Habla con Elocuencia — Premium Mobile v3
 
-Suba estos 3 archivos juntos a Vercel para reemplazar la versión anterior.
-Optimizada para teléfonos y con progreso local por dispositivo.
-Versión móvil activa
+Versión refinada para móvil con encabezado premium y consistencia visual en los 15 días.
+Sube estos 3 archivos al repositorio de GitHub para que Vercel publique la actualización automáticamente.
