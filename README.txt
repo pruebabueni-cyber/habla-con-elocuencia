@@ -1,4 +1,14 @@
-Habla con Elocuencia — API Tracking v9
+Habla con Elocuencia — Admin v11
 
-Incluye la función serverless /api/progress para guardar progreso en Supabase.
-Sube TODO el contenido del paquete al mismo repositorio de GitHub, incluyendo la carpeta api.
+Estructura:
+- /            Curso público para testers
+- /admin       Panel privado
+- /api/progress Guarda progreso
+- /api/admin    Entrega datos del panel solo con clave administrativa
+
+IMPORTANTE ANTES DE USAR /admin:
+En Vercel > Project Settings > Environment Variables, crea:
+ADMIN_PASSWORD = una clave fuerte que solo tú conozcas
+Aplica a Production y vuelve a desplegar.
+
+Sube TODO el contenido al mismo repositorio de GitHub conservando la carpeta api.
