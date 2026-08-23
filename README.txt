@@ -1,14 +1,11 @@
-Habla con Elocuencia — Admin v11
+Habla con Elocuencia — Admin v11.1
 
-Estructura:
-- /            Curso público para testers
-- /admin       Panel privado
-- /api/progress Guarda progreso
-- /api/admin    Entrega datos del panel solo con clave administrativa
+Corrección del panel privado:
+- El panel usa tester_progress para cargar testers.
+- La actividad reciente se deriva del último evento de cada tester.
+- No se amplían permisos públicos sobre tester_events.
 
-IMPORTANTE ANTES DE USAR /admin:
-En Vercel > Project Settings > Environment Variables, crea:
-ADMIN_PASSWORD = una clave fuerte que solo tú conozcas
-Aplica a Production y vuelve a desplegar.
+Mantén en Vercel:
+ADMIN_PASSWORD = tu clave administrativa
 
-Sube TODO el contenido al mismo repositorio de GitHub conservando la carpeta api.
+Sube TODO el contenido al mismo repositorio conservando la carpeta api.
