@@ -39,14 +39,26 @@ export default async function handler(req, res) {
     const testers = await supabase(
       '/rest/v1/tester_progress?select=tester_id,tester_name,current_day,current_step,completed_count,completed_days,last_event,last_activity,created_at&order=last_activity.desc'
     );
-    const events = await supabase(
-      '/rest/v1/tester_events?select=id,tester_id,tester_name,event,current_day,current_step,completed_count,created_at&order=created_at.desc&limit=30'
-    );
+
+    const safeTesters = Array.isArray(testers) ? testers : [];
+    const events = safeTesters
+      .filter(t => t.last_activity)
+      .map((t, index) => ({
+        id: index + 1,
+        tester_id: t.tester_id,
+        tester_name: t.tester_name,
+        event: t.last_event,
+        current_day: t.current_day,
+        current_step: t.current_step,
+        completed_count: t.completed_count,
+        created_at: t.last_activity
+      }))
+      .slice(0, 30);
 
     return sendJson(res, 200, {
       ok: true,
-      testers: Array.isArray(testers) ? testers : [],
-      events: Array.isArray(events) ? events : []
+      testers: safeTesters,
+      events
     });
   } catch (error) {
     console.error(error);
