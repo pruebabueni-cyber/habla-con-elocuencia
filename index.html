@@ -1538,6 +1538,18 @@ createDemoAccount=async function(){
   try{
     const {data,error}=await nexoraDb.auth.signUp({email,password,options:{data:{display_name:name},emailRedirectTo:NEXORA_PUBLIC_URL}});
     if(error)throw error;
+    const identities=data?.user?.identities;
+    if(Array.isArray(identities)&&identities.length===0){
+      const loginEmail=document.getElementById('loginEmail');
+      if(loginEmail)loginEmail.value=email;
+      switchAuth('login');
+      toast(nexoraLanguage==='en'
+        ?'If you already have an account with this email, sign in or reset your password.'
+        :nexoraLanguage==='fr'
+          ?'Si un compte existe déjà avec cet e-mail, connectez-vous ou réinitialisez votre mot de passe.'
+          :'Si ya tienes una cuenta con este correo, inicia sesión o recupera tu contraseña.');
+      return;
+    }
     if(data.session){
       await nexoraEstablishSession(data.session,true);
       closeModal('accountModal');
