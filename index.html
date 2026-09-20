@@ -315,7 +315,7 @@
             <div class="field"><label>¿Qué quieres contarnos?</label><textarea id="feedbackMessage" placeholder="Cuéntanos qué ocurrió o qué mejorarías…"></textarea></div>
             <div class="field"><label>Correo para responderte (opcional)</label><input id="feedbackEmail" type="email" placeholder="tu@email.com"></div>
             <button class="primary" onclick="submitFeedback()">Enviar sugerencia →</button>
-            <p class="tiny" style="margin-top:12px">En esta versión de prueba las sugerencias se guardan localmente. Al conectar Supabase se enviarán al panel de administración.</p>
+            <p class="tiny" style="margin-top:12px">Tu sugerencia se guarda en NEXORA y llega al panel de administración para que podamos revisarla y priorizar mejoras.</p>
             <div id="feedbackHistory"></div>
           </section>
         </div>
@@ -396,7 +396,7 @@
     <div class="field"><label>Programa</label><select id="testerProgram" onchange="syncTesterMax()"><option value="gratitud">Gratitud</option><option value="disciplina">Disciplina</option><option value="elocuencia">Hablar con elocuencia</option></select></div>
     <div class="tester"><input id="testerDay" type="number" min="1" max="90" value="1"><button class="primary" onclick="jumpToDay()">Abrir día</button></div>
     <button class="ghost" style="width:100%;margin-top:10px" onclick="resetDemo()">Reiniciar datos de prueba</button>
-    <p class="tiny" style="margin-top:14px">Este prototipo usa localStorage para progreso, cuentas y sugerencias. Todavía no modifica la base de Supabase.</p>
+    <p class="tiny" style="margin-top:14px">Vista interna de prueba. Las cuentas, el progreso y las sugerencias de usuarios autenticados se guardan en Supabase.</p>
     <div class="modal-actions">
       <button class="ghost" style="margin-left:auto" onclick="closeModal('testerModal')">Cerrar</button>
     </div>
@@ -422,12 +422,12 @@
         <div class="field"><label>Contraseña</label><input id="signupPassword" type="password" placeholder="Mínimo 6 caracteres" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
         <button class="primary" style="width:100%" onclick="createDemoAccount()">Crear mi cuenta</button>
       </div>
-      <div class="auth-note"><b>Modo de prueba:</b> esta versión demuestra cómo funcionarán las cuentas y separa el progreso por usuario en este navegador. El siguiente paso será conectar este flujo con Supabase Auth para que la cuenta funcione en cualquier dispositivo.</div>
+      <div class="auth-note"><b>Cuenta NEXORA:</b> tu sesión, progreso, evidencias y sugerencias se guardan de forma segura en Supabase para que puedas continuar desde otros dispositivos.</div>
     </div>
     <div class="profilebox" id="profileBox">
       <div class="profilehero"><div class="avatar" id="profileAvatar">N</div><div class="profilemeta"><b id="profileName">Usuario</b><span id="profileEmail"></span></div></div>
       <div class="status-chip"><span class="status-dot"></span>Sesión activa</div>
-      <div class="card" style="box-shadow:none;margin-top:16px;padding:18px"><div class="eyebrow">Tu información</div><p class="muted" style="margin:0">Tu progreso de Gratitud, Disciplina y Hablar con elocuencia queda separado de otros usuarios de este navegador.</p></div>
+      <div class="card" style="box-shadow:none;margin-top:16px;padding:18px"><div class="eyebrow">Tu información</div><p class="muted" style="margin:0">Tu progreso de Gratitud, Disciplina y Hablar con elocuencia queda vinculado a tu cuenta NEXORA.</p></div>
       <button class="ghost" style="width:100%;margin-top:16px" onclick="logoutDemoAccount()">Cerrar sesión</button>
     </div>
   </div></div>
@@ -875,6 +875,335 @@ function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pst
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function renderAll(){renderHome();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
+</script>
+
+
+<script data-nexora-supabase="v1" src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script data-nexora-supabase="v1">
+const NEXORA_SUPABASE_URL='https://nnfcppwruhethardmmvq.supabase.co';
+const NEXORA_SUPABASE_KEY='sb_publishable_1EYhImZLjFH-Z9jgQf7f_Q_VMCBbY6f';
+const nexoraDb=window.supabase.createClient(NEXORA_SUPABASE_URL,NEXORA_SUPABASE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+let nexoraSyncTimer=null;
+
+userStateKey=function(id=currentSession?.id){
+  return id ? 'nexora_user_state_'+id : 'nexora_guest_state_v1';
+};
+
+updateAccountUI=function(){
+  const btn=document.getElementById('accountBtn');
+  const label=document.getElementById('accountLabel');
+  const av=document.getElementById('accountAvatar');
+  if(!btn)return;
+  if(currentSession){
+    const who=currentSession.name||currentSession.email||'Cuenta';
+    label.textContent=who.split(' ')[0];
+    av.textContent=who.trim().charAt(0).toUpperCase()||'N';
+  }else{
+    label.textContent='Crear cuenta';
+    av.textContent='+';
+  }
+  const banner=document.getElementById('guestBanner');
+  if(banner)banner.style.display=currentSession?'none':'flex';
+  ['navToday','navHistory','navProgress'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.classList.toggle('restricted',!currentSession);
+  });
+  const emailField=document.getElementById('feedbackEmail');
+  if(emailField&&currentSession&&!emailField.value)emailField.value=currentSession.email||'';
+};
+
+renderAccountModal=function(){
+  const auth=document.getElementById('authBox');
+  const profile=document.getElementById('profileBox');
+  if(currentSession){
+    auth.style.display='none';
+    profile.classList.add('active');
+    const who=currentSession.name||'Usuario NEXORA';
+    document.getElementById('profileName').textContent=who;
+    document.getElementById('profileEmail').textContent=currentSession.email||'';
+    document.getElementById('profileAvatar').textContent=(who||currentSession.email||'N').trim().charAt(0).toUpperCase()||'N';
+  }else{
+    auth.style.display='block';
+    profile.classList.remove('active');
+  }
+};
+
+function nexoraFriendlyAuthError(message=''){
+  const m=String(message).toLowerCase();
+  if(m.includes('invalid login credentials'))return 'Correo o contraseña incorrectos.';
+  if(m.includes('email not confirmed'))return 'Confirma tu correo antes de entrar.';
+  if(m.includes('user already registered'))return 'Ya existe una cuenta con ese correo.';
+  if(m.includes('password'))return 'Revisa la contraseña e inténtalo nuevamente.';
+  return 'No pudimos completar esa acción. Inténtalo nuevamente.';
+}
+
+async function nexoraTrack(event_type,metadata={}){
+  if(!currentSession?.id)return;
+  try{
+    const p=program();
+    await nexoraDb.from('app_events').insert({
+      user_id:currentSession.id,
+      event_type,
+      program_key:p?.id||null,
+      day:pstate()?.currentDay||null,
+      metadata
+    });
+  }catch{}
+}
+
+async function nexoraSyncProgram(programKey){
+  if(!currentSession?.id||!appState?.programs?.[programKey])return;
+  const s=appState.programs[programKey];
+  const payload={
+    user_id:currentSession.id,
+    program_key:programKey,
+    current_day:s.currentDay||1,
+    completed_days:Array.isArray(s.completed)?s.completed:[],
+    baseline_done:!!s.baselineDone,
+    baseline:s.baseline||{},
+    started_at:(s.baselineDone||(s.completed||[]).length)?(s.startedAt||new Date().toISOString()):null
+  };
+  await nexoraDb.from('program_state').upsert(payload,{onConflict:'user_id,program_key'});
+}
+
+async function nexoraSyncEvidence(programKey,entry){
+  if(!currentSession?.id||!entry)return;
+  await nexoraDb.from('evidence').upsert({
+    user_id:currentSession.id,
+    program_key:programKey,
+    day:entry.day,
+    title:entry.title||'Evidencia',
+    answers:Array.isArray(entry.answers)?entry.answers:[],
+    updated_at:new Date().toISOString()
+  },{onConflict:'user_id,program_key,day'});
+}
+
+async function nexoraSyncAll(){
+  if(!currentSession?.id)return;
+  for(const key of Object.keys(PROGRAMS)){
+    await nexoraSyncProgram(key);
+    const entries=appState?.programs?.[key]?.entries||[];
+    for(const entry of entries)await nexoraSyncEvidence(key,entry);
+  }
+}
+
+function nexoraQueueSync(){
+  if(!currentSession?.id)return;
+  clearTimeout(nexoraSyncTimer);
+  nexoraSyncTimer=setTimeout(()=>nexoraSyncAll().catch(()=>{}),700);
+}
+
+const nexoraOriginalSave=save;
+save=function(){
+  localStorage.setItem(userStateKey(),JSON.stringify(appState));
+  nexoraQueueSync();
+  renderAll();
+};
+
+async function nexoraLoadRemoteState(){
+  if(!currentSession?.id)return;
+  const localState=appState||defaultAppState();
+  const [statesResult,evidenceResult]=await Promise.all([
+    nexoraDb.from('program_state').select('*').eq('user_id',currentSession.id),
+    nexoraDb.from('evidence').select('*').eq('user_id',currentSession.id).order('created_at',{ascending:false})
+  ]);
+  if(statesResult.error||evidenceResult.error){
+    toast('No pudimos sincronizar tu progreso. Seguiremos guardando localmente.');
+    return;
+  }
+  const states=statesResult.data||[];
+  const evidence=evidenceResult.data||[];
+  if(!states.length){
+    localStorage.setItem(userStateKey(),JSON.stringify(localState));
+    await nexoraSyncAll();
+    return;
+  }
+  const next=defaultAppState();
+  next.selectedProgram=(localState.selectedProgram&&PROGRAMS[localState.selectedProgram])?localState.selectedProgram:'gratitud';
+  for(const row of states){
+    if(!next.programs[row.program_key])continue;
+    next.programs[row.program_key]={
+      ...next.programs[row.program_key],
+      baselineDone:!!row.baseline_done,
+      baseline:row.baseline||{},
+      currentDay:row.current_day||1,
+      completed:Array.isArray(row.completed_days)?row.completed_days:[],
+      entries:[]
+    };
+  }
+  for(const row of evidence){
+    const state=next.programs[row.program_key];
+    if(!state)continue;
+    state.entries.push({
+      day:row.day,
+      title:row.title,
+      answers:Array.isArray(row.answers)?row.answers:[],
+      date:row.updated_at||row.created_at
+    });
+  }
+  appState=next;
+  localStorage.setItem(userStateKey(),JSON.stringify(appState));
+}
+
+async function nexoraEstablishSession(session,isNew=false){
+  if(!session?.user)return;
+  const user=session.user;
+  let name=user.user_metadata?.display_name||user.email?.split('@')[0]||'Usuario';
+  try{
+    const {data}=await nexoraDb.from('profiles').select('display_name,email').eq('id',user.id).maybeSingle();
+    if(data?.display_name)name=data.display_name;
+  }catch{}
+  currentSession={id:user.id,email:user.email||'',name};
+  await nexoraDb.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',user.id);
+  await nexoraLoadRemoteState();
+  updateAccountUI();
+  renderAll();
+  nexoraTrack(isNew?'signup':'login').catch(()=>{});
+}
+
+createDemoAccount=async function(){
+  const name=document.getElementById('signupName').value.trim();
+  const email=document.getElementById('signupEmail').value.trim().toLowerCase();
+  const password=document.getElementById('signupPassword').value;
+  if(!name||!email.includes('@')||password.length<6){
+    toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');
+    return;
+  }
+  const btn=document.querySelector('#signupPane .primary');
+  if(btn){btn.disabled=true;btn.textContent='Creando cuenta…';}
+  try{
+    const {data,error}=await nexoraDb.auth.signUp({email,password,options:{data:{display_name:name}}});
+    if(error)throw error;
+    if(data.session){
+      await nexoraEstablishSession(data.session,true);
+      closeModal('accountModal');
+      toast('Cuenta creada. Tu experiencia personal ya está conectada a NEXORA.');
+      setTimeout(runPendingAccountAction,220);
+    }else{
+      toast('Cuenta creada. Revisa tu correo para confirmar tu dirección y luego entra.');
+      switchAuth('login');
+    }
+  }catch(error){
+    toast(nexoraFriendlyAuthError(error?.message));
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Crear mi cuenta';}
+  }
+};
+
+loginDemoAccount=async function(){
+  const email=document.getElementById('loginEmail').value.trim().toLowerCase();
+  const password=document.getElementById('loginPassword').value;
+  if(!email||!password){toast('Escribe tu correo y contraseña.');return;}
+  const {data,error}=await nexoraDb.auth.signInWithPassword({email,password});
+  if(error){toast(nexoraFriendlyAuthError(error.message));return;}
+  await nexoraEstablishSession(data.session,false);
+  closeModal('accountModal');
+  toast('Bienvenido de nuevo.');
+  setTimeout(runPendingAccountAction,220);
+};
+
+logoutDemoAccount=async function(){
+  await nexoraDb.auth.signOut();
+  currentSession=null;
+  appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
+  renderAll();
+  updateAccountUI();
+  closeModal('accountModal');
+  toast('Sesión cerrada.');
+};
+
+submitFeedback=async function(){
+  if(!currentSession?.id)return requireAccount('help');
+  const type=document.getElementById('feedbackType').value;
+  const message=document.getElementById('feedbackMessage').value.trim();
+  const email=document.getElementById('feedbackEmail').value.trim();
+  if(message.length<5){toast('Cuéntanos un poco más antes de enviar.');return;}
+  const p=program();
+  const {error}=await nexoraDb.from('feedback').insert({
+    user_id:currentSession.id,
+    email:email||currentSession.email||null,
+    feedback_type:type,
+    message,
+    program_key:p?.id||null,
+    current_day:pstate()?.currentDay||null,
+    page:(document.querySelector('.view.active')||{}).id||null
+  });
+  if(error){toast('No pudimos enviar la sugerencia. Inténtalo nuevamente.');return;}
+  document.getElementById('feedbackMessage').value='';
+  nexoraTrack('feedback_submitted',{feedback_type:type}).catch(()=>{});
+  await renderFeedback();
+  toast('Sugerencia enviada. Gracias por ayudarnos a mejorar NEXORA.');
+};
+
+function nexoraFeedbackStatus(status){
+  return ({new:'Recibida',reviewed:'Revisada',planned:'Planificada',shipped:'Implementada',closed:'Cerrada'})[status]||status;
+}
+
+renderFeedback=async function(){
+  const wrap=document.getElementById('feedbackHistory');
+  if(!wrap)return;
+  if(!currentSession?.id){
+    wrap.innerHTML='<div class="tiny" style="margin-top:18px">Crea una cuenta para enviar y consultar tus sugerencias.</div>';
+    return;
+  }
+  const {data}=await nexoraDb.from('feedback')
+    .select('feedback_type,message,status,created_at')
+    .eq('user_id',currentSession.id)
+    .order('created_at',{ascending:false})
+    .limit(3);
+  const items=data||[];
+  wrap.innerHTML=items.length
+    ? '<div class="eyebrow" style="margin-top:22px">Tus envíos recientes</div><div class="feedback-list">'+items.map(x=>`<div class="feedback-item"><b>${escapeHtml(x.feedback_type)}</b><small>${new Date(x.created_at).toLocaleDateString('es-US',{month:'short',day:'numeric'})} · ${nexoraFeedbackStatus(x.status)}</small><div style="margin-top:6px;color:var(--ink2)">${escapeHtml(x.message)}</div></div>`).join('')+'</div>'
+    : '';
+};
+
+const nexoraOriginalOpenProgram=openProgram;
+openProgram=function(id){
+  nexoraOriginalOpenProgram(id);
+  nexoraTrack('program_viewed',{program:id}).catch(()=>{});
+};
+
+const nexoraOriginalCompleteDay=completeDay;
+completeDay=async function(n,isPreview){
+  const before=(pstate()?.entries||[]).find(e=>e.day===n);
+  nexoraOriginalCompleteDay(n,isPreview);
+  setTimeout(()=>{
+    const entry=(pstate()?.entries||[]).find(e=>e.day===n);
+    if(entry&&entry!==before){
+      nexoraSyncEvidence(program().id,entry).catch(()=>{});
+      nexoraSyncProgram(program().id).catch(()=>{});
+      nexoraTrack('day_completed',{day:n,preview:!!isPreview}).catch(()=>{});
+    }
+  },50);
+};
+
+(async function initNexoraSupabase(){
+  try{
+    const {data:{session}}=await nexoraDb.auth.getSession();
+    if(session)await nexoraEstablishSession(session,false);
+    else{
+      currentSession=null;
+      appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||appState||defaultAppState();
+      updateAccountUI();
+      renderAll();
+    }
+    nexoraDb.auth.onAuthStateChange(async(event,session)=>{
+      if(event==='SIGNED_OUT'){
+        currentSession=null;
+        appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
+        renderAll();
+        updateAccountUI();
+      }else if(session&&session.user?.id!==currentSession?.id){
+        await nexoraEstablishSession(session,false);
+      }
+    });
+  }catch(error){
+    console.warn('NEXORA Supabase init',error);
+    toast('NEXORA está disponible, pero la sincronización no pudo iniciarse.');
+  }
+})();
 </script>
 
 </body>
