@@ -1,4 +1,4 @@
-<!doctype html> 
+<!doctype html>
 <html lang="es">
 <head>
 <meta charset="utf-8" />
@@ -100,6 +100,18 @@
 
     @media(max-width:920px){.pathcards{grid-template-columns:1fr}}
     @media(max-width:560px){.journey-top{align-items:flex-start}.journey-pct{font-size:28px}.journey-actions>*{width:100%}.journey-meta{flex-direction:column;gap:4px}}
+
+    /* V6 · cuentas, guía y sugerencias */
+    .accountbtn{display:flex;align-items:center;gap:8px;font-weight:800}.avatar{width:28px;height:28px;border-radius:10px;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:900}
+    .guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}.guide-step{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}.guide-num{width:34px;height:34px;border-radius:12px;background:#f1e3cc;color:#624720;display:grid;place-items:center;font-weight:900;margin-bottom:14px}.guide-step h3{font-size:20px;margin-bottom:8px}.guide-step p{color:var(--muted);line-height:1.55;font-size:14px;margin:0}
+    .faq{display:grid;gap:10px;margin-top:16px}.faq details{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px}.faq summary{cursor:pointer;font-weight:850}.faq p{color:var(--muted);line-height:1.6;margin:12px 0 0}
+    .help-layout{display:grid;grid-template-columns:.8fr 1.2fr;gap:18px}.help-aside{background:linear-gradient(155deg,#172236,#31455f);color:#fff;border-radius:24px;padding:28px}.help-aside p{color:#d8dee7;line-height:1.65}.help-card{background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px}.help-card input,.help-card select{width:100%;border:1px solid #dcd4c8;background:#fff;border-radius:14px;padding:13px;outline:none}.help-card input:focus,.help-card select:focus{border-color:#ba8b50;box-shadow:0 0 0 3px rgba(199,146,79,.12)}
+    .feedback-list{display:grid;gap:10px;margin-top:16px}.feedback-item{border:1px solid var(--line);background:#fffdfa;border-radius:15px;padding:14px}.feedback-item b{display:block;margin-bottom:4px}.feedback-item small{color:var(--muted)}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 20px}.authtab{border:1px solid var(--line);background:#fff;border-radius:12px;padding:11px;font-weight:850;color:var(--ink2)}.authtab.active{background:var(--ink);color:#fff;border-color:var(--ink)}.authpane{display:none}.authpane.active{display:block}.auth-note{background:#f3eee6;border-radius:14px;padding:13px;color:var(--muted);font-size:12px;line-height:1.5;margin-top:12px}.profilebox{display:none}.profilebox.active{display:block}.profilehero{display:flex;gap:14px;align-items:center;margin:18px 0}.profilehero .avatar{width:48px;height:48px;border-radius:16px;font-size:18px}.profilemeta b{font-size:19px}.profilemeta span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+    .status-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:#eef3ed;color:#58705c;font-size:12px;font-weight:800}.status-dot{width:7px;height:7px;border-radius:50%;background:#6f8f75}
+    @media(max-width:920px){.guide-grid{grid-template-columns:1fr 1fr}.help-layout{grid-template-columns:1fr}}
+    @media(max-width:560px){.guide-grid{grid-template-columns:1fr}.bottomnav{overflow-x:auto;justify-content:flex-start}.bottomnav::-webkit-scrollbar{display:none}.navbtn{flex:0 0 auto;padding:10px 10px;font-size:11px}.top-actions{gap:6px}.accountbtn .account-label{display:none}.accountbtn{padding:8px}.help-card,.help-aside{padding:22px}}
+
 </style>
 </head>
 
@@ -111,6 +123,7 @@
       <div class="top-actions">
         <button class="iconbtn" onclick="openScience()">Base científica</button>
         <button class="iconbtn" onclick="openTester()">Vista tester</button>
+        <button class="iconbtn accountbtn" id="accountBtn" onclick="openAccount()"><span class="avatar" id="accountAvatar">?</span><span class="account-label" id="accountLabel">Entrar</span></button>
       </div>
     </header>
 
@@ -236,6 +249,52 @@
           <p id="currentStageDesc" class="muted" style="line-height:1.6;max-width:760px"></p>
         </section>
       </section>
+
+      <section id="guide" class="view">
+        <div class="eyebrow">Guía de NEXORA</div>
+        <h1 style="font-size:clamp(38px,6vw,60px);letter-spacing:-.055em;margin-bottom:12px">Aprende a usar la plataforma sin complicarte.</h1>
+        <p class="lead">NEXORA está diseñada para que abras una capa a la vez: eliges un camino, practicas, guardas evidencia y vuelves mañana.</p>
+        <div class="guide-grid">
+          <article class="guide-step"><div class="guide-num">1</div><h3>Elige un camino</h3><p>Empieza con Gratitud, Disciplina o Hablar con elocuencia. Cada camino conserva su propio progreso.</p></article>
+          <article class="guide-step"><div class="guide-num">2</div><h3>Marca tu punto de partida</h3><p>Antes del primer día respondes una evaluación breve. No es un examen; sirve para comparar tu evolución.</p></article>
+          <article class="guide-step"><div class="guide-num">3</div><h3>Haz la práctica del día</h3><p>Lee lo necesario, actúa fuera de la pantalla y vuelve para registrar lo que realmente ocurrió.</p></article>
+          <article class="guide-step"><div class="guide-num">4</div><h3>Guarda evidencia</h3><p>Historia conserva tus respuestas y experiencias. La meta no es acumular puntos, sino ver pruebas de cambio.</p></article>
+          <article class="guide-step"><div class="guide-num">5</div><h3>Mira tu progreso</h3><p>Los hitos y etapas te muestran dónde estás. El calendario orienta; no decide por ti cuándo una conducta está integrada.</p></article>
+          <article class="guide-step"><div class="guide-num">6</div><h3>Regresa, no te castigues</h3><p>Si pierdes un día, continúas. NEXORA está diseñada para sostener práctica real, no una racha perfecta.</p></article>
+        </div>
+        <section class="card" style="margin-top:22px">
+          <div class="eyebrow">Preguntas frecuentes</div>
+          <div class="faq">
+            <details><summary>¿Tengo que completar todos los caminos a la vez?</summary><p>No. Puedes trabajar uno solo o alternar, pero cada programa mantiene su progreso separado.</p></details>
+            <details><summary>¿Qué pasa si no puedo practicar un día?</summary><p>Tu progreso no desaparece. Retomas desde donde estabas; no necesitas empezar nuevamente.</p></details>
+            <details><summary>¿Los 90 días garantizan que ya cambié?</summary><p>No. El Día 90 es un punto de evaluación y consolidación. La evidencia y tu percepción determinan qué conviene mantener o reforzar.</p></details>
+            <details><summary>¿Dónde veo lo que he escrito?</summary><p>En Historia. Ahí NEXORA reúne las evidencias guardadas de tus distintos caminos.</p></details>
+          </div>
+        </section>
+      </section>
+
+      <section id="help" class="view">
+        <div class="eyebrow">Ayuda y sugerencias</div>
+        <h1 style="font-size:clamp(38px,6vw,60px);letter-spacing:-.055em;margin-bottom:12px">Ayúdanos a mejorar NEXORA.</h1>
+        <p class="lead">Si algo confunde, falla o podría sentirse mejor, queremos saberlo.</p>
+        <div class="help-layout">
+          <aside class="help-aside">
+            <div class="eyebrow" style="color:#e7c890">Tu experiencia importa</div>
+            <h2 style="font-size:32px;letter-spacing:-.035em">Una buena sugerencia nos dice qué ocurrió y qué esperabas.</h2>
+            <p>También puedes reportar errores, problemas de navegación, contenido confuso o ideas para nuevos caminos.</p>
+            <div class="mini-row"><span class="pill">Sugerencias</span><span class="pill">Errores</span><span class="pill">Contenido</span><span class="pill">Cuenta</span></div>
+          </aside>
+          <section class="help-card">
+            <div class="field"><label>Tipo</label><select id="feedbackType"><option>Sugerencia</option><option>Algo no funciona</option><option>Contenido</option><option>Cuenta o acceso</option><option>Otro</option></select></div>
+            <div class="field"><label>¿Qué quieres contarnos?</label><textarea id="feedbackMessage" placeholder="Cuéntanos qué ocurrió o qué mejorarías…"></textarea></div>
+            <div class="field"><label>Correo para responderte (opcional)</label><input id="feedbackEmail" type="email" placeholder="tu@email.com"></div>
+            <button class="primary" onclick="submitFeedback()">Enviar sugerencia →</button>
+            <p class="tiny" style="margin-top:12px">En esta versión de prueba las sugerencias se guardan localmente. Al conectar Supabase se enviarán al panel de administración.</p>
+            <div id="feedbackHistory"></div>
+          </section>
+        </div>
+      </section>
+
     </main>
   </div>
 
@@ -244,6 +303,8 @@
     <button class="navbtn" data-view="today" onclick="startToday(this)">Hoy</button>
     <button class="navbtn" data-view="history" onclick="showView('history',this)">Historia</button>
     <button class="navbtn" data-view="progress" onclick="showView('progress',this)">Progreso</button>
+    <button class="navbtn" data-view="guide" onclick="showView('guide',this)">Guía</button>
+    <button class="navbtn" data-view="help" onclick="showView('help',this)">Ayuda</button>
   </nav>
 
   <div class="modal" id="baselineModal"><div class="modalbox">
@@ -296,14 +357,57 @@
     <div class="field"><label>Programa</label><select id="testerProgram" onchange="syncTesterMax()"><option value="gratitud">Gratitud</option><option value="disciplina">Disciplina</option><option value="elocuencia">Hablar con elocuencia</option></select></div>
     <div class="tester"><input id="testerDay" type="number" min="1" max="90" value="1"><button class="primary" onclick="jumpToDay()">Abrir día</button></div>
     <button class="ghost" style="width:100%;margin-top:10px" onclick="resetDemo()">Reiniciar datos de prueba</button>
-    <p class="tiny" style="margin-top:14px">Este prototipo usa localStorage. Todavía no modifica la base de Supabase.</p>
+    <p class="tiny" style="margin-top:14px">Este prototipo usa localStorage para progreso, cuentas y sugerencias. Todavía no modifica la base de Supabase.</p>
     <div class="modal-actions">
       <button class="ghost" style="margin-left:auto" onclick="closeModal('testerModal')">Cerrar</button>
     </div>
   </div></div>
 
+  <div class="modal" id="accountModal"><div class="modalbox">
+    <div class="modalhead"><div class="copy"><div class="eyebrow">Tu cuenta</div><h2 id="accountModalTitle">Tu espacio personal en NEXORA</h2></div><button class="closex" aria-label="Cerrar" onclick="closeModal('accountModal')">×</button></div>
+    <div id="authBox">
+      <div class="auth-tabs"><button class="authtab active" id="loginTab" onclick="switchAuth('login')">Entrar</button><button class="authtab" id="signupTab" onclick="switchAuth('signup')">Crear cuenta</button></div>
+      <div class="authpane active" id="loginPane">
+        <div class="field"><label>Correo</label><input id="loginEmail" type="email" placeholder="tu@email.com" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
+        <div class="field"><label>Contraseña</label><input id="loginPassword" type="password" placeholder="Tu contraseña" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
+        <button class="primary" style="width:100%" onclick="loginDemoAccount()">Entrar a mi cuenta</button>
+      </div>
+      <div class="authpane" id="signupPane">
+        <div class="field"><label>Nombre</label><input id="signupName" placeholder="Tu nombre" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
+        <div class="field"><label>Correo</label><input id="signupEmail" type="email" placeholder="tu@email.com" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
+        <div class="field"><label>Contraseña</label><input id="signupPassword" type="password" placeholder="Mínimo 6 caracteres" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
+        <button class="primary" style="width:100%" onclick="createDemoAccount()">Crear mi cuenta</button>
+      </div>
+      <div class="auth-note"><b>Modo de prueba:</b> esta versión demuestra cómo funcionarán las cuentas y separa el progreso por usuario en este navegador. El siguiente paso será conectar este flujo con Supabase Auth para que la cuenta funcione en cualquier dispositivo.</div>
+    </div>
+    <div class="profilebox" id="profileBox">
+      <div class="profilehero"><div class="avatar" id="profileAvatar">N</div><div class="profilemeta"><b id="profileName">Usuario</b><span id="profileEmail"></span></div></div>
+      <div class="status-chip"><span class="status-dot"></span>Sesión activa</div>
+      <div class="card" style="box-shadow:none;margin-top:16px;padding:18px"><div class="eyebrow">Tu información</div><p class="muted" style="margin:0">Tu progreso de Gratitud, Disciplina y Hablar con elocuencia queda separado de otros usuarios de este navegador.</p></div>
+      <button class="ghost" style="width:100%;margin-top:16px" onclick="logoutDemoAccount()">Cerrar sesión</button>
+    </div>
+  </div></div>
+
 
 <script>
+
+const ACCOUNT_KEY='nexora_demo_accounts_v1';
+const SESSION_KEY='nexora_demo_session_v1';
+const FEEDBACK_KEY='nexora_feedback_v1';
+let currentSession=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+function userStateKey(email=currentSession?.email){if(!email)return 'nexora_v3_state';return 'nexora_user_state_'+btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/=/g,'')}
+async function hashPassword(value){const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}
+function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
+function updateAccountUI(){const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Entrar';av.textContent='?'}const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
+function openAccount(){document.getElementById('accountModal').classList.add('open');renderAccountModal()}
+function renderAccountModal(){const auth=document.getElementById('authBox'),profile=document.getElementById('profileBox');if(currentSession){auth.style.display='none';profile.classList.add('active');document.getElementById('profileName').textContent=currentSession.name;document.getElementById('profileEmail').textContent=currentSession.email;document.getElementById('profileAvatar').textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{auth.style.display='block';profile.classList.remove('active')}}
+function switchAuth(mode){document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginPane').classList.toggle('active',mode==='login');document.getElementById('signupPane').classList.toggle('active',mode==='signup')}
+async function createDemoAccount(){const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim().toLowerCase(),password=document.getElementById('signupPassword').value;if(!name||!email.includes('@')||password.length<6){toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');return}const all=accounts();if(all[email]){toast('Ya existe una cuenta de prueba con ese correo.');return}all[email]={name,email,passwordHash:await hashPassword(password),createdAt:new Date().toISOString()};localStorage.setItem(ACCOUNT_KEY,JSON.stringify(all));localStorage.setItem(userStateKey(email),JSON.stringify(appState));currentSession={name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();save();updateAccountUI();renderAccountModal();toast('Cuenta creada. Tu progreso ya quedó asociado a este usuario.')}
+async function loginDemoAccount(){const email=document.getElementById('loginEmail').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value,all=accounts();if(!all[email]){toast('No encontramos esa cuenta de prueba.');return}if(all[email].passwordHash!==await hashPassword(password)){toast('La contraseña no coincide.');return}currentSession={name:all[email].name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();renderAll();updateAccountUI();renderAccountModal();toast('Bienvenido de nuevo.')}
+function logoutDemoAccount(){currentSession=null;localStorage.removeItem(SESSION_KEY);appState=JSON.parse(localStorage.getItem('nexora_v3_state')||'null')||defaultAppState();renderAll();updateAccountUI();closeModal('accountModal');toast('Sesión cerrada.')}
+function submitFeedback(){const type=document.getElementById('feedbackType').value,msg=document.getElementById('feedbackMessage').value.trim(),email=document.getElementById('feedbackEmail').value.trim();if(msg.length<5){toast('Cuéntanos un poco más antes de enviar.');return}const items=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]');items.unshift({type,message:msg,email,user:currentSession?.email||null,date:new Date().toISOString()});localStorage.setItem(FEEDBACK_KEY,JSON.stringify(items.slice(0,30)));document.getElementById('feedbackMessage').value='';renderFeedback();toast('Sugerencia guardada para esta prueba.')}
+function renderFeedback(){const wrap=document.getElementById('feedbackHistory');if(!wrap)return;const items=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]').filter(x=>!currentSession||!x.user||x.user===currentSession.email).slice(0,3);wrap.innerHTML=items.length?'<div class="eyebrow" style="margin-top:22px">Tus envíos recientes</div><div class="feedback-list">'+items.map(x=>`<div class="feedback-item"><b>${escapeHtml(x.type)}</b><small>${new Date(x.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><div style="margin-top:6px;color:var(--ink2)">${escapeHtml(x.message)}</div></div>`).join('')+'</div>':''}
+
 const D=(d,title,hook,lesson,mission,prompts)=>({d,title,hook,lesson,mission,prompts});
 const DD=(d,title,hook,mission,prompts)=>({d,title,hook,mission,prompts});
 
@@ -611,7 +715,7 @@ const defaultAppState=()=>({selectedProgram:'gratitud', programs:{
   disciplina:defaultProgramState(),
   elocuencia:defaultProgramState()
 }});
-let appState=JSON.parse(localStorage.getItem('nexora_v3_state')||'null')||JSON.parse(localStorage.getItem('nexora_v2_state')||'null')||defaultAppState();
+let appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||(!currentSession?JSON.parse(localStorage.getItem('nexora_v2_state')||'null'):null)||defaultAppState();
 if(!appState.programs?.gratitud) appState=defaultAppState();
 Object.keys(PROGRAMS).forEach(id=>{if(!appState.programs[id]) appState.programs[id]=defaultProgramState()});
 if(!PROGRAMS[appState.selectedProgram]) appState.selectedProgram='gratitud';
@@ -622,13 +726,13 @@ function program(id=appState.selectedProgram){return PROGRAMS[id]}
 function pstate(id=appState.selectedProgram){return appState.programs[id]}
 function totalDays(p=program()){return p.days.length}
 function stageForDay(p,n){return p.stages.find((st,i)=>{const nums=(st.range.match(/\d+/g)||[]).map(Number);return nums.length>=2?n>=nums[0]&&n<=nums[1]:i===p.stages.length-1})||p.stages[p.stages.length-1]}
-function save(){localStorage.setItem('nexora_v3_state',JSON.stringify(appState));renderAll()}
+function save(){localStorage.setItem(userStateKey(),JSON.stringify(appState));renderAll()}
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 function closeOpenModal(){const open=document.querySelector('.modal.open');if(open)open.classList.remove('open')}
 document.addEventListener('click',e=>{if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('open')})
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeOpenModal()})
-function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress()}
+function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
@@ -643,7 +747,7 @@ function openScience(){document.getElementById('scienceModal').classList.add('op
 function syncTesterMax(){const id=document.getElementById('testerProgram').value,p=program(id),input=document.getElementById('testerDay');input.max=totalDays(p);if(+input.value>totalDays(p))input.value=totalDays(p)}
 function openTester(){document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();document.getElementById('testerModal').classList.add('open')}
 function jumpToDay(){const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
-function resetDemo(){if(confirm('¿Reiniciar todos los datos guardados de este prototipo?')){appState=defaultAppState();previewDay=null;['nexora_v1_state','nexora_v2_state','nexora_v3_state'].forEach(k=>localStorage.removeItem(k));renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
+function resetDemo(){if(confirm('¿Reiniciar el progreso de esta sesión de prueba?')){appState=defaultAppState();previewDay=null;localStorage.removeItem(userStateKey());renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
 function startToday(btn){const s=pstate();if(!s.baselineDone){beginProgram();return}const n=Math.min(previewDay||s.currentDay,totalDays());renderExercise(n,!!previewDay);showView('today',btn)}
 function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
 function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max;document.getElementById('exerciseCard').innerHTML=`
@@ -662,7 +766,7 @@ function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEa
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus caminos y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function renderAll(){renderHome();renderProgram();renderHistory();renderProgress()}
+function renderAll(){renderHome();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
 </script>
 
