@@ -3,43 +3,51 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
 <title>NEXORA Admin</title>
 <style>
 :root{--ink:#101827;--muted:#6f7888;--paper:#f7f4ef;--card:#fffdf9;--line:#e9e2d8;--gold:#c7924f;--green:#5e7a63;--red:#a04f4f}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
-.shell{max-width:1200px;margin:0 auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:24px}.brand{font-weight:900;letter-spacing:.14em}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{font-size:28px;display:block}.metric span{font-size:12px;color:var(--muted)}h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;font-weight:800}.primary{background:var(--ink);color:white}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.shell{max-width:1200px;margin:0 auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:24px}.brand{font-weight:900;letter-spacing:.14em}.version{font-size:10px;color:var(--muted);margin-top:5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{font-size:28px;display:block}.metric span{font-size:12px;color:var(--muted)}h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;font-weight:800}.primary{background:var(--ink);color:white}.primary:disabled{opacity:.55;cursor:wait}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
 .tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}.table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.stack{display:grid;gap:16px}.feedback{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.feedback-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#f1e3cc;color:#6b4a25;font-size:11px;font-weight:800}.empty{padding:30px;text-align:center;color:var(--muted)}
-.auth{max-width:460px;margin:80px auto}.auth input{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;margin:7px 0}.notice{padding:12px 14px;border-radius:14px;background:#fff4dc;border:1px solid #ecd7a8;margin-bottom:16px}
-@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.shell{padding:16px}}
+.auth{max-width:500px;margin:80px auto}.auth input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;margin:7px 0;background:#fff;color:var(--ink)}.msg{margin-top:13px;min-height:22px;font-size:13px;line-height:1.45}.msg.error{color:#8d3434}.msg.ok{color:#416247}.linkbtn{width:100%;margin-top:8px;background:transparent;color:#415e78}.notice{padding:12px 14px;border-radius:14px;background:#fff4dc;border:1px solid #ecd7a8;margin-bottom:16px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.shell{padding:16px}.auth{margin:38px auto}}
 </style>
 </head>
 <body>
 <div class="shell">
   <div id="authView" class="auth card">
     <div class="brand">NEXORA ADMIN</div>
+    <div class="version">ADMIN v2 · conexión directa segura</div>
     <h1 style="margin-top:18px">Panel privado</h1>
-    <p class="muted">Entra con una cuenta NEXORA marcada como administradora.</p>
-    <input id="email" type="email" placeholder="Correo">
-    <input id="password" type="password" placeholder="Contraseña">
-    <button class="primary" type="button" style="width:100%;margin-top:8px" id="loginBtn">Entrar</button>
-    <button type="button" id="forgotBtn" style="width:100%;margin-top:8px;background:transparent;color:#415e78">¿Olvidaste tu contraseña?</button>
-    <div id="authMsg" class="muted" style="margin-top:12px;min-height:20px"></div>
+    <p class="muted">Acceso exclusivo para cuentas administradoras de NEXORA.</p>
+
+    <form id="loginForm">
+      <input id="email" type="email" autocomplete="username" placeholder="Correo de administrador" required>
+      <input id="password" type="password" autocomplete="current-password" placeholder="Contraseña" required>
+      <button class="primary" type="submit" style="width:100%;margin-top:8px" id="loginBtn">Entrar</button>
+    </form>
+
+    <button class="linkbtn" type="button" id="forgotBtn">¿Olvidaste tu contraseña?</button>
+    <div id="authMsg" class="msg"></div>
+
     <div id="recoveryBox" style="display:none;margin-top:14px">
-      <input id="newPassword" type="password" placeholder="Nueva contraseña">
-      <input id="confirmPassword" type="password" placeholder="Confirmar contraseña">
+      <input id="newPassword" type="password" autocomplete="new-password" placeholder="Nueva contraseña">
+      <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirmar contraseña">
       <button class="primary" type="button" style="width:100%;margin-top:8px" id="savePasswordBtn">Guardar nueva contraseña</button>
     </div>
   </div>
 
   <div id="appView" style="display:none">
     <div class="top">
-      <div><div class="brand">NEXORA ADMIN</div><div class="muted" id="adminEmail"></div></div>
+      <div><div class="brand">NEXORA ADMIN</div><div class="muted" id="adminEmail"></div><div class="version">ADMIN v2</div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="refreshBtn">Actualizar</button><button class="ghost" id="logoutBtn">Cerrar sesión</button></div>
     </div>
 
-    <div class="grid" id="metrics">
+    <div class="grid">
       <div class="card metric"><b id="mUsers">—</b><span>usuarios registrados</span></div>
       <div class="card metric"><b id="mActive7">—</b><span>activos últimos 7 días</span></div>
       <div class="card metric"><b id="mActive30">—</b><span>activos últimos 30 días</span></div>
@@ -66,26 +74,72 @@
     </div>
   </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const URL='https://nnfcppwruhethardmmvq.supabase.co';
+const API='https://nnfcppwruhethardmmvq.supabase.co';
 const KEY='sb_publishable_1EYhImZLjFH-Z9jgQf7f_Q_VMCBbY6f';
-const sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true}});
-let currentUser=null;
-let usersData=[], feedbackData=[], eventData=[], stateData=[];
+const ADMIN_URL='https://nexora-five-ecru.vercel.app/admin';
+const STORE='nexora_admin_session_v2';
+let session=null,currentUser=null,usersData=[],feedbackData=[],eventData=[],stateData=[];
 
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const fmt=d=>d?new Date(d).toLocaleString('es-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—';
 const pct=(s,max)=>s?Math.round(((s.completed_days||[]).length/max)*100)+'%':'—';
 const statusLabel=s=>({new:'Nueva',reviewed:'Revisada',planned:'Planificada',shipped:'Implementada',closed:'Cerrada'})[s]||s;
+const msgEl=document.getElementById('authMsg');
 
+function setMsg(text,type=''){msgEl.textContent=text;msgEl.className='msg'+(type?' '+type:'')}
+function authHeaders(token){return {'apikey':KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'}}
+function publicHeaders(){return {'apikey':KEY,'Content-Type':'application/json'}}
+function saveSession(s){session=s;localStorage.setItem(STORE,JSON.stringify(s))}
+function clearSession(){session=null;currentUser=null;localStorage.removeItem(STORE)}
+
+async function authFetch(path,options={}){
+  const res=await fetch(API+path,options);
+  let body={};try{body=await res.json()}catch{}
+  if(!res.ok)throw new Error(body?.msg||body?.message||body?.error_description||body?.error||('HTTP '+res.status));
+  return body;
+}
+async function rest(path,options={}){
+  if(!session?.access_token)throw new Error('No active session');
+  const res=await fetch(API+'/rest/v1/'+path,{...options,headers:{...authHeaders(session.access_token),...(options.headers||{})}});
+  let body=null;
+  const text=await res.text();
+  if(text){try{body=JSON.parse(text)}catch{body=text}}
+  if(res.status===401&&session?.refresh_token){
+    await refreshSession();
+    return rest(path,options);
+  }
+  if(!res.ok)throw new Error(typeof body==='string'?body:(body?.message||body?.hint||('HTTP '+res.status)));
+  return body;
+}
+async function refreshSession(){
+  const data=await authFetch('/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:publicHeaders(),body:JSON.stringify({refresh_token:session.refresh_token})});
+  saveSession(data);
+  return data;
+}
+async function getUser(){
+  const data=await authFetch('/auth/v1/user',{headers:authHeaders(session.access_token)});
+  currentUser=data;
+  return data;
+}
+async function verifyAdmin(){
+  const rows=await rest('admin_users?select=user_id&user_id=eq.'+encodeURIComponent(currentUser.id));
+  return Array.isArray(rows)&&rows.length===1;
+}
 async function checkAdmin(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){showAuth();return false}
-  currentUser=session.user;
-  const {data,error}=await sb.from('admin_users').select('user_id').eq('user_id',currentUser.id).maybeSingle();
-  if(error||!data){await sb.auth.signOut();document.getElementById('authMsg').textContent='Esta cuenta no tiene acceso administrativo.';showAuth();return false}
-  showApp();await loadAll();return true
+  if(!session?.access_token){showAuth();return false}
+  try{
+    await getUser();
+    const ok=await verifyAdmin();
+    if(!ok){clearSession();setMsg('Esta cuenta no tiene acceso administrativo.','error');showAuth();return false}
+    showApp();await loadAll();return true;
+  }catch(e){
+    if(session?.refresh_token){
+      try{await refreshSession();await getUser();const ok=await verifyAdmin();if(ok){showApp();await loadAll();return true}}catch{}
+    }
+    clearSession();showAuth();return false;
+  }
 }
 function showAuth(){document.getElementById('authView').style.display='block';document.getElementById('appView').style.display='none'}
 function showApp(){document.getElementById('authView').style.display='none';document.getElementById('appView').style.display='block';document.getElementById('adminEmail').textContent=currentUser?.email||''}
@@ -93,69 +147,70 @@ function showApp(){document.getElementById('authView').style.display='none';docu
 async function adminLogin(){
   const email=document.getElementById('email').value.trim().toLowerCase();
   const password=document.getElementById('password').value;
-  const msg=document.getElementById('authMsg');
   const btn=document.getElementById('loginBtn');
-  msg.textContent='';
-  if(!email||!password){msg.textContent='Escribe el correo y la contraseña.';return}
+  setMsg('');
+  if(!email||!password){setMsg('Escribe el correo y la contraseña.','error');return}
   btn.disabled=true;btn.textContent='Entrando…';
   try{
-    const {error}=await sb.auth.signInWithPassword({email,password});
-    if(error){
-      msg.textContent='No se pudo iniciar sesión. Verifica el correo y la contraseña.';
-      return;
-    }
-    const ok=await checkAdmin();
-    if(!ok && !msg.textContent) msg.textContent='La cuenta inició sesión, pero no tiene acceso administrativo.';
+    const data=await authFetch('/auth/v1/token?grant_type=password',{method:'POST',headers:publicHeaders(),body:JSON.stringify({email,password})});
+    saveSession(data);currentUser=data.user;
+    const ok=await verifyAdmin();
+    if(!ok){clearSession();setMsg('La cuenta es válida, pero no tiene acceso administrativo.','error');return}
+    showApp();await loadAll();
   }catch(e){
-    msg.textContent='No se pudo conectar con el servicio de acceso. Inténtalo de nuevo.';
+    clearSession();
+    setMsg('No se pudo iniciar sesión. Verifica el correo y la contraseña.','error');
   }finally{
     btn.disabled=false;btn.textContent='Entrar';
   }
 }
-document.getElementById('loginBtn').addEventListener('click',adminLogin);
-['email','password'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin()}));
+document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();adminLogin()});
 
 document.getElementById('forgotBtn').addEventListener('click',async()=>{
   const email=document.getElementById('email').value.trim().toLowerCase();
-  const msg=document.getElementById('authMsg');
-  if(!email||!email.includes('@')){msg.textContent='Escribe primero el correo de administrador.';return}
-  msg.textContent='Enviando enlace de recuperación…';
+  if(!email||!email.includes('@')){setMsg('Escribe primero el correo de administrador.','error');return}
+  const b=document.getElementById('forgotBtn');b.disabled=true;
+  setMsg('Enviando enlace de recuperación…');
   try{
-    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://nexora-five-ecru.vercel.app/admin.html'});
-    if(error){msg.textContent='No pudimos enviar el enlace de recuperación. Inténtalo nuevamente.';return}
-    msg.textContent='Revisa tu correo. Te enviamos un enlace para crear una nueva contraseña.';
+    await authFetch('/auth/v1/recover?redirect_to='+encodeURIComponent(ADMIN_URL),{method:'POST',headers:publicHeaders(),body:JSON.stringify({email})});
+    setMsg('Revisa tu correo. Te enviamos un enlace para crear una nueva contraseña.','ok');
   }catch(e){
-    msg.textContent='No se pudo conectar con el servicio de recuperación.';
-  }
+    setMsg('No pudimos enviar el enlace de recuperación. Inténtalo nuevamente.','error');
+  }finally{b.disabled=false}
 });
 
 document.getElementById('savePasswordBtn').addEventListener('click',async()=>{
   const p=document.getElementById('newPassword').value;
   const q=document.getElementById('confirmPassword').value;
-  const msg=document.getElementById('authMsg');
-  if(p.length<6){msg.textContent='La contraseña debe tener al menos 6 caracteres.';return}
-  if(p!==q){msg.textContent='Las contraseñas no coinciden.';return}
-  const {error}=await sb.auth.updateUser({password:p});
-  if(error){msg.textContent='No pudimos actualizar la contraseña.';return}
-  document.getElementById('recoveryBox').style.display='none';
-  msg.textContent='Contraseña actualizada. Entrando al panel…';
-  await checkAdmin();
+  if(p.length<6){setMsg('La contraseña debe tener al menos 6 caracteres.','error');return}
+  if(p!==q){setMsg('Las contraseñas no coinciden.','error');return}
+  try{
+    await authFetch('/auth/v1/user',{method:'PUT',headers:authHeaders(session.access_token),body:JSON.stringify({password:p})});
+    setMsg('Contraseña actualizada. Entrando al panel…','ok');
+    document.getElementById('recoveryBox').style.display='none';
+    await checkAdmin();
+  }catch(e){setMsg('No pudimos actualizar la contraseña.','error')}
 });
-document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();showAuth()});
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{
+  try{if(session?.access_token)await fetch(API+'/auth/v1/logout',{method:'POST',headers:authHeaders(session.access_token)})}catch{}
+  clearSession();showAuth();setMsg('');
+});
 document.getElementById('refreshBtn').addEventListener('click',loadAll);
 document.getElementById('userSearch').addEventListener('input',renderUsers);
 document.getElementById('feedbackFilter').addEventListener('change',renderFeedback);
 
 async function loadAll(){
-  const [profiles,states,feedback,events]=await Promise.all([
-    sb.from('profiles').select('id,display_name,email,created_at,last_seen_at').order('created_at',{ascending:false}),
-    sb.from('program_state').select('user_id,program_key,current_day,completed_days,updated_at'),
-    sb.from('feedback').select('*').order('created_at',{ascending:false}).limit(200),
-    sb.from('app_events').select('user_id,event_type,program_key,day,created_at').order('created_at',{ascending:false}).limit(200)
-  ]);
-  if(profiles.error||states.error||feedback.error||events.error){alert('No se pudieron cargar todos los datos del panel.');return}
-  usersData=profiles.data||[];stateData=states.data||[];feedbackData=feedback.data||[];eventData=events.data||[];
-  renderMetrics();renderUsers();renderFeedback();renderEvents();
+  try{
+    const [profiles,states,feedback,events]=await Promise.all([
+      rest('profiles?select=id,display_name,email,created_at,last_seen_at&order=created_at.desc'),
+      rest('program_state?select=user_id,program_key,current_day,completed_days,updated_at'),
+      rest('feedback?select=*&order=created_at.desc&limit=200'),
+      rest('app_events?select=user_id,event_type,program_key,day,created_at&order=created_at.desc&limit=200')
+    ]);
+    usersData=profiles||[];stateData=states||[];feedbackData=feedback||[];eventData=events||[];
+    renderMetrics();renderUsers();renderFeedback();renderEvents();
+  }catch(e){alert('No se pudieron cargar todos los datos del panel: '+e.message)}
 }
 function renderMetrics(){
   const now=Date.now(),d7=7*864e5,d30=30*864e5;
@@ -165,8 +220,7 @@ function renderMetrics(){
   document.getElementById('mFeedback').textContent=feedbackData.filter(f=>f.status==='new').length;
 }
 function renderUsers(){
-  const q=document.getElementById('userSearch').value.trim().toLowerCase();
-  const body=document.getElementById('usersBody');
+  const q=document.getElementById('userSearch').value.trim().toLowerCase(),body=document.getElementById('usersBody');
   const rows=usersData.filter(u=>!q||[u.display_name,u.email].some(v=>(v||'').toLowerCase().includes(q))).map(u=>{
     const get=k=>stateData.find(s=>s.user_id===u.id&&s.program_key===k);
     return '<tr><td><b>'+esc(u.display_name||'Sin nombre')+'</b><br><span class="muted">'+esc(u.email||'')+'</span></td><td>'+fmt(u.last_seen_at)+'</td><td>'+pct(get('gratitud'),90)+'</td><td>'+pct(get('disciplina'),90)+'</td><td>'+pct(get('elocuencia'),15)+'</td></tr>'
@@ -174,8 +228,7 @@ function renderUsers(){
   body.innerHTML=rows||'<tr><td colspan="5" class="empty">No hay usuarios para mostrar.</td></tr>';
 }
 function renderFeedback(){
-  const filter=document.getElementById('feedbackFilter').value;
-  const wrap=document.getElementById('feedbackList');
+  const filter=document.getElementById('feedbackFilter').value,wrap=document.getElementById('feedbackList');
   const items=feedbackData.filter(f=>!filter||f.status===filter);
   wrap.innerHTML=items.length?items.map(f=>{
     const user=usersData.find(u=>u.id===f.user_id);
@@ -183,8 +236,10 @@ function renderFeedback(){
   }).join(''):'<div class="empty">No hay sugerencias en este estado.</div>';
   document.querySelectorAll('.feedback-status').forEach(el=>el.addEventListener('change',async()=>{
     const id=el.dataset.id,status=el.value;
-    const {error}=await sb.from('feedback').update({status}).eq('id',id);
-    if(!error){const item=feedbackData.find(x=>x.id===id);if(item)item.status=status;renderMetrics();renderFeedback()}
+    try{
+      await rest('feedback?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status})});
+      const item=feedbackData.find(x=>x.id===id);if(item)item.status=status;renderMetrics();renderFeedback();
+    }catch(e){alert('No pudimos actualizar la sugerencia.')}
   }));
 }
 function renderEvents(){
@@ -194,16 +249,24 @@ function renderEvents(){
     return '<tr><td>'+fmt(e.created_at)+'</td><td>'+esc(u?.display_name||u?.email||e.user_id.slice(0,8))+'</td><td>'+esc(e.event_type)+'</td><td>'+esc(e.program_key||'—')+'</td><td>'+(e.day??'—')+'</td></tr>'
   }).join('')||'<tr><td colspan="5" class="empty">Aún no hay actividad.</td></tr>';
 }
-sb.auth.onAuthStateChange(async(event,session)=>{
-  if(event==='PASSWORD_RECOVERY'){
-    currentUser=session?.user||null;
-    showAuth();
-    document.getElementById('recoveryBox').style.display='block';
-    document.getElementById('authMsg').textContent='Crea una nueva contraseña para tu cuenta administradora.';
+
+(function init(){
+  const hash=new URLSearchParams(location.hash.replace(/^#/,''));
+  const access=hash.get('access_token'),refresh=hash.get('refresh_token'),type=hash.get('type');
+  if(access&&refresh){
+    saveSession({access_token:access,refresh_token:refresh,user:null});
+    try{history.replaceState({},document.title,location.pathname)}catch{}
+    if(type==='recovery'){
+      showAuth();
+      document.getElementById('recoveryBox').style.display='block';
+      setMsg('Crea una nueva contraseña para tu cuenta administradora.');
+      return;
+    }
+  }else{
+    try{const stored=JSON.parse(localStorage.getItem(STORE)||'null');if(stored?.access_token)session=stored}catch{}
   }
-});
-checkAdmin();
+  checkAdmin();
+})();
 </script>
-<!-- data-admin-auth-hardening="v1" -->
 </body>
 </html>
