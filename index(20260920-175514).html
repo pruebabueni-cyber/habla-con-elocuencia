@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#101a2b" />
+<title>NEXORA — Transformación personal</title>
+<style>
+    :root{
+      --ink:#101827; --ink2:#2f3b50; --muted:#6f7888; --paper:#f7f4ef; --card:#fffdf9;
+      --line:#e9e2d8; --gold:#c7924f; --gold2:#e5bf7d; --sage:#839987; --blue:#415e78;
+      --shadow:0 18px 55px rgba(31,37,51,.10); --r:24px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:
+      radial-gradient(circle at 8% 0%, rgba(229,191,125,.26), transparent 30%),
+      radial-gradient(circle at 100% 20%, rgba(131,153,135,.19), transparent 28%),
+      var(--paper); color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; min-height:100vh}
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .shell{max-width:1180px;margin:0 auto;padding:22px 20px 110px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.15em;font-size:20px}
+    .brandmark{width:35px;height:35px;border-radius:12px;background:linear-gradient(135deg,var(--ink),#31435e);position:relative;box-shadow:0 8px 18px rgba(16,24,39,.18)}
+    .brandmark:before,.brandmark:after{content:"";position:absolute;border-radius:999px;background:var(--gold2);transform:rotate(-24deg)}
+    .brandmark:before{width:7px;height:22px;left:10px;top:6px}.brandmark:after{width:7px;height:22px;right:9px;top:7px;opacity:.75}
+    .top-actions{display:flex;gap:9px;align-items:center}.iconbtn{border:1px solid var(--line);background:rgba(255,255,255,.62);padding:10px 13px;border-radius:14px;color:var(--ink2)}
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:stretch;margin:18px 0 28px}
+    .hero-main,.hero-side,.card{background:rgba(255,253,249,.88);border:1px solid rgba(233,226,216,.9);box-shadow:var(--shadow);border-radius:var(--r)}
+    .hero-main{padding:44px;min-height:360px;display:flex;flex-direction:column;justify-content:center;overflow:hidden;position:relative}
+    .hero-main:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-110px;top:-95px;background:linear-gradient(145deg,rgba(229,191,125,.45),rgba(65,94,120,.07))}
+    .eyebrow{text-transform:uppercase;letter-spacing:.16em;font-weight:800;color:var(--gold);font-size:12px;margin-bottom:15px}
+    h1,h2,h3,p{margin-top:0}.hero h1{font-size:clamp(38px,5.5vw,68px);line-height:.98;letter-spacing:-.055em;margin-bottom:20px;max-width:760px}
+    .lead{font-size:18px;line-height:1.65;color:var(--ink2);max-width:690px;margin-bottom:28px}
+    .primary,.secondary,.ghost{border-radius:15px;padding:14px 18px;font-weight:800;border:0;transition:.18s transform,.18s box-shadow,.18s background}
+    .primary{background:var(--ink);color:white;box-shadow:0 10px 24px rgba(16,24,39,.16)}.primary:hover{transform:translateY(-1px)}
+    .secondary{background:#f1e3cc;color:#5b4327}.ghost{background:transparent;border:1px solid var(--line);color:var(--ink2)}
+    .hero-side{padding:28px;display:flex;flex-direction:column;justify-content:space-between;background:linear-gradient(160deg,#172236,#2e4058);color:white}
+    .hero-side .small{color:#ccd4df}.quote{font-size:27px;line-height:1.2;letter-spacing:-.025em;font-weight:720;margin:18px 0}.mini-row{display:flex;gap:10px;flex-wrap:wrap}.pill{font-size:12px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.13)}
+    .section-title{display:flex;justify-content:space-between;align-items:end;gap:16px;margin:38px 0 16px}.section-title h2{font-size:28px;letter-spacing:-.03em;margin:0}.section-title p{margin:0;color:var(--muted)}
+    .programs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.program{padding:22px;border-radius:20px;background:var(--card);border:1px solid var(--line);min-height:205px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}.program.active{background:linear-gradient(160deg,#fffdf9,#f4e8d7)}
+    .program .badge{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#70522d;background:#f1dfc0;padding:6px 9px;border-radius:999px;width:max-content}.program.locked{opacity:.62}.program h3{font-size:23px;margin:18px 0 8px}.program p{color:var(--muted);line-height:1.45;font-size:14px}.program .arrow{font-size:22px;font-weight:700}
+    .dashboard{display:grid;grid-template-columns:1.12fr .88fr;gap:18px}.card{padding:26px}.today-card{background:linear-gradient(150deg,#fffdf9,#f4eadc)}
+    .day-number{font-size:12px;font-weight:900;color:var(--gold);letter-spacing:.16em;text-transform:uppercase}.today-title{font-size:32px;line-height:1.05;letter-spacing:-.035em;margin:9px 0 12px}.today-hook{font-size:17px;line-height:1.6;color:var(--ink2)}
+    .progressbar{height:10px;background:#eee8de;border-radius:999px;overflow:hidden}.progressbar>div{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:999px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.stat{background:#faf7f1;border:1px solid var(--line);border-radius:16px;padding:15px}.stat b{font-size:22px;display:block}.stat span{font-size:12px;color:var(--muted)}
+    .feed{display:grid;gap:10px}.feed-item{border:1px solid var(--line);background:#fffdfa;padding:15px;border-radius:16px}.feed-meta{font-size:11px;color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.09em;margin-bottom:7px}.feed-empty{color:var(--muted);line-height:1.6}
+    .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stage{padding:18px;background:#fff;border:1px solid var(--line);border-radius:18px}.stage .num{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}.stage h3{margin:7px 0 5px}.stage p{font-size:13px;color:var(--muted);line-height:1.45;margin:0}
+    .bottomnav{position:fixed;z-index:50;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(16,24,39,.94);color:#fff;border-radius:22px;padding:8px;display:flex;gap:4px;box-shadow:0 18px 48px rgba(16,24,39,.26);backdrop-filter:blur(14px)}
+    .navbtn{color:#ccd3dd;border:0;background:transparent;border-radius:15px;padding:11px 16px;font-size:13px}.navbtn.active,.navbtn:hover{background:rgba(255,255,255,.12);color:white}
+    .view{display:none}.view.active{display:block}
+    .program-hero{display:grid;grid-template-columns:1fr .7fr;gap:18px;margin-bottom:20px}.program-cover{padding:40px;border-radius:26px;background:linear-gradient(135deg,#172236,#31455f);color:white;min-height:340px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}.program-cover:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-80px;top:-100px;background:radial-gradient(circle,#dab271,transparent 67%);opacity:.36}.program-cover h1{font-size:46px;letter-spacing:-.045em;line-height:1;margin:8px 0 16px}.program-cover p{color:#d8dee7;line-height:1.6;max-width:610px}
+    .program-info{padding:28px;border-radius:26px;background:#fff;border:1px solid var(--line)}.program-info h3{font-size:23px}.checklist{display:grid;gap:12px}.check{display:flex;gap:11px;color:var(--ink2);line-height:1.4}.check:before{content:"✓";display:grid;place-items:center;width:22px;height:22px;flex:0 0 22px;border-radius:8px;background:#eef3ed;color:#58705c;font-weight:900}
+    .daysgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:7px;margin-top:14px}.daydot{aspect-ratio:1;border:1px solid var(--line);background:#fff;border-radius:11px;font-size:11px;display:grid;place-items:center;color:var(--muted)}.daydot.done{background:#e9efe8;color:#47634d;border-color:#cfddcf}.daydot.current{background:var(--ink);color:white;border-color:var(--ink)}
+    .exercise-shell{max-width:760px;margin:0 auto}.exercise-card{background:var(--card);border:1px solid var(--line);border-radius:28px;padding:clamp(24px,5vw,48px);box-shadow:var(--shadow)}.exercise-card h1{font-size:clamp(35px,7vw,58px);line-height:.98;letter-spacing:-.055em;margin:10px 0 18px}.exercise-card .hook{font-size:20px;line-height:1.55;color:var(--ink2)}.lessonbox{margin:28px 0;padding:20px;border-radius:18px;background:#f3eee6;border-left:4px solid var(--gold);line-height:1.58;color:var(--ink2)}.mission{margin:24px 0}.mission h3{font-size:19px;margin-bottom:9px}.mission p{font-size:17px;line-height:1.55}.field{margin:15px 0}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:7px;color:var(--ink2)}textarea{width:100%;min-height:110px;resize:vertical;border:1px solid #dcd4c8;background:#fff;border-radius:16px;padding:14px;outline:none;line-height:1.5}textarea:focus{border-color:#ba8b50;box-shadow:0 0 0 3px rgba(199,146,79,.12)}
+    .completebox{margin-top:24px;padding:19px;border-radius:18px;background:#152237;color:white}.completebox p{color:#d5dce6;line-height:1.55}.complete-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .history-head{display:flex;justify-content:space-between;gap:12px;align-items:end}.timeline{display:grid;gap:12px;margin-top:18px}.evidence{background:#fff;border:1px solid var(--line);border-radius:19px;padding:19px}.evidence small{color:var(--gold);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.evidence h3{margin:9px 0 6px}.evidence p{margin:0;color:var(--ink2);line-height:1.55}.evidence .answers{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:8px}.answer{font-size:14px;color:var(--muted)}
+    .progress-layout{display:grid;grid-template-columns:.72fr 1.28fr;gap:18px}.bigmetric{font-size:72px;letter-spacing:-.06em;font-weight:900}.muted{color:var(--muted)}.milestones{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}.milestone{padding:15px;border:1px solid var(--line);border-radius:16px;background:#fff}.milestone b{display:block;font-size:20px}.milestone.reached{background:#eef3ed;border-color:#cfddcf}
+    .modal{position:fixed;z-index:100;inset:0;background:rgba(11,17,27,.56);display:none;align-items:center;justify-content:center;padding:18px;backdrop-filter:blur(8px)}.modal.open{display:flex}.modalbox{position:relative;width:min(690px,100%);max-height:90vh;overflow:auto;background:#fffdfa;border-radius:26px;padding:28px;box-shadow:0 30px 90px rgba(0,0,0,.28)}.modalbox h2{font-size:32px;letter-spacing:-.035em}.modalhead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:8px}.modalhead .copy{flex:1;min-width:0}.closex{border:1px solid var(--line);background:#fff;border-radius:14px;width:44px;height:44px;display:grid;place-items:center;color:var(--ink2);font-size:24px;font-weight:900;line-height:1;flex:0 0 44px}.closex:hover{background:#f4efe7;color:var(--ink)}.modal-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.science-list{margin:18px 0 0;padding-left:22px;color:var(--ink2);line-height:1.7}.science-list li+li{margin-top:4px}.q{padding:14px 0;border-top:1px solid var(--line)}.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:9px}.scale button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:10px 2px}.scale button.sel{background:var(--ink);color:white;border-color:var(--ink)}
+    .tester{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.tester input{width:100%;border:1px solid var(--line);padding:11px;border-radius:12px;background:#fff}.tiny{font-size:12px;color:var(--muted);line-height:1.45}
+    .toast{position:fixed;z-index:120;right:18px;top:18px;background:#101827;color:#fff;padding:14px 17px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(-8px);transition:.2s}.toast.show{opacity:1;transform:translateY(0)}
+    @media(max-width:920px){.hero,.dashboard,.program-hero,.progress-layout{grid-template-columns:1fr}.programs{grid-template-columns:repeat(2,1fr)}.stages{grid-template-columns:repeat(2,1fr)}.daysgrid{grid-template-columns:repeat(9,1fr)}.hero-main{padding:30px;min-height:300px}.hero-side{min-height:260px}}
+    @media(max-width:560px){.shell{padding:16px 14px 105px}.brand{font-size:17px}.hero-main{padding:25px}.hero-side{padding:23px}.programs,.stages{grid-template-columns:1fr}.program{min-height:175px}.card{padding:20px}.statrow{grid-template-columns:1fr 1fr 1fr}.daysgrid{grid-template-columns:repeat(6,1fr)}.bottomnav{width:calc(100% - 24px);justify-content:space-around}.navbtn{padding:10px 9px;font-size:12px}.program-cover{padding:28px}.program-cover h1{font-size:40px}.milestones{grid-template-columns:repeat(2,1fr)}.scale button{font-size:12px}.exercise-card{border-radius:22px}.top-actions .iconbtn:first-child{display:none}}
+  
+    .program.available{cursor:pointer;transition:.2s transform,.2s box-shadow,.2s border-color}
+    .program.available:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(31,37,51,.12);border-color:#d9c9b2}
+    .program.discipline{background:linear-gradient(160deg,#fdfdfb,#e8efe9)}
+    .program.discipline .badge{background:#dfeae0;color:#49624f}
+    .program.elocuencia{background:linear-gradient(160deg,#fffdf9,#f0edf7)}
+    .program-grid-status{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+    .program-progress{font-size:12px;color:var(--muted);font-weight:750}
+    .pathcards{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+    .pathcard{background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px}
+    .pathhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .pathcard h3{font-size:22px;margin:4px 0 7px}
+    .pathcard p{color:var(--muted);font-size:14px;line-height:1.5}
+    .path-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .smallbtn{border:0;border-radius:12px;padding:10px 13px;font-weight:800;background:var(--ink);color:#fff}
+    .smallbtn.alt{background:#f1e3cc;color:#5b4327}
+    .program-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+    .switchbtn{border:1px solid var(--line);background:#fff;color:var(--ink2);border-radius:999px;padding:9px 13px;font-weight:800}
+    .switchbtn.active{background:var(--ink);border-color:var(--ink);color:#fff}
+    .tagline{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;color:var(--muted)}
+    .tagdot{width:8px;height:8px;border-radius:999px;background:var(--gold)}
+    .tagdot.disc{background:#6f8f75}
+    .dual-feed-label{display:flex;align-items:center;gap:7px}
+    .feed-program{display:inline-block;font-size:10px;padding:4px 7px;border-radius:999px;background:#eee8de;color:#5e5141;margin-right:5px}
+    .feed-program.disc{background:#e3ece4;color:#506554}
+    .modal select{width:100%;border:1px solid var(--line);padding:11px;border-radius:12px;background:#fff;color:var(--ink)}
+    @media(max-width:920px){.pathcards{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+  <div class="toast" id="toast"></div>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brandmark"></span>NEXORA</div>
+      <div class="top-actions">
+        <button class="iconbtn" onclick="openScience()">Base científica</button>
+        <button class="iconbtn" onclick="openTester()">Vista tester</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="view active">
+        <div class="hero">
+          <div class="hero-main">
+            <div class="eyebrow">Transformación personal</div>
+            <h1>¿Qué quieres transformar en tu vida?</h1>
+            <p class="lead">NEXORA convierte intención en práctica: pequeñas acciones, reflexión y evidencia real de lo que estás construyendo.</p>
+            <div><button class="primary" onclick="openProgram('gratitud')">Explorar los caminos →</button></div>
+          </div>
+          <aside class="hero-side">
+            <div>
+              <div class="small">Tu principio de hoy</div>
+              <div class="quote">“No se trata de saber más. Se trata de convertirte.”</div>
+            </div>
+            <div class="mini-row"><span class="pill">Práctica real</span><span class="pill">Evidencia</span><span class="pill">Reflexión</span><span class="pill">Progreso</span></div>
+          </aside>
+        </div>
+
+        <div class="section-title"><div><h2>Elige un camino</h2><p>Tres caminos ya están disponibles en esta versión.</p></div></div>
+        <div class="programs">
+          <article class="program active available" onclick="openProgram('gratitud')">
+            <div><span class="badge">Disponible</span><h3>Gratitud</h3><p>Entrena tu atención para reconocer, apreciar y responder de manera diferente a lo valioso que ya existe en tu vida.</p></div>
+            <div class="program-grid-status"><span class="program-progress" id="gratitudCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+          </article>
+          <article class="program discipline available" onclick="openProgram('disciplina')">
+            <div><span class="badge">Disponible</span><h3>Disciplina</h3><p>Convierte decisiones importantes en acciones repetibles, incluso cuando la motivación cambia.</p></div>
+            <div class="program-grid-status"><span class="program-progress" id="disciplinaCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+          </article>
+          <article class="program locked"><div><span class="badge">Próximamente</span><h3>Confianza</h3><p>Construye evidencia de que puedes actuar incluso con incomodidad o incertidumbre.</p></div><div>🔒</div></article>
+          <article class="program elocuencia available" onclick="openProgram('elocuencia')">
+            <div><span class="badge">Programa original</span><h3>Hablar con elocuencia</h3><p>Continúa el entrenamiento original de 15 días: presencia, voz, estructura, persuasión y seguridad al expresarte.</p></div>
+            <div class="program-grid-status"><span class="program-progress" id="elocuenciaCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+          </article>
+          <article class="program locked"><div><span class="badge">Próximamente</span><h3>Comunicación</h3><p>Escucha, conversa, negocia y expresa tus ideas con mayor claridad y propósito en relaciones y trabajo.</p></div><div>🔒</div></article>
+        </div>
+
+        <div class="section-title"><div><h2>Tus caminos</h2><p>El progreso se guarda por separado. Tu historia puede reunir evidencias de varios programas.</p></div></div>
+        <div class="pathcards" id="homePaths"></div>
+
+        <div class="section-title"><div><h2>Tu vida, vista de otra manera</h2><p>Un solo lugar para la evidencia que vas creando en distintas áreas.</p></div></div>
+        <section class="card">
+          <div class="feed" id="homeFeed"></div>
+        </section>
+      </section>
+
+      <section id="program" class="view">
+        <div class="program-switch" id="programSwitch"></div>
+        <div class="program-hero">
+          <div class="program-cover" id="programCover">
+            <div class="eyebrow" id="programEyebrow" style="color:#e7c890"></div>
+            <h1 id="programTitle"></h1>
+            <p id="programSubtitle"></p>
+            <div style="margin-top:18px"><button class="secondary" id="programStartBtn" onclick="beginProgram()">Comenzar mi transformación →</button></div>
+          </div>
+          <aside class="program-info">
+            <div class="eyebrow">Lo que vas a entrenar</div>
+            <h3 id="programGoal"></h3>
+            <div class="checklist" id="programChecklist"></div>
+          </aside>
+        </div>
+
+        <div class="section-title"><div><h2>Seis etapas. Una progresión.</h2><p>Quince días por etapa.</p></div></div>
+        <div class="stages" id="stageCards"></div>
+        <div class="card" style="margin-top:18px">
+          <div style="display:flex;justify-content:space-between;align-items:end;gap:12px"><div><div class="eyebrow">Mapa de 90 días</div><h3 style="font-size:24px;margin-bottom:4px">Tu recorrido completo</h3></div><span class="muted" id="daysDoneLabel">0 / 90 completados</span></div>
+          <div class="daysgrid" id="daysGrid"></div>
+        </div>
+      </section>
+
+      <section id="today" class="view">
+        <div class="exercise-shell">
+          <button class="ghost" onclick="showView('home')" style="margin-bottom:14px">← Volver</button>
+          <article class="exercise-card" id="exerciseCard"></article>
+        </div>
+      </section>
+
+      <section id="history" class="view">
+        <div class="history-head"><div><div class="eyebrow">Historia personal</div><h1 style="font-size:44px;letter-spacing:-.05em;margin-bottom:7px">Tu vida, vista de otra manera</h1><p class="muted">Evidencias reales de Gratitud, Disciplina y Hablar con elocuencia en una sola historia.</p></div></div>
+        <div class="timeline" id="historyTimeline"></div>
+      </section>
+
+      <section id="progress" class="view">
+        <div class="program-switch" id="progressSwitch"></div>
+        <div class="progress-layout">
+          <section class="card">
+            <div class="eyebrow">Progreso</div>
+            <div class="bigmetric" id="progressPct">0%</div>
+            <p class="muted" id="progressProgramLabel"></p>
+            <div class="progressbar"><div id="progressFill" style="width:0%"></div></div>
+            <div class="statrow">
+              <div class="stat"><b id="statDays">0</b><span>días completados</span></div>
+              <div class="stat"><b id="statEvidence">0</b><span>evidencias</span></div>
+              <div class="stat"><b id="statThird">0</b><span id="statThirdLabel">señales</span></div>
+            </div>
+          </section>
+          <section class="card">
+            <div class="eyebrow">Hitos</div>
+            <h2 style="font-size:30px">No medimos solo uso. Buscamos evidencia de transformación.</h2>
+            <p class="muted" style="line-height:1.55">Los hitos de 15, 30, 60 y 90 días te devuelven lo que has practicado y registrado.</p>
+            <div class="milestones" id="milestones"></div>
+          </section>
+        </div>
+        <section class="card" style="margin-top:18px">
+          <div class="eyebrow">Etapa actual</div>
+          <h2 id="currentStageTitle" style="font-size:32px;margin-bottom:8px"></h2>
+          <p id="currentStageDesc" class="muted" style="line-height:1.6;max-width:760px"></p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottomnav">
+    <button class="navbtn active" data-view="home" onclick="showView('home',this)">Inicio</button>
+    <button class="navbtn" data-view="today" onclick="startToday(this)">Hoy</button>
+    <button class="navbtn" data-view="history" onclick="showView('history',this)">Historia</button>
+    <button class="navbtn" data-view="progress" onclick="showView('progress',this)">Progreso</button>
+  </nav>
+
+  <div class="modal" id="baselineModal"><div class="modalbox">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow">Antes de comenzar</div><h2 id="baselineTitle">Queremos conocerte como eres hoy.</h2>
+        <p class="muted" style="line-height:1.65">Esto crea tu punto de partida. No hay respuestas correctas; queremos comparar tu propia percepción más adelante.</p>
+      </div>
+      <button class="closex" aria-label="Cerrar" onclick="closeModal('baselineModal')">×</button>
+    </div>
+    <div id="baselineQuestions"></div>
+    <div class="modal-actions">
+      <button class="primary" style="flex:1" onclick="saveBaseline()">Guardar mi punto de partida →</button>
+      <button class="ghost" onclick="closeModal('baselineModal')">Cerrar</button>
+    </div>
+  </div></div>
+
+  <div class="modal" id="scienceModal"><div class="modalbox">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow">Base científica</div><h2>La experiencia evita promesas exageradas.</h2>
+      </div>
+      <button class="closex" aria-label="Cerrar" onclick="closeModal('scienceModal')">×</button>
+    </div>
+    <p class="muted" style="line-height:1.75;margin-bottom:12px">NEXORA organiza prácticas de conducta y reflexión inspiradas en investigación sobre varias áreas del cambio personal.</p>
+    <ul class="science-list">
+      <li>formación de hábitos</li>
+      <li>atención</li>
+      <li>gratitud</li>
+      <li>implementación de intenciones</li>
+      <li>diseño del entorno</li>
+      <li>autoobservación</li>
+      <li>mantenimiento conductual</li>
+    </ul>
+    <p class="muted" style="line-height:1.75;margin-top:16px">La aplicación no supone que completar un calendario transforma automáticamente a una persona. Los cierres sirven como puntos de evaluación, integración y consolidación.</p>
+    <div class="modal-actions">
+      <button class="primary" style="flex:1" onclick="closeModal('scienceModal')">Entendido</button>
+      <button class="ghost" onclick="closeModal('scienceModal')">Cerrar</button>
+    </div>
+  </div></div>
+
+  <div class="modal" id="testerModal"><div class="modalbox">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow">Vista tester</div><h2>Inspecciona los programas sin esperar a completar cada recorrido.</h2>
+        <p class="muted" style="line-height:1.65">Elige el camino y abre cualquier día. Así podemos comparar cómo se siente cada experiencia dentro de NEXORA.</p>
+      </div>
+      <button class="closex" aria-label="Cerrar" onclick="closeModal('testerModal')">×</button>
+    </div>
+    <div class="field"><label>Programa</label><select id="testerProgram" onchange="syncTesterMax()"><option value="gratitud">Gratitud</option><option value="disciplina">Disciplina</option><option value="elocuencia">Hablar con elocuencia</option></select></div>
+    <div class="tester"><input id="testerDay" type="number" min="1" max="90" value="1"><button class="primary" onclick="jumpToDay()">Abrir día</button></div>
+    <button class="ghost" style="width:100%;margin-top:10px" onclick="resetDemo()">Reiniciar datos de prueba</button>
+    <p class="tiny" style="margin-top:14px">Este prototipo usa localStorage. Todavía no modifica la base de Supabase.</p>
+    <div class="modal-actions">
+      <button class="ghost" style="margin-left:auto" onclick="closeModal('testerModal')">Cerrar</button>
+    </div>
+  </div></div>
+
+
+<script>
+const D=(d,title,hook,lesson,mission,prompts)=>({d,title,hook,lesson,mission,prompts});
+const DD=(d,title,hook,mission,prompts)=>({d,title,hook,mission,prompts});
+
+const GRATITUDE_STAGES=[
+  {name:'VER',range:'Días 1–15',desc:'Entrena la atención para detectar aspectos valiosos que la costumbre vuelve invisibles.'},
+  {name:'APRECIAR',range:'Días 16–30',desc:'Pasa de reconocer algo a detenerte, comprender su valor y experimentarlo conscientemente.'},
+  {name:'EXPRESAR',range:'Días 31–45',desc:'Convierte la gratitud interna en comunicación y conducta interpersonal específica.'},
+  {name:'PROFUNDIZAR',range:'Días 46–60',desc:'Rompe la habituación y redescubre valor en lo ordinario, conocido y repetido.'},
+  {name:'INTEGRAR',range:'Días 61–75',desc:'Practica una perspectiva agradecida sin negar frustración, dificultad ni emociones negativas.'},
+  {name:'CONVERTIRSE',range:'Días 76–90',desc:'Reduce gradualmente la dependencia de la guía y lleva la práctica a tu identidad cotidiana.'}
+];
+const GRATITUDE_DAYS=[
+D(1,'Lo que estaba ahí','Hay cosas buenas en tu vida que probablemente hoy no has notado. No porque no sean importantes. Porque se volvieron normales.','La atención es selectiva y la repetición reduce la novedad. Hoy no necesitas crear nada nuevo: necesitas volver a mirar.','Encuentra tres cosas presentes hoy que hacen tu vida un poco mejor y que normalmente no reconocerías conscientemente.',['Primera cosa que estaba ahí','Segunda cosa que estaba ahí','Tercera cosa que estaba ahí','¿Por qué importa para ti una de ellas?']),
+D(2,'Lo pequeño cuenta','Ayer buscaste lo evidente. Hoy la búsqueda se vuelve más fina.','Muchas experiencias agradables duran segundos y desaparecen de la memoria si no les prestamos atención.','Encuentra tres pequeños momentos agradables durante tu día. No tienen que ser importantes.',['Momento pequeño #1','Momento pequeño #2','Momento pequeño #3','¿Qué hizo especial uno de esos momentos?']),
+D(3,'Alguien hizo algo','Hasta ahora hemos mirado cosas. Hoy vamos a mirar personas.','Parte de lo que facilita nuestra vida proviene de acciones de otras personas, incluso cuando esas acciones son pequeñas.','Identifica una acción concreta de otra persona que te benefició hoy.',['¿Qué hizo esa persona?','¿Qué tuvo que hacer para que tú recibieras ese beneficio?','¿Qué habría sido diferente si no lo hubiera hecho?']),
+D(4,'Tu cuerpo también te sostiene','Antes de pensar en cómo se ve tu cuerpo, piensa en lo que te permite hacer.','La apreciación corporal puede enfocarse en función: capacidades que permiten vivir experiencias, no en apariencia.','Reconoce una capacidad de tu cuerpo que hoy hizo posible algo valioso.',['¿Qué capacidad notaste?','¿Qué te permitió hacer o experimentar hoy?']),
+D(5,'Lo que funciona','Hay cosas que solo parecen importantes cuando dejan de funcionar.','La familiaridad puede volver invisibles sistemas cotidianos que sostienen nuestra rutina.','Encuentra tres cosas que funcionaron hoy y que normalmente solo notarías si fallaran.',['Algo que funcionó #1','Algo que funcionó #2','Algo que funcionó #3']),
+D(6,'Antes no lo tenías','Parte de tu vida actual quizá fue deseo, esfuerzo o ausencia en otra etapa.','Compararte contigo mismo a través del tiempo puede revelar progreso que la adaptación vuelve normal.','Elige algo que hoy consideras normal pero que antes deseabas, necesitabas o no tenías.',['¿Qué tienes hoy que antes no tenías?','¿Qué habría pensado tu versión de hace cinco años al verlo?']),
+D(7,'Primera mirada atrás','Seis días producen datos. Hoy no necesitas buscar nada nuevo.','Reflexionar sobre experiencias recientes ayuda a consolidar patrones que de otro modo quedan dispersos.','Revisa mentalmente los últimos seis días y elige lo que más te sorprende haber pasado por alto.',['¿Qué habías olvidado valorar más?','¿Qué categoría aparece con mayor frecuencia: personas, cuerpo, comodidad, entorno u oportunidades?']),
+D(8,'Mira a tu alrededor','Tu entorno también participa en tu experiencia, aunque rara vez reciba atención.','La atención contextual amplía el foco más allá de pensamientos y personas.','Encuentra tres elementos de tu entorno que hoy hicieron tu experiencia un poco mejor.',['Elemento del entorno #1','Elemento del entorno #2','Elemento del entorno #3']),
+D(9,'Una persona','No pienses solamente en “quién”. Piensa en “cómo”.','La gratitud interpersonal se vuelve más concreta cuando identificamos conductas y recuerdos específicos.','Elige una persona cuya presencia aporta algo a tu vida y sé específico.',['¿Quién es esa persona?','¿Qué hace específicamente que mejora tu vida?','¿Qué recuerdo demuestra eso?']),
+D(10,'Algo difícil dejó algo','No necesitas agradecer el sufrimiento para reconocer algo que aprendiste después.','Reencuadrar con equilibrio significa permitir que una experiencia haya sido difícil y, al mismo tiempo, reconocer consecuencias valiosas si realmente existieron.','Si te resulta apropiado, elige una dificultad pasada de la que surgió aprendizaje, capacidad, decisión u oportunidad.',['¿Qué ocurrió?','¿Qué surgió después que hoy valoras?','¿Qué NO quieres minimizar de esa experiencia?']),
+D(11,'Quédate aquí 30 segundos','Hoy no vas a recordar algo bueno después. Vas a permanecer con ello mientras sucede.','El savoring consiste en atender deliberadamente una experiencia positiva en lugar de pasar inmediatamente a lo siguiente.','Cuando ocurra algo agradable, detente 30 segundos y observa detalles.',['¿Qué estaba ocurriendo?','¿Qué notaste al no apresurarte?']),
+D(12,'Lo que recibiste hoy','Recibir no siempre significa obtener un objeto.','Tiempo, atención, información, paciencia, servicio y oportunidades también implican contribuciones de otros.','Detecta algo no material que hayas recibido hoy.',['¿Qué recibiste?','¿Qué pudo requerir de la otra persona: tiempo, atención, esfuerzo o conocimiento?']),
+D(13,'Busca antes de que ocurra','Hoy empiezas el día sabiendo que algo valioso aparecerá, aunque todavía no sepas qué será.','Una intención de atención puede orientar qué estímulos buscamos y registramos durante el día.','Activa tu radar: encuentra algo que normalmente habrías ignorado.',['¿Qué encontraste?','¿En qué momento te diste cuenta de que tu atención lo estaba buscando?']),
+D(14,'Tu patrón empieza a aparecer','Después de casi dos semanas, tus respuestas empiezan a contar una historia.','La metacognición consiste en observar nuestros propios patrones sin apresurarnos a interpretarlos.','Mira tus categorías más frecuentes y registra qué te sorprende.',['¿Qué tipo de cosas aparecen más en tu gratitud?','¿Qué área aparece menos de lo que esperabas?']),
+D(15,'Ahora mira otra vez','Vuelve al principio con ojos distintos.','Repetir una tarea inicial permite comparar tu forma de observar sin depender solo de la memoria.','Haz nuevamente el ejercicio del Día 1 y compara.',['Tres cosas que hoy ves con claridad','¿Qué notas ahora que quizá no habrías notado hace 15 días?']),
+
+D(16,'Detenerte cambia la experiencia','Ver es el comienzo. Ahora vas a aprender a quedarte un poco más.','La apreciación requiere algo más que detección: atención sostenida al valor de la experiencia.','Elige una cosa buena de hoy y dedica un minuto completo a observarla sin multitarea.',['¿Qué elegiste?','¿Qué cambió al permanecer con ello?']),
+D(17,'¿Por qué importa?','Una misma cosa puede tener valores muy diferentes para dos personas.','Nombrar el significado personal transforma una lista genérica en apreciación específica.','Elige algo que agradeces y pregunta tres veces “¿por qué importa?”.',['¿Qué aprecias?','Primer porqué','Segundo porqué','Tercer porqué']),
+D(18,'El valor detrás de lo cotidiano','Lo cotidiano suele contener más valor del que cabe en su nombre.','Descomponer una experiencia en funciones, significados y consecuencias reduce la respuesta automática.','Elige una cosa ordinaria y enumera tres formas en que mejora tu vida.',['¿Qué elegiste?','Valor #1','Valor #2','Valor #3']),
+D(19,'Una cosa, cinco detalles','La profundidad aumenta cuando dejas de buscar más cosas y observas mejor una sola.','La atención a detalles sensoriales y contextuales puede hacer más vívida una experiencia.','Elige una experiencia agradable y registra cinco detalles concretos.',['¿Qué experiencia fue?','Cinco detalles que notaste']),
+D(20,'Disfrutar sin acelerar','La prisa convierte experiencias en transiciones.','Hoy entrenas una pausa deliberada para no saltar inmediatamente al siguiente estímulo.','Durante algo agradable, evita el teléfono y la multitarea por dos minutos.',['¿Qué experiencia protegiste de la prisa?','¿Qué notaste?']),
+D(21,'Agradecer el proceso','A veces valoramos el resultado e ignoramos todo lo que lo hizo posible.','Reconocer procesos hace visible esfuerzo, tiempo y condiciones acumuladas.','Elige un resultado que valores y reconstruye el proceso que lo produjo.',['Resultado que valoras','¿Qué pasos, personas o condiciones lo hicieron posible?']),
+D(22,'Lo que te facilita la vida','Conveniencia es una forma de valor que se vuelve invisible muy rápido.','Observar facilidades cotidianas ayuda a romper la adaptación a lo disponible.','Encuentra algo que hoy te ahorró tiempo, esfuerzo o preocupación.',['¿Qué te facilitó la vida?','¿Qué costo o esfuerzo evitó?']),
+D(23,'Una comodidad invisible','Lo cómodo se vuelve fondo hasta que desaparece.','El contraste moderado puede devolver saliencia a experiencias familiares.','Elige una comodidad diaria y aprecia conscientemente su presencia.',['¿Qué comodidad elegiste?','¿Cómo sería un día sin ella?']),
+D(24,'Un recuerdo que sigue dando','Algunas experiencias terminan, pero continúan aportando significado.','La gratitud también puede dirigirse a eventos pasados que siguen influyendo en el presente.','Recuerda una experiencia positiva que todavía tenga efecto en tu vida.',['¿Qué ocurrió?','¿Qué sigue aportando hoy?']),
+D(25,'Imagina que no hubiera ocurrido','A veces valoramos más algo al imaginar, brevemente, su ausencia.','Estudios sobre “sustracción mental” han observado que imaginar que un evento positivo pudo no haber ocurrido puede aumentar su apreciación.','Elige un evento positivo y considera cómo sería tu vida si nunca hubiese ocurrido.',['Evento elegido','¿Qué sería diferente si no hubiera ocurrido?','¿Qué valor ves ahora con mayor claridad?']),
+D(26,'El costo detrás de lo que recibes','Lo valioso suele tener detrás tiempo, práctica o esfuerzo que no vemos.','Reconocer costos reales evita tratar beneficios como si aparecieran solos.','Elige algo que recibes regularmente y piensa qué requiere hacerlo posible.',['¿Qué recibes?','¿Qué trabajo o recursos hay detrás?']),
+D(27,'Aprendiste a valorarlo','Hay cosas que solo aprendemos a apreciar después de vivir suficiente.','La experiencia modifica nuestros criterios de valor.','Elige algo que hoy valoras más que hace algunos años.',['¿Qué es?','¿Qué cambió en ti para apreciarlo más?']),
+D(28,'Una experiencia sensorial','La gratitud también puede empezar en lo que ves, oyes, tocas, hueles o saboreas.','La atención sensorial ancla la experiencia al presente.','Elige un momento y descríbelo usando al menos tres sentidos.',['¿Qué momento?','¿Qué viste, oíste o sentiste?']),
+D(29,'Tu forma de apreciar','No todos agradecemos lo mismo ni de la misma manera.','Reconocer preferencias personales permite diseñar prácticas más sostenibles.','Observa qué tipo de ejercicios te han resultado más naturales.',['¿Qué práctica te ayudó más?','¿Cuál se sintió menos natural?','¿Qué aprendiste de eso?']),
+D(30,'Segunda mirada','Treinta días permiten una comparación más útil que una impresión aislada.','Un hito sirve para revisar evidencia, no para declarar que una identidad ya está “completa”.','Compara tu forma de notar y apreciar con el inicio.',['¿Qué haces ahora con más frecuencia?','¿Qué todavía requiere esfuerzo consciente?','¿Qué quieres entrenar durante los próximos 30 días?']),
+
+D(31,'Decirlo en voz alta','Sentir gratitud y expresarla son conductas diferentes.','La expresión específica puede beneficiar la relación porque hace visible qué conducta fue valorada.','Agradece verbalmente a alguien por una acción concreta.',['¿A quién se lo dijiste?','¿Qué acción específica reconociste?','¿Cómo fue la interacción?']),
+D(32,'Gracias específico','“Gracias por todo” puede ser sincero, pero hoy vas a hacerlo preciso.','La especificidad reduce automatismos y comunica qué fue significativo.','Completa: “Gracias por ___; para mí significó ___.”',['Tu agradecimiento específico','¿Qué significado expresaste?']),
+D(33,'Un mensaje breve','No necesitas una gran carta para hacer visible la gratitud.','Una expresión pequeña pero auténtica puede ser más sostenible que esperar ocasiones extraordinarias.','Envía un mensaje breve de agradecimiento sin añadir una petición.',['¿A quién escribiste?','¿Qué quisiste reconocer?']),
+D(34,'Reconocer el esfuerzo','A veces vemos el resultado y no el esfuerzo.','Reconocer proceso comunica que notaste algo que quizá la otra persona pensó que pasó inadvertido.','Agradece a alguien por el esfuerzo detrás de algo.',['¿Qué esfuerzo reconociste?','¿Qué detalle mencionaste?']),
+D(35,'A quien casi nunca agradeces','Hay personas cuya contribución se vuelve parte del paisaje.','La rutina puede reducir el reconocimiento incluso cuando el beneficio continúa.','Identifica a alguien a quien sueles dar por sentado y agradécele algo concreto.',['¿Quién fue?','¿Qué aportación normalmente das por sentada?']),
+D(36,'Gratitud en casa','La cercanía no elimina la necesidad de reconocimiento.','En relaciones frecuentes, la habituación puede hacer que acciones útiles parezcan obligaciones invisibles.','Reconoce hoy una acción concreta de alguien con quien convives o tienes mucha cercanía.',['¿Qué acción viste?','¿Cómo la reconociste?']),
+D(37,'Gratitud en el trabajo','El reconocimiento también pertenece a los contextos profesionales.','Agradecer con precisión puede reforzar cooperación sin convertirlo en adulación.','Reconoce una contribución laboral genuina.',['¿Qué contribución?','¿Cómo la expresaste sin exagerarla?']),
+D(38,'Agradecer sin pedir nada','Un agradecimiento pierde claridad cuando se usa como introducción para una solicitud.','Separar reconocimiento de petición ayuda a que el mensaje sea genuino y completo.','Expresa gratitud hoy sin añadir ninguna petición, consejo ni “pero”.',['¿Qué dijiste?','¿Cómo se sintió dejar el agradecimiento completo por sí mismo?']),
+D(39,'Hacer visible una contribución','Algunas contribuciones merecen ser reconocidas más allá de un “gracias”.','Describir el efecto concreto de una acción ayuda a mostrar su impacto.','Dile a alguien qué cambió para ti gracias a algo que hizo.',['¿Qué hizo?','¿Qué efecto tuvo en ti o en tu día?']),
+D(40,'Carta de gratitud','Hay agradecimientos que necesitan más espacio que una frase.','Escribir organiza recuerdos, detalles y significado antes de expresarlos.','Escribe una carta breve a alguien importante. No tienes que enviarla hoy.',['¿A quién va dirigida?','Escribe el núcleo de la carta']),
+D(41,'Entregar o leer','Hoy decides si esa carta necesita salir de tu pantalla.','La expresión directa añade una dimensión interpersonal distinta a la reflexión privada.','Si es apropiado y seguro, entrega o lee tu carta. Si no, explica por qué prefieres conservarla privada.',['¿Qué decidiste?','¿Qué ocurrió o qué protegiste al no compartirla?']),
+D(42,'Recibir gratitud','También se practica cuando alguien te agradece a ti.','Restar importancia automáticamente puede cortar una interacción de reconocimiento.','Cuando alguien te agradezca, evita negar o minimizar; recibe el mensaje con presencia.',['¿Recibiste algún agradecimiento?','¿Cómo respondiste?']),
+D(43,'Convertir gratitud en ayuda','La gratitud puede inspirar conducta prosocial sin convertirse en deuda.','Responder con generosidad es distinto de sentir obligación.','Haz una pequeña acción útil inspirada por algo bueno que has recibido.',['¿Qué acción hiciste?','¿Fue elección o sensación de deuda?']),
+D(44,'Agradecer una enseñanza','No toda ayuda llega en forma cómoda.','Una corrección útil puede valorarse sin afirmar que toda crítica es correcta.','Identifica una enseñanza o corrección válida que te haya ayudado.',['¿Qué enseñanza fue útil?','¿Qué cambiaste gracias a ella?']),
+D(45,'Tu red de contribuciones','Quince días de expresión permiten mirar relaciones de otra manera.','El objetivo no es contar personas como puntos, sino observar cómo circula la ayuda en tu vida.','Revisa a quiénes has reconocido y qué tipos de contribución aparecen.',['¿Qué patrón interpersonal ves?','¿A quién sigues queriendo reconocer mejor?']),
+
+D(46,'Lo ordinario merece una segunda mirada','Lo extraordinario llama solo. Lo ordinario necesita atención.','La profundización empieza cuando no dependes de novedades para apreciar.','Elige una parte repetida de tu rutina y obsérvala como si fuera nueva.',['¿Qué rutina elegiste?','¿Qué detalle nuevo encontraste?']),
+D(47,'Repetición y novedad','Algo puede repetirse y aun así contener diferencias.','Buscar variación dentro de lo conocido combate la sensación de que “todo es igual”.','Encuentra tres diferencias en una experiencia habitual.',['Experiencia elegida','Tres diferencias que notaste']),
+D(48,'Un lugar conocido','Los lugares familiares se vuelven mapas automáticos.','Explorar conscientemente un entorno conocido aumenta la atención a detalles omitidos.','Recorre un lugar habitual más despacio de lo normal.',['¿Qué lugar?','¿Qué viste que normalmente ignoras?']),
+D(49,'Una persona conocida, algo nuevo','La familiaridad puede reducir curiosidad hacia quienes más conocemos.','Apreciar también implica actualizar nuestra percepción de las personas.','Pregunta o descubre algo nuevo de alguien cercano.',['¿Qué descubriste?','¿Cambió algo en cómo ves a esa persona?']),
+D(50,'Tu rutina bajo lupa','Una rutina contiene decenas de pequeñas ayudas.','Descomponer secuencias habituales hace visibles recursos, capacidades y personas.','Elige una hora de tu día y registra todo lo que facilita que funcione.',['¿Qué hora observaste?','¿Qué soportes invisibles encontraste?']),
+D(51,'Un objeto con historia','Los objetos también pueden concentrar memoria, esfuerzo o vínculos.','El valor subjetivo de algo puede exceder su precio.','Elige un objeto cotidiano que tenga historia para ti.',['¿Qué objeto?','¿Qué historia o significado contiene?']),
+D(52,'Una habilidad adquirida','Lo que hoy haces sin pensar alguna vez requirió aprendizaje.','La automaticidad puede ocultar años de práctica y adaptación.','Elige una habilidad que hoy das por sentada.',['¿Qué habilidad?','¿Qué tuvo que pasar para que hoy parezca normal?']),
+D(53,'Algo que otros construyeron','Tu día depende de trabajo humano que nunca ves.','Reconocer sistemas sociales amplía la gratitud más allá de relaciones cercanas.','Elige algo que usaste hoy y rastrea mentalmente a quienes hicieron posible que llegara hasta ti.',['¿Qué elegiste?','¿Qué personas o trabajos hay detrás?']),
+D(54,'Una oportunidad improbable','Muchas cosas importantes dependieron de condiciones que no controlaste por completo.','Reconocer contingencia no elimina tu esfuerzo; añade perspectiva sobre el contexto.','Elige una oportunidad que pudo no haber aparecido.',['¿Qué oportunidad?','¿Qué condiciones externas ayudaron?']),
+D(55,'Lo que sigue presente','La permanencia también es una forma de valor.','No todo beneficio necesita ser nuevo para ser significativo.','Identifica algo bueno que lleva años en tu vida.',['¿Qué sigue presente?','¿Qué ha permitido su continuidad?']),
+D(56,'Antes y ahora','El cambio se vuelve invisible cuando ocurre lentamente.','Comparaciones temporales moderadas permiten reconocer progreso acumulativo.','Elige un área y compara cómo era antes con cómo es ahora.',['Área elegida','Antes','Ahora','¿Qué valor ves en la diferencia?']),
+D(57,'La vida sin esto','Vuelve a usar contraste, ahora con algo profundamente familiar.','Imaginar brevemente una ausencia puede devolver saliencia sin necesidad de perder realmente aquello.','Elige algo importante y considera cómo cambiaría tu semana sin ello.',['¿Qué elegiste?','¿Qué cambiaría?','¿Qué aprecias con mayor claridad?']),
+D(58,'Dos minutos de presencia','Profundizar también significa aumentar la calidad de la atención.','La experiencia puede sentirse distinta cuando reducimos distracciones durante un momento positivo.','Elige un momento agradable y permanece dos minutos sin capturarlo, compartirlo ni cambiarlo.',['¿Qué momento?','¿Qué apareció cuando dejaste de producir o documentar?']),
+D(59,'Tres capas de valor','Una cosa puede aportar utilidad, significado y relación al mismo tiempo.','Mirar múltiples capas previene respuestas superficiales y repetitivas.','Elige algo que valoras y explora tres capas: práctica, emocional y relacional.',['¿Qué elegiste?','Valor práctico','Valor emocional','Valor relacional']),
+D(60,'Mapa profundo','Sesenta días ya permiten ver más que una racha.','Este hito compara qué notas, qué aprecias y qué expresas en distintos contextos.','Revisa tus registros y describe dónde la gratitud aparece de forma más espontánea y dónde no.',['¿Dónde aparece más naturalmente?','¿Dónde todavía casi no aparece?','¿Qué quieres integrar en los próximos 15 días?']),
+
+D(61,'Un día imperfecto','La gratitud no requiere que el día haya sido bueno.','Integrar significa sostener más de una realidad: dificultad y algo valioso pueden coexistir.','En un día imperfecto, identifica una cosa que aún te sostiene.',['¿Qué fue difícil hoy?','¿Qué siguió siendo valioso sin negar lo difícil?']),
+D(62,'Dos verdades a la vez','“Esto es difícil” y “hay algo que valoro” pueden ser ciertas al mismo tiempo.','Evitar el pensamiento todo-o-nada permite una evaluación más equilibrada.','Escribe dos verdades simultáneas sobre tu día.',['Verdad difícil','Verdad valiosa','¿Cómo cambia tu perspectiva al sostener ambas?']),
+D(63,'Frustración y apoyo','La frustración estrecha el foco hacia lo que no funciona.','Buscar un apoyo concreto no elimina la causa de frustración, pero amplía el campo de atención.','Cuando aparezca una frustración, identifica un recurso, persona o capacidad que te ayude a manejarla.',['Frustración','Punto de apoyo']),
+D(64,'Cuando el plan cambia','Los planes interrumpidos revelan cuánto dependíamos de una sola expectativa.','Flexibilidad no significa preferir el cambio; significa encontrar alternativas reales.','Ante un cambio de plan, busca algo útil que siga disponible.',['¿Qué cambió?','¿Qué siguió disponible o apareció gracias al cambio?']),
+D(65,'Error y aprendizaje','Un error puede doler y aun así aportar información.','Aprender no convierte el error en algo deseable; extrae señal de lo ocurrido.','Elige un error reciente y separa consecuencia de aprendizaje.',['¿Qué error?','¿Qué consecuencia aceptas?','¿Qué información útil dejó?']),
+D(66,'Esperar sin desperdiciar todo el momento','Las esperas suelen sentirse como tiempo perdido.','Una pausa impuesta también puede contener experiencias que normalmente no vemos.','Durante una espera, encuentra algo que puedas observar o apreciar sin negar la molestia.',['¿Dónde esperabas?','¿Qué notaste durante la espera?']),
+D(67,'Gratitud dentro del conflicto','No necesitas agradecer que exista un conflicto.','Puedes reconocer una parte valiosa de una relación incluso mientras hay desacuerdo.','Piensa en un conflicto actual y nombra algo que valoras de la persona o relación, si existe.',['¿Qué conflicto existe?','¿Qué valor permanece?','¿Qué límite o desacuerdo sigue siendo necesario?']),
+D(68,'Cuando estás cansado','El cansancio reduce recursos atencionales y vuelve más difícil practicar.','Una práctica sostenible también debe funcionar en días de baja energía.','Haz una versión mínima: identifica una sola cosa que agradeces y por qué.',['Una cosa','Por qué importa hoy, precisamente estando cansado']),
+D(69,'Incertidumbre','La incertidumbre dirige la mente hacia lo que todavía no sabemos.','Anclarte en algo presente no resuelve el futuro, pero diferencia hechos actuales de posibilidades.','Nombra una incertidumbre y luego tres cosas verdaderas y presentes ahora.',['Incertidumbre','Tres apoyos presentes']),
+D(70,'Cuando algo cambia o termina','El cambio puede incluir pérdida, incluso cuando era necesario.','La gratitud no debe utilizarse para saltar el duelo o la tristeza.','Si es apropiado, reconoce algo valioso de una etapa que cambió o terminó sin exigirte sentirte bien.',['¿Qué cambió?','¿Qué valor quieres conservar en tu memoria?']),
+D(71,'Un punto de apoyo','En un día muy difícil, tres cosas pueden ser demasiado.','Reducir la dosis mantiene la conducta sin convertirla en obligación emocional.','Encuentra un solo punto de apoyo real. Uno es suficiente.',['¿Cuál fue tu punto de apoyo?']),
+D(72,'Sin compararte con alguien peor','“Otros están peor” no es requisito para agradecer.','La gratitud puede construirse desde valor intrínseco, no desde minimizar problemas mediante comparación.','Aprecia algo hoy sin usar ninguna comparación con la situación de otra persona.',['¿Qué aprecias por su propio valor?']),
+D(73,'No fuerces gratitud','Una práctica pierde credibilidad si obliga a inventar emociones.','Reconocer “hoy no lo siento” puede ser más honesto que fabricar una respuesta.','Describe tu estado real. Si no surge gratitud, observa algo neutral que te sostenga.',['¿Cómo estás realmente?','¿Qué puedes reconocer sin fingir?']),
+D(74,'Lo que sí está disponible','En situaciones difíciles, distinguir control de disponibilidad evita expectativas irreales.','No todo depende de ti, pero casi siempre puedes identificar recursos o decisiones presentes.','Elige una dificultad y nombra algo disponible ahora mismo.',['Dificultad','Recurso o decisión disponible']),
+D(75,'Integrar no es negar','Has practicado gratitud junto a experiencias incómodas.','El objetivo de esta etapa era ampliar la perspectiva, no reemplazar emociones difíciles por positividad.','Resume qué aprendiste sobre practicar en días difíciles.',['¿Qué te ayudó?','¿Qué se sintió falso o poco útil?','¿Qué regla personal quieres conservar?']),
+
+D(76,'Tu señal automática','La identidad cambia cuando la conducta empieza a aparecer sin que la aplicación la ordene.','Una señal estable puede facilitar que una práctica se repita en el mismo contexto.','Elige una señal cotidiana para recordar gratitud: café, ducha, manejar, cena o acostarte.',['¿Qué señal eliges?','¿Qué conducta breve harás cuando aparezca?']),
+D(77,'Ritual de inicio','Los comienzos repetidos pueden convertirse en anclas.','Un ritual pequeño reduce decisiones y hace la conducta más accesible.','Diseña un ritual de 30 segundos para comenzar el día.',['Describe tu ritual de inicio']),
+D(78,'Ritual de cierre','Cerrar el día con intención es distinto de revisar una lista interminable.','Una rutina de cierre puede ayudar a recuperar una experiencia significativa antes de dormir.','Diseña un cierre de un minuto.',['¿Qué recordarás cada noche?','¿Cómo evitarás que se vuelva mecánico?']),
+D(79,'Gratitud en movimiento','La práctica no necesita ocurrir sentado frente a una pantalla.','Trasladarla a actividades normales ayuda a generalizar la conducta.','Practica mientras caminas, conduces con seguridad, limpias o haces una tarea rutinaria.',['¿En qué actividad la integraste?','¿Qué notaste?']),
+D(80,'Elige tu desencadenante','Una conducta es más fácil de repetir cuando tiene una señal clara.','Los planes “cuando X, haré Y” convierten una intención general en una respuesta contextual.','Completa un plan: “Cuando ___, voy a detenerme y reconocer ___.”',['Tu plan cuando-entonces']),
+D(81,'Menos app, más vida','NEXORA debería volverse menos necesaria a medida que la conducta se fortalece.','La meta no es aumentar tiempo de pantalla; es trasladar la práctica al mundo real.','Haz una práctica completa sin abrir la app. Vuelve después solo para registrar lo esencial.',['¿Qué hiciste sin la app?','¿Fue más difícil o más natural?']),
+D(82,'Practica sin registrar','No toda conducta necesita convertirse en dato.','Dejar algunas experiencias sin registrar prueba si la práctica existe fuera del sistema de recompensa de la aplicación.','Hoy practica gratitud y no escribas nada hasta la noche.',['¿Recordaste practicar sin registrar?','¿Qué quedó en tu memoria de forma natural?']),
+D(83,'Primero vivir, después registrar','Registrar demasiado pronto puede cambiar la experiencia.','Separar experiencia y documentación prioriza la vida real sobre la interfaz.','Cuando ocurra algo valioso, vívelo primero. Regístralo al menos diez minutos después.',['¿Qué ocurrió?','¿Qué recordaste diez minutos después?']),
+D(84,'Expresar espontáneamente','Hoy no tendrás una persona asignada.','La generalización aparece cuando detectas una oportunidad real y actúas sin guion previo.','Si surge una ocasión genuina, expresa gratitud espontáneamente.',['¿Surgió la ocasión?','¿Qué hiciste sin que la app te lo indicara?']),
+D(85,'Diseña tu entorno','El entorno puede recordarte quién quieres ser.','Las señales físicas y digitales pueden apoyar una conducta sin depender de motivación intensa.','Añade una señal discreta en tu entorno que recuerde tu práctica.',['¿Qué señal añadiste?','¿Dónde estará?']),
+D(86,'Tu identidad en evidencia','Las identidades creíbles se construyen con pruebas, no solo afirmaciones.','Revisar conductas reales permite decir “estoy convirtiéndome” con base observable.','Busca tres evidencias de que hoy actúas diferente a hace 86 días.',['Evidencia #1','Evidencia #2','Evidencia #3']),
+D(87,'Enseñar con el ejemplo','Una conducta integrada puede influir sin necesidad de dar discursos.','Modelar reconocimiento y apreciación hace visible una norma interpersonal.','Haz una acción de gratitud que otra persona pueda experimentar directamente.',['¿Qué acción hiciste?','¿Qué valor querías modelar?']),
+D(88,'Un día completo sin guía','Hoy NEXORA se aparta.','La prueba más importante es qué haces cuando no hay instrucción paso a paso.','Vive el día sin abrir ejercicios. Regresa al final y describe si la conducta apareció sola.',['¿Apareció espontáneamente?','¿En qué situaciones?','¿Dónde todavía necesitaste recordatorio?']),
+D(89,'Carta a tu yo futuro','El mantenimiento necesita una razón que sobreviva al entusiasmo inicial.','Escribir al futuro hace explícito qué no quieres olvidar cuando la práctica deje de sentirse nueva.','Escribe una nota breve para leer dentro de tres meses.',['¿Qué quieres recordarte?','¿Qué conducta quieres proteger?']),
+D(90,'Mira quién eres ahora','Noventa días no son una sentencia final. Son un punto de medición.','Comparamos percepción, conducta registrada, espontaneidad y generalización. Si algo no está consolidado, se refuerza; no se declara fracaso.','Evalúa con honestidad qué cambió, qué ya forma parte de ti y qué necesita consolidación.',['¿Qué cambió claramente?','¿Qué haces ahora sin recordatorio?','¿Qué todavía necesita práctica?','Sin mirar tus estadísticas: ¿sientes que esta forma de actuar ya forma parte de ti?'])
+];
+
+const DISCIPLINE_STAGES=[{"name": "OBSERVAR", "range": "Días 1–15", "desc": "Detecta dónde se rompe tu ejecución: fricción, negociación, distracciones y patrones de postergación.", "principle": "La disciplina mejora cuando dejas de describirte y empiezas a observar qué ocurre antes de actuar o postergar."}, {"name": "EMPEZAR", "range": "Días 16–30", "desc": "Reduce la barrera de inicio con reglas claras, señales, preparación y versiones mínimas.", "principle": "Empezar de forma consistente depende menos de esperar motivación y más de crear señales y decisiones previas."}, {"name": "SOSTENER", "range": "Días 31–45", "desc": "Construye consistencia flexible: plan B, entorno, seguimiento y recuperación.", "principle": "Una conducta sostenible necesita adaptarse a días imperfectos sin convertirse en todo o nada."}, {"name": "RESISTIR", "range": "Días 46–60", "desc": "Practica actuar frente a aburrimiento, cansancio, frustración e impulsos de distracción.", "principle": "La incomodidad no siempre indica que debas parar. Aprender a permanecer brevemente amplía tu margen de elección."}, {"name": "PRIORIZAR", "range": "Días 61–75", "desc": "Protege lo importante con límites, costo de oportunidad y decisiones explícitas sobre tu tiempo.", "principle": "La disciplina también es selección: decidir qué merece tiempo y qué queda fuera."}, {"name": "CONVERTIRSE", "range": "Días 76–90", "desc": "Reduce la dependencia de recordatorios y consolida una identidad basada en evidencia conductual.", "principle": "La identidad se fortalece cuando puedes señalar conductas repetidas que la respaldan, incluso sin supervisión."}];
+const DISCIPLINE_DAYS=[
+DD(1,"La promesa mínima","La disciplina no empieza con una gran hazaña. Empieza cuando cumples una promesa pequeña contigo.","Elige una acción importante que puedas completar hoy en cinco minutos o menos.",["¿Qué acción elegiste?", "¿La completaste? ¿Qué ocurrió justo antes de empezar?"]),
+DD(2,"Hazlo antes de negociar","Muchas veces la postergación comienza con una conversación interna demasiado larga.","Haz una acción planificada antes de empezar a debatir contigo si tienes ganas o no.",["¿Qué ibas a posponer?", "¿Qué pasó al actuar antes de negociar?"]),
+DD(3,"Detecta tu hora débil","No posponemos igual durante todo el día. Tus patrones tienen contexto.","Observa hoy en qué momento, lugar o estado empiezas a aplazar lo importante.",["¿Cuándo apareció más resistencia?", "¿Qué estabas haciendo justo antes?"]),
+DD(4,"La fricción visible","A veces no falta disciplina: sobran pasos, obstáculos o decisiones.","Elige una conducta importante y detecta tres fricciones que hacen más difícil empezarla.",["Fricción #1", "Fricción #2", "Fricción #3"]),
+DD(5,"Deja preparado el camino","El entorno puede hacer que una buena decisión sea más fácil o más difícil.","Prepara hoy el entorno para que mañana la primera acción requiera menos esfuerzo.",["¿Qué dejaste preparado?", "¿Qué paso eliminaste para mañana?"]),
+DD(6,"Una decisión menos","Cada decisión repetida abre espacio para negociar de nuevo.","Predecide una conducta: qué harás, cuándo y dónde.",["¿Qué decidiste por adelantado?", "¿Cuándo y dónde ocurrirá?"]),
+DD(7,"Primera revisión","Una semana ya permite ver patrones que antes parecían aleatorios.","Revisa los primeros seis días y elige la barrera que más se repitió.",["¿Qué barrera se repite?", "¿Qué ajuste concreto probarás esta semana?"]),
+DD(8,"Empieza imperfecto","Esperar el momento perfecto suele ser una forma elegante de no empezar.","Inicia una tarea importante de manera deliberadamente imperfecta durante diez minutos.",["¿Qué empezaste?", "¿Qué perfección estabas esperando?"]),
+DD(9,"Solo cinco minutos","Empezar y continuar son problemas diferentes. Hoy trabajas solo el primero.","Pon un temporizador de cinco minutos y comienza la tarea que has estado evitando.",["¿Qué tarea elegiste?", "¿Seguiste después de los cinco minutos? ¿Por qué?"]),
+DD(10,"Quita una distracción","La disciplina también se construye eliminando competidores de atención.","Retira una distracción concreta durante tu bloque de trabajo o práctica.",["¿Qué distracción quitaste?", "¿Qué cambió al hacerlo?"]),
+DD(11,"Cierra un ciclo","Las tareas abiertas ocupan atención incluso cuando parecen pequeñas.","Completa un pendiente corto que llevas varios días arrastrando.",["¿Qué cerraste?", "¿Qué sensación produjo terminarlo?"]),
+DD(12,"Acción antes de ánimo","La motivación cambia. Una acción programada puede ocurrir aunque el ánimo no acompañe.","Cumple una acción pequeña precisamente en un momento en que no tengas ganas.",["¿Qué hiciste sin ganas?", "¿Qué te dijiste antes de empezar?"]),
+DD(13,"Una señal concreta","Los hábitos se vuelven más predecibles cuando tienen una señal estable.","Asocia una conducta a una señal clara que ya ocurre en tu día.",["Señal elegida", "Conducta que harás después"]),
+DD(14,"Lo que te hace abandonar","Antes de fortalecer una conducta conviene entender dónde suele romperse.","Identifica el punto exacto donde normalmente abandonas una tarea o rutina.",["¿En qué punto sueles abandonar?", "¿Qué harás diferente en ese punto?"]),
+DD(15,"Hazlo otra vez","Quince días después, repetimos la idea inicial para medir algo real.","Cumple otra promesa mínima hoy y compárala con la del Día 1.",["¿Qué promesa cumpliste hoy?", "¿Qué fue más fácil o más difícil que en el Día 1?"]),
+DD(16,"Tu regla de inicio","La consistencia mejora cuando el comienzo deja de depender de improvisación.","Crea una regla: “Cuando ocurra X, empezaré Y”.",["Completa: Cuando ___, empezaré ___", "¿La pusiste en práctica hoy?"]),
+DD(17,"Misma hora","La repetición en un contexto estable puede reducir decisiones innecesarias.","Haz una conducta importante aproximadamente a la misma hora que ayer.",["¿Qué conducta repetiste?", "¿Cómo afectó tener una hora definida?"]),
+DD(18,"Misma señal","La hora no siempre es suficiente; algunas rutinas funcionan mejor ancladas a eventos.","Repite una conducta inmediatamente después de una señal cotidiana estable.",["¿Cuál fue la señal?", "¿Qué tan fácil fue recordar la acción?"]),
+DD(19,"La noche anterior","Una buena mañana muchas veces empieza antes de dormir.","Deja preparado esta noche todo lo necesario para una acción importante de mañana.",["¿Qué dejaste listo?", "¿Qué decisión ya no tendrás que tomar mañana?"]),
+DD(20,"Primero lo importante","Si esperas a que sobre tiempo, lo importante suele competir con todo lo demás.","Haz hoy una prioridad relevante antes de una actividad de consumo o entretenimiento.",["¿Qué hiciste primero?", "¿Qué ibas a hacer en su lugar?"]),
+DD(21,"Reduce sin cancelar","Un día difícil no obliga a abandonar completamente una práctica.","Si no puedes hacer la versión completa, ejecuta una versión mínima intencional.",["¿Cuál era la versión completa?", "¿Cuál fue tu versión mínima?"]),
+DD(22,"Cero negociación","Hay decisiones que se debilitan cada vez que vuelven a ponerse sobre la mesa.","Elige una acción ya decidida y ejecútala sin reabrir la decisión.",["¿Qué decisión dejaste de renegociar?", "¿Qué excusa apareció?"]),
+DD(23,"Ventana protegida","El tiempo reservado solo funciona si está protegido de invasiones previsibles.","Protege un bloque corto para una prioridad y trata ese espacio como una cita.",["¿Qué bloque protegiste?", "¿Qué intentó invadirlo?"]),
+DD(24,"El teléfono fuera","La cercanía de una distracción puede hacer más costoso sostener la atención.","Deja el teléfono fuera de alcance durante una tarea importante.",["¿Durante cuánto tiempo?", "¿Cuántas veces sentiste el impulso de buscarlo?"]),
+DD(25,"Deja evidencia","La disciplina mejora cuando puedes observar lo que realmente hiciste, no lo que recuerdas.","Registra al terminar una conducta: hecha, parcial o no hecha, sin justificarla.",["¿Qué conducta registraste?", "Resultado: hecha, parcial o no hecha", "¿Qué dato aprendiste?"]),
+DD(26,"Un final claro","Las tareas vagas se expanden y cansan. Un criterio de terminado reduce ambigüedad.","Define antes de empezar qué significa “terminado” para una tarea de hoy.",["¿Qué tarea?", "¿Cuál fue tu criterio de terminado?"]),
+DD(27,"Haz visible el compromiso","Un compromiso concreto es más difícil de distorsionar después.","Escribe exactamente qué harás hoy y revisa al final si lo hiciste.",["Compromiso exacto", "¿Se cumplió tal como lo escribiste?"]),
+DD(28,"Tolera lo aburrido","No todo comportamiento valioso produce estimulación inmediata.","Permanece diez minutos en una tarea útil y repetitiva sin añadir entretenimiento.",["¿Qué tarea fue?", "¿Qué hiciste cuando apareció aburrimiento?"]),
+DD(29,"Plan para la interrupción","La vida interrumpe. La disciplina necesita una respuesta preparada.","Elige una interrupción probable y decide de antemano cómo retomarás.",["Interrupción probable", "Plan de regreso"]),
+DD(30,"Treinta días de datos","Ya no necesitas describirte con adjetivos; tienes conductas observables.","Revisa tus registros y detecta qué condición ayuda más a cumplir.",["¿Qué condición favorece tu cumplimiento?", "¿Qué condición lo dificulta?", "¿Qué ajustarás para los próximos 15 días?"]),
+DD(31,"Consistencia flexible","Consistencia no significa hacer siempre exactamente la misma cantidad.","Define una versión normal y una versión mínima de una conducta.",["Versión normal", "Versión mínima"]),
+DD(32,"Evita dos omisiones seguidas","Una omisión aislada es distinta de convertirla en una nueva pauta.","Si ayer omitiste una práctica, haz hoy al menos su versión mínima.",["¿Qué retomaste?", "¿Qué permitió volver?"]),
+DD(33,"Tu plan B","La conducta sólida sobrevive mejor cuando tiene una alternativa prevista.","Diseña una versión B para cuando falle tu horario, lugar o recurso habitual.",["Plan habitual", "Plan B"]),
+DD(34,"Descanso deliberado","Descansar por decisión no es lo mismo que abandonar por agotamiento.","Programa un descanso concreto y vuelve a la hora definida.",["¿Cuándo descansaste?", "¿A qué hora retomaste?"]),
+DD(35,"Mide cumplimiento, no intención","Querer hacer algo y hacerlo son datos diferentes.","Elige tres compromisos del día y marca al final cuáles ocurrieron realmente.",["Compromiso #1", "Compromiso #2", "Compromiso #3", "¿Cuántos se cumplieron?"]),
+DD(36,"Quita pasos","Cada paso adicional puede convertirse en un punto de abandono.","Reduce un paso innecesario antes de una conducta que quieres repetir.",["¿Qué paso quitaste?", "¿La acción fue más fácil de iniciar?"]),
+DD(37,"Añade fricción a lo que te distrae","El diseño del entorno también puede hacer menos automática una conducta que quieres reducir.","Haz una distracción menos accesible: cerrar sesión, alejar objeto, bloquear acceso o cambiar ubicación.",["¿Qué distracción hiciste menos accesible?", "¿Qué fricción añadiste?"]),
+DD(38,"Decide una vez","Las reglas simples pueden protegerte de decidir repetidamente bajo cansancio.","Crea una regla personal para una situación frecuente.",["Mi regla será…", "¿Qué decisión futura elimina?"]),
+DD(39,"No optimices de más","Buscar el sistema perfecto puede convertirse en otra forma de postergar.","Usa hoy el sistema que ya tienes y termina una tarea antes de mejorarlo.",["¿Qué dejaste de optimizar?", "¿Qué terminaste en su lugar?"]),
+DD(40,"Termina con reserva","Agotar toda tu energía puede hacer más difícil volver mañana.","Detén una sesión después de cumplir el objetivo definido, no después de quedar exhausto.",["¿Cuál era el objetivo?", "¿Terminaste con energía suficiente para repetir mañana?"]),
+DD(41,"Reinicia rápido","La capacidad de volver importa más que una cadena perfecta.","Después de una desviación, ejecuta la siguiente acción útil disponible.",["¿De qué te desviaste?", "¿Cuál fue tu primera acción de regreso?"]),
+DD(42,"Bloque sin escape","Cambiar de tarea cada pocos minutos puede ser una salida automática ante la incomodidad.","Trabaja en una sola tarea durante un bloque definido sin cambiar de actividad.",["Duración del bloque", "¿Qué impulso de escape apareció?"]),
+DD(43,"Lista de no hacer","Proteger una prioridad requiere decidir qué no recibirá tiempo.","Escribe tres cosas que deliberadamente no harás durante tu bloque importante.",["No haré #1", "No haré #2", "No haré #3"]),
+DD(44,"Mismo lugar","El contexto físico puede convertirse en una señal para actuar.","Realiza una práctica en un lugar elegido específicamente para esa conducta.",["¿Qué lugar elegiste?", "¿Qué asociación quieres construir ahí?"]),
+DD(45,"Segunda revisión","Cuarenta y cinco días permiten distinguir entusiasmo inicial de estructura sostenible.","Revisa qué estrategias sigues usando sin esfuerzo excesivo.",["¿Qué estrategia ya se siente natural?", "¿Cuál todavía requiere demasiada fuerza?"]),
+DD(46,"Un minuto de incomodidad","La disciplina incluye permanecer con una sensación incómoda sin obedecerla de inmediato.","Cuando quieras abandonar una tarea, espera un minuto observando la incomodidad antes de decidir.",["¿Qué sentiste?", "¿Qué decidiste después del minuto?"]),
+DD(47,"El impulso no es una orden","Sentir ganas de distraerte no significa que tengas que actuar sobre ellas.","Nombra un impulso de distracción y déjalo pasar durante cinco minutos.",["¿Qué impulso apareció?", "¿Qué ocurrió al no obedecerlo de inmediato?"]),
+DD(48,"Espera diez minutos","Retrasar una gratificación breve puede abrir espacio para elegir conscientemente.","Cuando aparezca una distracción deseada, retrásala diez minutos y termina primero una acción útil.",["¿Qué retrasaste?", "¿Qué completaste antes?"]),
+DD(49,"Frustración sin salida","La dificultad puede activar la búsqueda inmediata de algo más fácil.","Permanece cinco minutos adicionales con una tarea justo después de sentir frustración.",["¿Qué te frustró?", "¿Qué hiciste en esos cinco minutos?"]),
+DD(50,"Día de energía baja","Una rutina sostenible necesita una respuesta para días imperfectos.","En un momento de poca energía, ejecuta solo la versión mínima de una prioridad.",["¿Cuál fue tu versión mínima?", "¿Qué evitaste abandonar por completo?"]),
+DD(51,"Aburrimiento consciente","Aburrimiento y falta de valor no son lo mismo.","Haz una tarea útil y monótona sin cambiarla por algo más estimulante durante diez minutos.",["¿Qué tarea?", "¿Qué pensamientos aparecieron?"]),
+DD(52,"Fallar sin dramatizar","Convertir una omisión en una historia sobre tu identidad puede alargarla.","Describe una omisión reciente solo con hechos y elige el siguiente paso.",["Hechos, sin juicio", "Siguiente acción concreta"]),
+DD(53,"Diagnostica la recaída","Cuando una conducta se rompe, buscar el mecanismo es más útil que buscar culpables.","Analiza una recaída: señal, fricción, decisión y consecuencia.",["¿Qué la disparó?", "¿Qué fricción faltó o sobró?", "¿Qué cambiarás?"]),
+DD(54,"Decide fuera del momento débil","Las decisiones tomadas en el pico de tentación suelen competir en desventaja.","Toma hoy una decisión preventiva para una situación en la que normalmente cedes.",["Situación débil", "Decisión preventiva"]),
+DD(55,"Primero, después","Una secuencia simple puede ordenar recompensa y responsabilidad.","Define una regla “primero X, después Y” y úsala hoy.",["Primero…", "Después…", "¿Funcionó?"]),
+DD(56,"La difícil primero","Una tarea exigente puede dominar mentalmente el resto del día si se aplaza.","Completa primero una parte concreta de la tarea que más resistencia te produce.",["¿Qué tarea elegiste?", "¿Qué parte hiciste primero?"]),
+DD(57,"Termina lo programado","La perfección al final puede impedir cerrar.","Cuando alcances el criterio definido, entrega o cierra aunque aún veas mejoras posibles.",["¿Qué cerraste?", "¿Qué mejora decidiste no perseguir hoy?"]),
+DD(58,"Sin recompensa inmediata","Algunas conductas importantes tardan en mostrar resultados.","Haz hoy una acción valiosa aunque no produzca una recompensa visible inmediata.",["¿Qué acción hiciste?", "¿Por qué sigue siendo valiosa?"]),
+DD(59,"Elige el costo","Toda prioridad real excluye algo.","Identifica qué costo aceptas hoy para proteger una conducta importante.",["¿Qué estás protegiendo?", "¿Qué costo aceptaste?"]),
+DD(60,"Sesenta días","Ahora puedes evaluar si respondes distinto cuando aparecen cansancio, aburrimiento o frustración.","Revisa cómo reaccionas hoy ante resistencia comparado con el inicio.",["¿Qué resistencia manejas mejor?", "¿Dónde todavía cedes con facilidad?"]),
+DD(61,"Una prioridad real","Si todo es prioridad, ninguna decisión queda protegida.","Elige una sola prioridad principal para hoy y hazla visible.",["Mi prioridad #1 es…", "¿Qué quedó por debajo de ella?"]),
+DD(62,"Decir no protege un sí","Cada nuevo compromiso compite con los anteriores.","Rechaza, pospone o reduce una solicitud que desplazaría una prioridad importante.",["¿A qué dijiste no o todavía no?", "¿Qué sí protegiste?"]),
+DD(63,"Lista de mañana","Empezar el día decidiendo todo consume tiempo y atención.","Antes de terminar hoy, escribe las tres primeras acciones de mañana.",["Acción 1", "Acción 2", "Acción 3"]),
+DD(64,"Presupuesta tu tiempo","El tiempo también necesita asignación antes de ser gastado.","Asigna bloques aproximados a tus dos prioridades principales.",["Prioridad y bloque #1", "Prioridad y bloque #2"]),
+DD(65,"Costo de oportunidad","Elegir algo también significa no elegir otra cosa.","Antes de una decisión de tiempo, pregunta qué estás dejando fuera.",["¿Qué elegiste?", "¿Qué desplazó esa elección?"]),
+DD(66,"Crear antes de consumir","El consumo puede ocupar el espacio cognitivo que querías dedicar a producir.","Haz una acción de creación o trabajo antes de redes, videos o noticias no esenciales.",["¿Qué creaste o avanzaste?", "¿Qué consumo dejaste para después?"]),
+DD(67,"Protege un límite","Los límites reducen decisiones futuras y expectativas ambiguas.","Define y respeta hoy un límite de tiempo, disponibilidad o atención.",["¿Qué límite definiste?", "¿Lo respetaste?"]),
+DD(68,"Recuperación programada","La disciplina sostenible incluye recuperación, no solo esfuerzo.","Programa una actividad breve de recuperación y termina a la hora acordada.",["¿Qué recuperación elegiste?", "¿Cómo afectó tu siguiente bloque?"]),
+DD(69,"Menos metas simultáneas","Demasiadas metas activas pueden fragmentar la ejecución.","Pausa conscientemente una meta secundaria durante siete días.",["¿Qué meta pausas?", "¿Qué prioridad recibe ese espacio?"]),
+DD(70,"Diseña la semana","Una semana diseñada reduce la dependencia de decisiones diarias improvisadas.","Coloca en tu calendario tres bloques para la prioridad de esta semana.",["Bloque #1", "Bloque #2", "Bloque #3"]),
+DD(71,"Tres compromisos","Limitar compromisos puede mejorar la claridad de ejecución.","Elige solo tres resultados realistas que quieres cerrar hoy.",["Resultado #1", "Resultado #2", "Resultado #3", "¿Cuántos cerraste?"]),
+DD(72,"Protege tu mejor franja","No todas tus horas tienen el mismo nivel de atención o energía.","Reserva tu franja más útil para una tarea que realmente la merezca.",["¿Cuál es tu mejor franja?", "¿Qué tarea colocaste allí?"]),
+DD(73,"Auditoría de decisiones","Tus prioridades reales aparecen en decisiones pequeñas repetidas.","Revisa tres decisiones de hoy y pregunta qué prioridad reflejó cada una.",["Decisión #1 y prioridad", "Decisión #2 y prioridad", "Decisión #3 y prioridad"]),
+DD(74,"Cuando nadie mira","La identidad conductual se fortalece con acciones que no necesitan audiencia.","Cumple una promesa contigo que nadie más sabrá si hiciste o no.",["¿Qué promesa fue?", "¿Qué significado tuvo cumplirla sin audiencia?"]),
+DD(75,"Revisión de prioridades","Setenta y cinco días permiten ver qué dices que importa y qué proteges realmente.","Compara tus prioridades declaradas con dónde pusiste tiempo esta semana.",["¿Qué coincide?", "¿Qué no coincide?", "¿Qué ajustarás?"]),
+DD(76,"La evidencia de identidad","No necesitas repetirte quién eres; puedes mirar lo que haces.","Encuentra tres acciones recientes que apoyen la identidad que quieres construir.",["Evidencia #1", "Evidencia #2", "Evidencia #3"]),
+DD(77,"Soy alguien que…","Una identidad útil debe describir conductas observables, no una fantasía.","Completa una frase de identidad y añade una conducta que la demuestra.",["Soy alguien que…", "Lo demuestro cuando…"]),
+DD(78,"Prueba, no afirmación","La confianza en tu disciplina crece con evidencia acumulada.","Haz hoy una acción que puedas usar como prueba mañana.",["¿Qué acción servirá de prueba?", "¿Por qué cuenta?"]),
+DD(79,"Sin abrir NEXORA primero","La meta es que la conducta exista fuera de la aplicación.","Realiza tu práctica principal antes de consultar NEXORA.",["¿Qué hiciste por tu cuenta?", "¿Recordaste la acción sin ayuda?"]),
+DD(80,"Chequeo tardío","Reducimos la guía para ver qué se sostiene.","No abras tu registro hasta el final del día; después anota qué hiciste espontáneamente.",["¿Qué ocurrió sin recordatorio?", "¿Qué olvidaste?"]),
+DD(81,"Un día sin recordatorios","Hoy la aplicación no debe ser el disparador principal.","Elige una conducta y ejecútala sin alarma ni aviso específico.",["¿Qué conducta recordaste sola?", "¿Qué señal natural la activó?"]),
+DD(82,"Otro lugar","Una conducta integrada debe poder sobrevivir a cambios de contexto.","Haz una práctica importante en un lugar diferente al habitual.",["¿Dónde la hiciste?", "¿Qué cambió al cambiar de lugar?"]),
+DD(83,"Otro estado de ánimo","La conducta estable no puede depender exclusivamente de sentirse motivado.","Haz tu versión mínima en un estado de ánimo distinto al ideal.",["¿Cómo te sentías?", "¿Qué hiciste de todos modos?"]),
+DD(84,"Explícalo con tus palabras","Poder explicar tu sistema muestra que entiendes qué te funciona.","Describe en pocas líneas cómo haces para empezar, sostener y retomar.",["Cómo empiezo", "Cómo sostengo", "Cómo retomo"]),
+DD(85,"Anticipa la caída","La consolidación incluye saber que habrá semanas difíciles.","Imagina una semana complicada y diseña cómo protegerás una sola conducta clave.",["Escenario difícil", "Conducta que protegerás", "Versión mínima"]),
+DD(86,"Tu protocolo de regreso","No necesitas una vida sin interrupciones; necesitas saber volver.","Escribe un protocolo de tres pasos para retomar después de varios días fuera.",["Paso 1", "Paso 2", "Paso 3"]),
+DD(87,"Frecuencia de mantenimiento","No toda práctica necesita la misma intensidad para siempre.","Decide qué conductas seguirán diarias, semanales o solo cuando sean necesarias.",["Diaria", "Semanal", "Según necesidad"]),
+DD(88,"Tu conducta ancla","Algunas conductas facilitan varias otras.","Elige una conducta ancla que quieras proteger durante los próximos 30 días.",["Conducta ancla", "¿Qué otras conductas facilita?"]),
+DD(89,"Carta a tu yo futuro","La motivación de hoy no puede hablar por ti todos los días.","Escribe una nota breve para leer cuando empieces a negociar con una prioridad importante.",["¿Qué quieres recordarte?", "¿Qué promesa concreta quieres proteger?"]),
+DD(90,"Mira cómo respondes ahora","Noventa días no certifican una identidad; permiten medir qué se volvió más estable.","Evalúa qué conductas ya salen con menos negociación y cuáles necesitan consolidación.",["¿Qué haces ahora con mayor naturalidad?", "¿Qué evidencia demuestra el cambio?", "¿Qué todavía depende demasiado de recordatorios?", "¿Qué quieres consolidar durante los próximos 30 días?"])
+];
+
+
+const ELOCUENCIA_STAGES=[
+  {name:'PRESENCIA',range:'Días 1–5',desc:'Construye seguridad, escucha, voz y lenguaje corporal para comunicar con mayor intención.'},
+  {name:'INFLUENCIA',range:'Días 6–10',desc:'Organiza ideas, conecta con otros y practica persuasión, negociación y manejo de objeciones.'},
+  {name:'MAESTRÍA',range:'Días 11–15',desc:'Integra conversaciones difíciles, storytelling, autoridad e improvisación en una forma propia de comunicar.'}
+];
+const ELOCUENCIA_DAYS=[
+D(1,'Habla con confianza','La seguridad no exige ausencia de nervios. Exige una idea clara y una conducta que puedas ejecutar incluso con nervios.','Hoy entrenas una base simple: respirar, ordenar una idea y decirla sin esconderte detrás de explicaciones innecesarias.','Explica una idea importante en menos de 60 segundos y escucha tu propia claridad.',['¿Qué idea elegiste?','¿Cuál fue tu frase principal?','¿Qué cambiarías para sonar más seguro y directo?']),
+D(2,'La primera impresión','Antes de que una conversación avance, ya estás comunicando con postura, mirada, saludo y tono.','Una primera impresión útil no depende de “actuar”; depende de congruencia entre presencia, voz y mensaje.','Practica una entrada: postura abierta, contacto visual natural, saludo claro y una primera frase con intención.',['¿En qué situación lo practicaste?','¿Qué hiciste diferente al entrar?','¿Qué reacción observaste?']),
+D(3,'Escuchar antes de responder','La elocuencia no es hablar más. Una buena respuesta empieza entendiendo qué dijo realmente la otra persona.','Escuchar mejora precisión, reduce respuestas defensivas y te da mejores palabras para contestar.','En una conversación de hoy, espera dos segundos antes de responder y resume mentalmente lo que la otra persona quiso decir.',['¿Qué conversación elegiste?','¿Qué entendiste mejor por no responder de inmediato?','¿Cómo cambió tu respuesta?']),
+D(4,'Voz, ritmo y pausa','Una frase clara puede perder fuerza si sale demasiado rápido, plana o sin pausas.','El ritmo y la pausa ayudan a separar ideas y a dirigir la atención del oyente sin necesidad de elevar el volumen.','Lee o expresa un mensaje breve marcando una pausa antes y después de la idea principal.',['¿Qué mensaje practicaste?','¿Dónde colocaste la pausa?','¿Qué cambió al reducir la velocidad?']),
+D(5,'Tu cuerpo también habla','Gestos, postura y dirección de la mirada pueden reforzar o contradecir lo que dices.','La meta no es controlar cada movimiento, sino eliminar señales que compiten con tu mensaje.','Grábate durante 60 segundos explicando algo y observa una sola conducta corporal que quieras mejorar.',['¿Qué conducta corporal observaste?','¿Te ayudaba o distraía?','¿Qué ajuste concreto practicarás?']),
+D(6,'Carisma sin actuación','Conectar no requiere convertirte en otra persona. Requiere atención real, energía adecuada y hacer sentir al otro incluido.','El carisma sostenible se apoya más en presencia y curiosidad que en intentar impresionar.','En una conversación, formula una pregunta genuina y construye tu siguiente comentario a partir de la respuesta.',['¿Qué preguntaste?','¿Qué detalle de la respuesta utilizaste para continuar?','¿Cómo cambió la conversación?']),
+D(7,'Una idea, una estructura','Cuando una idea no tiene estructura, el oyente trabaja demasiado para entenderla.','Una estructura sencilla —punto, razón, ejemplo— puede volver un mensaje mucho más fácil de seguir.','Explica hoy una idea usando: 1) punto principal, 2) por qué importa, 3) ejemplo concreto.',['Punto principal','¿Por qué importa?','Ejemplo que utilizaste']),
+D(8,'Persuadir sin presionar','Persuadir no es dominar; es ayudar a que una persona vea razones, consecuencias y alternativas con claridad.','Una propuesta gana fuerza cuando conecta una necesidad real con una razón específica y verificable.','Haz una propuesta pequeña explicando primero el beneficio para la otra persona, no solo lo que tú quieres.',['¿Qué propusiste?','¿Qué necesidad o beneficio identificaste?','¿Cómo presentaste tu razón?']),
+D(9,'Negociar con claridad','Negociar empieza por saber qué necesitas, qué puedes ceder y qué necesitas entender del otro lado.','Entrar sin límites definidos facilita aceptar condiciones que luego generan fricción.','Antes de una negociación real o simulada, escribe tu objetivo, tu mínimo aceptable y una pregunta para entender a la otra parte.',['Tu objetivo','Tu mínimo aceptable','Pregunta que harás antes de decidir']),
+D(10,'Responder a una objeción','Una objeción no siempre es rechazo. Puede ser una solicitud de información, seguridad o condiciones diferentes.','Defenderte inmediatamente suele impedir descubrir qué hay detrás del “no”.','Cuando escuches una objeción, primero aclárala con una pregunta antes de argumentar.',['¿Cuál fue la objeción?','¿Qué pregunta hiciste para aclararla?','¿Qué descubriste detrás de ella?']),
+D(11,'Conversaciones difíciles','La claridad se vuelve más importante cuando hay tensión.','Una conversación difícil mejora cuando separas hechos, impacto y petición concreta, evitando ataques personales.','Formula un mensaje difícil usando: “Esto ocurrió… esto produjo… y esto es lo que necesito ahora”.',['Hecho sin juicio','Impacto concreto','Petición específica']),
+D(12,'Contar una historia que lleva a un punto','Una historia funciona cuando no obliga al oyente a preguntarse por qué se la estás contando.','Contexto, tensión, cambio y significado forman una estructura suficiente para una historia breve.','Cuenta una historia de 90 segundos que termine en una idea clara.',['¿Cuál fue el contexto?','¿Qué cambió o creó tensión?','¿Cuál es el punto que debe recordar el oyente?']),
+D(13,'Autoridad sin arrogancia','Hablar con autoridad no significa sonar superior. Significa asumir responsabilidad sobre lo que sabes y distinguirlo de lo que no sabes.','Frases directas, datos concretos y límites claros suelen transmitir más seguridad que exagerar certeza.','Explica una decisión o recomendación evitando muletillas que resten fuerza y evitando afirmar lo que no puedes sostener.',['¿Qué explicaste?','¿Qué frase hiciste más directa?','¿Dónde reconociste un límite o incertidumbre?']),
+D(14,'Improvisar sin perder el hilo','Improvisar no significa hablar sin estructura. Significa construir estructura rápidamente.','Una respuesta puede organizarse en segundos: conclusión breve, dos razones y cierre.','Pide a alguien que te haga una pregunta inesperada y responde con conclusión → razones → cierre.',['¿Qué pregunta recibiste?','¿Cuál fue tu conclusión inicial?','¿Qué mejorarías en tu organización?']),
+D(15,'Habla con intención','Quince días no convierten la comunicación en algo terminado. Sí pueden darte evidencia de qué cambió y qué necesitas seguir practicando.','El cierre del programa sirve para integrar: presencia, escucha, estructura, voz e influencia deben funcionar juntas, no como trucos separados.','Graba o realiza una intervención de dos minutos aplicando lo que más te ayudó durante el programa y evalúala.',['¿Qué notas que haces mejor ahora?','¿Qué evidencia concreta tienes?','¿Qué habilidad todavía necesita práctica?','¿Cuál será tu regla personal al comunicarte a partir de hoy?'])
+];
+
+const PROGRAMS={
+  gratitud:{
+    id:'gratitud', name:'Gratitud', eyebrow:'Camino 01 · 90 días', title:'El poder de la gratitud',
+    subtitle:'Cambia tu enfoque. Cambia tu manera de vivir. Aquí no vienes simplemente a leer sobre gratitud: vienes a practicarla.',
+    goal:'De notar algo bueno a vivir con una orientación más agradecida.',
+    checklist:[
+      'Detectar lo valioso que la rutina vuelve invisible.',
+      'Detenerte y comprender por qué algo importa.',
+      'Expresar gratitud de manera específica y auténtica.',
+      'Mantener una perspectiva equilibrada también en días difíciles.',
+      'Construir una práctica que dependa cada vez menos de la aplicación.'
+    ],
+    baseline:[
+      '¿Con qué frecuencia notas conscientemente cosas buenas que normalmente das por sentadas?',
+      '¿Con qué frecuencia te detienes a apreciar una experiencia agradable mientras ocurre?',
+      '¿Con qué frecuencia expresas agradecimiento de forma específica a otra persona?',
+      '¿Puedes reconocer algo valioso incluso en un día difícil sin negar lo negativo?',
+      '¿La gratitud aparece espontáneamente en tu vida sin que tengas que recordártela?'
+    ],
+    stages:GRATITUDE_STAGES, days:GRATITUDE_DAYS,
+    accent:'#c7924f', cover:'linear-gradient(135deg,#172236,#31455f)',
+    thirdMetricLabel:'personas reconocidas',
+    thirdMetric:(s)=>s.entries.filter(e=>[3,9,12,31,32,33,34,35,36,37,38,39,40,41,42,44,45].includes(e.day)).length
+  },
+  disciplina:{
+    id:'disciplina', name:'Disciplina', eyebrow:'Camino 02 · 90 días', title:'Disciplina que se sostiene',
+    subtitle:'Convierte decisiones importantes en acciones repetibles, incluso cuando la motivación cambia. Aquí no entrenas dureza: entrenas ejecución.',
+    goal:'De depender de las ganas a construir un sistema personal para empezar, sostener y retomar.',
+    checklist:[
+      'Detectar dónde y por qué postergas.',
+      'Reducir fricción y hacer más fácil empezar.',
+      'Crear consistencia flexible sin caer en todo o nada.',
+      'Responder mejor a cansancio, aburrimiento y distracciones.',
+      'Proteger prioridades y depender cada vez menos de recordatorios.'
+    ],
+    baseline:[
+      '¿Con qué frecuencia cumples pequeños compromisos contigo aunque no tengas ganas?',
+      '¿Con qué frecuencia empiezas tareas importantes sin postergarlas innecesariamente?',
+      '¿Con qué frecuencia proteges tu atención frente a distracciones previsibles?',
+      'Cuando fallas un día, ¿qué tan rápido retomas?',
+      '¿Tus decisiones diarias suelen reflejar las prioridades que dices tener?'
+    ],
+    stages:DISCIPLINE_STAGES, days:DISCIPLINE_DAYS,
+    accent:'#6f8f75', cover:'linear-gradient(135deg,#183027,#3f5c4a)',
+    thirdMetricLabel:'reinicios practicados',
+    thirdMetric:(s)=>s.completed.filter(d=>[41,52,53,86].includes(d)).length
+  },
+  elocuencia:{
+    id:'elocuencia', name:'Hablar con elocuencia', eyebrow:'Programa original · 15 días', title:'Hablar con elocuencia',
+    subtitle:'El programa original sigue vivo dentro de NEXORA. Practica presencia, voz, estructura e influencia sin perder el progreso de quienes ya comenzaron este camino.',
+    goal:'De tener una idea a expresarla con claridad, presencia y propósito.',
+    checklist:[
+      'Hablar con mayor seguridad y menos rodeos.',
+      'Escuchar mejor antes de responder.',
+      'Usar voz, pausas y lenguaje corporal con intención.',
+      'Estructurar ideas, historias y propuestas para que sean fáciles de seguir.',
+      'Manejar objeciones y conversaciones difíciles con mayor claridad.'
+    ],
+    baseline:[
+      '¿Con qué frecuencia expresas tus ideas con claridad sin dar demasiados rodeos?',
+      '¿Con qué frecuencia mantienes una presencia segura aunque estés nervioso?',
+      '¿Con qué frecuencia escuchas completamente antes de preparar tu respuesta?',
+      '¿Con qué frecuencia estructuras una explicación para que sea fácil de seguir?',
+      '¿Con qué frecuencia manejas objeciones o desacuerdos sin ponerte a la defensiva?'
+    ],
+    stages:ELOCUENCIA_STAGES, days:ELOCUENCIA_DAYS,
+    accent:'#7562a8', cover:'linear-gradient(135deg,#2b2440,#5a4c7a)',
+    milestones:[5,10,15],
+    thirdMetricLabel:'prácticas de voz y presencia',
+    thirdMetric:(s)=>s.completed.filter(d=>[1,2,4,5,13,14,15].includes(d)).length
+  }
+};
+
+const defaultProgramState=()=>({baselineDone:false,baseline:{},currentDay:1,completed:[],entries:[]});
+const v1=JSON.parse(localStorage.getItem('nexora_v1_state')||'null');
+const defaultAppState=()=>({selectedProgram:'gratitud', programs:{
+  gratitud:v1?{...defaultProgramState(),...v1}:defaultProgramState(),
+  disciplina:defaultProgramState(),
+  elocuencia:defaultProgramState()
+}});
+let appState=JSON.parse(localStorage.getItem('nexora_v3_state')||'null')||JSON.parse(localStorage.getItem('nexora_v2_state')||'null')||defaultAppState();
+if(!appState.programs?.gratitud) appState=defaultAppState();
+Object.keys(PROGRAMS).forEach(id=>{if(!appState.programs[id]) appState.programs[id]=defaultProgramState()});
+if(!PROGRAMS[appState.selectedProgram]) appState.selectedProgram='gratitud';
+let previewDay=null;
+
+function program(id=appState.selectedProgram){return PROGRAMS[id]}
+function pstate(id=appState.selectedProgram){return appState.programs[id]}
+function totalDays(p=program()){return p.days.length}
+function stageForDay(p,n){return p.stages.find((st,i)=>{const nums=(st.range.match(/\d+/g)||[]).map(Number);return nums.length>=2?n>=nums[0]&&n<=nums[1]:i===p.stages.length-1})||p.stages[p.stages.length-1]}
+function save(){localStorage.setItem('nexora_v3_state',JSON.stringify(appState));renderAll()}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+function closeOpenModal(){const open=document.querySelector('.modal.open');if(open)open.classList.remove('open')}
+document.addEventListener('click',e=>{if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('open')})
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeOpenModal()})
+function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress()}
+function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
+function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;save();renderProgram();showView('program')}
+function beginProgram(){const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
+function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
+function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
+function saveBaseline(){const p=program(),s=pstate(),ans={};for(let i=0;i<p.baseline.length;i++){const el=document.querySelector(`[data-q="${i}"].sel`);if(!el){toast(`Responde las ${p.baseline.length} preguntas antes de continuar.`);return}ans[i]=+el.dataset.v}s.baselineDone=true;s.baseline=ans;save();closeModal('baselineModal');toast(`Ya tenemos tu punto de partida en ${p.name}.`);setTimeout(startToday,350)}
+function openScience(){document.getElementById('scienceModal').classList.add('open')}
+function syncTesterMax(){const id=document.getElementById('testerProgram').value,p=program(id),input=document.getElementById('testerDay');input.max=totalDays(p);if(+input.value>totalDays(p))input.value=totalDays(p)}
+function openTester(){document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();document.getElementById('testerModal').classList.add('open')}
+function jumpToDay(){const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
+function resetDemo(){if(confirm('¿Reiniciar todos los datos guardados de este prototipo?')){appState=defaultAppState();previewDay=null;['nexora_v1_state','nexora_v2_state','nexora_v3_state'].forEach(k=>localStorage.removeItem(k));renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
+function startToday(btn){const s=pstate();if(!s.baselineDone){beginProgram();return}const n=Math.min(previewDay||s.currentDay,totalDays());renderExercise(n,!!previewDay);showView('today',btn)}
+function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
+function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max;document.getElementById('exerciseCard').innerHTML=`
+  <div class="day-number">${p.name.toUpperCase()} · ${stage.name} · DÍA ${n} DE ${max}${isPreview?' · VISTA TESTER':''}</div>
+  <h1>${day.title}</h1><p class="hook">${day.hook}</p>
+  <div class="lessonbox"><b>Descubrir</b><br>${dayLesson(p,n)}</div>
+  <div class="mission"><div class="eyebrow">Tu práctica de hoy</div><h3>${day.mission}</h3></div>
+  <div id="exerciseFields">${day.prompts.map((q,i)=>`<div class="field"><label>${q}</label><textarea id="ans_${i}" placeholder="Escribe con tus propias palabras…">${escapeHtml(existing?.answers?.[i]||'')}</textarea></div>`).join('')}</div>
+  <div class="completebox"><h3>${last?'Evalúa lo que ya cambió':'Convierte la experiencia en evidencia'}</h3><p>${last?(max===90?'El objetivo es decidir qué ya está integrado y qué merece un ciclo de consolidación.':'Este cierre no borra tu camino: resume lo aprendido y te ayuda a decidir qué seguir practicando.'):'Guarda lo que ocurrió. NEXORA te lo devolverá después como parte de tu historia personal.'}</p><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div></div>`}
+function completeDay(n,isPreview){const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Evidencia guardada.');setTimeout(()=>{previewDay=isPreview?n:null;showView('history')},450)}
+function renderSwitch(target){const el=document.getElementById(target);el.innerHTML=Object.values(PROGRAMS).map(p=>`<button class="switchbtn ${appState.selectedProgram===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${p.name}</button>`).join('')}
+function renderProgram(){const p=program(),s=pstate(),max=totalDays(p);renderSwitch('programSwitch');document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=s.baselineDone?'Continuar mi camino →':'Comenzar mi transformación →';document.querySelector('#program .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#program .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.querySelector('#program .card .eyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays()}
+function renderStages(){const p=program();document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>`<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('')}
+function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="previewDay=${d.d};renderExercise(${d.d},true);showView('today')">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
+function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'});const wrap=document.getElementById('homePaths');wrap.innerHTML=ids.map(id=>{const p=program(id),s=pstate(id),max=totalDays(p),d=p.days[Math.min(s.currentDay-1,max-1)],pct=Math.round(s.completed.length/max*100);return `<article class="pathcard"><div class="pathhead"><div><div class="tagline"><span class="tagdot ${id==='disciplina'?'disc':''}"></span>${p.name}</div><h3>${s.baselineDone?`Día ${s.currentDay} · ${d.title}`:'Listo para comenzar'}</h3></div><b>${pct}%</b></div><p>${s.baselineDone?d.hook:p.subtitle}</p><div class="progressbar"><div style="width:${pct}%;background:${p.accent}"></div></div><div class="path-actions"><button class="smallbtn" onclick="appState.selectedProgram='${id}';save();${s.baselineDone?'startToday()':'openProgram(\''+id+'\')'}">${s.baselineDone?'Continuar hoy':'Explorar camino'}</button><button class="smallbtn alt" onclick="openProgram('${id}')">Ver ${max} días</button></div></article>`}).join('');
+  const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const feed=document.getElementById('homeFeed');if(!all.length){feed.innerHTML='<div class="feed-empty">Tus primeras evidencias aparecerán aquí cuando completes una práctica de cualquiera de tus caminos.</div>'}else{feed.innerHTML=all.slice(0,5).map(e=>`<div class="feed-item"><div class="feed-meta"><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span>Día ${e.day} · Evidencia</div><b>${e.title}</b><div class="tiny" style="margin-top:5px">${escapeHtml((e.answers.find(Boolean)||'').slice(0,125))}${(e.answers.find(Boolean)||'').length>125?'…':''}</div></div>`).join('')}}
+function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus caminos y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
+function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
+function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function renderAll(){renderHome();renderProgram();renderHistory();renderProgress()}
+renderAll();
+</script>
+
+</body>
+</html>
