@@ -215,6 +215,237 @@
     .authlink{display:block;width:100%;margin-top:10px;border:0;background:transparent;color:var(--blue);padding:8px 4px;text-align:center;font-weight:800}
     .authlink:hover{text-decoration:underline}
     html[data-theme="dark"] .authlink{color:#b9d4ef}
+
+    /* Comprehensive dark-mode contrast audit v3 */
+    html[data-theme="dark"]{
+      --dark-surface:#151b24;
+      --dark-surface-2:#111720;
+      --dark-surface-3:#1b2330;
+      --dark-border:#344050;
+      --dark-text:#f4f1ea;
+      --dark-text-2:#d9dfe7;
+      --dark-muted:#b9c0cb;
+      --dark-accent:#e7c58d;
+      --dark-accent-text:#101827;
+    }
+
+    /* Every light surface gets an explicit dark counterpart. */
+    html[data-theme="dark"] .hero-main,
+    html[data-theme="dark"] .program,
+    html[data-theme="dark"] .program.active,
+    html[data-theme="dark"] .program.discipline,
+    html[data-theme="dark"] .program.elocuencia,
+    html[data-theme="dark"] .today-card,
+    html[data-theme="dark"] .stat,
+    html[data-theme="dark"] .feed-item,
+    html[data-theme="dark"] .stage,
+    html[data-theme="dark"] .program-info,
+    html[data-theme="dark"] .exercise-card,
+    html[data-theme="dark"] .evidence,
+    html[data-theme="dark"] .milestone,
+    html[data-theme="dark"] .modalbox,
+    html[data-theme="dark"] .pathcard,
+    html[data-theme="dark"] .guide-step,
+    html[data-theme="dark"] .faq details,
+    html[data-theme="dark"] .help-card,
+    html[data-theme="dark"] .feedback-item,
+    html[data-theme="dark"] .tour-card{
+      background:var(--dark-surface)!important;
+      color:var(--dark-text)!important;
+      border-color:var(--dark-border)!important;
+    }
+
+    /* Nested surfaces and instructional boxes. */
+    html[data-theme="dark"] .lessonbox,
+    html[data-theme="dark"] .examplebox,
+    html[data-theme="dark"] .auth-note,
+    html[data-theme="dark"] .locale-content-notice,
+    html[data-theme="dark"] .milestone.reached,
+    html[data-theme="dark"] .status-chip{
+      background:var(--dark-surface-3)!important;
+      color:var(--dark-text-2)!important;
+      border-color:var(--dark-border)!important;
+    }
+    html[data-theme="dark"] .lessonbox{border-left-color:var(--dark-accent)!important}
+    html[data-theme="dark"] .examplebox b{color:var(--dark-accent)!important}
+    html[data-theme="dark"] .status-chip{color:#c9e2cd!important}
+    html[data-theme="dark"] .status-dot{background:#9ac2a1!important}
+
+    /* Inputs, selects, plain buttons and modal controls. */
+    html[data-theme="dark"] input,
+    html[data-theme="dark"] textarea,
+    html[data-theme="dark"] select,
+    html[data-theme="dark"] .modal select,
+    html[data-theme="dark"] .help-card input,
+    html[data-theme="dark"] .help-card select,
+    html[data-theme="dark"] .tester input,
+    html[data-theme="dark"] .scale button,
+    html[data-theme="dark"] .daydot,
+    html[data-theme="dark"] .switchbtn,
+    html[data-theme="dark"] .authtab,
+    html[data-theme="dark"] .closex,
+    html[data-theme="dark"] .tour-close,
+    html[data-theme="dark"] .tour-back{
+      background:var(--dark-surface-2)!important;
+      color:var(--dark-text)!important;
+      border-color:var(--dark-border)!important;
+    }
+    html[data-theme="dark"] .closex:hover,
+    html[data-theme="dark"] .tour-close:hover,
+    html[data-theme="dark"] .tour-back:hover{
+      background:#202a38!important;
+      color:#fff!important;
+    }
+
+    /* High-emphasis actions: never white-on-white in dark mode. */
+    html[data-theme="dark"] .primary,
+    html[data-theme="dark"] .smallbtn,
+    html[data-theme="dark"] .switchbtn.active,
+    html[data-theme="dark"] .authtab.active,
+    html[data-theme="dark"] .tour-next,
+    html[data-theme="dark"] .daydot.current,
+    html[data-theme="dark"] .scale button.sel{
+      background:var(--dark-accent)!important;
+      color:var(--dark-accent-text)!important;
+      border-color:var(--dark-accent)!important;
+    }
+    html[data-theme="dark"] .primary *,
+    html[data-theme="dark"] .smallbtn *,
+    html[data-theme="dark"] .switchbtn.active *,
+    html[data-theme="dark"] .authtab.active *,
+    html[data-theme="dark"] .tour-next *{
+      color:var(--dark-accent-text)!important;
+    }
+
+    /* Secondary and outline actions. */
+    html[data-theme="dark"] .ghost,
+    html[data-theme="dark"] .secondary,
+    html[data-theme="dark"] .iconbtn,
+    html[data-theme="dark"] .langselect{
+      background:var(--dark-surface-2)!important;
+      color:var(--dark-text)!important;
+      border-color:var(--dark-border)!important;
+    }
+    html[data-theme="dark"] .ghost:hover,
+    html[data-theme="dark"] .secondary:hover,
+    html[data-theme="dark"] .iconbtn:hover{
+      background:#202a38!important;
+      color:#fff!important;
+    }
+
+    /* Text hierarchy. */
+    html[data-theme="dark"] h1,
+    html[data-theme="dark"] h2,
+    html[data-theme="dark"] h3,
+    html[data-theme="dark"] .today-title,
+    html[data-theme="dark"] .journey-pct,
+    html[data-theme="dark"] .bigmetric,
+    html[data-theme="dark"] .brandbtn,
+    html[data-theme="dark"] .program .arrow{
+      color:var(--dark-text)!important;
+    }
+    html[data-theme="dark"] .lead,
+    html[data-theme="dark"] .today-hook,
+    html[data-theme="dark"] .check,
+    html[data-theme="dark"] .program p,
+    html[data-theme="dark"] .stage p,
+    html[data-theme="dark"] .guide-step p,
+    html[data-theme="dark"] .faq p,
+    html[data-theme="dark"] .evidence p,
+    html[data-theme="dark"] .answer,
+    html[data-theme="dark"] .muted,
+    html[data-theme="dark"] .tiny,
+    html[data-theme="dark"] .program-progress,
+    html[data-theme="dark"] .journey-meta,
+    html[data-theme="dark"] .feed-empty,
+    html[data-theme="dark"] .profilemeta span,
+    html[data-theme="dark"] .guest-banner-copy span,
+    html[data-theme="dark"] .tour-card p,
+    html[data-theme="dark"] .tour-progress{
+      color:var(--dark-muted)!important;
+    }
+    html[data-theme="dark"] .field label,
+    html[data-theme="dark"] .science-list{
+      color:var(--dark-text-2)!important;
+    }
+    html[data-theme="dark"] .eyebrow,
+    html[data-theme="dark"] .feed-meta,
+    html[data-theme="dark"] .evidence small,
+    html[data-theme="dark"] .examplebtn,
+    html[data-theme="dark"] .authlink{
+      color:var(--dark-accent)!important;
+    }
+
+    /* Progress, badges, chips and small indicators. */
+    html[data-theme="dark"] .progressbar{background:#26303d!important}
+    html[data-theme="dark"] .program .badge,
+    html[data-theme="dark"] .feed-program,
+    html[data-theme="dark"] .guide-num{
+      background:#332a20!important;
+      color:#f2d19e!important;
+      border-color:#5a4630!important;
+    }
+    html[data-theme="dark"] .program.discipline .badge,
+    html[data-theme="dark"] .feed-program.disc{
+      background:#203128!important;
+      color:#bfe0c5!important;
+      border-color:#35523d!important;
+    }
+    html[data-theme="dark"] .check:before{
+      background:#203128!important;
+      color:#bfe0c5!important;
+    }
+    html[data-theme="dark"] .daydot.done{
+      background:#203128!important;
+      color:#c7e6cc!important;
+      border-color:#35523d!important;
+    }
+    html[data-theme="dark"] .program.locked{opacity:.82}
+
+    /* Intentionally dark feature panels keep light text and dark gradients. */
+    html[data-theme="dark"] .hero-side,
+    html[data-theme="dark"] .program-cover,
+    html[data-theme="dark"] .help-aside,
+    html[data-theme="dark"] .unlock-panel,
+    html[data-theme="dark"] .completebox{
+      color:#f7f8fa!important;
+      border-color:#344050!important;
+    }
+    html[data-theme="dark"] .hero-side{background:linear-gradient(160deg,#111a28,#24344a)!important}
+    html[data-theme="dark"] .program-cover{background:linear-gradient(135deg,#0c121b,#26374c)!important}
+    html[data-theme="dark"] .help-aside{background:linear-gradient(155deg,#111a28,#26384f)!important}
+    html[data-theme="dark"] .unlock-panel{background:linear-gradient(145deg,#111a28,#26384f)!important}
+    html[data-theme="dark"] .completebox{background:#111c2b!important}
+    html[data-theme="dark"] .hero-side .small,
+    html[data-theme="dark"] .hero-side .quote,
+    html[data-theme="dark"] .program-cover h1,
+    html[data-theme="dark"] .program-cover p,
+    html[data-theme="dark"] .help-aside h2,
+    html[data-theme="dark"] .help-aside p,
+    html[data-theme="dark"] .unlock-panel h3,
+    html[data-theme="dark"] .unlock-panel p,
+    html[data-theme="dark"] .unlock-list,
+    html[data-theme="dark"] .completebox p{
+      color:#eef2f6!important;
+    }
+    html[data-theme="dark"] .hero-side .pill,
+    html[data-theme="dark"] .help-aside .pill{
+      background:rgba(255,255,255,.08)!important;
+      color:#eef2f6!important;
+      border-color:rgba(255,255,255,.16)!important;
+    }
+
+    /* Placeholders and focus states remain visible. */
+    html[data-theme="dark"] input::placeholder,
+    html[data-theme="dark"] textarea::placeholder{color:#8f99a8!important;opacity:1}
+    html[data-theme="dark"] input:focus,
+    html[data-theme="dark"] textarea:focus,
+    html[data-theme="dark"] select:focus{
+      border-color:var(--dark-accent)!important;
+      box-shadow:0 0 0 3px rgba(231,197,141,.16)!important;
+      outline:none;
+    }
+    /* data-nexora-dark-audit="v3" */
 </style>
 
 <script data-nexora-theme="v1">
