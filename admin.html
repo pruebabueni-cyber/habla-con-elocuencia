@@ -12,7 +12,7 @@
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{font-size:28px;display:block}.metric span{font-size:12px;color:var(--muted)}h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}
 button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;font-weight:800}.primary{background:var(--ink);color:white}.primary:disabled{opacity:.55;cursor:wait}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
 .tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}.table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.stack{display:grid;gap:16px}.feedback{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.feedback-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#f1e3cc;color:#6b4a25;font-size:11px;font-weight:800}.empty{padding:30px;text-align:center;color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.stack{display:grid;gap:16px}.feedback{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.replybox{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.replybox textarea{width:100%;min-height:92px;border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;color:var(--ink);resize:vertical}.replyactions{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:8px}.email-state{font-size:11px;color:var(--muted);font-weight:700}.feedback-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#f1e3cc;color:#6b4a25;font-size:11px;font-weight:800}.empty{padding:30px;text-align:center;color:var(--muted)}
 .auth{max-width:500px;margin:80px auto}.auth input{width:100%;border:1px solid var(--line);border-radius:12px;padding:13px;margin:7px 0;background:#fff;color:var(--ink)}.msg{margin-top:13px;min-height:22px;font-size:13px;line-height:1.45}.msg.error{color:#8d3434}.msg.ok{color:#416247}.linkbtn{width:100%;margin-top:8px;background:transparent;color:#415e78}.notice{padding:12px 14px;border-radius:14px;background:#fff4dc;border:1px solid #ecd7a8;margin-bottom:16px}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.shell{padding:16px}.auth{margin:38px auto}}
 </style>
@@ -63,7 +63,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-
 
       <section class="card">
         <h2>Sugerencias y ayuda</h2>
-        <div class="filters"><select id="feedbackFilter"><option value="">Todas</option><option value="new">Nuevas</option><option value="reviewed">Revisadas</option><option value="planned">Planificadas</option><option value="shipped">Implementadas</option><option value="closed">Cerradas</option></select></div>
+        <div class="filters"><select id="feedbackFilter"><option value="">Todas</option><option value="new">Nuevas</option><option value="reviewed">Revisadas</option><option value="in_progress">En proceso</option><option value="planned">Planificadas</option><option value="responded">Respondidas</option><option value="shipped">Implementadas</option><option value="closed">Cerradas</option></select></div>
         <div id="feedbackList"></div>
       </section>
 
@@ -85,7 +85,8 @@ let session=null,currentUser=null,usersData=[],feedbackData=[],eventData=[],stat
 const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
 const fmt=d=>d?new Date(d).toLocaleString('es-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—';
 const pct=(s,max)=>s?Math.round(((s.completed_days||[]).length/max)*100)+'%':'—';
-const statusLabel=s=>({new:'Nueva',reviewed:'Revisada',planned:'Planificada',shipped:'Implementada',closed:'Cerrada'})[s]||s;
+const statusLabel=s=>({new:'Nueva',reviewed:'Revisada',in_progress:'En proceso',planned:'Planificada',responded:'Respondida',shipped:'Implementada',closed:'Cerrada'})[s]||s;
+const ackLabel=s=>({sent:'Confirmación enviada',pending:'Confirmación pendiente',failed:'Confirmación falló',skipped:'Sin confirmación',legacy:'Envío anterior'})[s]||s;
 const msgEl=document.getElementById('authMsg');
 
 function setMsg(text,type=''){msgEl.textContent=text;msgEl.className='msg'+(type?' '+type:'')}
@@ -112,6 +113,14 @@ async function rest(path,options={}){
   }
   if(!res.ok)throw new Error(typeof body==='string'?body:(body?.message||body?.hint||('HTTP '+res.status)));
   return body;
+}
+async function invokeFunction(name,body){
+  if(!session?.access_token)throw new Error('No active session');
+  const res=await fetch(API+'/functions/v1/'+name,{method:'POST',headers:authHeaders(session.access_token),body:JSON.stringify(body)});
+  let data={};try{data=await res.json()}catch{}
+  if(res.status===401&&session?.refresh_token){await refreshSession();return invokeFunction(name,body)}
+  if(!res.ok||data?.ok===false)throw new Error(data?.error||('HTTP '+res.status));
+  return data;
 }
 async function refreshSession(){
   const data=await authFetch('/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:publicHeaders(),body:JSON.stringify({refresh_token:session.refresh_token})});
@@ -232,7 +241,7 @@ function renderFeedback(){
   const items=feedbackData.filter(f=>!filter||f.status===filter);
   wrap.innerHTML=items.length?items.map(f=>{
     const user=usersData.find(u=>u.id===f.user_id);
-    return '<div class="feedback"><div class="feedback-head"><div><span class="badge">'+esc(f.feedback_type)+'</span><h3 style="margin:10px 0 6px">'+esc(user?.display_name||user?.email||'Usuario')+'</h3><div class="muted">'+fmt(f.created_at)+' · '+esc(f.program_key||'sin programa')+(f.current_day?' · Día '+f.current_day:'')+'</div></div><select data-id="'+f.id+'" class="feedback-status"><option value="new" '+(f.status==='new'?'selected':'')+'>Nueva</option><option value="reviewed" '+(f.status==='reviewed'?'selected':'')+'>Revisada</option><option value="planned" '+(f.status==='planned'?'selected':'')+'>Planificada</option><option value="shipped" '+(f.status==='shipped'?'selected':'')+'>Implementada</option><option value="closed" '+(f.status==='closed'?'selected':'')+'>Cerrada</option></select></div><p style="margin-top:14px">'+esc(f.message)+'</p><div class="muted">Estado: '+statusLabel(f.status)+'</div></div>'
+    return '<div class="feedback"><div class="feedback-head"><div><span class="badge">'+esc(f.feedback_type)+'</span><h3 style="margin:10px 0 6px">'+esc(user?.display_name||user?.email||'Usuario')+'</h3><div class="muted">'+fmt(f.created_at)+' · '+esc(f.program_key||'sin programa')+(f.current_day?' · Día '+f.current_day:'')+'</div><div class="email-state" style="margin-top:5px">'+ackLabel(f.ack_email_status)+'</div></div><select data-id="'+f.id+'" class="feedback-status"><option value="new" '+(f.status==='new'?'selected':'')+'>Nueva</option><option value="reviewed" '+(f.status==='reviewed'?'selected':'')+'>Revisada</option><option value="in_progress" '+(f.status==='in_progress'?'selected':'')+'>En proceso</option><option value="planned" '+(f.status==='planned'?'selected':'')+'>Planificada</option><option value="responded" '+(f.status==='responded'?'selected':'')+'>Respondida</option><option value="shipped" '+(f.status==='shipped'?'selected':'')+'>Implementada</option><option value="closed" '+(f.status==='closed'?'selected':'')+'>Cerrada</option></select></div><p style="margin-top:14px">'+esc(f.message)+'</p><div class="muted">Estado: '+statusLabel(f.status)+(f.response_sent_at?' · Respuesta enviada '+fmt(f.response_sent_at):'')+'</div><div class="replybox"><textarea class="feedback-reply-text" data-id="'+f.id+'" placeholder="Escribe una respuesta para enviar por correo al usuario…">'+esc(f.response_text||'')+'</textarea><div class="replyactions"><span class="email-state">'+(f.email?'Se enviará a '+esc(f.email):'Sin correo disponible')+'</span><button class="primary feedback-reply-btn" data-id="'+f.id+'" '+(!f.email?'disabled':'')+'>Enviar respuesta</button></div></div></div>'
   }).join(''):'<div class="empty">No hay sugerencias en este estado.</div>';
   document.querySelectorAll('.feedback-status').forEach(el=>el.addEventListener('change',async()=>{
     const id=el.dataset.id,status=el.value;
@@ -240,6 +249,21 @@ function renderFeedback(){
       await rest('feedback?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{'Prefer':'return=minimal'},body:JSON.stringify({status})});
       const item=feedbackData.find(x=>x.id===id);if(item)item.status=status;renderMetrics();renderFeedback();
     }catch(e){alert('No pudimos actualizar la sugerencia.')}
+  }));
+  document.querySelectorAll('.feedback-reply-btn').forEach(btn=>btn.addEventListener('click',async()=>{
+    const id=btn.dataset.id;
+    const area=document.querySelector('.feedback-reply-text[data-id="'+id+'"]');
+    const message=(area?.value||'').trim();
+    if(message.length<2){alert('Escribe la respuesta antes de enviarla.');return}
+    const original=btn.textContent;btn.disabled=true;btn.textContent='Enviando…';
+    try{
+      await invokeFunction('feedback-reply',{feedback_id:id,message});
+      await loadAll();
+      alert('Respuesta enviada por correo.');
+    }catch(e){
+      alert('No pudimos enviar la respuesta por correo.');
+      btn.disabled=false;btn.textContent=original;
+    }
   }));
 }
 function renderEvents(){
