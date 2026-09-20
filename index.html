@@ -59,7 +59,7 @@
     .tester{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}.tester input{width:100%;border:1px solid var(--line);padding:11px;border-radius:12px;background:#fff}.tiny{font-size:12px;color:var(--muted);line-height:1.45}
     .toast{position:fixed;z-index:120;right:18px;top:18px;background:#101827;color:#fff;padding:14px 17px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(-8px);transition:.2s}.toast.show{opacity:1;transform:translateY(0)}
     @media(max-width:920px){.hero,.dashboard,.program-hero,.progress-layout{grid-template-columns:1fr}.programs{grid-template-columns:repeat(2,1fr)}.stages{grid-template-columns:repeat(2,1fr)}.daysgrid{grid-template-columns:repeat(9,1fr)}.hero-main{padding:30px;min-height:300px}.hero-side{min-height:260px}}
-    @media(max-width:560px){.shell{padding:16px 14px 105px}.brand{font-size:17px}.hero-main{padding:25px}.hero-side{padding:23px}.programs,.stages{grid-template-columns:1fr}.program{min-height:175px}.card{padding:20px}.statrow{grid-template-columns:1fr 1fr 1fr}.daysgrid{grid-template-columns:repeat(6,1fr)}.bottomnav{width:calc(100% - 24px);justify-content:space-around}.navbtn{padding:10px 9px;font-size:12px}.program-cover{padding:28px}.program-cover h1{font-size:40px}.milestones{grid-template-columns:repeat(2,1fr)}.scale button{font-size:12px}.exercise-card{border-radius:22px}.top-actions .iconbtn:first-child{display:none}}
+    @media(max-width:560px){.shell{padding:16px 14px 105px}.brand{font-size:17px}.hero-main{padding:25px}.hero-side{padding:23px}.programs,.stages{grid-template-columns:1fr}.program{min-height:175px}.card{padding:20px}.statrow{grid-template-columns:1fr 1fr 1fr}.daysgrid{grid-template-columns:repeat(6,1fr)}.bottomnav{width:calc(100% - 24px);justify-content:space-around}.navbtn{padding:10px 9px;font-size:12px}.program-cover{padding:28px}.program-cover h1{font-size:40px}.milestones{grid-template-columns:repeat(2,1fr)}.scale button{font-size:12px}.exercise-card{border-radius:22px}.top-actions .testerbtn{display:none}}
   
     .program.available{cursor:pointer;transition:.2s transform,.2s box-shadow,.2s border-color}
     .program.available:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(31,37,51,.12);border-color:#d9c9b2}
@@ -112,6 +112,23 @@
     @media(max-width:920px){.guide-grid{grid-template-columns:1fr 1fr}.help-layout{grid-template-columns:1fr}}
     @media(max-width:560px){.guide-grid{grid-template-columns:1fr}.bottomnav{overflow-x:auto;justify-content:flex-start}.bottomnav::-webkit-scrollbar{display:none}.navbtn{flex:0 0 auto;padding:10px 10px;font-size:11px}.top-actions{gap:6px}.accountbtn .account-label{display:none}.accountbtn{padding:8px}.help-card,.help-aside{padding:22px}}
 
+    /* V8 · guía interactiva + ajustes móviles */
+    .tour-layer{position:fixed;inset:0;z-index:250;display:none;pointer-events:none}
+    .tour-layer.open{display:block}
+    .tour-shade{position:fixed;background:rgba(8,13,22,.72);backdrop-filter:blur(1px);pointer-events:auto}
+    .tour-focus{position:fixed;border:3px solid var(--gold2);border-radius:18px;box-shadow:0 0 0 4px rgba(229,191,125,.18),0 16px 40px rgba(0,0,0,.18);pointer-events:none;transition:.22s ease}
+    .tour-card{position:fixed;z-index:252;width:min(370px,calc(100vw - 24px));background:#fffdfa;border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 28px 80px rgba(0,0,0,.3);pointer-events:auto}
+    .tour-top{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.tour-kicker{font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:7px}.tour-card h3{font-size:24px;letter-spacing:-.03em;margin:0 0 8px}.tour-card p{color:var(--ink2);line-height:1.55;margin:0}.tour-close{border:1px solid var(--line);background:#fff;width:36px;height:36px;border-radius:12px;font-size:20px;color:var(--muted)}
+    .tour-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:18px}.tour-progress{font-size:12px;color:var(--muted);font-weight:800}.tour-actions{display:flex;gap:8px}.tour-actions button{padding:10px 13px;border-radius:12px;font-weight:850}.tour-back{border:1px solid var(--line);background:#fff;color:var(--ink2)}.tour-next{border:0;background:var(--ink);color:#fff}
+    .guide-launch{max-width:720px;margin:40px auto}.guide-launch .card{text-align:center;padding:38px}.guide-launch h1{font-size:clamp(36px,6vw,58px);letter-spacing:-.05em;margin-bottom:12px}.guide-launch p{color:var(--muted);line-height:1.65;max-width:580px;margin:0 auto 22px}
+    .guest-banner{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 0 28px;padding:20px 22px;border:1px solid #decdb6;background:linear-gradient(135deg,#fffaf1,#f3eadc);border-radius:20px;box-shadow:0 12px 32px rgba(31,37,51,.06)}
+    .guest-banner-copy{min-width:0}.guest-banner-copy b{display:block;font-size:19px;letter-spacing:-.02em;margin-bottom:4px}.guest-banner-copy span{display:block;color:var(--muted);line-height:1.5}
+    .guest-banner-actions{display:flex;gap:9px;flex-wrap:wrap;flex:0 0 auto}
+    .unlock-panel{margin:4px 0 18px;padding:18px;border-radius:18px;background:linear-gradient(145deg,#172236,#2d4058);color:#fff}.unlock-panel h3{font-size:20px;margin:0 0 8px}.unlock-panel p{color:#d8dee7;line-height:1.5;margin:0 0 12px}.unlock-list{display:grid;gap:7px;font-size:13px;color:#eef2f6}.unlock-list span:before{content:"✓";margin-right:8px;color:#e5bf7d;font-weight:900}
+    .navbtn.restricted{opacity:.7}.navbtn.restricted:after{content:"  🔒";font-size:10px}
+    @media(max-width:700px){.guest-banner{align-items:flex-start;flex-direction:column}.guest-banner-actions{width:100%}.guest-banner-actions button{flex:1}}
+    @media(max-width:560px){.topbar{align-items:flex-start;flex-wrap:wrap}.top-actions{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}.top-actions .iconbtn{font-size:12px;padding:8px 10px}.top-actions .sciencebtn{display:inline-flex}.tour-card{padding:18px}.tour-card h3{font-size:21px}}
+
 </style>
 </head>
 
@@ -121,8 +138,8 @@
     <header class="topbar">
       <button class="brand brandbtn" onclick="goHome()" aria-label="Ir al inicio"><span class="brandmark"></span>NEXORA</button>
       <div class="top-actions">
-        <button class="iconbtn" onclick="openScience()">Base científica</button>
-        <button class="iconbtn" onclick="openTester()">Vista tester</button>
+        <button class="iconbtn sciencebtn" id="scienceBtn" onclick="openScience()">Base científica</button>
+        <button class="iconbtn testerbtn" id="testerBtn" onclick="openTester()">Vista tester</button>
         <button class="iconbtn accountbtn" id="accountBtn" onclick="openAccount()"><span class="avatar" id="accountAvatar">?</span><span class="account-label" id="accountLabel">Entrar</span></button>
       </div>
     </header>
@@ -145,8 +162,13 @@
           </aside>
         </div>
 
+        <section class="guest-banner" id="guestBanner">
+          <div class="guest-banner-copy"><b>Explora primero. Tu transformación empieza con tu cuenta.</b><span>Puedes conocer NEXORA y sus caminos sin registrarte. Crea una cuenta para iniciar prácticas, guardar evidencias, construir tu Historia y ver tu Progreso.</span></div>
+          <div class="guest-banner-actions"><button class="primary" onclick="openAccountFor('signup')">Crear cuenta →</button><button class="ghost" onclick="openAccountFor('login')">Ya tengo cuenta</button></div>
+        </section>
+
         <div class="section-title" id="pathsAnchor"><div><h2>Elige un camino</h2><p>Tres caminos ya están disponibles en esta versión.</p></div></div>
-        <div class="programs">
+        <div class="programs" id="programChoices">
           <article class="program active available" onclick="openProgram('gratitud')">
             <div><span class="badge">Disponible</span><h3>Gratitud</h3><p>Entrena tu atención para reconocer, apreciar y responder de manera diferente a lo valioso que ya existe en tu vida.</p></div>
             <div class="program-grid-status"><span class="program-progress" id="gratitudCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
@@ -253,7 +275,11 @@
       <section id="guide" class="view">
         <div class="eyebrow">Guía de NEXORA</div>
         <h1 style="font-size:clamp(38px,6vw,60px);letter-spacing:-.055em;margin-bottom:12px">Aprende a usar la plataforma sin complicarte.</h1>
-        <p class="lead">NEXORA está diseñada para que abras una capa a la vez: eliges un camino, practicas, guardas evidencia y vuelves mañana.</p>
+        <p class="lead">Primero puedes recorrer NEXORA de forma interactiva. Después, esta página queda como referencia rápida para cuando quieras recordar cómo funciona algo.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px">
+          <button class="primary" onclick="startGuide()">Repetir recorrido interactivo →</button>
+          <button class="ghost" onclick="goHome()">Ir al inicio</button>
+        </div>
         <div class="guide-grid">
           <article class="guide-step"><div class="guide-num">1</div><h3>Elige un camino</h3><p>Empieza con Gratitud, Disciplina o Hablar con elocuencia. Cada camino conserva su propio progreso.</p></article>
           <article class="guide-step"><div class="guide-num">2</div><h3>Marca tu punto de partida</h3><p>Antes del primer día respondes una evaluación breve. No es un examen; sirve para comparar tu evolución.</p></article>
@@ -299,13 +325,26 @@
   </div>
 
   <nav class="bottomnav">
-    <button class="navbtn active" data-view="home" onclick="showView('home',this)">Inicio</button>
-    <button class="navbtn" data-view="today" onclick="startToday(this)">Hoy</button>
-    <button class="navbtn" data-view="history" onclick="showView('history',this)">Historia</button>
-    <button class="navbtn" data-view="progress" onclick="showView('progress',this)">Progreso</button>
-    <button class="navbtn" data-view="guide" onclick="showView('guide',this)">Guía</button>
-    <button class="navbtn" data-view="help" onclick="showView('help',this)">Ayuda</button>
+    <button class="navbtn active" id="navHome" data-view="home" onclick="showView('home',this)">Inicio</button>
+    <button class="navbtn" id="navToday" data-view="today" onclick="startToday(this)">Hoy</button>
+    <button class="navbtn" id="navHistory" data-view="history" onclick="showView('history',this)">Historia</button>
+    <button class="navbtn" id="navProgress" data-view="progress" onclick="showView('progress',this)">Progreso</button>
+    <button class="navbtn" id="navGuide" data-view="guide" onclick="startGuide(this)">Guía</button>
+    <button class="navbtn" id="navHelp" data-view="help" onclick="showView('help',this)">Ayuda</button>
   </nav>
+
+  <div class="tour-layer" id="tourLayer" aria-live="polite">
+    <div class="tour-shade" id="tourShadeTop"></div>
+    <div class="tour-shade" id="tourShadeLeft"></div>
+    <div class="tour-shade" id="tourShadeRight"></div>
+    <div class="tour-shade" id="tourShadeBottom"></div>
+    <div class="tour-focus" id="tourFocus"></div>
+    <section class="tour-card" id="tourCard" role="dialog" aria-modal="true" aria-labelledby="tourTitle">
+      <div class="tour-top"><div><div class="tour-kicker" id="tourKicker">Guía NEXORA</div><h3 id="tourTitle"></h3></div><button class="tour-close" type="button" aria-label="Cerrar guía" onclick="closeGuide()">×</button></div>
+      <p id="tourText"></p>
+      <div class="tour-controls"><span class="tour-progress" id="tourProgress"></span><div class="tour-actions"><button class="tour-back" id="tourBack" type="button" onclick="prevGuideStep()">Anterior</button><button class="tour-next" id="tourNext" type="button" onclick="nextGuideStep()">Siguiente</button></div></div>
+    </section>
+  </div>
 
   <div class="modal" id="baselineModal"><div class="modalbox">
     <div class="modalhead">
@@ -331,13 +370,13 @@
     </div>
     <p class="muted" style="line-height:1.75;margin-bottom:12px">NEXORA organiza prácticas de conducta y reflexión inspiradas en investigación sobre varias áreas del cambio personal.</p>
     <ul class="science-list">
-      <li>formación de hábitos</li>
-      <li>atención</li>
-      <li>gratitud</li>
-      <li>implementación de intenciones</li>
-      <li>diseño del entorno</li>
-      <li>autoobservación</li>
-      <li>mantenimiento conductual</li>
+      <li>Formación de hábitos</li>
+      <li>Atención</li>
+      <li>Gratitud</li>
+      <li>Implementación de intenciones</li>
+      <li>Diseño del entorno</li>
+      <li>Auto-observación</li>
+      <li>Mantenimiento conductual</li>
     </ul>
     <p class="muted" style="line-height:1.75;margin-top:16px">La aplicación no supone que completar un calendario transforma automáticamente a una persona. Los cierres sirven como puntos de evaluación, integración y consolidación.</p>
     <div class="modal-actions">
@@ -366,6 +405,11 @@
   <div class="modal" id="accountModal"><div class="modalbox">
     <div class="modalhead"><div class="copy"><div class="eyebrow">Tu cuenta</div><h2 id="accountModalTitle">Tu espacio personal en NEXORA</h2></div><button class="closex" aria-label="Cerrar" onclick="closeModal('accountModal')">×</button></div>
     <div id="authBox">
+      <div class="unlock-panel">
+        <h3>Desbloquea tu experiencia personal</h3>
+        <p>Explorar es solo el comienzo. Con tu cuenta NEXORA puede convertir lo que haces en un recorrido que realmente te pertenece.</p>
+        <div class="unlock-list"><span>Comenzar prácticas y evaluaciones</span><span>Guardar tus evidencias y respuestas</span><span>Construir tu Historia personal</span><span>Ver progreso, etapas e hitos</span></div>
+      </div>
       <div class="auth-tabs"><button class="authtab active" id="loginTab" onclick="switchAuth('login')">Entrar</button><button class="authtab" id="signupTab" onclick="switchAuth('signup')">Crear cuenta</button></div>
       <div class="authpane active" id="loginPane">
         <div class="field"><label>Correo</label><input id="loginEmail" type="email" placeholder="tu@email.com" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"></div>
@@ -395,15 +439,19 @@ const ACCOUNT_KEY='nexora_demo_accounts_v1';
 const SESSION_KEY='nexora_demo_session_v1';
 const FEEDBACK_KEY='nexora_feedback_v1';
 let currentSession=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+let pendingAccountAction=null;
 function userStateKey(email=currentSession?.email){if(!email)return 'nexora_v3_state';return 'nexora_user_state_'+btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/=/g,'')}
 async function hashPassword(value){const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
-function updateAccountUI(){const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Entrar';av.textContent='?'}const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
-function openAccount(){document.getElementById('accountModal').classList.add('open');renderAccountModal()}
+function updateAccountUI(){const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
+function openAccount(){openAccountFor(currentSession?'login':'signup')}
+function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';document.getElementById('accountModal').classList.add('open');renderAccountModal();if(!currentSession)switchAuth(mode)}
+function requireAccount(action){openAccountFor('signup',action);return false}
+function runPendingAccountAction(){const action=pendingAccountAction;pendingAccountAction=null;if(!action)return;if(action==='beginProgram')beginProgram();else if(action==='today')startToday();else if(action==='history')showView('history');else if(action==='progress')showView('progress')}
 function renderAccountModal(){const auth=document.getElementById('authBox'),profile=document.getElementById('profileBox');if(currentSession){auth.style.display='none';profile.classList.add('active');document.getElementById('profileName').textContent=currentSession.name;document.getElementById('profileEmail').textContent=currentSession.email;document.getElementById('profileAvatar').textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{auth.style.display='block';profile.classList.remove('active')}}
 function switchAuth(mode){document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginPane').classList.toggle('active',mode==='login');document.getElementById('signupPane').classList.toggle('active',mode==='signup')}
-async function createDemoAccount(){const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim().toLowerCase(),password=document.getElementById('signupPassword').value;if(!name||!email.includes('@')||password.length<6){toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');return}const all=accounts();if(all[email]){toast('Ya existe una cuenta de prueba con ese correo.');return}all[email]={name,email,passwordHash:await hashPassword(password),createdAt:new Date().toISOString()};localStorage.setItem(ACCOUNT_KEY,JSON.stringify(all));localStorage.setItem(userStateKey(email),JSON.stringify(appState));currentSession={name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();save();updateAccountUI();renderAccountModal();toast('Cuenta creada. Tu progreso ya quedó asociado a este usuario.')}
-async function loginDemoAccount(){const email=document.getElementById('loginEmail').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value,all=accounts();if(!all[email]){toast('No encontramos esa cuenta de prueba.');return}if(all[email].passwordHash!==await hashPassword(password)){toast('La contraseña no coincide.');return}currentSession={name:all[email].name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();renderAll();updateAccountUI();renderAccountModal();toast('Bienvenido de nuevo.')}
+async function createDemoAccount(){const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim().toLowerCase(),password=document.getElementById('signupPassword').value;if(!name||!email.includes('@')||password.length<6){toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');return}const all=accounts();if(all[email]){toast('Ya existe una cuenta de prueba con ese correo.');return}all[email]={name,email,passwordHash:await hashPassword(password),createdAt:new Date().toISOString()};localStorage.setItem(ACCOUNT_KEY,JSON.stringify(all));localStorage.setItem(userStateKey(email),JSON.stringify(appState));currentSession={name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();save();updateAccountUI();renderAll();closeModal('accountModal');toast('Cuenta creada. Tu experiencia personal ya está desbloqueada.');setTimeout(runPendingAccountAction,220)}
+async function loginDemoAccount(){const email=document.getElementById('loginEmail').value.trim().toLowerCase(),password=document.getElementById('loginPassword').value,all=accounts();if(!all[email]){toast('No encontramos esa cuenta de prueba.');return}if(all[email].passwordHash!==await hashPassword(password)){toast('La contraseña no coincide.');return}currentSession={name:all[email].name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();renderAll();updateAccountUI();closeModal('accountModal');toast('Bienvenido de nuevo.');setTimeout(runPendingAccountAction,220)}
 function logoutDemoAccount(){currentSession=null;localStorage.removeItem(SESSION_KEY);appState=JSON.parse(localStorage.getItem('nexora_v3_state')||'null')||defaultAppState();renderAll();updateAccountUI();closeModal('accountModal');toast('Sesión cerrada.')}
 function submitFeedback(){const type=document.getElementById('feedbackType').value,msg=document.getElementById('feedbackMessage').value.trim(),email=document.getElementById('feedbackEmail').value.trim();if(msg.length<5){toast('Cuéntanos un poco más antes de enviar.');return}const items=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]');items.unshift({type,message:msg,email,user:currentSession?.email||null,date:new Date().toISOString()});localStorage.setItem(FEEDBACK_KEY,JSON.stringify(items.slice(0,30)));document.getElementById('feedbackMessage').value='';renderFeedback();toast('Sugerencia guardada para esta prueba.')}
 function renderFeedback(){const wrap=document.getElementById('feedbackHistory');if(!wrap)return;const items=JSON.parse(localStorage.getItem(FEEDBACK_KEY)||'[]').filter(x=>!currentSession||!x.user||x.user===currentSession.email).slice(0,3);wrap.innerHTML=items.length?'<div class="eyebrow" style="margin-top:22px">Tus envíos recientes</div><div class="feedback-list">'+items.map(x=>`<div class="feedback-item"><b>${escapeHtml(x.type)}</b><small>${new Date(x.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><div style="margin-top:6px;color:var(--ink2)">${escapeHtml(x.message)}</div></div>`).join('')+'</div>':''}
@@ -732,14 +780,34 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 function closeOpenModal(){const open=document.querySelector('.modal.open');if(open)open.classList.remove('open')}
 document.addEventListener('click',e=>{if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('open')})
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeOpenModal()})
-function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
+const GUIDE_STEPS=[
+  {target:'#accountBtn',title:'Tu cuenta',text:'Aquí creas tu cuenta o entras a la que ya tienes. Tu progreso y tus caminos quedarán vinculados a tu perfil cuando conectemos las cuentas reales.',view:'home'},
+  {target:'#programChoices',title:'Elige un camino',text:'Empieza por el área que quieras transformar. Gratitud, Disciplina y Hablar con elocuencia mantienen su progreso por separado.',view:'home'},
+  {target:'#navToday',title:'Hoy',text:'Este botón te lleva directamente a la práctica que te corresponde hoy en el camino que estás trabajando.'},
+  {target:'#navHistory',title:'Historia',text:'Aquí se reúne la evidencia real que vas dejando: respuestas, experiencias y momentos que muestran lo que estás construyendo.'},
+  {target:'#navProgress',title:'Progreso',text:'Mira cuánto has recorrido, tus hitos y la etapa en la que te encuentras. No es solo una racha: buscamos evidencia de cambio.'},
+  {target:'#navHelp',title:'Ayuda y sugerencias',text:'Si algo no funciona, confunde o crees que puede mejorar, envíalo desde aquí. Queremos aprender de cómo usas NEXORA.'},
+  {target:'#scienceBtn',title:'Base científica',text:'Aquí puedes ver el criterio con el que diseñamos las prácticas y por qué evitamos prometer cambios automáticos o resultados exagerados.',view:'home'}
+];
+let guideIndex=0,guideReturnView='home';
+function currentViewId(){return document.querySelector('.view.active')?.id||'home'}
+function startGuide(btn){guideReturnView=currentViewId();guideIndex=0;closeOpenModal();showView('home');document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));const g=document.getElementById('navGuide');if(g)g.classList.add('active');document.getElementById('tourLayer').classList.add('open');setTimeout(()=>renderGuideStep(),120)}
+function closeGuide(){document.getElementById('tourLayer').classList.remove('open');document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));const h=document.getElementById('navHome');if(h)h.classList.add('active');showView('home')}
+function finishGuide(){document.getElementById('tourLayer').classList.remove('open');showView('guide',document.getElementById('navGuide'));toast('Recorrido completado. Esta guía queda disponible para consultarla cuando quieras.')}
+function nextGuideStep(){if(guideIndex>=GUIDE_STEPS.length-1){finishGuide();return}guideIndex++;renderGuideStep()}
+function prevGuideStep(){if(guideIndex>0){guideIndex--;renderGuideStep()}}
+function renderGuideStep(){const step=GUIDE_STEPS[guideIndex];if(step.view&&currentViewId()!==step.view)showView(step.view);const el=document.querySelector(step.target);if(!el){if(guideIndex<GUIDE_STEPS.length-1){guideIndex++;renderGuideStep()}return}el.scrollIntoView({behavior:'smooth',block:'center',inline:'nearest'});setTimeout(()=>{positionGuide(el);document.getElementById('tourTitle').textContent=step.title;document.getElementById('tourText').textContent=step.text;document.getElementById('tourProgress').textContent=`${guideIndex+1} de ${GUIDE_STEPS.length}`;document.getElementById('tourBack').style.visibility=guideIndex===0?'hidden':'visible';document.getElementById('tourNext').textContent=guideIndex===GUIDE_STEPS.length-1?'Terminar':'Siguiente'},260)}
+function positionGuide(el){const pad=8,r=el.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;const x=Math.max(6,r.left-pad),y=Math.max(6,r.top-pad),w=Math.min(vw-x-6,r.width+pad*2),h=Math.min(vh-y-6,r.height+pad*2);const top=document.getElementById('tourShadeTop'),left=document.getElementById('tourShadeLeft'),right=document.getElementById('tourShadeRight'),bottom=document.getElementById('tourShadeBottom'),focus=document.getElementById('tourFocus'),card=document.getElementById('tourCard');Object.assign(top.style,{left:'0px',top:'0px',width:'100vw',height:y+'px'});Object.assign(left.style,{left:'0px',top:y+'px',width:x+'px',height:h+'px'});Object.assign(right.style,{left:(x+w)+'px',top:y+'px',width:Math.max(0,vw-(x+w))+'px',height:h+'px'});Object.assign(bottom.style,{left:'0px',top:(y+h)+'px',width:'100vw',height:Math.max(0,vh-(y+h))+'px'});Object.assign(focus.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});const cardW=Math.min(370,vw-24);let cx=Math.min(Math.max(12,x),vw-cardW-12);let cy=y+h+14;if(cy+250>vh)cy=Math.max(12,y-264);Object.assign(card.style,{left:cx+'px',top:cy+'px'});}
+window.addEventListener('resize',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}});
+window.addEventListener('scroll',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}},{passive:true});
+function showView(id,btn){if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;details.classList.toggle('open',journeyOpen);btn.textContent=journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓'}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
 function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
-function beginProgram(){const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
+function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
 function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
 function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
 function saveBaseline(){const p=program(),s=pstate(),ans={};for(let i=0;i<p.baseline.length;i++){const el=document.querySelector(`[data-q="${i}"].sel`);if(!el){toast(`Responde las ${p.baseline.length} preguntas antes de continuar.`);return}ans[i]=+el.dataset.v}s.baselineDone=true;s.baseline=ans;save();closeModal('baselineModal');toast(`Ya tenemos tu punto de partida en ${p.name}.`);setTimeout(startToday,350)}
@@ -748,7 +816,7 @@ function syncTesterMax(){const id=document.getElementById('testerProgram').value
 function openTester(){document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();document.getElementById('testerModal').classList.add('open')}
 function jumpToDay(){const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
 function resetDemo(){if(confirm('¿Reiniciar el progreso de esta sesión de prueba?')){appState=defaultAppState();previewDay=null;localStorage.removeItem(userStateKey());renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
-function startToday(btn){const s=pstate();if(!s.baselineDone){beginProgram();return}const n=Math.min(previewDay||s.currentDay,totalDays());renderExercise(n,!!previewDay);showView('today',btn)}
+function startToday(btn){if(!currentSession)return requireAccount('today');const s=pstate();if(!s.baselineDone){beginProgram();return}const n=Math.min(previewDay||s.currentDay,totalDays());renderExercise(n,!!previewDay);showView('today',btn)}
 function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
 function promptSupport(p,n,i,q){
   const t=q.toLowerCase();
@@ -796,11 +864,11 @@ function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.da
   <div class="mission"><div class="eyebrow">Tu práctica de hoy</div><h3>${day.mission}</h3></div>
   <div id="exerciseFields">${day.prompts.map((q,i)=>{const help=promptSupport(p,n,i,q),eid=`ex_${n}_${i}`;return `<div class="field"><div class="fieldhead"><label>${q}</label><button type="button" class="examplebtn" onclick="toggleExample('${eid}',this)">💡 Ver ejemplo</button></div><div class="examplebox" id="${eid}"><b>Ejemplo para orientarte:</b><br>${escapeHtml(help.example)}<br><span class="tiny">Úsalo solo como referencia; tu respuesta puede ser completamente distinta.</span></div><textarea id="ans_${i}" placeholder="${escapeHtml(help.placeholder)}">${escapeHtml(existing?.answers?.[i]||'')}</textarea></div>`}).join('')}</div>
   <div class="completebox"><h3>${last?'Evalúa lo que ya cambió':'Convierte la experiencia en evidencia'}</h3><p>${last?(max===90?'El objetivo es decidir qué ya está integrado y qué merece un ciclo de consolidación.':'Este cierre no borra tu camino: resume lo aprendido y te ayuda a decidir qué seguir practicando.'):'Guarda lo que ocurrió. NEXORA te lo devolverá después como parte de tu historia personal.'}</p><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div></div>`}
-function completeDay(n,isPreview){const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Evidencia guardada.');setTimeout(()=>{previewDay=isPreview?n:null;showView('history')},450)}
+function completeDay(n,isPreview){if(!currentSession)return requireAccount('today');const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Evidencia guardada.');setTimeout(()=>{previewDay=isPreview?n:null;showView('history')},450)}
 function renderSwitch(target){const el=document.getElementById(target);el.innerHTML=Object.values(PROGRAMS).map(p=>`<button class="switchbtn ${appState.selectedProgram===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${p.name}</button>`).join('')}
-function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=s.baselineDone?'Continuar mi camino →':'Comenzar mi transformación →';document.getElementById('journeyTitle').textContent=s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu camino comienza aquí';document.getElementById('journeyText').textContent=s.baselineDone?day.hook:`Cuando comiences ${p.name}, tu progreso, tu etapa actual y tu siguiente práctica vivirán aquí dentro de este camino.`;document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays();updateJourneyVisibility()}
+function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi camino →':'Comenzar mi transformación →');document.getElementById('journeyTitle').textContent=!currentSession?'Explora este camino':(s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu camino comienza aquí');document.getElementById('journeyText').textContent=!currentSession?`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`:(s.baselineDone?day.hook:`Cuando comiences ${p.name}, tu progreso, tu etapa actual y tu siguiente práctica vivirán aquí dentro de este camino.`);document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays();updateJourneyVisibility()}
 function renderStages(){const p=program();document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>`<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('')}
-function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="previewDay=${d.d};renderExercise(${d.d},true);showView('today')">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
+function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="if(!currentSession){requireAccount('today')}else{previewDay=${d.d};renderExercise(${d.d},true);showView('today')}">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
 function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'})}
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus caminos y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
