@@ -23,8 +23,14 @@
     <p class="muted">Entra con una cuenta NEXORA marcada como administradora.</p>
     <input id="email" type="email" placeholder="Correo">
     <input id="password" type="password" placeholder="Contraseña">
-    <button class="primary" style="width:100%;margin-top:8px" id="loginBtn">Entrar</button>
-    <div id="authMsg" class="muted" style="margin-top:12px"></div>
+    <button class="primary" type="button" style="width:100%;margin-top:8px" id="loginBtn">Entrar</button>
+    <button type="button" id="forgotBtn" style="width:100%;margin-top:8px;background:transparent;color:#415e78">¿Olvidaste tu contraseña?</button>
+    <div id="authMsg" class="muted" style="margin-top:12px;min-height:20px"></div>
+    <div id="recoveryBox" style="display:none;margin-top:14px">
+      <input id="newPassword" type="password" placeholder="Nueva contraseña">
+      <input id="confirmPassword" type="password" placeholder="Confirmar contraseña">
+      <button class="primary" type="button" style="width:100%;margin-top:8px" id="savePasswordBtn">Guardar nueva contraseña</button>
+    </div>
   </div>
 
   <div id="appView" style="display:none">
@@ -84,10 +90,55 @@ async function checkAdmin(){
 function showAuth(){document.getElementById('authView').style.display='block';document.getElementById('appView').style.display='none'}
 function showApp(){document.getElementById('authView').style.display='none';document.getElementById('appView').style.display='block';document.getElementById('adminEmail').textContent=currentUser?.email||''}
 
-document.getElementById('loginBtn').addEventListener('click',async()=>{
-  const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
-  const {error}=await sb.auth.signInWithPassword({email,password});
-  if(error){document.getElementById('authMsg').textContent='Correo o contraseña incorrectos.';return}
+async function adminLogin(){
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const password=document.getElementById('password').value;
+  const msg=document.getElementById('authMsg');
+  const btn=document.getElementById('loginBtn');
+  msg.textContent='';
+  if(!email||!password){msg.textContent='Escribe el correo y la contraseña.';return}
+  btn.disabled=true;btn.textContent='Entrando…';
+  try{
+    const {error}=await sb.auth.signInWithPassword({email,password});
+    if(error){
+      msg.textContent='No se pudo iniciar sesión. Verifica el correo y la contraseña.';
+      return;
+    }
+    const ok=await checkAdmin();
+    if(!ok && !msg.textContent) msg.textContent='La cuenta inició sesión, pero no tiene acceso administrativo.';
+  }catch(e){
+    msg.textContent='No se pudo conectar con el servicio de acceso. Inténtalo de nuevo.';
+  }finally{
+    btn.disabled=false;btn.textContent='Entrar';
+  }
+}
+document.getElementById('loginBtn').addEventListener('click',adminLogin);
+['email','password'].forEach(id=>document.getElementById(id).addEventListener('keydown',e=>{if(e.key==='Enter')adminLogin()}));
+
+document.getElementById('forgotBtn').addEventListener('click',async()=>{
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const msg=document.getElementById('authMsg');
+  if(!email||!email.includes('@')){msg.textContent='Escribe primero el correo de administrador.';return}
+  msg.textContent='Enviando enlace de recuperación…';
+  try{
+    const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:'https://nexora-five-ecru.vercel.app/admin.html'});
+    if(error){msg.textContent='No pudimos enviar el enlace de recuperación. Inténtalo nuevamente.';return}
+    msg.textContent='Revisa tu correo. Te enviamos un enlace para crear una nueva contraseña.';
+  }catch(e){
+    msg.textContent='No se pudo conectar con el servicio de recuperación.';
+  }
+});
+
+document.getElementById('savePasswordBtn').addEventListener('click',async()=>{
+  const p=document.getElementById('newPassword').value;
+  const q=document.getElementById('confirmPassword').value;
+  const msg=document.getElementById('authMsg');
+  if(p.length<6){msg.textContent='La contraseña debe tener al menos 6 caracteres.';return}
+  if(p!==q){msg.textContent='Las contraseñas no coinciden.';return}
+  const {error}=await sb.auth.updateUser({password:p});
+  if(error){msg.textContent='No pudimos actualizar la contraseña.';return}
+  document.getElementById('recoveryBox').style.display='none';
+  msg.textContent='Contraseña actualizada. Entrando al panel…';
   await checkAdmin();
 });
 document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();showAuth()});
@@ -143,7 +194,16 @@ function renderEvents(){
     return '<tr><td>'+fmt(e.created_at)+'</td><td>'+esc(u?.display_name||u?.email||e.user_id.slice(0,8))+'</td><td>'+esc(e.event_type)+'</td><td>'+esc(e.program_key||'—')+'</td><td>'+(e.day??'—')+'</td></tr>'
   }).join('')||'<tr><td colspan="5" class="empty">Aún no hay actividad.</td></tr>';
 }
+sb.auth.onAuthStateChange(async(event,session)=>{
+  if(event==='PASSWORD_RECOVERY'){
+    currentUser=session?.user||null;
+    showAuth();
+    document.getElementById('recoveryBox').style.display='block';
+    document.getElementById('authMsg').textContent='Crea una nueva contraseña para tu cuenta administradora.';
+  }
+});
 checkAdmin();
 </script>
+<!-- data-admin-auth-hardening="v1" -->
 </body>
 </html>
