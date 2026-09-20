@@ -129,7 +129,59 @@
     @media(max-width:700px){.guest-banner{align-items:flex-start;flex-direction:column}.guest-banner-actions{width:100%}.guest-banner-actions button{flex:1}}
     @media(max-width:560px){.topbar{align-items:flex-start;flex-wrap:wrap}.top-actions{margin-left:auto;flex-wrap:wrap;justify-content:flex-end}.top-actions .iconbtn{font-size:12px;padding:8px 10px}.top-actions .sciencebtn{display:inline-flex}.tour-card{padding:18px}.tour-card h3{font-size:21px}}
 
+
+    /* NEXORA theme system */
+    html[data-theme="dark"]{color-scheme:dark}
+    html[data-theme="dark"] body{
+      --ink:#f4f1ea;--ink2:#d9d4cb;--muted:#a7adba;--paper:#0d1118;--card:#151b24;
+      --line:#2a3340;--gold:#d6aa6a;--gold2:#e8c78f;--sage:#8fa995;--blue:#87a7c5;
+      --shadow:0 18px 55px rgba(0,0,0,.34);
+      background:
+        radial-gradient(circle at 8% 0%,rgba(214,170,106,.13),transparent 30%),
+        radial-gradient(circle at 100% 20%,rgba(143,169,149,.10),transparent 28%),
+        var(--paper);
+    }
+    html[data-theme="dark"] .hero-main,
+    html[data-theme="dark"] .hero-side,
+    html[data-theme="dark"] .card,
+    html[data-theme="dark"] .help-card,
+    html[data-theme="dark"] .feedback-item,
+    html[data-theme="dark"] .stage,
+    html[data-theme="dark"] .modal-card,
+    html[data-theme="dark"] .tour-card,
+    html[data-theme="dark"] .path-card,
+    html[data-theme="dark"] .evidence-card,
+    html[data-theme="dark"] .day-card,
+    html[data-theme="dark"] .guide-card{
+      background:#151b24!important;border-color:#2a3340!important;color:var(--ink)!important;
+    }
+    html[data-theme="dark"] .iconbtn,
+    html[data-theme="dark"] input,
+    html[data-theme="dark"] textarea,
+    html[data-theme="dark"] select,
+    html[data-theme="dark"] .secondary,
+    html[data-theme="dark"] .ghost{
+      background:#111720!important;border-color:#2a3340!important;color:var(--ink)!important;
+    }
+    html[data-theme="dark"] .feed-item{background:#151b24!important;border-color:#2a3340!important}
+    html[data-theme="dark"] .pill{background:#202833!important;border-color:#333e4d!important;color:#d9d4cb!important}
+    html[data-theme="dark"] .brandmark{background:linear-gradient(135deg,#202938,#35465e)}
+    html[data-theme="dark"] .guest-banner{background:#171e27!important;border-color:#34404d!important}
+    html[data-theme="dark"] .program-cover{background:linear-gradient(135deg,#0c121b,#26374c)}
+    html[data-theme="dark"] footer{color:#9ea6b2!important}
+    .themebtn{min-width:46px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+    .themebtn .theme-label{font-size:11px;font-weight:800}
+    @media(max-width:700px){.themebtn .theme-label{display:none}.themebtn{min-width:42px;padding-left:10px!important;padding-right:10px!important}}
 </style>
+
+<script data-nexora-theme="v1">
+(function(){
+  const pref=localStorage.getItem('nexora_theme')||'auto';
+  const dark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme=pref==='auto'?(dark?'dark':'light'):pref;
+  document.documentElement.dataset.themePref=pref;
+})();
+</script>
 </head>
 
 <body>
@@ -138,6 +190,7 @@
     <header class="topbar">
       <button class="brand brandbtn" onclick="goHome()" aria-label="Ir al inicio"><span class="brandmark"></span>NEXORA</button>
       <div class="top-actions">
+        <button class="iconbtn themebtn" id="themeBtn" onclick="cycleTheme()" aria-label="Cambiar tema" title="Tema"><span id="themeIcon">◐</span><span class="theme-label" id="themeLabel">Auto</span></button>
         <button class="iconbtn sciencebtn" id="scienceBtn" onclick="openScience()">Base científica</button>
         <button class="iconbtn testerbtn" id="testerBtn" onclick="openTester()">Vista tester</button>
         <button class="iconbtn accountbtn" id="accountBtn" onclick="openAccount()"><span class="avatar" id="accountAvatar">?</span><span class="account-label" id="accountLabel">Entrar</span></button>
@@ -1210,5 +1263,44 @@ completeDay=async function(n,isPreview){
 })();
 </script>
 
+
+<script data-nexora-theme="v1">
+function resolveTheme(pref){
+  if(pref==='light'||pref==='dark') return pref;
+  return (window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
+}
+function renderThemeButton(){
+  const pref=localStorage.getItem('nexora_theme')||'auto';
+  const icon=document.getElementById('themeIcon');
+  const label=document.getElementById('themeLabel');
+  const btn=document.getElementById('themeBtn');
+  if(!icon||!label||!btn)return;
+  const map={auto:['◐','Auto','Tema automático según el dispositivo'],dark:['☾','Oscuro','Tema oscuro'],light:['☀','Claro','Tema claro']};
+  const v=map[pref]||map.auto;
+  icon.textContent=v[0]; label.textContent=v[1]; btn.title=v[2]; btn.setAttribute('aria-label',v[2]);
+}
+function setNexoraTheme(pref,announce=true){
+  localStorage.setItem('nexora_theme',pref);
+  document.documentElement.dataset.themePref=pref;
+  document.documentElement.dataset.theme=resolveTheme(pref);
+  renderThemeButton();
+  if(announce&&typeof toast==='function'){
+    const msg={auto:'Tema automático: seguirá la configuración de tu dispositivo.',dark:'Tema oscuro activado.',light:'Tema claro activado.'}[pref];
+    toast(msg);
+  }
+}
+function cycleTheme(){
+  const current=localStorage.getItem('nexora_theme')||'auto';
+  const next=current==='auto'?'dark':current==='dark'?'light':'auto';
+  setNexoraTheme(next,true);
+}
+if(window.matchMedia){
+  const mq=window.matchMedia('(prefers-color-scheme: dark)');
+  const onSystemTheme=()=>{if((localStorage.getItem('nexora_theme')||'auto')==='auto')setNexoraTheme('auto',false)};
+  if(mq.addEventListener)mq.addEventListener('change',onSystemTheme);
+  else if(mq.addListener)mq.addListener(onSystemTheme);
+}
+renderThemeButton();
+</script>
 </body>
 </html>
