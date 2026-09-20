@@ -20,7 +20,7 @@
     button{cursor:pointer}
     .shell{max-width:1180px;margin:0 auto;padding:22px 20px 110px}
     .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
-    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.15em;font-size:20px}
+    .brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:.15em;font-size:20px}.brandbtn{border:0;background:transparent;color:var(--ink);padding:0;cursor:pointer}.brandbtn:hover{opacity:.82}
     .brandmark{width:35px;height:35px;border-radius:12px;background:linear-gradient(135deg,var(--ink),#31435e);position:relative;box-shadow:0 8px 18px rgba(16,24,39,.18)}
     .brandmark:before,.brandmark:after{content:"";position:absolute;border-radius:999px;background:var(--gold2);transform:rotate(-24deg)}
     .brandmark:before{width:7px;height:22px;left:10px;top:6px}.brandmark:after{width:7px;height:22px;right:9px;top:7px;opacity:.75}
@@ -86,7 +86,20 @@
     .feed-program{display:inline-block;font-size:10px;padding:4px 7px;border-radius:999px;background:#eee8de;color:#5e5141;margin-right:5px}
     .feed-program.disc{background:#e3ece4;color:#506554}
     .modal select{width:100%;border:1px solid var(--line);padding:11px;border-radius:12px;background:#fff;color:var(--ink)}
+    .path-back{margin-bottom:14px}
+    .journey-card{margin-top:18px;padding:28px}
+    .journey-top{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    .journey-top h2{font-size:30px;letter-spacing:-.035em;margin:2px 0 8px}
+    .journey-pct{font-size:34px;font-weight:900;letter-spacing:-.04em}
+    .journey-progress{margin-top:18px}
+    .journey-meta{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:13px;margin-top:9px}
+    .journey-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+    .journey-details{display:none;animation:journeyReveal .22s ease}
+    .journey-details.open{display:block}
+    @keyframes journeyReveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
     @media(max-width:920px){.pathcards{grid-template-columns:1fr}}
+    @media(max-width:560px){.journey-top{align-items:flex-start}.journey-pct{font-size:28px}.journey-actions>*{width:100%}.journey-meta{flex-direction:column;gap:4px}}
 </style>
 </head>
 
@@ -94,7 +107,7 @@
   <div class="toast" id="toast"></div>
   <div class="shell">
     <header class="topbar">
-      <div class="brand"><span class="brandmark"></span>NEXORA</div>
+      <button class="brand brandbtn" onclick="goHome()" aria-label="Ir al inicio"><span class="brandmark"></span>NEXORA</button>
       <div class="top-actions">
         <button class="iconbtn" onclick="openScience()">Base científica</button>
         <button class="iconbtn" onclick="openTester()">Vista tester</button>
@@ -108,7 +121,7 @@
             <div class="eyebrow">Transformación personal</div>
             <h1>¿Qué quieres transformar en tu vida?</h1>
             <p class="lead">NEXORA convierte intención en práctica: pequeñas acciones, reflexión y evidencia real de lo que estás construyendo.</p>
-            <div><button class="primary" onclick="openProgram('gratitud')">Explorar los caminos →</button></div>
+            <div><button class="primary" onclick="scrollToPaths()">Explorar los caminos →</button></div>
           </div>
           <aside class="hero-side">
             <div>
@@ -119,7 +132,7 @@
           </aside>
         </div>
 
-        <div class="section-title"><div><h2>Elige un camino</h2><p>Tres caminos ya están disponibles en esta versión.</p></div></div>
+        <div class="section-title" id="pathsAnchor"><div><h2>Elige un camino</h2><p>Tres caminos ya están disponibles en esta versión.</p></div></div>
         <div class="programs">
           <article class="program active available" onclick="openProgram('gratitud')">
             <div><span class="badge">Disponible</span><h3>Gratitud</h3><p>Entrena tu atención para reconocer, apreciar y responder de manera diferente a lo valioso que ya existe en tu vida.</p></div>
@@ -137,23 +150,15 @@
           <article class="program locked"><div><span class="badge">Próximamente</span><h3>Comunicación</h3><p>Escucha, conversa, negocia y expresa tus ideas con mayor claridad y propósito en relaciones y trabajo.</p></div><div>🔒</div></article>
         </div>
 
-        <div class="section-title"><div><h2>Tus caminos</h2><p>El progreso se guarda por separado. Tu historia puede reunir evidencias de varios programas.</p></div></div>
-        <div class="pathcards" id="homePaths"></div>
-
-        <div class="section-title"><div><h2>Tu vida, vista de otra manera</h2><p>Un solo lugar para la evidencia que vas creando en distintas áreas.</p></div></div>
-        <section class="card">
-          <div class="feed" id="homeFeed"></div>
-        </section>
       </section>
 
       <section id="program" class="view">
-        <div class="program-switch" id="programSwitch"></div>
+        <button class="ghost path-back" onclick="goHome()">← Todos los caminos</button>
         <div class="program-hero">
           <div class="program-cover" id="programCover">
             <div class="eyebrow" id="programEyebrow" style="color:#e7c890"></div>
             <h1 id="programTitle"></h1>
             <p id="programSubtitle"></p>
-            <div style="margin-top:18px"><button class="secondary" id="programStartBtn" onclick="beginProgram()">Comenzar mi transformación →</button></div>
           </div>
           <aside class="program-info">
             <div class="eyebrow">Lo que vas a entrenar</div>
@@ -162,11 +167,33 @@
           </aside>
         </div>
 
-        <div class="section-title"><div><h2>Seis etapas. Una progresión.</h2><p>Quince días por etapa.</p></div></div>
-        <div class="stages" id="stageCards"></div>
-        <div class="card" style="margin-top:18px">
-          <div style="display:flex;justify-content:space-between;align-items:end;gap:12px"><div><div class="eyebrow">Mapa de 90 días</div><h3 style="font-size:24px;margin-bottom:4px">Tu recorrido completo</h3></div><span class="muted" id="daysDoneLabel">0 / 90 completados</span></div>
-          <div class="daysgrid" id="daysGrid"></div>
+        <section class="card journey-card" id="programJourneyCard">
+          <div class="journey-top">
+            <div>
+              <div class="eyebrow">Tu camino</div>
+              <h2 id="journeyTitle">Listo para comenzar</h2>
+              <p class="muted" id="journeyText"></p>
+            </div>
+            <div class="journey-pct" id="journeyPct">0%</div>
+          </div>
+          <div class="progressbar journey-progress"><div id="journeyFill" style="width:0%"></div></div>
+          <div class="journey-meta">
+            <span id="journeyDays">0 / 90 días</span>
+            <span id="journeyStage">Etapa 1</span>
+          </div>
+          <div class="journey-actions">
+            <button class="primary" id="programStartBtn" onclick="beginProgram()">Comenzar mi transformación →</button>
+            <button class="ghost" id="journeyToggleBtn" onclick="toggleJourney()">Ver recorrido completo ↓</button>
+          </div>
+        </section>
+
+        <div id="programJourneyDetails" class="journey-details">
+          <div class="section-title"><div><h2>Seis etapas. Una progresión.</h2><p>Quince días por etapa.</p></div></div>
+          <div class="stages" id="stageCards"></div>
+          <div class="card" style="margin-top:18px">
+            <div style="display:flex;justify-content:space-between;align-items:end;gap:12px"><div><div class="eyebrow" id="mapEyebrow">Mapa de 90 días</div><h3 style="font-size:24px;margin-bottom:4px">Tu recorrido completo</h3></div><span class="muted" id="daysDoneLabel">0 / 90 completados</span></div>
+            <div class="daysgrid" id="daysGrid"></div>
+          </div>
         </div>
       </section>
 
@@ -589,6 +616,7 @@ if(!appState.programs?.gratitud) appState=defaultAppState();
 Object.keys(PROGRAMS).forEach(id=>{if(!appState.programs[id]) appState.programs[id]=defaultProgramState()});
 if(!PROGRAMS[appState.selectedProgram]) appState.selectedProgram='gratitud';
 let previewDay=null;
+let journeyOpen=false;
 
 function program(id=appState.selectedProgram){return PROGRAMS[id]}
 function pstate(id=appState.selectedProgram){return appState.programs[id]}
@@ -601,8 +629,12 @@ function closeOpenModal(){const open=document.querySelector('.modal.open');if(op
 document.addEventListener('click',e=>{if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('open')})
 document.addEventListener('keydown',e=>{if(e.key==='Escape') closeOpenModal()})
 function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history')renderHistory();if(id==='progress')renderProgress()}
+function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
+function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
+function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;details.classList.toggle('open',journeyOpen);btn.textContent=journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓'}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
-function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;save();renderProgram();showView('program')}
+function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
 function beginProgram(){const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
 function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
 function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
@@ -623,11 +655,10 @@ function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.da
   <div class="completebox"><h3>${last?'Evalúa lo que ya cambió':'Convierte la experiencia en evidencia'}</h3><p>${last?(max===90?'El objetivo es decidir qué ya está integrado y qué merece un ciclo de consolidación.':'Este cierre no borra tu camino: resume lo aprendido y te ayuda a decidir qué seguir practicando.'):'Guarda lo que ocurrió. NEXORA te lo devolverá después como parte de tu historia personal.'}</p><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div></div>`}
 function completeDay(n,isPreview){const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Evidencia guardada.');setTimeout(()=>{previewDay=isPreview?n:null;showView('history')},450)}
 function renderSwitch(target){const el=document.getElementById(target);el.innerHTML=Object.values(PROGRAMS).map(p=>`<button class="switchbtn ${appState.selectedProgram===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${p.name}</button>`).join('')}
-function renderProgram(){const p=program(),s=pstate(),max=totalDays(p);renderSwitch('programSwitch');document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=s.baselineDone?'Continuar mi camino →':'Comenzar mi transformación →';document.querySelector('#program .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#program .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.querySelector('#program .card .eyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays()}
+function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=s.baselineDone?'Continuar mi camino →':'Comenzar mi transformación →';document.getElementById('journeyTitle').textContent=s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu camino comienza aquí';document.getElementById('journeyText').textContent=s.baselineDone?day.hook:`Cuando comiences ${p.name}, tu progreso, tu etapa actual y tu siguiente práctica vivirán aquí dentro de este camino.`;document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays();updateJourneyVisibility()}
 function renderStages(){const p=program();document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>`<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('')}
 function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="previewDay=${d.d};renderExercise(${d.d},true);showView('today')">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
-function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'});const wrap=document.getElementById('homePaths');wrap.innerHTML=ids.map(id=>{const p=program(id),s=pstate(id),max=totalDays(p),d=p.days[Math.min(s.currentDay-1,max-1)],pct=Math.round(s.completed.length/max*100);return `<article class="pathcard"><div class="pathhead"><div><div class="tagline"><span class="tagdot ${id==='disciplina'?'disc':''}"></span>${p.name}</div><h3>${s.baselineDone?`Día ${s.currentDay} · ${d.title}`:'Listo para comenzar'}</h3></div><b>${pct}%</b></div><p>${s.baselineDone?d.hook:p.subtitle}</p><div class="progressbar"><div style="width:${pct}%;background:${p.accent}"></div></div><div class="path-actions"><button class="smallbtn" onclick="appState.selectedProgram='${id}';save();${s.baselineDone?'startToday()':'openProgram(\''+id+'\')'}">${s.baselineDone?'Continuar hoy':'Explorar camino'}</button><button class="smallbtn alt" onclick="openProgram('${id}')">Ver ${max} días</button></div></article>`}).join('');
-  const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const feed=document.getElementById('homeFeed');if(!all.length){feed.innerHTML='<div class="feed-empty">Tus primeras evidencias aparecerán aquí cuando completes una práctica de cualquiera de tus caminos.</div>'}else{feed.innerHTML=all.slice(0,5).map(e=>`<div class="feed-item"><div class="feed-meta"><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span>Día ${e.day} · Evidencia</div><b>${e.title}</b><div class="tiny" style="margin-top:5px">${escapeHtml((e.answers.find(Boolean)||'').slice(0,125))}${(e.answers.find(Boolean)||'').length>125?'…':''}</div></div>`).join('')}}
+function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'})}
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus caminos y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
