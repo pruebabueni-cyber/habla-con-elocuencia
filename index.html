@@ -446,6 +446,116 @@
       outline:none;
     }
     /* data-nexora-dark-audit="v3" */
+
+    /* NEXORA visual hierarchy v1 — less chrome, clearer sections */
+    :root{
+      --section-line:rgba(93,84,72,.14);
+      --surface-soft:rgba(255,253,249,.48);
+    }
+    .topbar{
+      padding-bottom:18px;
+      border-bottom:1px solid var(--section-line);
+      margin-bottom:30px;
+    }
+    .brand{gap:10px;min-height:42px}
+    .brandmark{width:42px;height:42px;border-radius:13px;flex:0 0 42px}
+    .brandmark:before{width:8px;height:26px;left:12px;top:7px}
+    .brandmark:after{width:8px;height:26px;right:11px;top:8px}
+    .brandname{
+      display:flex;align-items:center;height:42px;
+      font-size:29px;line-height:1;font-weight:900;letter-spacing:.145em;
+      transform:translateY(-1px);
+    }
+    .top-actions{gap:8px}
+    .utility-wrap{position:relative}
+    .morebtn{width:44px;min-width:44px;padding-left:0!important;padding-right:0!important;font-size:17px;letter-spacing:2px}
+    .utility-menu{
+      position:absolute;right:0;top:calc(100% + 9px);z-index:90;
+      width:205px;padding:7px;border:1px solid var(--line);
+      border-radius:16px;background:rgba(255,253,249,.98);
+      box-shadow:0 18px 55px rgba(31,37,51,.16);
+      display:none;
+    }
+    .utility-menu.open{display:grid}
+    .utility-menu button{
+      border:0;background:transparent;color:var(--ink2);
+      text-align:left;padding:11px 12px;border-radius:11px;font-weight:750;
+    }
+    .utility-menu button:hover{background:#f4efe7;color:var(--ink)}
+    html[data-theme="dark"]{
+      --section-line:rgba(220,226,235,.13);
+      --surface-soft:rgba(21,27,36,.60);
+    }
+    html[data-theme="dark"] .utility-menu{
+      background:#151b24;border-color:#344050;box-shadow:0 18px 55px rgba(0,0,0,.38);
+    }
+    html[data-theme="dark"] .utility-menu button{color:#d9dfe7}
+    html[data-theme="dark"] .utility-menu button:hover{background:#202a38;color:#fff}
+
+    /* Sections are separated mainly with space, with a restrained rule only at structural boundaries. */
+    #pathsAnchor{
+      position:relative;
+      margin-top:44px;
+      padding-top:34px;
+      border-top:1px solid var(--section-line);
+    }
+    .journey-details > .section-title:first-child{
+      margin-top:34px;
+      padding-top:30px;
+      border-top:1px solid var(--section-line);
+    }
+    .site-footer{
+      max-width:960px;
+      margin:58px auto 8px;
+      padding:28px 24px 94px;
+      text-align:center;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+      border-top:1px solid var(--section-line);
+      background:linear-gradient(180deg,transparent,var(--surface-soft));
+      border-radius:0 0 22px 22px;
+    }
+    .site-footer-title{font-weight:850;color:var(--ink2);margin-bottom:7px}
+    html[data-theme="dark"] .site-footer-title{color:#d9dfe7!important}
+
+    /* Reduce visual density slightly without making the layout feel empty. */
+    .hero{margin-top:10px;margin-bottom:34px}
+    .section-title{margin-top:42px}
+    .programs{row-gap:16px}
+    .program{box-shadow:0 9px 26px rgba(31,37,51,.045)}
+    html[data-theme="dark"] .program{box-shadow:0 9px 26px rgba(0,0,0,.14)}
+
+    @media(max-width:700px){
+      .shell{padding-top:14px}
+      .topbar{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:15px;
+        padding-bottom:17px;
+        margin-bottom:24px;
+      }
+      .brand{justify-self:start}
+      .brandmark{width:40px;height:40px;flex-basis:40px}
+      .brandmark:before{width:8px;height:25px;left:11px;top:7px}
+      .brandmark:after{width:8px;height:25px;right:10px;top:8px}
+      .brandname{height:40px;font-size:27px;letter-spacing:.135em}
+      .top-actions{
+        width:100%;
+        justify-content:flex-end;
+        flex-wrap:nowrap!important;
+        gap:7px!important;
+      }
+      .langselect{min-width:62px!important;width:62px;padding-left:8px!important;padding-right:6px!important}
+      .themebtn{width:44px;min-width:44px!important}
+      .accountbtn{width:48px;min-width:48px;justify-content:center;padding:8px!important}
+      .morebtn{width:44px;min-width:44px}
+      .utility-menu{right:0;width:190px}
+      #pathsAnchor{margin-top:36px;padding-top:28px}
+      .site-footer{margin-top:42px;padding:26px 14px 92px}
+      .hero{margin-bottom:30px}
+    }
+    /* data-nexora-visual-hierarchy="v1" */
 </style>
 
 <script data-nexora-theme="v1">
@@ -462,13 +572,18 @@
   <div class="toast" id="toast"></div>
   <div class="shell">
     <header class="topbar">
-      <button class="brand brandbtn" onclick="goHome()" aria-label="Ir al inicio"><span class="brandmark"></span>NEXORA</button>
+      <button class="brand brandbtn" onclick="goHome()" aria-label="Ir al inicio"><span class="brandmark"></span><span class="brandname">NEXORA</span></button>
       <div class="top-actions">
         <select class="langselect" id="languageSelect" aria-label="Idioma / Language / Langue" onchange="setNexoraLanguage(this.value,true)"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option></select>
         <button class="iconbtn themebtn" id="themeBtn" onclick="cycleTheme()" aria-label="Cambiar tema" title="Tema"><span id="themeIcon">◐</span><span class="theme-label" id="themeLabel">Auto</span></button>
-        <button class="iconbtn sciencebtn" id="scienceBtn" onclick="openScience()">Base científica</button>
-        <button class="iconbtn testerbtn" id="testerBtn" onclick="openTester()">Vista tester</button>
         <button class="iconbtn accountbtn" id="accountBtn" onclick="openAccount()"><span class="avatar" id="accountAvatar">?</span><span class="account-label" id="accountLabel">Entrar</span></button>
+        <div class="utility-wrap">
+          <button class="iconbtn morebtn" id="moreBtn" type="button" onclick="toggleUtilityMenu(event)" aria-label="Más opciones" title="Más opciones">•••</button>
+          <div class="utility-menu" id="utilityMenu" role="menu" aria-label="Más opciones">
+            <button id="scienceBtn" type="button" onclick="closeUtilityMenu();openScience()">Base científica</button>
+            <button id="testerBtn" type="button" onclick="closeUtilityMenu();openTester()">Vista tester</button>
+          </div>
+        </div>
       </div>
     </header>
 
@@ -652,8 +767,8 @@
       </section>
 
     </main>
-    <footer style="margin:42px auto 10px;max-width:900px;padding:22px 18px 92px;text-align:center;color:var(--muted);font-size:12px;line-height:1.65">
-      <div style="font-weight:800;color:var(--ink2);margin-bottom:5px">© 2026 NEXORA™ · Todos los derechos reservados.</div>
+    <footer class="site-footer">
+      <div class="site-footer-title">© 2026 NEXORA™ · Todos los derechos reservados.</div>
       <div>El contenido original, diseño, estructura y materiales propios de esta plataforma están protegidos por las leyes aplicables de propiedad intelectual. Queda prohibida su reproducción, distribución, adaptación o explotación comercial sin autorización.</div>
     </footer>
   </div>
@@ -787,6 +902,26 @@
 
 
 <script>
+
+function toggleUtilityMenu(event){
+  if(event)event.stopPropagation();
+  const menu=document.getElementById('utilityMenu');
+  if(!menu)return;
+  const willOpen=!menu.classList.contains('open');
+  menu.classList.toggle('open',willOpen);
+  const btn=document.getElementById('moreBtn');
+  if(btn)btn.setAttribute('aria-expanded',String(willOpen));
+}
+function closeUtilityMenu(){
+  const menu=document.getElementById('utilityMenu');
+  if(menu)menu.classList.remove('open');
+  const btn=document.getElementById('moreBtn');
+  if(btn)btn.setAttribute('aria-expanded','false');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.utility-wrap'))closeUtilityMenu();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeUtilityMenu()});
 
 const ACCOUNT_KEY='nexora_demo_accounts_v1';
 const SESSION_KEY='nexora_demo_session_v1';
@@ -1142,7 +1277,7 @@ const GUIDE_STEPS=[
   {target:'#navHistory',title:'Historia',text:'Aquí se reúne la evidencia real que vas dejando: respuestas, experiencias y momentos que muestran lo que estás construyendo.'},
   {target:'#navProgress',title:'Progreso',text:'Mira cuánto has recorrido, tus hitos y la etapa en la que te encuentras. No es solo una racha: buscamos evidencia de cambio.'},
   {target:'#navHelp',title:'Ayuda y sugerencias',text:'Si algo no funciona, confunde o crees que puede mejorar, envíalo desde aquí. Queremos aprender de cómo usas NEXORA.'},
-  {target:'#scienceBtn',title:'Base científica',text:'Aquí puedes ver el criterio con el que diseñamos las prácticas y por qué evitamos prometer cambios automáticos o resultados exagerados.',view:'home'}
+  {target:'#moreBtn',title:'Más opciones',text:'Aquí encuentras funciones secundarias como Base científica y Vista tester, sin recargar la pantalla principal.',view:'home'}
 ];
 let guideIndex=0,guideReturnView='home';
 function currentViewId(){return document.querySelector('.view.active')?.id||'home'}
@@ -1240,6 +1375,8 @@ const NEXORA_TRANSLATIONS_EXTRA_AUTH_GUIDE={"Elige tu idioma y apariencia":{"en"
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_AUTH_GUIDE);
 const NEXORA_TRANSLATIONS_EXTRA_EMAIL_CHANGE={"Cambiar correo":{"en":"Change email","fr":"Changer l’adresse e-mail"},"Nuevo correo":{"en":"New email","fr":"Nouvelle adresse e-mail"},"Enviar confirmación":{"en":"Send confirmation","fr":"Envoyer la confirmation"},"Por seguridad, Supabase puede pedir confirmación antes de completar el cambio.":{"en":"For security, Supabase may require confirmation before completing the change.","fr":"Pour votre sécurité, Supabase peut demander une confirmation avant de finaliser le changement."},"Inicia sesión para cambiar tu correo.":{"en":"Sign in to change your email.","fr":"Connectez-vous pour changer votre adresse e-mail."},"Escribe un correo válido.":{"en":"Enter a valid email address.","fr":"Saisissez une adresse e-mail valide."},"Ese ya es tu correo actual.":{"en":"That is already your current email.","fr":"C’est déjà votre adresse e-mail actuelle."},"Ese correo ya está asociado a otra cuenta.":{"en":"That email is already linked to another account.","fr":"Cette adresse e-mail est déjà associée à un autre compte."},"No pudimos iniciar el cambio de correo. Inténtalo nuevamente.":{"en":"We couldn’t start the email change. Please try again.","fr":"Nous n’avons pas pu lancer le changement d’adresse e-mail. Veuillez réessayer."},"Revisa tu correo y confirma el cambio de dirección.":{"en":"Check your email and confirm the address change.","fr":"Consultez votre messagerie et confirmez le changement d’adresse."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_EMAIL_CHANGE);
+const NEXORA_TRANSLATIONS_EXTRA_VISUAL_V1={"Más opciones":{"en":"More options","fr":"Plus d’options"},"Aquí encuentras funciones secundarias como Base científica y Vista tester, sin recargar la pantalla principal.":{"en":"Find secondary tools here, such as Scientific basis and Tester view, without crowding the main screen.","fr":"Retrouvez ici les fonctions secondaires, comme les Fondements scientifiques et la Vue test, sans surcharger l’écran principal."}};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_VISUAL_V1);
 let nexoraI18nApplying=false;
 function detectNexoraLanguage(){
   const saved=localStorage.getItem('nexora_language');
