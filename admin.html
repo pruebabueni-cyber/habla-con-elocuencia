@@ -2,194 +2,148 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#111214">
-<title>Panel privado · Habla con Elocuencia</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEXORA Admin</title>
 <style>
-:root{color-scheme:dark}
-*{box-sizing:border-box}
-body{margin:0;background:#111214;color:#f4f4f4;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-main{max-width:1100px;margin:auto;padding:22px}
-header{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:20px}
-.kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#c9a35d;font-weight:800}
-h1{font-size:30px;margin:6px 0 0}
-.muted{color:#aaa;font-size:13px}
-.login,.card{background:#1b1c1e;border:1px solid #34363a;border-radius:18px;padding:18px}
-.login{max-width:460px;margin:80px auto}
-label{display:block;font-size:12px;color:#c9a35d;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-input{width:100%;min-height:48px;border-radius:12px;border:1px solid #3b3d42;background:#222326;color:#fff;padding:0 14px;font-size:16px}
-button{min-height:46px;border:0;border-radius:12px;background:#c9a35d;color:#151515;font-weight:800;padding:0 18px;cursor:pointer}
-.login button{width:100%;margin-top:12px}
-.error{color:#e09292;font-size:13px;min-height:20px;margin-top:10px}
-.toolbar{display:flex;gap:8px;align-items:center}
-.toolbar button.secondary{background:transparent;color:#eee;border:1px solid #3a3c40}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
-.stat{background:#1b1c1e;border:1px solid #2d2f33;border-radius:16px;padding:16px}
-.stat strong{display:block;font-size:28px;color:#c9a35d}
-.stat span{font-size:12px;color:#aaa}
-.table-wrap{overflow-x:auto;background:#1b1c1e;border:1px solid #2d2f33;border-radius:18px}
-table{width:100%;border-collapse:collapse;min-width:760px}
-th,td{text-align:left;padding:14px;border-bottom:1px solid #2b2d31;font-size:13px}
-th{color:#c9a35d;text-transform:uppercase;letter-spacing:.06em;font-size:11px}
-.progress{height:7px;background:#313338;border-radius:999px;overflow:hidden;min-width:100px}
-.progress span{display:block;height:100%;background:#c9a35d}
-.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#25262a;color:#ddd;font-size:11px}
-section{margin-top:18px}
-h2{font-size:18px;margin:0 0 12px}
-.event-list{display:grid;gap:8px}
-.event{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;background:#1b1c1e;border:1px solid #2b2d31;border-radius:12px;font-size:13px}
-.hidden{display:none!important}
-@media(max-width:720px){
- main{padding:14px}
- header{align-items:flex-start;flex-direction:column}
- .stats{grid-template-columns:repeat(2,1fr)}
- h1{font-size:26px}
- .event{flex-direction:column;gap:4px}
-}
+:root{--ink:#101827;--muted:#6f7888;--paper:#f7f4ef;--card:#fffdf9;--line:#e9e2d8;--gold:#c7924f;--green:#5e7a63;--red:#a04f4f}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.shell{max-width:1200px;margin:0 auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:24px}.brand{font-weight:900;letter-spacing:.14em}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.metric b{font-size:28px;display:block}.metric span{font-size:12px;color:var(--muted)}h1,h2,h3,p{margin-top:0}.muted{color:var(--muted)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 14px;font-weight:800}.primary{background:var(--ink);color:white}.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:11px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;font-size:13px}.table th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filters input,.filters select{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.stack{display:grid;gap:16px}.feedback{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fff}.feedback-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#f1e3cc;color:#6b4a25;font-size:11px;font-weight:800}.empty{padding:30px;text-align:center;color:var(--muted)}
+.auth{max-width:460px;margin:80px auto}.auth input{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;margin:7px 0}.notice{padding:12px 14px;border-radius:14px;background:#fff4dc;border:1px solid #ecd7a8;margin-bottom:16px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.shell{padding:16px}}
 </style>
 </head>
 <body>
-<main>
-  <div id="login" class="login">
-    <div class="kicker">Acceso privado</div>
-    <h1>Panel de seguimiento</h1>
-    <p class="muted">Este panel es solo para administración.</p>
-    <form id="login-form">
-      <label for="password">Clave administrativa</label>
-      <input id="password" type="password" autocomplete="current-password" required>
-      <button type="submit">Entrar al panel</button>
-      <div id="login-error" class="error" aria-live="polite"></div>
-    </form>
+<div class="shell">
+  <div id="authView" class="auth card">
+    <div class="brand">NEXORA ADMIN</div>
+    <h1 style="margin-top:18px">Panel privado</h1>
+    <p class="muted">Entra con una cuenta NEXORA marcada como administradora.</p>
+    <input id="email" type="email" placeholder="Correo">
+    <input id="password" type="password" placeholder="Contraseña">
+    <button class="primary" style="width:100%;margin-top:8px" id="loginBtn">Entrar</button>
+    <div id="authMsg" class="muted" style="margin-top:12px"></div>
   </div>
 
-  <div id="dashboard" class="hidden">
-    <header>
-      <div>
-        <div class="kicker">Habla con Elocuencia</div>
-        <h1>Panel privado</h1>
-        <div id="updated" class="muted">Cargando…</div>
-      </div>
-      <div class="toolbar">
-        <button id="refresh" type="button">Actualizar</button>
-        <button id="logout" type="button" class="secondary">Salir</button>
-      </div>
-    </header>
-
-    <div class="stats">
-      <div class="stat"><strong id="stat-testers">0</strong><span>Testers</span></div>
-      <div class="stat"><strong id="stat-active">0</strong><span>Activos hoy</span></div>
-      <div class="stat"><strong id="stat-average">0%</strong><span>Progreso promedio</span></div>
-      <div class="stat"><strong id="stat-completed">0</strong><span>Programa completado</span></div>
+  <div id="appView" style="display:none">
+    <div class="top">
+      <div><div class="brand">NEXORA ADMIN</div><div class="muted" id="adminEmail"></div></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="ghost" id="refreshBtn">Actualizar</button><button class="ghost" id="logoutBtn">Cerrar sesión</button></div>
     </div>
 
-    <section>
-      <h2>Progreso de testers</h2>
-      <div class="table-wrap">
-        <table>
-          <thead><tr><th>Tester</th><th>Progreso</th><th>Día / paso</th><th>Última acción</th><th>Última actividad</th></tr></thead>
-          <tbody id="tester-rows"></tbody>
-        </table>
-      </div>
-    </section>
+    <div class="grid" id="metrics">
+      <div class="card metric"><b id="mUsers">—</b><span>usuarios registrados</span></div>
+      <div class="card metric"><b id="mActive7">—</b><span>activos últimos 7 días</span></div>
+      <div class="card metric"><b id="mActive30">—</b><span>activos últimos 30 días</span></div>
+      <div class="card metric"><b id="mFeedback">—</b><span>sugerencias nuevas</span></div>
+    </div>
 
-    <section>
-      <h2>Actividad reciente</h2>
-      <div id="events" class="event-list"></div>
-    </section>
+    <div class="stack" style="margin-top:16px">
+      <section class="card">
+        <h2>Usuarios y avance</h2>
+        <div class="filters"><input id="userSearch" placeholder="Buscar usuario o correo"></div>
+        <div class="tablewrap"><table class="table"><thead><tr><th>Usuario</th><th>Última actividad</th><th>Gratitud</th><th>Disciplina</th><th>Elocuencia</th></tr></thead><tbody id="usersBody"></tbody></table></div>
+      </section>
+
+      <section class="card">
+        <h2>Sugerencias y ayuda</h2>
+        <div class="filters"><select id="feedbackFilter"><option value="">Todas</option><option value="new">Nuevas</option><option value="reviewed">Revisadas</option><option value="planned">Planificadas</option><option value="shipped">Implementadas</option><option value="closed">Cerradas</option></select></div>
+        <div id="feedbackList"></div>
+      </section>
+
+      <section class="card">
+        <h2>Actividad reciente</h2>
+        <div class="tablewrap"><table class="table"><thead><tr><th>Fecha</th><th>Usuario</th><th>Evento</th><th>Programa</th><th>Día</th></tr></thead><tbody id="eventsBody"></tbody></table></div>
+      </section>
+    </div>
   </div>
-</main>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(()=>{
-  const login=document.getElementById('login');
-  const dashboard=document.getElementById('dashboard');
-  const form=document.getElementById('login-form');
-  const passwordInput=document.getElementById('password');
-  const error=document.getElementById('login-error');
-  const refresh=document.getElementById('refresh');
-  const logout=document.getElementById('logout');
-  const rows=document.getElementById('tester-rows');
-  const events=document.getElementById('events');
-  let password=sessionStorage.getItem('eloquence-admin-password')||'';
+const URL='https://nnfcppwruhethardmmvq.supabase.co';
+const KEY='sb_publishable_1EYhImZLjFH-Z9jgQf7f_Q_VMCBbY6f';
+const sb=window.supabase.createClient(URL,KEY,{auth:{persistSession:true,autoRefreshToken:true}});
+let currentUser=null;
+let usersData=[], feedbackData=[], eventData=[], stateData=[];
 
-  function fmtDate(value){
-    if(!value) return '—';
-    try{return new Intl.DateTimeFormat('es-US',{dateStyle:'short',timeStyle:'short'}).format(new Date(value));}
-    catch{return value;}
-  }
-  function eventLabel(value){
-    const map={tester_started:'Inicio',session_opened:'Abrió app',step_advanced:'Avanzó paso',step_back:'Retrocedió',day_completed:'Completó día',day_started:'Inició día',day_opened:'Abrió día'};
-    return map[value]||value||'—';
-  }
+const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+const fmt=d=>d?new Date(d).toLocaleString('es-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—';
+const pct=(s,max)=>s?Math.round(((s.completed_days||[]).length/max)*100)+'%':'—';
+const statusLabel=s=>({new:'Nueva',reviewed:'Revisada',planned:'Planificada',shipped:'Implementada',closed:'Cerrada'})[s]||s;
 
-  async function load(){
-    error.textContent='';
-    const response=await fetch('/api/admin',{headers:{'x-admin-password':password},cache:'no-store'});
-    const data=await response.json().catch(()=>({}));
-    if(response.status===401){
-      sessionStorage.removeItem('eloquence-admin-password');
-      password='';
-      dashboard.classList.add('hidden');
-      login.classList.remove('hidden');
-      error.textContent='Clave incorrecta.';
-      passwordInput.focus();
-      return;
-    }
-    if(!response.ok) throw new Error(data.error||'No se pudo cargar el panel');
+async function checkAdmin(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){showAuth();return false}
+  currentUser=session.user;
+  const {data,error}=await sb.from('admin_users').select('user_id').eq('user_id',currentUser.id).maybeSingle();
+  if(error||!data){await sb.auth.signOut();document.getElementById('authMsg').textContent='Esta cuenta no tiene acceso administrativo.';showAuth();return false}
+  showApp();await loadAll();return true
+}
+function showAuth(){document.getElementById('authView').style.display='block';document.getElementById('appView').style.display='none'}
+function showApp(){document.getElementById('authView').style.display='none';document.getElementById('appView').style.display='block';document.getElementById('adminEmail').textContent=currentUser?.email||''}
 
-    const testers=data.testers||[];
-    const recent=data.events||[];
-    const now=Date.now();
-    const todayMs=24*60*60*1000;
-    const active=testers.filter(t=>t.last_activity && now-new Date(t.last_activity).getTime()<=todayMs).length;
-    const avg=testers.length?Math.round(testers.reduce((s,t)=>s+(Number(t.completed_count)||0),0)/(testers.length*15)*100):0;
-    const completed=testers.filter(t=>Number(t.completed_count)>=15).length;
+document.getElementById('loginBtn').addEventListener('click',async()=>{
+  const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  if(error){document.getElementById('authMsg').textContent='Correo o contraseña incorrectos.';return}
+  await checkAdmin();
+});
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();showAuth()});
+document.getElementById('refreshBtn').addEventListener('click',loadAll);
+document.getElementById('userSearch').addEventListener('input',renderUsers);
+document.getElementById('feedbackFilter').addEventListener('change',renderFeedback);
 
-    document.getElementById('stat-testers').textContent=testers.length;
-    document.getElementById('stat-active').textContent=active;
-    document.getElementById('stat-average').textContent=avg+'%';
-    document.getElementById('stat-completed').textContent=completed;
-    document.getElementById('updated').textContent='Actualizado '+fmtDate(new Date().toISOString());
-
-    rows.innerHTML=testers.length?testers.map(t=>{
-      const count=Number(t.completed_count)||0;
-      const pct=Math.round(count/15*100);
-      return `<tr>
-        <td><strong>${escapeHtml(t.tester_name||'Sin nombre')}</strong><br><span class="muted">${escapeHtml(t.tester_id||'')}</span></td>
-        <td>${count}/15 · ${pct}%<div class="progress"><span style="width:${pct}%"></span></div></td>
-        <td>Día ${Number(t.current_day)||1} · Paso ${Number(t.current_step)||1}</td>
-        <td><span class="badge">${escapeHtml(eventLabel(t.last_event))}</span></td>
-        <td>${escapeHtml(fmtDate(t.last_activity))}</td>
-      </tr>`;
-    }).join(''):`<tr><td colspan="5">Todavía no hay testers.</td></tr>`;
-
-    events.innerHTML=recent.length?recent.map(e=>`<div class="event"><span><strong>${escapeHtml(e.tester_name||'Tester')}</strong> · ${escapeHtml(eventLabel(e.event))} · Día ${Number(e.current_day)||1}, paso ${Number(e.current_step)||1}</span><span class="muted">${escapeHtml(fmtDate(e.created_at))}</span></div>`).join(''):'<div class="muted">Sin actividad reciente.</div>';
-
-    login.classList.add('hidden');
-    dashboard.classList.remove('hidden');
-  }
-
-  function escapeHtml(value){
-    return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-
-  form.addEventListener('submit',async(e)=>{
-    e.preventDefault();
-    password=passwordInput.value;
-    sessionStorage.setItem('eloquence-admin-password',password);
-    try{await load();}catch(err){error.textContent=err.message;}
-  });
-  refresh.addEventListener('click',()=>load().catch(err=>alert(err.message)));
-  logout.addEventListener('click',()=>{
-    sessionStorage.removeItem('eloquence-admin-password');
-    password='';
-    dashboard.classList.add('hidden');
-    login.classList.remove('hidden');
-    passwordInput.value='';
-    passwordInput.focus();
-  });
-
-  if(password){load().catch(()=>{});}
-})();
+async function loadAll(){
+  const [profiles,states,feedback,events]=await Promise.all([
+    sb.from('profiles').select('id,display_name,email,created_at,last_seen_at').order('created_at',{ascending:false}),
+    sb.from('program_state').select('user_id,program_key,current_day,completed_days,updated_at'),
+    sb.from('feedback').select('*').order('created_at',{ascending:false}).limit(200),
+    sb.from('app_events').select('user_id,event_type,program_key,day,created_at').order('created_at',{ascending:false}).limit(200)
+  ]);
+  if(profiles.error||states.error||feedback.error||events.error){alert('No se pudieron cargar todos los datos del panel.');return}
+  usersData=profiles.data||[];stateData=states.data||[];feedbackData=feedback.data||[];eventData=events.data||[];
+  renderMetrics();renderUsers();renderFeedback();renderEvents();
+}
+function renderMetrics(){
+  const now=Date.now(),d7=7*864e5,d30=30*864e5;
+  document.getElementById('mUsers').textContent=usersData.length;
+  document.getElementById('mActive7').textContent=usersData.filter(u=>u.last_seen_at&&now-new Date(u.last_seen_at).getTime()<=d7).length;
+  document.getElementById('mActive30').textContent=usersData.filter(u=>u.last_seen_at&&now-new Date(u.last_seen_at).getTime()<=d30).length;
+  document.getElementById('mFeedback').textContent=feedbackData.filter(f=>f.status==='new').length;
+}
+function renderUsers(){
+  const q=document.getElementById('userSearch').value.trim().toLowerCase();
+  const body=document.getElementById('usersBody');
+  const rows=usersData.filter(u=>!q||[u.display_name,u.email].some(v=>(v||'').toLowerCase().includes(q))).map(u=>{
+    const get=k=>stateData.find(s=>s.user_id===u.id&&s.program_key===k);
+    return '<tr><td><b>'+esc(u.display_name||'Sin nombre')+'</b><br><span class="muted">'+esc(u.email||'')+'</span></td><td>'+fmt(u.last_seen_at)+'</td><td>'+pct(get('gratitud'),90)+'</td><td>'+pct(get('disciplina'),90)+'</td><td>'+pct(get('elocuencia'),15)+'</td></tr>'
+  }).join('');
+  body.innerHTML=rows||'<tr><td colspan="5" class="empty">No hay usuarios para mostrar.</td></tr>';
+}
+function renderFeedback(){
+  const filter=document.getElementById('feedbackFilter').value;
+  const wrap=document.getElementById('feedbackList');
+  const items=feedbackData.filter(f=>!filter||f.status===filter);
+  wrap.innerHTML=items.length?items.map(f=>{
+    const user=usersData.find(u=>u.id===f.user_id);
+    return '<div class="feedback"><div class="feedback-head"><div><span class="badge">'+esc(f.feedback_type)+'</span><h3 style="margin:10px 0 6px">'+esc(user?.display_name||user?.email||'Usuario')+'</h3><div class="muted">'+fmt(f.created_at)+' · '+esc(f.program_key||'sin programa')+(f.current_day?' · Día '+f.current_day:'')+'</div></div><select data-id="'+f.id+'" class="feedback-status"><option value="new" '+(f.status==='new'?'selected':'')+'>Nueva</option><option value="reviewed" '+(f.status==='reviewed'?'selected':'')+'>Revisada</option><option value="planned" '+(f.status==='planned'?'selected':'')+'>Planificada</option><option value="shipped" '+(f.status==='shipped'?'selected':'')+'>Implementada</option><option value="closed" '+(f.status==='closed'?'selected':'')+'>Cerrada</option></select></div><p style="margin-top:14px">'+esc(f.message)+'</p><div class="muted">Estado: '+statusLabel(f.status)+'</div></div>'
+  }).join(''):'<div class="empty">No hay sugerencias en este estado.</div>';
+  document.querySelectorAll('.feedback-status').forEach(el=>el.addEventListener('change',async()=>{
+    const id=el.dataset.id,status=el.value;
+    const {error}=await sb.from('feedback').update({status}).eq('id',id);
+    if(!error){const item=feedbackData.find(x=>x.id===id);if(item)item.status=status;renderMetrics();renderFeedback()}
+  }));
+}
+function renderEvents(){
+  const body=document.getElementById('eventsBody');
+  body.innerHTML=eventData.map(e=>{
+    const u=usersData.find(x=>x.id===e.user_id);
+    return '<tr><td>'+fmt(e.created_at)+'</td><td>'+esc(u?.display_name||u?.email||e.user_id.slice(0,8))+'</td><td>'+esc(e.event_type)+'</td><td>'+esc(e.program_key||'—')+'</td><td>'+(e.day??'—')+'</td></tr>'
+  }).join('')||'<tr><td colspan="5" class="empty">Aún no hay actividad.</td></tr>';
+}
+checkAdmin();
 </script>
 </body>
 </html>
