@@ -556,6 +556,68 @@
       .hero{margin-bottom:30px}
     }
     /* data-nexora-visual-hierarchy="v1" */
+
+    /* Progressive program system: knowledge + staged practice + growing autonomy */
+    .program-method-strip{
+      display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:center;
+      margin-top:18px;padding:22px 24px;border:1px solid var(--section-line);
+      border-radius:20px;background:linear-gradient(135deg,rgba(255,253,249,.66),rgba(247,244,239,.42));
+    }
+    .program-method-copy h2{font-size:22px;letter-spacing:-.025em;margin:2px 0 7px}
+    .program-method-copy p{margin:0;color:var(--muted);line-height:1.55;font-size:14px;max-width:760px}
+    .program-method-actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+    .method-note{font-size:11px;color:var(--muted);font-weight:800;letter-spacing:.035em;text-align:right}
+    .program-library-box{max-width:880px}
+    .library-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:20px}
+    .library-module{border:1px solid var(--line);border-radius:18px;padding:18px;background:#fffdfa}
+    .library-module .library-index{font-size:10px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+    .library-module h3{font-size:19px;margin:0 0 7px}
+    .library-module p{color:var(--muted);font-size:13px;line-height:1.55;margin:0}
+    .library-module .library-use{margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:12px;color:var(--ink2);line-height:1.5}
+    .library-principle{margin-top:14px;padding:17px 18px;border-radius:16px;background:#f3eee6;color:var(--ink2)}
+    .library-principle p{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.6}
+    .stage{position:relative}
+    .stage-meta{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 0}
+    .stage-chip{font-size:10px;font-weight:850;letter-spacing:.04em;padding:6px 8px;border-radius:999px;background:#f3eee6;color:#66533e}
+    .stage-shift{margin-top:11px;padding-top:11px;border-top:1px solid var(--line);font-size:12px!important;color:var(--ink2)!important}
+    .practice-context{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      margin:14px 0 18px;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:#faf7f2;
+    }
+    .practice-context-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .practice-kind{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#6a4b28}
+    .practice-autonomy{font-size:11px;color:var(--muted);font-weight:800}
+    .practice-context p{margin:0;color:var(--muted);font-size:12px;line-height:1.45;max-width:540px}
+    .stage-transition{
+      margin:0 0 18px;padding:18px;border-radius:18px;
+      background:linear-gradient(145deg,#182438,#31455f);color:white;
+    }
+    .stage-transition .eyebrow{color:#e7c890;margin-bottom:8px}
+    .stage-transition h3{font-size:24px;margin:0 0 8px}
+    .stage-transition p{margin:0;color:#d8dee7;line-height:1.55}
+    .stage-close{
+      margin:18px 0;padding:16px 18px;border-radius:16px;
+      border:1px solid rgba(199,146,79,.35);background:rgba(241,227,204,.5);
+    }
+    .stage-close b{display:block;margin-bottom:5px;color:var(--ink)}
+    .stage-close p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+    html[data-theme="dark"] .program-method-strip{background:linear-gradient(135deg,rgba(21,27,36,.82),rgba(27,35,47,.55))}
+    html[data-theme="dark"] .library-module{background:#171e28;border-color:#344050}
+    html[data-theme="dark"] .library-principle{background:#202a38}
+    html[data-theme="dark"] .stage-chip{background:#273242;color:#d7dde6}
+    html[data-theme="dark"] .practice-context{background:#171e28;border-color:#344050}
+    html[data-theme="dark"] .practice-kind{color:#e7c58d}
+    html[data-theme="dark"] .stage-close{background:rgba(103,82,48,.22);border-color:rgba(231,197,141,.28)}
+    html[data-theme="dark"] .stage-close b{color:#edf1f6}
+    @media(max-width:760px){
+      .program-method-strip{grid-template-columns:1fr;padding:19px}
+      .program-method-actions{align-items:stretch}
+      .program-method-actions .ghost{width:100%}
+      .method-note{text-align:left}
+      .library-grid{grid-template-columns:1fr}
+      .practice-context{align-items:flex-start}
+    }
+    /* data-nexora-progressive-programs="v1" */
 </style>
 
 <script data-nexora-theme="v1">
@@ -645,6 +707,18 @@
             <div class="checklist" id="programChecklist"></div>
           </aside>
         </div>
+
+        <section class="program-method-strip" id="programMethodStrip">
+          <div class="program-method-copy">
+            <div class="eyebrow">Método del programa</div>
+            <h2>Aprender cuando quieras. Practicar con progresión.</h2>
+            <p>La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.</p>
+          </div>
+          <div class="program-method-actions">
+            <button class="ghost" type="button" onclick="openProgramLibrary()">Explorar fundamentos</button>
+            <span class="method-note" id="programMethodNote">6 etapas · más autonomía con el tiempo</span>
+          </div>
+        </section>
 
         <section class="card journey-card" id="programJourneyCard">
           <div class="journey-top">
@@ -831,6 +905,25 @@
     <div class="modal-actions">
       <button class="primary" style="flex:1" onclick="closeModal('scienceModal')">Entendido</button>
       <button class="ghost" onclick="closeModal('scienceModal')">Cerrar</button>
+    </div>
+  </div></div>
+
+  <div class="modal" id="programLibraryModal"><div class="modalbox program-library-box">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow">Fundamentos del programa</div>
+        <h2 id="programLibraryTitle">Biblioteca del programa</h2>
+        <p class="muted" id="programLibraryIntro" style="line-height:1.7;margin-bottom:0"></p>
+      </div>
+      <button class="closex" aria-label="Cerrar" onclick="closeModal('programLibraryModal')">×</button>
+    </div>
+    <div class="library-grid" id="programLibraryGrid"></div>
+    <div class="library-principle">
+      <b>Cómo usar esta biblioteca</b>
+      <p>Este material es opcional. Puedes estudiarlo cuando quieras, pero NEXORA no exige memorizar teoría para avanzar. El programa busca que el conocimiento se convierta en conducta mediante práctica, evidencia y revisión.</p>
+    </div>
+    <div class="modal-actions">
+      <button class="primary" style="flex:1" onclick="closeModal('programLibraryModal')">Volver al programa</button>
     </div>
   </div></div>
 
@@ -1171,6 +1264,65 @@ D(14,'Improvisar sin perder el hilo','Improvisar no significa hablar sin estruct
 D(15,'Habla con intención','Quince días no convierten la comunicación en algo terminado. Sí pueden darte evidencia de qué cambió y qué necesitas seguir practicando.','El cierre del programa sirve para integrar: presencia, escucha, estructura, voz e influencia deben funcionar juntas, no como trucos separados.','Graba o realiza una intervención de dos minutos aplicando lo que más te ayudó durante el programa y evalúala.',['¿Qué notas que haces mejor ahora?','¿Qué evidencia concreta tienes?','¿Qué habilidad todavía necesita práctica?','¿Cuál será tu regla personal al comunicarte a partir de hoy?'])
 ];
 
+
+const PROGRAM_LEARNING={
+  gratitud:{
+    intro:'La gratitud aquí no se trata de forzarte a sentirte bien. El programa entrena atención, apreciación, expresión y perspectiva para que puedas reconocer valor sin negar dificultad.',
+    modules:[
+      {title:'Atención y habituación',body:'La atención es selectiva y la familiaridad vuelve menos visibles estímulos, ayudas y experiencias repetidas. La primera etapa entrena volver a notar lo que ya estaba ahí.',use:'Aparece sobre todo en VER y PROFUNDIZAR.'},
+      {title:'Apreciación consciente',body:'Notar algo positivo y apreciarlo no son la misma conducta. Sostener la atención, identificar significado y registrar detalles ayuda a profundizar la experiencia.',use:'Aparece sobre todo en APRECIAR.'},
+      {title:'Gratitud interpersonal',body:'Reconocer una contribución de manera específica convierte una experiencia interna en comunicación observable y puede fortalecer la calidad de la interacción.',use:'Aparece sobre todo en EXPRESAR.'},
+      {title:'Contraste y perspectiva',body:'Comparar con el pasado, imaginar brevemente una ausencia o reconstruir lo que hizo posible algo puede devolver valor a experiencias que la rutina volvió normales.',use:'Se usa con cuidado para ampliar perspectiva, no para minimizar problemas.'},
+      {title:'Integración sin positividad forzada',body:'La práctica madura no exige agradecer sufrimiento ni negar frustración. Busca sostener una visión más amplia donde lo difícil y lo valioso puedan coexistir.',use:'Aparece especialmente en INTEGRAR.'},
+      {title:'Autonomía e identidad cotidiana',body:'La etapa final reduce gradualmente la dependencia de instrucciones. El objetivo es observar si la conducta empieza a aparecer fuera de la aplicación y con menos recordatorios.',use:'Aparece especialmente en CONVERTIRSE.'}
+    ]
+  },
+  disciplina:{
+    intro:'La disciplina se trabaja como un sistema de ejecución, no como dureza personal. El programa avanza desde observar fricción hasta diseñar respuestas, sostenerlas y actuar con mayor autonomía.',
+    modules:[
+      {title:'Fricción y diseño del entorno',body:'Una conducta puede fallar por demasiados pasos, decisiones o distracciones. Reducir fricción para lo importante y añadirla a lo que distrae cambia las condiciones de ejecución.',use:'Aparece desde OBSERVAR y continúa durante todo el programa.'},
+      {title:'Intenciones de implementación',body:'Definir con anticipación cuándo, dónde y después de qué señal actuar reduce decisiones improvisadas en el momento de ejecutar.',use:'Es central en EMPEZAR.'},
+      {title:'Versiones mínimas y consistencia flexible',body:'Una práctica sostenible necesita alternativas para días imperfectos. La versión mínima protege continuidad sin fingir que todos los días tienen la misma capacidad.',use:'Es central en SOSTENER.'},
+      {title:'Reinicio y respuesta a la resistencia',body:'El objetivo no es una cadena perfecta. El entrenamiento incluye notar impulsos de escape, tolerar incomodidad breve y volver rápido después de una desviación.',use:'Es central en RESISTIR.'},
+      {title:'Prioridades y costo de oportunidad',body:'Proteger una prioridad requiere decidir qué no recibirá tiempo, atención o energía. Los límites convierten prioridades abstractas en decisiones observables.',use:'Es central en PRIORIZAR.'},
+      {title:'Autonomía conductual',body:'La fase final reduce recordatorios y reglas externas para observar si la persona puede diseñar, ajustar y retomar su propio sistema de ejecución.',use:'Es central en INTEGRAR.'}
+    ]
+  },
+  elocuencia:{
+    intro:'El programa original combina práctica deliberada de presencia, escucha, voz, estructura e influencia. La teoría sirve para comprender la habilidad; la práctica busca convertirla en conducta observable.',
+    modules:[
+      {title:'Presencia y seguridad',body:'La comunicación empieza antes del contenido: ritmo, postura, escucha y regulación de la respuesta cambian cómo una idea llega a la otra persona.',use:'Primer bloque del programa.'},
+      {title:'Estructura y claridad',body:'Una idea clara necesita orden: punto principal, razones, ejemplos y cierre. La estructura reduce rodeos y carga cognitiva para quien escucha.',use:'Bloque central del programa.'},
+      {title:'Influencia sin presión',body:'Persuadir, negociar y responder objeciones funciona mejor cuando se entiende primero la perspectiva de la otra persona y se hace explícito el propósito.',use:'Bloque avanzado del programa.'},
+      {title:'Integración',body:'La meta final no es ejecutar trucos aislados, sino combinar voz, presencia, escucha y estructura de manera natural y contextual.',use:'Cierre del programa.'}
+    ]
+  }
+};
+
+const PROGRAM_STAGE_META={
+  gratitud:[
+    {mode:'Observación guiada',autonomy:'Guía alta',shift:'Primero entrenas el radar: detectar lo que la costumbre dejó de mostrarte.'},
+    {mode:'Apreciación profunda',autonomy:'Guía media-alta',shift:'Dejas de buscar cantidad y empiezas a sostener atención, significado y detalle.'},
+    {mode:'Acción interpersonal',autonomy:'Guía media',shift:'La gratitud sale de la pantalla: ahora se expresa en conversaciones y acciones reales.'},
+    {mode:'Redescubrimiento',autonomy:'Guía media',shift:'Aprendes a encontrar variación y valor sin depender de novedad.'},
+    {mode:'Integración',autonomy:'Guía baja',shift:'Practicas una perspectiva más amplia sin negar dificultad ni emociones negativas.'},
+    {mode:'Práctica autónoma',autonomy:'Autonomía alta',shift:'NEXORA empieza a retirarse: tú eliges, observas y sostienes la práctica con menos instrucciones.'}
+  ],
+  disciplina:[
+    {mode:'Diagnóstico conductual',autonomy:'Guía alta',shift:'Identificas dónde se rompe la ejecución antes de intentar corregirlo todo.'},
+    {mode:'Diseño del inicio',autonomy:'Guía media-alta',shift:'Construyes señales, reglas y condiciones que hacen más fácil empezar.'},
+    {mode:'Sistema flexible',autonomy:'Guía media',shift:'La meta deja de ser hacerlo perfecto y pasa a sostener, adaptar y retomar.'},
+    {mode:'Resistencia entrenada',autonomy:'Guía media',shift:'Practicas actuar frente a aburrimiento, cansancio, frustración e impulsos de escape.'},
+    {mode:'Prioridad protegida',autonomy:'Guía baja',shift:'La disciplina se convierte en decisiones explícitas sobre tiempo, límites y costo de oportunidad.'},
+    {mode:'Ejecución autónoma',autonomy:'Autonomía alta',shift:'Reduces recordatorios externos y demuestras que puedes diseñar y corregir tu propio sistema.'}
+  ],
+  elocuencia:[
+    {mode:'Presencia',autonomy:'Guía alta',shift:'Practicas seguridad, escucha, voz y lenguaje corporal.'},
+    {mode:'Influencia',autonomy:'Guía media',shift:'Organizas ideas, persuades, negocias y respondes objeciones.'},
+    {mode:'Maestría integrada',autonomy:'Guía baja',shift:'Combinas habilidades y respondes con mayor naturalidad a situaciones menos preparadas.'}
+  ]
+};
+
 const PROGRAMS={
   gratitud:{
     id:'gratitud', name:'Gratitud', eyebrow:'Programa 01 · 90 días', title:'El poder de la gratitud',
@@ -1260,6 +1412,17 @@ let journeyOpen=false;
 
 function program(id=appState.selectedProgram){return PROGRAMS[id]}
 function pstate(id=appState.selectedProgram){return appState.programs[id]}
+function stageIndexForDay(p,n){const st=stageForDay(p,n);return Math.max(0,p.stages.indexOf(st))}
+function stageMetaForDay(p,n){const arr=PROGRAM_STAGE_META[p.id]||[];return arr[stageIndexForDay(p,n)]||{mode:'Práctica guiada',autonomy:'Guía',shift:'Cada etapa cambia el foco de práctica.'}}
+function isStageStart(p,n){const st=stageForDay(p,n),nums=(st.range.match(/\d+/g)||[]).map(Number);return nums[0]===n}
+function isStageEnd(p,n){const st=stageForDay(p,n),nums=(st.range.match(/\d+/g)||[]).map(Number);return nums[1]===n||n===totalDays(p)}
+function openProgramLibrary(){
+  const p=program(),lib=PROGRAM_LEARNING[p.id]||PROGRAM_LEARNING.gratitud;
+  document.getElementById('programLibraryTitle').textContent='Fundamentos de '+p.name;
+  document.getElementById('programLibraryIntro').textContent=lib.intro;
+  document.getElementById('programLibraryGrid').innerHTML=lib.modules.map((m,i)=>`<article class="library-module"><div class="library-index">Fundamento ${String(i+1).padStart(2,'0')}</div><h3>${m.title}</h3><p>${m.body}</p><div class="library-use"><b>Dentro del programa:</b> ${m.use}</div></article>`).join('');
+  document.getElementById('programLibraryModal').classList.add('open');
+}
 function totalDays(p=program()){return p.days.length}
 function stageForDay(p,n){return p.stages.find((st,i)=>{const nums=(st.range.match(/\d+/g)||[]).map(Number);return nums.length>=2?n>=nums[0]&&n<=nums[1]:i===p.stages.length-1})||p.stages[p.stages.length-1]}
 function save(){localStorage.setItem(userStateKey(),JSON.stringify(appState));renderAll()}
@@ -1347,17 +1510,20 @@ function promptSupport(p,n,i,q){
   return {placeholder,example};
 }
 function toggleExample(id,btn){const box=document.getElementById(id);if(!box)return;const open=box.classList.toggle('open');btn.textContent=open?'Ocultar ejemplo':'💡 Ver ejemplo'}
-function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max;document.getElementById('exerciseCard').innerHTML=`
+function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),meta=stageMetaForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max;document.getElementById('exerciseCard').innerHTML=`
   <div class="day-number">${p.name.toUpperCase()} · ${stage.name} · DÍA ${n} DE ${max}${isPreview?' · VISTA TESTER':''}</div>
+  ${isStageStart(p,n)?`<div class="stage-transition"><div class="eyebrow">Nueva etapa</div><h3>${stage.name}</h3><p>${meta.shift}</p></div>`:''}
   <h1>${day.title}</h1><p class="hook">${day.hook}</p>
-  <div class="lessonbox"><b>Descubrir</b><br>${dayLesson(p,n)}</div>
-  <div class="mission"><div class="eyebrow">Tu práctica de hoy</div><h3>${day.mission}</h3></div>
+  <div class="practice-context"><div class="practice-context-left"><span class="practice-kind">${meta.mode}</span><span class="practice-autonomy">${meta.autonomy}</span></div><p>${meta.shift}</p></div>
+  <div class="lessonbox"><b>Comprender</b><br>${dayLesson(p,n)}</div>
+  <div class="mission"><div class="eyebrow">Llévalo a la práctica</div><h3>${day.mission}</h3></div>
   <div id="exerciseFields">${day.prompts.map((q,i)=>{const help=promptSupport(p,n,i,q),eid=`ex_${n}_${i}`;return `<div class="field"><div class="fieldhead"><label>${q}</label><button type="button" class="examplebtn" onclick="toggleExample('${eid}',this)">💡 Ver ejemplo</button></div><div class="examplebox" id="${eid}"><b>Ejemplo para orientarte:</b><br>${escapeHtml(help.example)}<br><span class="tiny">Úsalo solo como referencia; tu respuesta puede ser completamente distinta.</span></div><textarea id="ans_${i}" placeholder="${escapeHtml(help.placeholder)}">${escapeHtml(existing?.answers?.[i]||'')}</textarea></div>`}).join('')}</div>
+  ${isStageEnd(p,n)?`<div class="stage-close"><b>Cierre de etapa · ${stage.name}</b><p>No estás repitiendo el inicio. Este punto sirve para revisar qué cambió, qué todavía requiere esfuerzo y qué capacidad entra en juego en la siguiente etapa.</p></div>`:''}
   <div class="completebox"><h3>${last?'Evalúa lo que ya cambió':'Convierte la experiencia en evidencia'}</h3><p>${last?(max===90?'El objetivo es decidir qué ya está integrado y qué merece un ciclo de consolidación.':'Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.'):'Guarda lo que ocurrió. NEXORA te lo devolverá después como parte de tu historia personal.'}</p><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div></div>`}
 function completeDay(n,isPreview){if(!currentSession)return requireAccount('today');const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Evidencia guardada.');setTimeout(()=>{previewDay=isPreview?n:null;showView('history')},450)}
 function renderSwitch(target){const el=document.getElementById(target);el.innerHTML=Object.values(PROGRAMS).map(p=>`<button class="switchbtn ${appState.selectedProgram===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${p.name}</button>`).join('')}
-function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →');document.getElementById('journeyTitle').textContent=!currentSession?'Explora este programa':(s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu proceso comienza aquí');document.getElementById('journeyText').textContent=!currentSession?`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`:(s.baselineDone?day.hook:(getNexoraLanguage()==='en'?`When you begin ${p.name}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:getNexoraLanguage()==='fr'?`Lorsque vous commencez ${p.name}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;renderStages();renderDays();updateJourneyVisibility()}
-function renderStages(){const p=program();document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>`<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p></div>`).join('')}
+function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →');document.getElementById('journeyTitle').textContent=!currentSession?'Explora este programa':(s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu proceso comienza aquí');document.getElementById('journeyText').textContent=!currentSession?`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`:(s.baselineDone?day.hook:(getNexoraLanguage()==='en'?`When you begin ${p.name}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:getNexoraLanguage()==='fr'?`Lorsque vous commencez ${p.name}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;const mn=document.getElementById('programMethodNote');if(mn)mn.textContent=p.stages.length+' etapas · más autonomía con el tiempo';renderStages();renderDays();updateJourneyVisibility()}
+function renderStages(){const p=program(),meta=PROGRAM_STAGE_META[p.id]||[];document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>{const m=meta[i]||{};return `<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p><div class="stage-meta"><span class="stage-chip">${m.mode||'Práctica guiada'}</span><span class="stage-chip">${m.autonomy||'Guía'}</span></div>${m.shift?`<p class="stage-shift"><b>Qué cambia aquí:</b> ${m.shift}</p>`:''}</div>`}).join('')}
 function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="if(!currentSession){requireAccount('today')}else{previewDay=${d.d};renderExercise(${d.d},true);showView('today')}">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
 function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'})}
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus programas y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
@@ -1381,6 +1547,8 @@ const NEXORA_TRANSLATIONS_EXTRA_PROGRAM_TERMS={"Explorar programas →":{"en":"E
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROGRAM_TERMS);
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE);
+const NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1={"Método del programa":{"en":"Program method","fr":"Méthode du programme"},"Aprender cuando quieras. Practicar con progresión.":{"en":"Learn when you want. Practice through progression.","fr":"Apprenez quand vous le souhaitez. Progressez par la pratique."},"La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.":{"en":"The theory is available whenever you want to go deeper; daily practice changes by stage so the 90-day experience does not become repetitive.","fr":"La théorie reste disponible pour approfondir ; la pratique quotidienne évolue par étapes afin que l’expérience de 90 jours ne devienne pas répétitive."},"Explorar fundamentos":{"en":"Explore foundations","fr":"Explorer les fondements"},"Fundamentos del programa":{"en":"Program foundations","fr":"Fondements du programme"},"Biblioteca del programa":{"en":"Program library","fr":"Bibliothèque du programme"},"Cómo usar esta biblioteca":{"en":"How to use this library","fr":"Comment utiliser cette bibliothèque"},"Este material es opcional. Puedes estudiarlo cuando quieras, pero NEXORA no exige memorizar teoría para avanzar. El programa busca que el conocimiento se convierta en conducta mediante práctica, evidencia y revisión.":{"en":"This material is optional. Study it whenever you want, but NEXORA does not require you to memorize theory to move forward. The program is designed to turn knowledge into behavior through practice, evidence, and review.","fr":"Ce contenu est facultatif. Vous pouvez l’étudier quand vous le souhaitez, mais NEXORA ne vous demande pas de mémoriser la théorie pour avancer. Le programme vise à transformer les connaissances en comportements par la pratique, les preuves et la révision."},"Volver al programa":{"en":"Back to program","fr":"Retour au programme"},"Comprender":{"en":"Understand","fr":"Comprendre"},"Llévalo a la práctica":{"en":"Put it into practice","fr":"Passez à la pratique"},"Nueva etapa":{"en":"New stage","fr":"Nouvelle étape"}};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1);
 let nexoraI18nApplying=false;
 function detectNexoraLanguage(){
   const saved=localStorage.getItem('nexora_language');
