@@ -1992,7 +1992,7 @@ submitFeedback=async function(){
   const email=document.getElementById('feedbackEmail').value.trim();
   if(message.length<5){toast('Cuéntanos un poco más antes de enviar.');return;}
   const p=program();
-  const {error}=await nexoraDb.from('feedback').insert({
+  const {data:created,error}=await nexoraDb.from('feedback').insert({
     user_id:currentSession.id,
     email:email||currentSession.email||null,
     feedback_type:type,
@@ -2000,16 +2000,43 @@ submitFeedback=async function(){
     program_key:p?.id||null,
     current_day:pstate()?.currentDay||null,
     page:(document.querySelector('.view.active')||{}).id||null
-  });
-  if(error){toast('No pudimos enviar la sugerencia. Inténtalo nuevamente.');return;}
+  }).select('id').single();
+  if(error||!created?.id){toast('No pudimos enviar la sugerencia. Inténtalo nuevamente.');return;}
   document.getElementById('feedbackMessage').value='';
   nexoraTrack('feedback_submitted',{feedback_type:type}).catch(()=>{});
+
+  let ackStatus='pending';
+  try{
+    const {data:ack,error:ackError}=await nexoraDb.functions.invoke('feedback-acknowledgement',{body:{feedback_id:created.id}});
+    if(!ackError&&ack?.email_status)ackStatus=ack.email_status;
+  }catch(error){console.warn('NEXORA feedback acknowledgement',error)}
+
   await renderFeedback();
-  toast('Sugerencia enviada. Gracias por ayudarnos a mejorar NEXORA.');
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const sent={
+    es:'Mensaje recibido. También te enviamos una confirmación por correo.',
+    en:'Message received. We also sent you an email confirmation.',
+    fr:'Message reçu. Nous vous avons également envoyé une confirmation par e-mail.'
+  };
+  const received={
+    es:'Mensaje recibido. Gracias por ayudarnos a mejorar NEXORA.',
+    en:'Message received. Thank you for helping us improve NEXORA.',
+    fr:'Message reçu. Merci de nous aider à améliorer NEXORA.'
+  };
+  toast((ackStatus==='sent'?sent:received)[lang]||(ackStatus==='sent'?sent.es:received.es));
 };
 
 function nexoraFeedbackStatus(status){
-  return ({new:'Recibida',reviewed:'Revisada',planned:'Planificada',shipped:'Implementada',closed:'Cerrada'})[status]||status;
+  return ({new:'Recibida',reviewed:'Revisada',in_progress:'En proceso',planned:'Planificada',responded:'Respondida',shipped:'Implementada',closed:'Cerrada'})[status]||status;
+}
+function nexoraAckStatus(status){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const labels={
+    es:{sent:'Confirmación enviada por correo',pending:'Confirmación por correo pendiente',failed:'No se pudo enviar la confirmación',skipped:'Sin confirmación por correo',legacy:'Envío anterior'},
+    en:{sent:'Email confirmation sent',pending:'Email confirmation pending',failed:'Email confirmation could not be sent',skipped:'No email confirmation',legacy:'Earlier submission'},
+    fr:{sent:'Confirmation envoyée par e-mail',pending:'Confirmation par e-mail en attente',failed:'La confirmation n’a pas pu être envoyée',skipped:'Aucune confirmation par e-mail',legacy:'Envoi antérieur'}
+  };
+  return (labels[lang]||labels.es)[status]||'';
 }
 
 renderFeedback=async function(){
@@ -2020,13 +2047,13 @@ renderFeedback=async function(){
     return;
   }
   const {data}=await nexoraDb.from('feedback')
-    .select('feedback_type,message,status,created_at')
+    .select('feedback_type,message,status,ack_email_status,created_at')
     .eq('user_id',currentSession.id)
     .order('created_at',{ascending:false})
     .limit(3);
   const items=data||[];
   wrap.innerHTML=items.length
-    ? '<div class="eyebrow" style="margin-top:22px">Tus envíos recientes</div><div class="feedback-list">'+items.map(x=>`<div class="feedback-item"><b>${escapeHtml(x.feedback_type)}</b><small>${new Date(x.created_at).toLocaleDateString('es-US',{month:'short',day:'numeric'})} · ${nexoraFeedbackStatus(x.status)}</small><div style="margin-top:6px;color:var(--ink2)">${escapeHtml(x.message)}</div></div>`).join('')+'</div>'
+    ? '<div class="eyebrow" style="margin-top:22px">Tus envíos recientes</div><div class="feedback-list">'+items.map(x=>`<div class="feedback-item"><b>${escapeHtml(x.feedback_type)}</b><small>${new Date(x.created_at).toLocaleDateString('es-US',{month:'short',day:'numeric'})} · ${nexoraFeedbackStatus(x.status)}</small><div style="margin-top:6px;color:var(--ink2)">${escapeHtml(x.message)}</div>${x.ack_email_status?`<div class="tiny" style="margin-top:8px">${escapeHtml(nexoraAckStatus(x.ack_email_status))}</div>`:''}</div>`).join('')+'</div>'
     : '';
 };
 
