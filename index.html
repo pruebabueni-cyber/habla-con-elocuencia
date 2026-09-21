@@ -883,6 +883,71 @@
     }
     /* data-nexora-program-cards="high-end-v1" */
 
+
+    /* NEXORA previous-day navigation v1 */
+    .exercise-day-nav{
+      display:grid;
+      grid-template-columns:1fr auto 1fr;
+      align-items:center;
+      gap:10px;
+      margin:0 0 14px;
+      padding:8px;
+      border:1px solid var(--line);
+      border-radius:17px;
+      background:rgba(255,255,255,.58);
+    }
+    .day-nav-btn{
+      min-height:42px;
+      padding:9px 12px;
+      border:0;
+      border-radius:12px;
+      background:transparent;
+      color:var(--ink2);
+      font-size:12px;
+      font-weight:800;
+      text-align:left;
+      transition:.16s background,.16s color,.16s transform;
+    }
+    .day-nav-btn.next{text-align:right}
+    .day-nav-btn:not(:disabled):hover{background:#f1ece4;color:var(--ink);transform:translateY(-1px)}
+    .day-nav-btn:disabled{opacity:.28;cursor:not-allowed}
+    .day-nav-center{display:flex;align-items:baseline;gap:5px;white-space:nowrap;color:var(--muted);font-size:11px}
+    .day-nav-center b{font-size:13px;color:var(--ink)}
+    .day-nav-center em{
+      margin-left:4px;
+      padding:4px 7px;
+      border-radius:999px;
+      background:#f1e3cc;
+      color:#73522a;
+      font-style:normal;
+      font-size:9px;
+      font-weight:900;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .return-today-btn{
+      margin:0 0 14px;
+      border:0;
+      background:transparent;
+      color:#8a642e;
+      font-size:12px;
+      font-weight:850;
+      padding:0;
+    }
+    .daydot.locked-day{opacity:.32;cursor:not-allowed;filter:saturate(.2)}
+    html[data-theme="dark"] .exercise-day-nav{background:rgba(255,255,255,.025);border-color:#2d3642}
+    html[data-theme="dark"] .day-nav-btn:not(:disabled):hover{background:#202833;color:#fff}
+    html[data-theme="dark"] .day-nav-center em{background:#3a3024;color:#e7c890}
+    html[data-theme="dark"] .return-today-btn{color:#e1b873}
+    @media(max-width:560px){
+      .exercise-day-nav{grid-template-columns:1fr auto 1fr;gap:4px;padding:6px}
+      .day-nav-btn{padding:9px 7px;font-size:11px}
+      .day-nav-btn span{display:none}
+      .day-nav-center{gap:3px}
+      .day-nav-center em{display:none}
+    }
+    /* data-nexora-day-navigation="v1" */
+
 </style>
 
 <script data-nexora-theme="v1">
@@ -1780,7 +1845,9 @@ function syncTesterMax(){const id=document.getElementById('testerProgram').value
 function openTester(){document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();document.getElementById('testerModal').classList.add('open')}
 function jumpToDay(){const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
 function resetDemo(){if(confirm('¿Reiniciar el progreso de esta sesión de prueba?')){appState=defaultAppState();previewDay=null;localStorage.removeItem(userStateKey());renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
-function startToday(btn){if(!currentSession)return requireAccount('today');const s=pstate();if(!s.baselineDone){beginProgram();return}const n=Math.min(previewDay||s.currentDay,totalDays());renderExercise(n,!!previewDay);showView('today',btn)}
+function startToday(btn){if(!currentSession)return requireAccount('today');const s=pstate();if(!s.baselineDone){beginProgram();return}previewDay=null;const n=Math.min(s.currentDay,totalDays());renderExercise(n,false,false);showView('today',btn)}
+function openProgramDay(n){if(!currentSession)return requireAccount('today');const s=pstate(),max=totalDays(),limit=Math.min(s.currentDay,max);if(n<1||n>limit){toast('Ese día todavía no está disponible.');return}previewDay=null;renderExercise(n,false,n<s.currentDay||s.completed.includes(n));showView('today')}
+function navigateExerciseDay(n,isPreview=false){const max=totalDays();if(n<1||n>max)return;if(isPreview){previewDay=n;renderExercise(n,true,false);showView('today');return}openProgramDay(n)}
 function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
 function promptSupport(p,n,i,q){
   const t=q.toLowerCase();
@@ -1821,7 +1888,13 @@ function promptSupport(p,n,i,q){
   return {placeholder,example};
 }
 function toggleExample(id,btn){const box=document.getElementById(id);if(!box)return;const open=box.classList.toggle('open');btn.textContent=open?'Ocultar ejemplo':'💡 Ver ejemplo'}
-function renderExercise(n,isPreview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),meta=stageMetaForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max;document.getElementById('exerciseCard').innerHTML=`
+function renderExercise(n,isPreview=false,isReview=false){const p=program(),s=pstate(),day=p.days[n-1],stage=stageForDay(p,n),meta=stageMetaForDay(p,n),existing=s.entries.find(e=>e.day===n),max=totalDays(p),last=n===max,current=Math.min(s.currentDay,max),canPrev=n>1&&(isPreview||n<=current),canNext=n<max&&(isPreview||n<current);document.getElementById('exerciseCard').innerHTML=`
+  <div class="exercise-day-nav">
+    <button type="button" class="day-nav-btn" ${canPrev?'': 'disabled'} onclick="navigateExerciseDay(${n-1},${isPreview})" aria-label="Día anterior">← <span>Día anterior</span></button>
+    <div class="day-nav-center"><b>Día ${n}</b><span>de ${max}</span>${isReview&&!isPreview?'<em>Revisando</em>':''}</div>
+    <button type="button" class="day-nav-btn next" ${canNext?'': 'disabled'} onclick="navigateExerciseDay(${n+1},${isPreview})" aria-label="Día siguiente"><span>Día siguiente</span> →</button>
+  </div>
+  ${isReview&&!isPreview&&n!==current?'<button type="button" class="return-today-btn" onclick="startToday()">Volver al día actual →</button>':''}
   <div class="day-number">${p.name.toUpperCase()} · ${stage.name} · DÍA ${n} DE ${max}${isPreview?' · VISTA TESTER':''}</div>
   ${isStageStart(p,n)?`<div class="stage-transition"><div class="eyebrow">Nueva etapa</div><h3>${stage.name}</h3><p>${meta.shift}</p></div>`:''}
   <h1>${day.title}</h1><p class="hook">${day.hook}</p>
@@ -1835,7 +1908,7 @@ function completeDay(n,isPreview){if(!currentSession)return requireAccount('toda
 function renderSwitch(target){const el=document.getElementById(target);el.innerHTML=Object.values(PROGRAMS).map(p=>`<button class="switchbtn ${appState.selectedProgram===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${p.name}</button>`).join('')}
 function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →');document.getElementById('journeyTitle').textContent=!currentSession?'Explora este programa':(s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu proceso comienza aquí');document.getElementById('journeyText').textContent=!currentSession?`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`:(s.baselineDone?day.hook:(getNexoraLanguage()==='en'?`When you begin ${p.name}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:getNexoraLanguage()==='fr'?`Lorsque vous commencez ${p.name}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;const mn=document.getElementById('programMethodNote');if(mn)mn.textContent=p.stages.length+' etapas · más autonomía con el tiempo';renderStages();renderDays();updateJourneyVisibility()}
 function renderStages(){const p=program(),meta=PROGRAM_STAGE_META[p.id]||[];document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>{const m=meta[i]||{};return `<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p><div class="stage-meta"><span class="stage-chip">${m.mode||'Práctica guiada'}</span><span class="stage-chip">${m.autonomy||'Guía'}</span></div>${m.shift?`<p class="stage-shift"><b>Qué cambia aquí:</b> ${m.shift}</p>`:''}</div>`}).join('')}
-function renderDays(){const p=program(),s=pstate(),max=totalDays(p);document.getElementById('daysGrid').innerHTML=p.days.map(d=>`<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''}" title="${p.name} · Día ${d.d}: ${d.title}" onclick="if(!currentSession){requireAccount('today')}else{previewDay=${d.d};renderExercise(${d.d},true);showView('today')}">${d.d}</button>`).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
+function renderDays(){const p=program(),s=pstate(),max=totalDays(p),limit=Math.min(s.currentDay,max);document.getElementById('daysGrid').innerHTML=p.days.map(d=>{const available=d.d<=limit||s.completed.includes(d.d);return `<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''} ${available?'':'locked-day'}" title="${available?`${p.name} · Día ${d.d}: ${d.title}`:'Disponible cuando avances hasta este día'}" ${available?'': 'disabled'} onclick="openProgramDay(${d.d})">${d.d}</button>`}).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
 function renderHome(){const ids=['gratitud','disciplina','elocuencia'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'})}
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus programas y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
