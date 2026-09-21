@@ -721,6 +721,168 @@
     }
     /* data-nexora-premium-bottomnav="v1" */
 
+
+    /* NEXORA high-end program cards v1 */
+    #programChoices.programs{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      align-items:stretch;
+    }
+    #programChoices .program{
+      min-height:178px;
+      padding:22px 20px 20px 22px;
+      border-radius:24px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 92px;
+      gap:18px;
+      align-items:center;
+      background:linear-gradient(145deg,#fffdf9 0%,#faf6ef 100%);
+      border:1px solid rgba(191,174,149,.32);
+      box-shadow:0 12px 34px rgba(32,42,58,.065),inset 0 1px 0 rgba(255,255,255,.82);
+      overflow:hidden;
+      isolation:isolate;
+    }
+    #programChoices .program:before{
+      content:"";
+      position:absolute;
+      width:140px;height:140px;
+      right:-56px;top:-58px;
+      border-radius:50%;
+      background:radial-gradient(circle at 35% 35%,rgba(229,191,125,.2),rgba(229,191,125,.045) 58%,transparent 70%);
+      z-index:-1;
+      pointer-events:none;
+    }
+    #programChoices .program.active,
+    #programChoices .program.discipline,
+    #programChoices .program.elocuencia{
+      background:linear-gradient(145deg,#fffdf9 0%,#f9f5ed 100%);
+    }
+    #programChoices .program.available:hover{
+      transform:translateY(-3px);
+      border-color:rgba(201,166,108,.52);
+      box-shadow:0 18px 42px rgba(31,42,58,.10),inset 0 1px 0 rgba(255,255,255,.9);
+    }
+    #programChoices .program-copy{min-width:0}
+    #programChoices .program-kicker{
+      display:block;
+      width:max-content;
+      margin-bottom:8px;
+      color:#b27b32;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.13em;
+      line-height:1;
+    }
+    #programChoices .program h3{
+      margin:0 0 7px;
+      max-width:310px;
+      font-size:25px;
+      line-height:1.02;
+      letter-spacing:-.035em;
+      color:var(--ink);
+    }
+    #programChoices .program p{
+      margin:0;
+      max-width:360px;
+      color:var(--ink2);
+      font-size:13px;
+      line-height:1.45;
+    }
+    #programChoices .program-meta{
+      margin-top:14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    #programChoices .program-progress{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.015em;
+    }
+    #programChoices .program-side{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:11px;
+    }
+    #programChoices .program-icon{
+      width:72px;height:72px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      color:#1a2a42;
+      background:linear-gradient(145deg,#f4eadb,#fbf8f2);
+      border:1px solid rgba(201,166,108,.17);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.8);
+    }
+    #programChoices .program-icon svg{width:34px;height:34px}
+    #programChoices .program-arrow{
+      width:36px;height:36px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      color:#26374e;
+      background:rgba(255,255,255,.74);
+      border:1px solid rgba(31,42,58,.08);
+      font-size:27px;
+      line-height:1;
+      font-weight:350;
+      transition:transform .18s ease,background .18s ease,color .18s ease;
+    }
+    #programChoices .program.available:hover .program-arrow{
+      transform:translateX(2px);
+      background:#172236;
+      color:#fff;
+    }
+    #programChoices .program.locked{
+      opacity:.64;
+      filter:saturate(.72);
+    }
+    #programChoices .program.locked .program-arrow{
+      font-size:18px;
+      color:#8a8f98;
+    }
+    html[data-theme="dark"] #programChoices .program{
+      background:linear-gradient(145deg,#181f29,#141a23);
+      border-color:#2b3441;
+      box-shadow:0 12px 34px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.025);
+    }
+    html[data-theme="dark"] #programChoices .program-icon{
+      background:linear-gradient(145deg,#242b35,#1d242d);
+      border-color:#343d49;
+      color:#e5bf7d;
+    }
+    html[data-theme="dark"] #programChoices .program-arrow{
+      background:#202833;
+      border-color:#303946;
+      color:#d9dfe7;
+    }
+    html[data-theme="dark"] #programChoices .program-kicker{color:#d7ab69}
+    @media(max-width:920px){
+      #programChoices.programs{grid-template-columns:1fr}
+      #programChoices .program{min-height:164px}
+    }
+    @media(max-width:560px){
+      #programChoices.programs{gap:12px}
+      #programChoices .program{
+        min-height:150px;
+        padding:18px 16px 17px 18px;
+        grid-template-columns:minmax(0,1fr) 78px;
+        gap:12px;
+        border-radius:21px;
+      }
+      #programChoices .program h3{font-size:22px;max-width:230px}
+      #programChoices .program p{font-size:12px;line-height:1.4}
+      #programChoices .program-icon{width:62px;height:62px}
+      #programChoices .program-icon svg{width:30px;height:30px}
+      #programChoices .program-arrow{width:32px;height:32px;font-size:24px}
+      #programChoices .program-meta{margin-top:11px}
+    }
+    /* data-nexora-program-cards="high-end-v1" */
+
 </style>
 
 <script data-nexora-theme="v1">
@@ -777,20 +939,66 @@
 
         <div class="section-title" id="pathsAnchor"><div><h2>Elige un programa</h2><p>Tres programas ya están disponibles en esta versión.</p></div></div>
         <div class="programs" id="programChoices">
-          <article class="program active available" onclick="openProgram('gratitud')">
-            <div><span class="badge">Disponible</span><h3>Gratitud</h3><p>Entrena tu atención para reconocer, apreciar y responder de manera diferente a lo valioso que ya existe en tu vida.</p></div>
-            <div class="program-grid-status"><span class="program-progress" id="gratitudCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+          <article class="program active gratitude available" onclick="openProgram('gratitud')">
+            <div class="program-copy">
+              <span class="program-kicker">GRATITUD</span>
+              <h3>Una mirada más plena</h3>
+              <p>Entrena tu atención para reconocer, apreciar y responder de manera diferente a lo valioso que ya existe en tu vida.</p>
+              <div class="program-meta"><span class="program-progress" id="gratitudCardProgress">Sin comenzar</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 3.8C14 4.2 8.6 6.8 7.1 12.2c-1.1 4.1 1.2 6.7 4.8 5.9 5.2-1.1 7.6-6.6 8.6-14.3Z"/><path d="M4 20c2.8-4.4 6.2-7.2 10.8-9.3"/><path d="M4.2 9.3c2.4.1 4.2.8 5.4 2.1"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">›</span>
+            </div>
           </article>
           <article class="program discipline available" onclick="openProgram('disciplina')">
-            <div><span class="badge">Disponible</span><h3>Disciplina</h3><p>Convierte decisiones importantes en acciones repetibles, incluso cuando la motivación cambia.</p></div>
-            <div class="program-grid-status"><span class="program-progress" id="disciplinaCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+            <div class="program-copy">
+              <span class="program-kicker">DISCIPLINA</span>
+              <h3>Construye la mejor versión de ti</h3>
+              <p>Convierte decisiones importantes en acciones repetibles, incluso cuando la motivación cambia.</p>
+              <div class="program-meta"><span class="program-progress" id="disciplinaCardProgress">Sin comenzar</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="m4 19 6.2-10.2L14 15l2.2-3.2L20 19Z"/><path d="M15 11V5.5h4l-1.2 1.7L19 9h-4"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">›</span>
+            </div>
           </article>
-          <article class="program locked"><div><span class="badge">Próximamente</span><h3>Confianza</h3><p>Construye evidencia de que puedes actuar incluso con incomodidad o incertidumbre.</p></div><div>🔒</div></article>
+          <article class="program confidence locked">
+            <div class="program-copy">
+              <span class="program-kicker">CONFIANZA</span>
+              <h3>Actúa incluso con incomodidad</h3>
+              <p>Construye evidencia de que puedes actuar incluso con incomodidad o incertidumbre.</p>
+              <div class="program-meta"><span class="program-progress">Próximamente</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 13.6 8l4.4 1.6-4.4 1.6-1.6 4.4-1.6-4.4L6 9.6 10.4 8Z"/><path d="m18.5 15 .8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8Z"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">×</span>
+            </div>
+          </article>
           <article class="program elocuencia available" onclick="openProgram('elocuencia')">
-            <div><span class="badge">Programa original</span><h3>Hablar con elocuencia</h3><p>Continúa el entrenamiento original de 15 días: presencia, voz, estructura, persuasión y seguridad al expresarte.</p></div>
-            <div class="program-grid-status"><span class="program-progress" id="elocuenciaCardProgress">Sin comenzar</span><div class="arrow">→</div></div>
+            <div class="program-copy">
+              <span class="program-kicker">ELOCUENCIA</span>
+              <h3>Habla con intención</h3>
+              <p>Continúa el entrenamiento original de 15 días: presencia, voz, estructura, persuasión y seguridad al expresarte.</p>
+              <div class="program-meta"><span class="program-progress" id="elocuenciaCardProgress">Sin comenzar</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10.5v3"/><path d="M9 8v8"/><path d="M13 5.5v13"/><path d="M17 8v8"/><path d="M21 10.5v3"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">›</span>
+            </div>
           </article>
-          <article class="program locked"><div><span class="badge">Próximamente</span><h3>Comunicación</h3><p>Escucha, conversa, negocia y expresa tus ideas con mayor claridad y propósito en relaciones y trabajo.</p></div><div>🔒</div></article>
+          <article class="program communication locked">
+            <div class="program-copy">
+              <span class="program-kicker">COMUNICACIÓN</span>
+              <h3>Conecta con mayor claridad</h3>
+              <p>Escucha, conversa, negocia y expresa tus ideas con mayor claridad y propósito en relaciones y trabajo.</p>
+              <div class="program-meta"><span class="program-progress">Próximamente</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.5h10a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3H9l-4.5 3v-3.8a3 3 0 0 1-2-2.8V8.5a3 3 0 0 1 2-3Z"/><path d="M9 9h5"/><path d="M9 12h3.5"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">×</span>
+            </div>
+          </article>
         </div>
 
       </section>
