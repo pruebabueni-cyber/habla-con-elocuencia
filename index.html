@@ -1273,6 +1273,48 @@
     }
     /* data-nexora-program-surfaces="v2" */
 
+
+    /* NEXORA uniform program card sizing v1 */
+    #programChoices.programs{
+      grid-auto-rows:1fr;
+    }
+    #programChoices .program{
+      height:100%;
+      min-height:190px;
+      align-content:center;
+    }
+    #programChoices .program-copy{
+      display:flex;
+      flex-direction:column;
+      min-height:144px;
+    }
+    #programChoices .program-meta{
+      margin-top:auto;
+      padding-top:14px;
+    }
+
+    @media(max-width:920px){
+      #programChoices.programs{
+        grid-auto-rows:auto;
+      }
+      #programChoices .program{
+        min-height:178px;
+      }
+      #programChoices .program-copy{
+        min-height:132px;
+      }
+    }
+
+    @media(max-width:560px){
+      #programChoices .program{
+        min-height:170px;
+      }
+      #programChoices .program-copy{
+        min-height:126px;
+      }
+    }
+    /* data-nexora-uniform-program-cards="v1" */
+
 </style>
 
 <script data-nexora-theme="v1">
