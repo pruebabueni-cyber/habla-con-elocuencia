@@ -1519,6 +1519,16 @@
     }
     /* data-nexora-program-geometry="v2" */
 
+
+    /* NEXORA program section confidence copy v1 */
+    #pathsAnchor.section-title{
+      margin-bottom:18px;
+    }
+    #pathsAnchor h2{
+      margin-bottom:0;
+    }
+    /* data-nexora-program-section-copy="v1" */
+
 </style>
 
 <script data-nexora-theme="v1">
@@ -1562,7 +1572,7 @@
           <aside class="hero-side">
             <div class="principle-block">
               <div class="small">Tu principio de hoy</div>
-              <div class="quote">“No se trata de saber más. Se trata de convertirte.”</div>
+              <div class="quote" id="dailyPrinciple">“No se trata de saber más. Se trata de convertirte.”</div>
             </div>
             <div class="nexora-method" aria-label="Cómo funciona NEXORA">
               <div class="method-title">Cómo funciona NEXORA</div>
@@ -1584,7 +1594,7 @@
           <div class="guest-banner-actions"><button class="primary" onclick="openAccountFor('signup')">Crear cuenta →</button><button class="ghost" onclick="openAccountFor('login')">Ya tengo cuenta</button></div>
         </section>
 
-        <div class="section-title" id="pathsAnchor"><div><h2>Elige un programa</h2><p>Seis programas ya están disponibles. Inteligencia emocional está en preparación.</p></div></div>
+        <div class="section-title" id="pathsAnchor"><div><h2>Elige un programa</h2></div></div>
         <div class="programs" id="programChoices">
           <article class="program gratitud available" onclick="openProgram('gratitud')">
             <div class="program-copy">
@@ -2731,7 +2741,144 @@ function renderSwitch(target){const el=document.getElementById(target);el.innerH
 function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=p.eyebrow;document.getElementById('programTitle').textContent=p.title;document.getElementById('programSubtitle').textContent=p.subtitle;document.getElementById('programGoal').textContent=p.goal;document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${x}</div>`).join('');document.getElementById('programStartBtn').textContent=!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →');document.getElementById('journeyTitle').textContent=!currentSession?'Explora este programa':(s.baselineDone?`Día ${s.currentDay} · ${day.title}`:'Tu proceso comienza aquí');document.getElementById('journeyText').textContent=!currentSession?`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`:(s.baselineDone?day.hook:(getNexoraLanguage()==='en'?`When you begin ${p.name}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:getNexoraLanguage()==='fr'?`Lorsque vous commencez ${p.name}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=`${s.completed.length} / ${max} días completados`;document.getElementById('journeyStage').textContent=s.baselineDone?`${st.name} · ${st.range}`:'Aún no iniciado';document.querySelector('#programJourneyDetails .section-title h2').textContent=`${p.stages.length} etapas. Una progresión.`;document.querySelector('#programJourneyDetails .section-title p').textContent=p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`;document.getElementById('mapEyebrow').textContent=`Mapa de ${max} días`;const mn=document.getElementById('programMethodNote');if(mn)mn.textContent=p.stages.length+' etapas · más autonomía con el tiempo';renderStages();renderDays();updateJourneyVisibility()}
 function renderStages(){const p=program(),meta=PROGRAM_STAGE_META[p.id]||[];document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>{const m=meta[i]||{};return `<div class="stage"><div class="num">Etapa ${i+1} · ${s.range}</div><h3>${s.name}</h3><p>${s.desc}</p><div class="stage-meta"><span class="stage-chip">${m.mode||'Práctica guiada'}</span><span class="stage-chip">${m.autonomy||'Guía'}</span></div>${m.shift?`<p class="stage-shift"><b>Qué cambia aquí:</b> ${m.shift}</p>`:''}</div>`}).join('')}
 function renderDays(){const p=program(),s=pstate(),max=totalDays(p),limit=Math.min(s.currentDay,max);document.getElementById('daysGrid').innerHTML=p.days.map(d=>{const available=d.d<=limit||s.completed.includes(d.d);return `<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''} ${available?'':'locked-day'}" title="${available?`${p.name} · Día ${d.d}: ${d.title}`:'Disponible cuando avances hasta este día'}" ${available?'': 'disabled'} onclick="openProgramDay(${d.d})">${d.d}</button>`}).join('');document.getElementById('daysDoneLabel').textContent=`${s.completed.length} / ${max} completados`}
-function renderHome(){const ids=['gratitud','disciplina','confianza','enfoque','elocuencia','comunicacion'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'})}
+
+const NEXORA_PRINCIPLES={
+  es:{
+    base:'“No se trata de saber más. Se trata de convertirte.”',
+    return:'“Volver también es parte del proceso. Retoma desde la próxima acción.”',
+    milestone:'“La evidencia acumulada empieza a convertirse en identidad.”',
+    programs:{
+      gratitud:[
+        '“Lo valioso no siempre falta. A veces solo dejó de llamar tu atención.”',
+        '“Apreciar no es contar cosas buenas. Es aprender a verlas con profundidad.”',
+        '“La gratitud cambia cuando deja de sentirse y empieza a expresarse.”',
+        '“Lo cotidiano recupera valor cuando vuelves a mirarlo con intención.”',
+        '“Una perspectiva amplia puede incluir lo difícil sin borrar lo valioso.”',
+        '“La práctica madura cuando ya no necesitas que alguien te recuerde mirar.”'
+      ],
+      disciplina:[
+        '“Antes de exigir más de ti, descubre dónde se rompe la ejecución.”',
+        '“Empieza haciendo que la acción correcta sea más fácil de iniciar.”',
+        '“La consistencia no exige perfección. Exige saber continuar y retomar.”',
+        '“La disciplina se fortalece cuando puedes actuar también frente a la resistencia.”',
+        '“Una prioridad real siempre desplaza algo menos importante.”',
+        '“La disciplina se vuelve tuya cuando sabes diseñar y corregir tu propio sistema.”'
+      ],
+      confianza:[
+        '“La confianza empieza cuando separas lo que ocurrió de lo que dices sobre ti.”',
+        '“No tienes que sentirte completamente seguro para empezar a actuar.”',
+        '“La incomodidad manejable puede ser evidencia de que estás ampliando tu rango.”',
+        '“Un resultado imperfecto no decide si vuelves a intentarlo.”',
+        '“Tu voz también ocupa espacio: expresa lo que piensas, necesitas y eliges.”',
+        '“La confianza se consolida cuando eliges actuar sin esperar instrucciones.”'
+      ],
+      enfoque:[
+        '“No puedes proteger tu atención sin saber primero dónde se está perdiendo.”',
+        '“Menos ruido puede hacer más por tu enfoque que otra técnica nueva.”',
+        '“Enfocarte también significa decidir qué no recibirá atención ahora.”',
+        '“La concentración se entrena permaneciendo un poco más con lo importante.”',
+        '“Una distracción no tiene que decidir cuánto tardas en volver.”',
+        '“Tu atención se vuelve poderosa cuando tú decides qué merece quedarse con ella.”'
+      ],
+      elocuencia:[
+        '“La presencia empieza antes de la primera palabra.”',
+        '“Una idea gana fuerza cuando tiene estructura y propósito.”',
+        '“La comunicación madura cuando presencia, escucha y claridad trabajan juntas.”'
+      ],
+      comunicacion:[
+        '“Entender primero cambia la calidad de todo lo que dices después.”',
+        '“Preguntar antes de asumir evita conversaciones construidas sobre errores.”',
+        '“La claridad aparece cuando una idea tiene un punto que el otro puede seguir.”',
+        '“La comunicación importa más cuando hay tensión y aun así eliges claridad.”',
+        '“Negociar bien empieza por conocer tus límites y entender los intereses del otro.”',
+        '“La comunicación madura cuando sabes qué habilidad necesita cada conversación.”'
+      ]
+    }
+  },
+  en:{
+    base:'“It’s not about knowing more. It’s about becoming.”',
+    return:'“Returning is part of the process too. Resume from the next action.”',
+    milestone:'“Accumulated evidence begins to become identity.”',
+    programs:{
+      gratitud:['“What matters is not always missing. Sometimes it simply stopped getting your attention.”','“Appreciation is not counting good things. It is learning to see them deeply.”','“Gratitude changes when it moves from feeling to expression.”','“The ordinary regains value when you look at it with intention.”','“A broader perspective can include difficulty without erasing what is valuable.”','“The practice matures when you no longer need to be reminded to notice.”'],
+      disciplina:['“Before demanding more from yourself, discover where execution breaks.”','“Start by making the right action easier to begin.”','“Consistency does not require perfection. It requires knowing how to continue and return.”','“Discipline grows when you can act in the presence of resistance.”','“A real priority always displaces something less important.”','“Discipline becomes yours when you can design and correct your own system.”'],
+      confianza:['“Confidence begins when you separate what happened from what you say about yourself.”','“You do not have to feel completely confident before you act.”','“Manageable discomfort can be evidence that you are expanding your range.”','“An imperfect result does not decide whether you try again.”','“Your voice takes up space too: express what you think, need, and choose.”','“Confidence consolidates when you choose action without waiting for instructions.”'],
+      enfoque:['“You cannot protect your attention until you know where it is going.”','“Less noise can do more for focus than another new technique.”','“Focus also means deciding what will not receive attention right now.”','“Concentration is trained by staying a little longer with what matters.”','“A distraction does not have to decide how long it takes you to return.”','“Your attention becomes powerful when you decide what deserves to keep it.”'],
+      elocuencia:['“Presence begins before the first word.”','“An idea gains strength when it has structure and purpose.”','“Communication matures when presence, listening, and clarity work together.”'],
+      comunicacion:['“Understanding first changes the quality of everything you say next.”','“Asking before assuming prevents conversations built on errors.”','“Clarity appears when an idea has a point the other person can follow.”','“Communication matters most when tension appears and you still choose clarity.”','“Good negotiation starts with knowing your limits and understanding the other side’s interests.”','“Communication matures when you know which skill each conversation needs.”']
+    }
+  },
+  fr:{
+    base:'« Il ne s’agit pas d’en savoir plus. Il s’agit de devenir. »',
+    return:'« Revenir fait aussi partie du processus. Reprenez à partir de la prochaine action. »',
+    milestone:'« Les preuves accumulées commencent à devenir une identité. »',
+    programs:{
+      gratitud:['« Ce qui a de la valeur ne manque pas toujours. Parfois, cela a simplement cessé d’attirer votre attention. »','« Apprécier ne consiste pas à compter les bonnes choses, mais à apprendre à les voir en profondeur. »','« La gratitude change lorsqu’elle passe du ressenti à l’expression. »','« L’ordinaire retrouve sa valeur lorsque vous le regardez avec intention. »','« Une perspective plus large peut inclure la difficulté sans effacer ce qui a de la valeur. »','« La pratique mûrit lorsque vous n’avez plus besoin qu’on vous rappelle de remarquer. »'],
+      disciplina:['« Avant de vous demander davantage, découvrez où l’exécution se brise. »','« Commencez par rendre l’action juste plus facile à démarrer. »','« La constance n’exige pas la perfection. Elle exige de savoir continuer et reprendre. »','« La discipline se renforce lorsque vous pouvez agir malgré la résistance. »','« Une vraie priorité déplace toujours quelque chose de moins important. »','« La discipline devient vôtre lorsque vous savez concevoir et corriger votre propre système. »'],
+      confianza:['« La confiance commence lorsque vous séparez ce qui s’est passé de ce que vous dites de vous-même. »','« Vous n’avez pas besoin de vous sentir totalement sûr pour commencer à agir. »','« Un inconfort gérable peut être la preuve que vous élargissez votre champ d’action. »','« Un résultat imparfait ne décide pas si vous réessayez. »','« Votre voix a aussi sa place : exprimez ce que vous pensez, ce dont vous avez besoin et ce que vous choisissez. »','« La confiance se consolide lorsque vous choisissez d’agir sans attendre d’instructions. »'],
+      enfoque:['« Vous ne pouvez pas protéger votre attention sans savoir d’abord où elle se perd. »','« Moins de bruit peut faire plus pour votre concentration qu’une nouvelle technique. »','« Se concentrer, c’est aussi décider ce qui ne recevra pas votre attention maintenant. »','« La concentration s’entraîne en restant un peu plus longtemps avec ce qui compte. »','« Une distraction ne doit pas décider du temps qu’il vous faut pour revenir. »','« Votre attention devient puissante lorsque vous décidez ce qui mérite de la garder. »'],
+      elocuencia:['« La présence commence avant le premier mot. »','« Une idée gagne en force lorsqu’elle a une structure et un but. »','« La communication mûrit lorsque présence, écoute et clarté travaillent ensemble. »'],
+      comunicacion:['« Comprendre d’abord change la qualité de tout ce que vous dites ensuite. »','« Demander avant de supposer évite des conversations construites sur des erreurs. »','« La clarté apparaît lorsqu’une idée a un point que l’autre peut suivre. »','« La communication compte davantage lorsque la tension apparaît et que vous choisissez malgré tout la clarté. »','« Bien négocier commence par connaître vos limites et comprendre les intérêts de l’autre. »','« La communication mûrit lorsque vous savez quelle compétence chaque conversation exige. »']
+    }
+  }
+};
+
+function nexoraLatestEvidenceDate(){
+  let latest=null;
+  Object.keys(PROGRAMS).forEach(id=>{
+    const s=pstate(id);
+    (s.entries||[]).forEach(e=>{
+      if(!e.date)return;
+      const d=new Date(e.date);
+      if(!Number.isNaN(d.getTime())&&(!latest||d>latest))latest=d;
+    });
+  });
+  return latest;
+}
+
+function nexoraPersonalPrinciple(){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es')||'es';
+  const pack=NEXORA_PRINCIPLES[lang]||NEXORA_PRINCIPLES.es;
+  if(!currentSession)return pack.base;
+
+  const started=Object.keys(PROGRAMS).filter(id=>{
+    const s=pstate(id);
+    return s.baselineDone||s.completed.length||s.entries.length;
+  });
+  if(!started.length)return pack.base;
+
+  const latest=nexoraLatestEvidenceDate();
+  if(latest){
+    const daysAway=Math.floor((Date.now()-latest.getTime())/86400000);
+    if(daysAway>=3)return pack.return;
+  }
+
+  let id=appState.selectedProgram;
+  if(!started.includes(id)){
+    id=started.sort((a,b)=>{
+      const sa=pstate(a),sb=pstate(b);
+      const da=sa.entries?.length?new Date(sa.entries[sa.entries.length-1].date||0).getTime():0;
+      const db=sb.entries?.length?new Date(sb.entries[sb.entries.length-1].date||0).getTime():0;
+      return (db-da)||(sb.completed.length-sa.completed.length);
+    })[0];
+  }
+
+  const p=program(id),s=pstate(id),max=totalDays(p);
+  const completed=s.completed.length;
+  if(completed>0 && (completed===max || completed%15===0))return pack.milestone;
+
+  const phrases=pack.programs[id];
+  if(!phrases?.length)return pack.base;
+  const idx=Math.min(stageIndexForDay(p,Math.min(s.currentDay,max)),phrases.length-1);
+  return phrases[idx]||pack.base;
+}
+
+function renderPersonalPrinciple(){
+  const el=document.getElementById('dailyPrinciple');
+  if(el)el.textContent=nexoraPersonalPrinciple();
+}
+
+function renderHome(){const ids=['gratitud','disciplina','confianza','enfoque','elocuencia','comunicacion'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?`${s.completed.length}/${max} días`:'Sin comenzar'});renderPersonalPrinciple()}
 function renderHistory(){const all=[];Object.keys(PROGRAMS).forEach(id=>pstate(id).entries.forEach(e=>all.push({...e,programId:id})));all.sort((a,b)=>new Date(b.date)-new Date(a.date));const wrap=document.getElementById('historyTimeline');if(!all.length){wrap.innerHTML='<div class="card"><h3>Aún no hay evidencias</h3><p class="muted">Completa una práctica de cualquiera de tus programas y aquí comenzará a formarse tu historia personal.</p></div>';return}wrap.innerHTML=all.map(e=>`<article class="evidence"><small><span class="feed-program ${e.programId==='disciplina'?'disc':''}">${PROGRAMS[e.programId].name}</span> Día ${e.day} · ${new Date(e.date).toLocaleDateString('es-US',{month:'short',day:'numeric'})}</small><h3>${e.title}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')}
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=`del recorrido de ${p.name} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=p.thirdMetricLabel;const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>Día ${m}</b><span class="tiny">${s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente'}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=st.name;document.getElementById('currentStageDesc').textContent=st.desc}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
