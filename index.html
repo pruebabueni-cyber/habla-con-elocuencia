@@ -3524,6 +3524,8 @@ const NEXORA_TRANSLATIONS_EXTRA_STAGE2_DYNAMIC_V1={"Aún no hay evidencias":{"en
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_STAGE2_DYNAMIC_V1);
 const NEXORA_TRANSLATIONS_EXTRA_STAGE2_SUMMARY_V2={"Recorrido de Gratitud completado.":{"en":"Gratitude journey completed.","fr":"Parcours Gratitude terminé."},"Recorrido de Disciplina completado.":{"en":"Discipline journey completed.","fr":"Parcours Discipline terminé."},"Recorrido de Confianza completado.":{"en":"Confidence journey completed.","fr":"Parcours Confiance terminé."},"Recorrido de Enfoque completado.":{"en":"Focus journey completed.","fr":"Parcours Concentration terminé."},"Recorrido de Hablar con elocuencia completado.":{"en":"Speak with Eloquence journey completed.","fr":"Parcours S’exprimer avec éloquence terminé."},"Recorrido de Comunicación completado.":{"en":"Communication journey completed.","fr":"Parcours Communication terminé."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_STAGE2_SUMMARY_V2);
+const NEXORA_TRANSLATIONS_EXTRA_STAGE3_QA_V1={"Qué cambia aquí:":{"en":"What changes here:","fr":"Ce qui change ici :"},"Usuario NEXORA":{"en":"NEXORA User","fr":"Utilisateur NEXORA"}};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_STAGE3_QA_V1);
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE);
 const NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1={"Método del programa":{"en":"Program method","fr":"Méthode du programme"},"Aprender cuando quieras. Practicar con progresión.":{"en":"Learn when you want. Practice through progression.","fr":"Apprenez quand vous le souhaitez. Progressez par la pratique."},"La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.":{"en":"The theory is available whenever you want to go deeper; daily practice changes by stage so the 90-day experience does not become repetitive.","fr":"La théorie reste disponible pour approfondir ; la pratique quotidienne évolue par étapes afin que l’expérience de 90 jours ne devienne pas répétitive."},"Explorar fundamentos":{"en":"Explore foundations","fr":"Explorer les fondements"},"Fundamentos del programa":{"en":"Program foundations","fr":"Fondements du programme"},"Biblioteca del programa":{"en":"Program library","fr":"Bibliothèque du programme"},"Cómo usar esta biblioteca":{"en":"How to use this library","fr":"Comment utiliser cette bibliothèque"},"Este material es opcional. Puedes estudiarlo cuando quieras, pero NEXORA no exige memorizar teoría para avanzar. El programa busca que el conocimiento se convierta en conducta mediante práctica, evidencia y revisión.":{"en":"This material is optional. Study it whenever you want, but NEXORA does not require you to memorize theory to move forward. The program is designed to turn knowledge into behavior through practice, evidence, and review.","fr":"Ce contenu est facultatif. Vous pouvez l’étudier quand vous le souhaitez, mais NEXORA ne vous demande pas de mémoriser la théorie pour avancer. Le programme vise à transformer les connaissances en comportements par la pratique, les preuves et la révision."},"Volver al programa":{"en":"Back to program","fr":"Retour au programme"},"Comprender":{"en":"Understand","fr":"Comprendre"},"Llévalo a la práctica":{"en":"Put it into practice","fr":"Passez à la pratique"},"Nueva etapa":{"en":"New stage","fr":"Nouvelle étape"}};
@@ -3940,7 +3942,7 @@ async function nexoraEstablishSession(session,isNew=false){
     if(isNew){
       await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage(),preferred_theme:localStorage.getItem('nexora_theme')||'auto'}).eq('id',user.id);
     }else{
-      if(data?.preferred_language)setNexoraLanguage(data.preferred_language,false,true);
+      if(data?.preferred_language)await setNexoraLanguage(data.preferred_language,false,true);
       if(data?.preferred_theme&&typeof setNexoraTheme==='function')setNexoraTheme(data.preferred_theme,false);
     }
   }catch{}
@@ -3949,6 +3951,7 @@ async function nexoraEstablishSession(session,isNew=false){
   await nexoraLoadRemoteState();
   updateAccountUI();
   renderAll();
+  try{applyNexoraLanguage(document.body)}catch{}
   nexoraTrack(isNew?'signup':'login').catch(()=>{});
 }
 
@@ -4056,6 +4059,7 @@ logoutDemoAccount=async function(){
   appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
   renderAll();
   updateAccountUI();
+  try{applyNexoraLanguage(document.body)}catch{}
   closeModal('accountModal');
   toast('Sesión cerrada.');
 };
@@ -4213,6 +4217,7 @@ completeDay=async function(n,isPreview){
         appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
         renderAll();
         updateAccountUI();
+        try{applyNexoraLanguage(document.body)}catch{}
       }else if(session&&session.user?.id!==currentSession?.id){
         await nexoraEstablishSession(session,false);
       }
