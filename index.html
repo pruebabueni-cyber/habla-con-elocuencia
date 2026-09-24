@@ -3551,7 +3551,19 @@ function translatePattern(value,lang){
   if(NEXORA_TRANSLATIONS[es])return lang==='es'?es:NEXORA_TRANSLATIONS[es][lang]||es;
   if(lang==='es')return es;
   if((m=es.match(/^Día (\d+)$/)))return lang==='en'?'Day '+m[1]:'Jour '+m[1];
+  if((m=es.match(/^Día (\d+) · (.+)$/))){
+    const dayLabel=lang==='en'?'Day '+m[1]:'Jour '+m[1];
+    return dayLabel+' · '+translatePattern(m[2],lang);
+  }
+  if((m=es.match(/^(.+) · Día (\d+): (.+)$/))){
+    const dayLabel=lang==='en'?'Day '+m[2]:'Jour '+m[2];
+    return translatePattern(m[1],lang)+' · '+dayLabel+': '+translatePattern(m[3],lang);
+  }
   if((m=es.match(/^Días (\d+)[–-](\d+)$/)))return lang==='en'?'Days '+m[1]+'–'+m[2]:'Jours '+m[1]+'–'+m[2];
+  if((m=es.match(/^(.+) · Días (\d+)[–-](\d+)$/))){
+    const range=lang==='en'?'Days '+m[2]+'–'+m[3]:'Jours '+m[2]+'–'+m[3];
+    return translatePattern(m[1],lang)+' · '+range;
+  }
   if((m=es.match(/^Etapa (\d+)$/)))return lang==='en'?'Stage '+m[1]:'Étape '+m[1];
   if((m=es.match(/^(\d+) \/ (\d+) días completados$/)))return lang==='en'?m[1]+' / '+m[2]+' days completed':m[1]+' / '+m[2]+' jours terminés';
   if((m=es.match(/^(\d+)\/(\d+) días$/)))return lang==='en'?m[1]+'/'+m[2]+' days':m[1]+'/'+m[2]+' jours';
