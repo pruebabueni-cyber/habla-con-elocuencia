@@ -2731,7 +2731,7 @@ function showView(id,btn){if(!currentSession&&['today','history','progress'].inc
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
-function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;details.classList.toggle('open',journeyOpen);btn.textContent=journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓'}
+function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
 function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
 function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
@@ -3522,6 +3522,8 @@ const NEXORA_TRANSLATIONS_EXTRA_ROUNDTRIP_FINAL_V1={"RECUPERAR":{"en":"REFOCUS",
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_ROUNDTRIP_FINAL_V1);
 const NEXORA_TRANSLATIONS_EXTRA_STAGE2_DYNAMIC_V1={"Aún no hay evidencias":{"en":"No evidence yet","fr":"Aucune preuve pour le moment"},"Completa una práctica de cualquiera de tus programas y aquí comenzará a formarse tu historia personal.":{"en":"Complete a practice from any of your programs and your personal history will begin to take shape here.","fr":"Réalisez une pratique dans l’un de vos programmes et votre historique personnel commencera à prendre forme ici."},"Recorrido de Gratitud completado.":{"en":"Gratitude journey completed.","fr":"Parcours Gratitude terminé."},"Recorrido de Disciplina completado.":{"en":"Discipline journey completed.","fr":"Parcours Discipline terminé."},"Recorrido de Confianza completado.":{"en":"Confidence journey completed.","fr":"Parcours Confiance terminé."},"Recorrido de Enfoque completado.":{"en":"Focus journey completed.","fr":"Parcours Concentration terminé."},"Recorrido de Elocuencia completado.":{"en":"Eloquence journey completed.","fr":"Parcours Éloquence terminé."},"Recorrido de Comunicación completado.":{"en":"Communication journey completed.","fr":"Parcours Communication terminé."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_STAGE2_DYNAMIC_V1);
+const NEXORA_TRANSLATIONS_EXTRA_STAGE2_SUMMARY_V2={"Recorrido de Gratitud completado.":{"en":"Gratitude journey completed.","fr":"Parcours Gratitude terminé."},"Recorrido de Disciplina completado.":{"en":"Discipline journey completed.","fr":"Parcours Discipline terminé."},"Recorrido de Confianza completado.":{"en":"Confidence journey completed.","fr":"Parcours Confiance terminé."},"Recorrido de Enfoque completado.":{"en":"Focus journey completed.","fr":"Parcours Concentration terminé."},"Recorrido de Hablar con elocuencia completado.":{"en":"Speak with Eloquence journey completed.","fr":"Parcours S’exprimer avec éloquence terminé."},"Recorrido de Comunicación completado.":{"en":"Communication journey completed.","fr":"Parcours Communication terminé."}};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_STAGE2_SUMMARY_V2);
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE);
 const NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1={"Método del programa":{"en":"Program method","fr":"Méthode du programme"},"Aprender cuando quieras. Practicar con progresión.":{"en":"Learn when you want. Practice through progression.","fr":"Apprenez quand vous le souhaitez. Progressez par la pratique."},"La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.":{"en":"The theory is available whenever you want to go deeper; daily practice changes by stage so the 90-day experience does not become repetitive.","fr":"La théorie reste disponible pour approfondir ; la pratique quotidienne évolue par étapes afin que l’expérience de 90 jours ne devienne pas répétitive."},"Explorar fundamentos":{"en":"Explore foundations","fr":"Explorer les fondements"},"Fundamentos del programa":{"en":"Program foundations","fr":"Fondements du programme"},"Biblioteca del programa":{"en":"Program library","fr":"Bibliothèque du programme"},"Cómo usar esta biblioteca":{"en":"How to use this library","fr":"Comment utiliser cette bibliothèque"},"Este material es opcional. Puedes estudiarlo cuando quieras, pero NEXORA no exige memorizar teoría para avanzar. El programa busca que el conocimiento se convierta en conducta mediante práctica, evidencia y revisión.":{"en":"This material is optional. Study it whenever you want, but NEXORA does not require you to memorize theory to move forward. The program is designed to turn knowledge into behavior through practice, evidence, and review.","fr":"Ce contenu est facultatif. Vous pouvez l’étudier quand vous le souhaitez, mais NEXORA ne vous demande pas de mémoriser la théorie pour avancer. Le programme vise à transformer les connaissances en comportements par la pratique, les preuves et la révision."},"Volver al programa":{"en":"Back to program","fr":"Retour au programme"},"Comprender":{"en":"Understand","fr":"Comprendre"},"Llévalo a la práctica":{"en":"Put it into practice","fr":"Passez à la pratique"},"Nueva etapa":{"en":"New stage","fr":"Nouvelle étape"}};
@@ -3676,10 +3678,30 @@ function applyNexoraLanguage(root=document.body){
 }
 async function setNexoraLanguage(lang,announce=false,skipRemote=false){
   if(!['es','en','fr'].includes(lang))lang='es';
+  const activeView=(typeof currentViewId==='function'?currentViewId():document.querySelector('.view.active')?.id)||'home';
   nexoraLanguage=lang;
   localStorage.setItem('nexora_language',lang);
-  try{if(typeof renderAll==='function')renderAll()}catch{}
+
+  try{
+    if(typeof renderAll==='function')renderAll();
+
+    // If the user changes language while reviewing today's practice,
+    // rebuild that dynamic card from source content in the new locale.
+    if(activeView==='today'&&typeof renderExercise==='function'&&typeof pstate==='function'){
+      const s=pstate(),max=(typeof totalDays==='function'?totalDays():90);
+      const isPreview=(typeof previewDay!=='undefined'&&previewDay!==null);
+      const n=isPreview?previewDay:Math.min(s.currentDay||1,max);
+      const isReview=!isPreview&&n<(s.currentDay||1);
+      renderExercise(n,!!isPreview,isReview);
+    }
+
+    if(typeof renderThemeButton==='function')renderThemeButton();
+    if(document.getElementById('accountModal')?.classList.contains('open')&&typeof renderAccountModal==='function')renderAccountModal();
+    if(document.getElementById('tourLayer')?.classList.contains('open')&&typeof renderGuideStep==='function')renderGuideStep();
+  }catch(error){console.warn('NEXORA language rerender',error)}
+
   applyNexoraLanguage(document.body);
+
   if(!skipRemote){
     try{
       if(typeof nexoraDb!=='undefined'&&typeof currentSession!=='undefined'&&currentSession?.id){
