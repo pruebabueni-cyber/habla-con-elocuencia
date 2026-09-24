@@ -3431,17 +3431,35 @@ completeDay=async function(n,isPreview){
 };
 
 (async function initNexoraSupabase(){
+  const useGuestFallback=()=>{
+    currentSession=null;
+    appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||appState||defaultAppState();
+    updateAccountUI();
+    renderAll();
+  };
   try{
     const nexoraRecoveryHint=(location.hash.includes('type=recovery')||location.search.includes('type=recovery'));
-    const {data:{session}}=await nexoraDb.auth.getSession();
+    let session=null;
+    try{
+      const result=await nexoraDb.auth.getSession();
+      session=result?.data?.session||null;
+    }catch(sessionError){
+      // A browser can retain an obsolete/corrupted Supabase auth payload.
+      // Clear only this project's auth cache and retry once; never block the app UI.
+      console.warn('NEXORA session cache recovery',sessionError);
+      try{localStorage.removeItem('sb-nnfcppwruhethardmmvq-auth-token')}catch{}
+      try{
+        const retry=await nexoraDb.auth.getSession();
+        session=retry?.data?.session||null;
+      }catch(retryError){
+        console.warn('NEXORA session retry',retryError);
+        session=null;
+      }
+    }
     if(session)await nexoraEstablishSession(session,false);
     if(session&&nexoraRecoveryHint)setTimeout(showPasswordRecovery,140);
-    else{
-      currentSession=null;
-      appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||appState||defaultAppState();
-      updateAccountUI();
-      renderAll();
-    }
+    else if(!session)useGuestFallback();
+
     nexoraDb.auth.onAuthStateChange(async(event,session)=>{
       if(event==='PASSWORD_RECOVERY'){
         if(session&&session.user?.id!==currentSession?.id)await nexoraEstablishSession(session,false);
@@ -3472,8 +3490,8 @@ completeDay=async function(n,isPreview){
       }
     });
   }catch(error){
-    console.warn('NEXORA Supabase init',error);
-    toast('NEXORA está disponible, pero la sincronización no pudo iniciarse.');
+    console.warn('NEXORA Supabase init fallback',error);
+    useGuestFallback();
   }
 })();
 </script>
