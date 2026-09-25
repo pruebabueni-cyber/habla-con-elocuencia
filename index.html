@@ -3116,8 +3116,603 @@ const COMMUNICATION_DEEP_STAGE1_CONTENT=[
 ];
 const COMMUNICATION_DEEP_STAGE1=COMMUNICATION_DEEP_STAGE1_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
+const COMMUNICATION_DEEP_STAGE2_CONTENT=[
+  {
+    "d": 16,
+    "es": {
+      "title": "Pregunta antes de concluir",
+      "hook": "La segunda etapa empieza donde suelen nacer muchos malentendidos: en la conclusión que aparece antes de verificar.",
+      "lesson": "Una pregunta breve puede reemplazar varios minutos de interpretación y evitar responder a algo que la otra persona no quiso decir.",
+      "mission": "Hoy detecta una frase ambigua y haz una pregunta de aclaración antes de sacar una conclusión.",
+      "prompts": [
+        "¿Qué frase podía tener más de un significado?",
+        "¿Qué ibas a asumir?",
+        "¿Qué preguntaste?",
+        "¿Qué cambió después de aclarar?"
+      ]
+    },
+    "en": {
+      "title": "Ask Before You Conclude",
+      "hook": "This stage begins where many misunderstandings start: with a conclusion formed before anything is verified.",
+      "lesson": "One brief question can replace several minutes of interpretation and prevent you from responding to something the other person did not mean.",
+      "mission": "Today, notice one ambiguous statement and ask a clarifying question before reaching a conclusion.",
+      "prompts": [
+        "Which statement could have meant more than one thing?",
+        "What were you about to assume?",
+        "What did you ask?",
+        "What changed after you clarified?"
+      ]
+    },
+    "fr": {
+      "title": "Demandez avant de conclure",
+      "hook": "Cette étape commence là où naissent de nombreux malentendus : dans la conclusion qui apparaît avant toute vérification.",
+      "lesson": "Une question brève peut remplacer plusieurs minutes d’interprétation et vous éviter de répondre à quelque chose que l’autre personne ne voulait pas dire.",
+      "mission": "Aujourd’hui, repérez une phrase ambiguë et posez une question de clarification avant de tirer une conclusion.",
+      "prompts": [
+        "Quelle phrase pouvait avoir plusieurs sens ?",
+        "Qu’alliez-vous supposer ?",
+        "Qu’avez-vous demandé ?",
+        "Qu’est-ce qui a changé après la clarification ?"
+      ]
+    }
+  },
+  {
+    "d": 17,
+    "es": {
+      "title": "Devuelve lo que entendiste",
+      "hook": "A veces crees haber entendido porque la conversación siguió, no porque ambos estén hablando de lo mismo.",
+      "lesson": "Parafrasear no es repetir palabra por palabra. Es devolver el sentido que recibiste para que la otra persona pueda confirmarlo o corregirlo.",
+      "mission": "En una conversación importante, resume en una frase lo que entendiste y pregunta si lo captaste bien.",
+      "prompts": [
+        "¿Qué entendiste?",
+        "¿Cómo lo resumiste?",
+        "¿La otra persona confirmó o corrigió algo?",
+        "¿Qué dato apareció gracias a la verificación?"
+      ]
+    },
+    "en": {
+      "title": "Reflect Back What You Understood",
+      "hook": "Sometimes you think you understood because the conversation continued, not because both people are talking about the same thing.",
+      "lesson": "Paraphrasing is not repeating word for word. It means reflecting the meaning you received so the other person can confirm or correct it.",
+      "mission": "In one important conversation, summarize what you understood in one sentence and ask whether you got it right.",
+      "prompts": [
+        "What did you understand?",
+        "How did you summarize it?",
+        "Did the other person confirm or correct anything?",
+        "What information appeared because you verified?"
+      ]
+    },
+    "fr": {
+      "title": "Reformulez ce que vous avez compris",
+      "hook": "Parfois, vous pensez avoir compris simplement parce que la conversation a continué, pas parce que vous parlez réellement de la même chose.",
+      "lesson": "Reformuler ne signifie pas répéter mot pour mot. Il s’agit de restituer le sens que vous avez reçu afin que l’autre personne puisse le confirmer ou le corriger.",
+      "mission": "Dans une conversation importante, résumez en une phrase ce que vous avez compris et demandez si votre compréhension est correcte.",
+      "prompts": [
+        "Qu’avez-vous compris ?",
+        "Comment l’avez-vous reformulé ?",
+        "L’autre personne a-t-elle confirmé ou corrigé quelque chose ?",
+        "Quelle information est apparue grâce à cette vérification ?"
+      ]
+    }
+  },
+  {
+    "d": 18,
+    "es": {
+      "title": "Hecho no es intención",
+      "hook": "Puedes observar lo que alguien hizo sin saber todavía por qué lo hizo.",
+      "lesson": "Atribuir intención demasiado rápido convierte una conducta observable en una historia sobre motivos que quizá nunca fueron expresados.",
+      "mission": "Elige una conducta de otra persona que te haya generado una interpretación y formula una pregunta que permita aclarar su intención sin acusar.",
+      "prompts": [
+        "¿Qué ocurrió de forma observable?",
+        "¿Qué intención estabas atribuyendo?",
+        "¿Qué pregunta neutral podías hacer?",
+        "¿Qué aprendiste al separar hecho de intención?"
+      ]
+    },
+    "en": {
+      "title": "Behavior Is Not Intention",
+      "hook": "You can observe what someone did without yet knowing why they did it.",
+      "lesson": "Assigning intention too quickly turns observable behavior into a story about motives that may never have been expressed.",
+      "mission": "Choose one behavior from another person that triggered an interpretation and formulate a question that could clarify intent without accusing.",
+      "prompts": [
+        "What happened observably?",
+        "What intention were you assigning?",
+        "What neutral question could you ask?",
+        "What did you learn by separating behavior from intention?"
+      ]
+    },
+    "fr": {
+      "title": "Le comportement n’est pas l’intention",
+      "hook": "Vous pouvez observer ce qu’une personne a fait sans encore savoir pourquoi elle l’a fait.",
+      "lesson": "Attribuer une intention trop rapidement transforme un comportement observable en histoire sur des motivations qui n’ont peut-être jamais été exprimées.",
+      "mission": "Choisissez un comportement d’une autre personne qui a déclenché une interprétation et formulez une question permettant de clarifier l’intention sans accusation.",
+      "prompts": [
+        "Que s’est-il passé de manière observable ?",
+        "Quelle intention attribuiez-vous ?",
+        "Quelle question neutre pouviez-vous poser ?",
+        "Qu’avez-vous appris en séparant comportement et intention ?"
+      ]
+    }
+  },
+  {
+    "d": 19,
+    "es": {
+      "title": "Aclara la parte exacta",
+      "hook": "Decir “no entendí” puede ser tan amplio que obliga a empezar toda la explicación de nuevo.",
+      "lesson": "La clarificación mejora cuando identificas con precisión qué parte conoces y en qué punto se rompe tu comprensión.",
+      "mission": "Cuando algo no te quede claro hoy, señala exactamente la palabra, paso o relación que necesitas entender mejor.",
+      "prompts": [
+        "¿Qué sí entendías?",
+        "¿Dónde exactamente se rompió tu comprensión?",
+        "¿Qué pregunta específica hiciste?",
+        "¿La respuesta resolvió ese punto?"
+      ]
+    },
+    "en": {
+      "title": "Clarify the Exact Part",
+      "hook": "Saying “I didn’t understand” can be so broad that it forces the entire explanation to start over.",
+      "lesson": "Clarification improves when you identify precisely what you already understand and where your understanding breaks down.",
+      "mission": "When something is unclear today, point to the exact word, step, or relationship you need explained more clearly.",
+      "prompts": [
+        "What did you already understand?",
+        "Where exactly did your understanding break down?",
+        "What specific question did you ask?",
+        "Did the answer resolve that point?"
+      ]
+    },
+    "fr": {
+      "title": "Clarifiez la partie précise",
+      "hook": "Dire « je n’ai pas compris » peut être si large qu’il oblige à reprendre toute l’explication depuis le début.",
+      "lesson": "La clarification devient plus efficace lorsque vous identifiez précisément ce que vous comprenez déjà et l’endroit où votre compréhension se rompt.",
+      "mission": "Lorsqu’une chose n’est pas claire aujourd’hui, désignez le mot, l’étape ou le lien précis que vous avez besoin de mieux comprendre.",
+      "prompts": [
+        "Qu’aviez-vous déjà compris ?",
+        "À quel endroit précis votre compréhension s’est-elle interrompue ?",
+        "Quelle question spécifique avez-vous posée ?",
+        "La réponse a-t-elle résolu ce point ?"
+      ]
+    }
+  },
+  {
+    "d": 20,
+    "es": {
+      "title": "La palabra que significa cosas distintas",
+      "hook": "Palabras comunes como “pronto”, “bien”, “urgente”, “mucho” o “después” pueden parecer claras hasta que dos personas las entienden de manera diferente.",
+      "lesson": "Los términos vagos necesitan criterios observables cuando afectan expectativas, decisiones o compromisos.",
+      "mission": "Detecta hoy una palabra vaga en una conversación y conviértela en algo más concreto.",
+      "prompts": [
+        "¿Qué palabra era ambigua?",
+        "¿Qué podía significar para cada persona?",
+        "¿Cómo la hicieron más concreta?",
+        "¿Qué confusión evitó esa precisión?"
+      ]
+    },
+    "en": {
+      "title": "The Word That Means Different Things",
+      "hook": "Common words such as “soon,” “fine,” “urgent,” “a lot,” or “later” can seem clear until two people understand them differently.",
+      "lesson": "Vague terms need observable criteria when they affect expectations, decisions, or commitments.",
+      "mission": "Notice one vague word in a conversation today and turn it into something more concrete.",
+      "prompts": [
+        "Which word was ambiguous?",
+        "What could it have meant to each person?",
+        "How did you make it more concrete?",
+        "What confusion did that precision prevent?"
+      ]
+    },
+    "fr": {
+      "title": "Le mot qui ne veut pas dire la même chose pour tous",
+      "hook": "Des mots courants comme « bientôt », « bien », « urgent », « beaucoup » ou « plus tard » peuvent sembler clairs jusqu’à ce que deux personnes les comprennent différemment.",
+      "lesson": "Les termes vagues ont besoin de critères observables lorsqu’ils influencent des attentes, des décisions ou des engagements.",
+      "mission": "Repérez aujourd’hui un mot vague dans une conversation et rendez-le plus concret.",
+      "prompts": [
+        "Quel mot était ambigu ?",
+        "Que pouvait-il signifier pour chaque personne ?",
+        "Comment l’avez-vous rendu plus concret ?",
+        "Quelle confusion cette précision a-t-elle évitée ?"
+      ]
+    }
+  },
+  {
+    "d": 21,
+    "es": {
+      "title": "¿Qué necesitas de mí ahora?",
+      "hook": "A veces el contenido está claro, pero no está claro qué espera la otra persona de ti.",
+      "lesson": "Escuchar una historia, dar una opinión, tomar una decisión y ayudar a resolver son roles distintos. Aclarar el rol evita respuestas bien intencionadas pero inútiles.",
+      "mission": "En una conversación donde no sepas qué espera la otra persona, pregunta qué necesita de ti en ese momento.",
+      "prompts": [
+        "¿Qué estaba compartiendo la persona?",
+        "¿Qué suponías que necesitaba?",
+        "¿Qué preguntaste?",
+        "¿Qué necesitaba realmente: escucha, opinión, ayuda, decisión u otra cosa?"
+      ]
+    },
+    "en": {
+      "title": "What Do You Need from Me Right Now?",
+      "hook": "Sometimes the content is clear, but what the other person expects from you is not.",
+      "lesson": "Listening to a story, giving an opinion, making a decision, and helping solve a problem are different roles. Clarifying the role prevents well-intended but unhelpful responses.",
+      "mission": "In one conversation where you are unsure what the other person expects, ask what they need from you in that moment.",
+      "prompts": [
+        "What was the person sharing?",
+        "What did you assume they needed?",
+        "What did you ask?",
+        "What did they actually need: listening, an opinion, help, a decision, or something else?"
+      ]
+    },
+    "fr": {
+      "title": "De quoi avez-vous besoin de ma part maintenant ?",
+      "hook": "Parfois, le contenu est clair, mais ce que l’autre personne attend de vous ne l’est pas.",
+      "lesson": "Écouter un récit, donner un avis, prendre une décision et aider à résoudre un problème sont des rôles différents. Clarifier le rôle évite des réponses bien intentionnées mais inutiles.",
+      "mission": "Dans une conversation où vous ne savez pas ce que l’autre personne attend, demandez ce dont elle a besoin de votre part à ce moment-là.",
+      "prompts": [
+        "Que partageait la personne ?",
+        "Que supposiez-vous qu’elle attendait ?",
+        "Qu’avez-vous demandé ?",
+        "De quoi avait-elle réellement besoin : écoute, avis, aide, décision ou autre chose ?"
+      ]
+    }
+  },
+  {
+    "d": 22,
+    "es": {
+      "title": "Confirma el detalle operativo",
+      "hook": "Muchos conflictos no nacen de grandes desacuerdos, sino de pequeños detalles que cada persona creyó haber entendido.",
+      "lesson": "Fechas, cantidades, responsables, lugares y próximos pasos merecen verificación explícita cuando tienen consecuencias prácticas.",
+      "mission": "En una conversación con un acuerdo concreto, confirma al menos dos detalles operativos antes de cerrar.",
+      "prompts": [
+        "¿Qué acuerdo se estaba formando?",
+        "Detalle confirmado #1",
+        "Detalle confirmado #2",
+        "¿Qué habría podido quedar ambiguo?"
+      ]
+    },
+    "en": {
+      "title": "Confirm the Operational Detail",
+      "hook": "Many conflicts do not begin with major disagreement but with small details each person believed they understood.",
+      "lesson": "Dates, quantities, owners, locations, and next steps deserve explicit verification when they have practical consequences.",
+      "mission": "In one conversation involving a concrete agreement, confirm at least two operational details before closing it.",
+      "prompts": [
+        "What agreement was being formed?",
+        "Confirmed detail #1",
+        "Confirmed detail #2",
+        "What could have remained ambiguous?"
+      ]
+    },
+    "fr": {
+      "title": "Confirmez le détail opérationnel",
+      "hook": "De nombreux conflits ne commencent pas par un grand désaccord, mais par de petits détails que chacun pensait avoir compris.",
+      "lesson": "Les dates, quantités, responsables, lieux et prochaines étapes méritent une vérification explicite lorsqu’ils ont des conséquences pratiques.",
+      "mission": "Dans une conversation comportant un accord concret, confirmez au moins deux détails opérationnels avant de la terminer.",
+      "prompts": [
+        "Quel accord était en train de se former ?",
+        "Détail confirmé n° 1",
+        "Détail confirmé n° 2",
+        "Qu’est-ce qui aurait pu rester ambigu ?"
+      ]
+    }
+  },
+  {
+    "d": 23,
+    "es": {
+      "title": "Aclara cuando sube la tensión",
+      "hook": "Cuando aparece tensión, la mente suele acelerar justo cuando más precisión necesita.",
+      "lesson": "Bajar el ritmo y verificar una sola idea puede impedir que una frase ambigua se convierta en varios minutos de defensa mutua.",
+      "mission": "Si una conversación se tensa hoy, haz una pausa y verifica una sola interpretación antes de responder al contenido.",
+      "prompts": [
+        "¿Qué cambió en la tensión?",
+        "¿Qué estabas interpretando?",
+        "¿Cómo verificaste esa interpretación?",
+        "¿Qué efecto tuvo bajar el ritmo?"
+      ]
+    },
+    "en": {
+      "title": "Clarify When Tension Rises",
+      "hook": "When tension appears, the mind often speeds up exactly when more precision is needed.",
+      "lesson": "Slowing down and checking one idea can prevent an ambiguous sentence from becoming several minutes of mutual defensiveness.",
+      "mission": "If a conversation becomes tense today, pause and verify one interpretation before responding to the content.",
+      "prompts": [
+        "What changed in the tension?",
+        "What were you interpreting?",
+        "How did you verify that interpretation?",
+        "What effect did slowing down have?"
+      ]
+    },
+    "fr": {
+      "title": "Clarifiez lorsque la tension monte",
+      "hook": "Lorsque la tension apparaît, l’esprit accélère souvent précisément au moment où il aurait besoin de davantage de précision.",
+      "lesson": "Ralentir et vérifier une seule idée peut empêcher une phrase ambiguë de se transformer en plusieurs minutes de défense mutuelle.",
+      "mission": "Si une conversation devient tendue aujourd’hui, faites une pause et vérifiez une interprétation avant de répondre au contenu.",
+      "prompts": [
+        "Qu’est-ce qui a changé dans la tension ?",
+        "Qu’étiez-vous en train d’interpréter ?",
+        "Comment avez-vous vérifié cette interprétation ?",
+        "Quel effet le ralentissement a-t-il eu ?"
+      ]
+    }
+  },
+  {
+    "d": 24,
+    "es": {
+      "title": "Una pregunta a la vez",
+      "hook": "Tres preguntas seguidas pueden parecer eficiencia, pero obligan a la otra persona a decidir cuál responder y pueden dejar información sin aclarar.",
+      "lesson": "Una pregunta precisa seguida de una respuesta completa produce mejor información que una ráfaga de preguntas mezcladas.",
+      "mission": "Hoy, cuando necesites aclarar varias cosas, haz una sola pregunta y espera la respuesta completa antes de formular la siguiente.",
+      "prompts": [
+        "¿Cuántas preguntas querías hacer de una vez?",
+        "¿Cuál elegiste primero?",
+        "¿Qué información obtuviste?",
+        "¿Qué segunda pregunta se volvió innecesaria o cambió?"
+      ]
+    },
+    "en": {
+      "title": "One Question at a Time",
+      "hook": "Three questions in a row may feel efficient, but they force the other person to decide which one to answer and can leave information unclear.",
+      "lesson": "One precise question followed by a complete answer produces better information than a burst of mixed questions.",
+      "mission": "Today, when you need to clarify several things, ask one question and wait for the complete answer before asking the next.",
+      "prompts": [
+        "How many questions did you want to ask at once?",
+        "Which one did you choose first?",
+        "What information did you get?",
+        "Which second question became unnecessary or changed?"
+      ]
+    },
+    "fr": {
+      "title": "Une question à la fois",
+      "hook": "Trois questions à la suite peuvent sembler efficaces, mais elles obligent l’autre personne à choisir laquelle répondre et peuvent laisser des éléments flous.",
+      "lesson": "Une question précise suivie d’une réponse complète produit une meilleure information qu’une rafale de questions mélangées.",
+      "mission": "Aujourd’hui, lorsque vous devez clarifier plusieurs éléments, posez une seule question et attendez la réponse complète avant de poser la suivante.",
+      "prompts": [
+        "Combien de questions vouliez-vous poser en même temps ?",
+        "Laquelle avez-vous choisie en premier ?",
+        "Quelle information avez-vous obtenue ?",
+        "Quelle deuxième question est devenue inutile ou a changé ?"
+      ]
+    }
+  },
+  {
+    "d": 25,
+    "es": {
+      "title": "Abre primero, confirma después",
+      "hook": "Una pregunta demasiado cerrada puede confirmar tu hipótesis sin descubrir lo que no habías considerado.",
+      "lesson": "Las preguntas abiertas ayudan a ampliar información; las preguntas cerradas son útiles después para verificar un detalle concreto.",
+      "mission": "En una conversación, usa primero una pregunta abierta y después una pregunta cerrada para confirmar un punto específico.",
+      "prompts": [
+        "¿Cuál fue tu pregunta abierta?",
+        "¿Qué información nueva apareció?",
+        "¿Qué detalle confirmaste después?",
+        "¿Qué habrías perdido si empezabas por la pregunta cerrada?"
+      ]
+    },
+    "en": {
+      "title": "Open First, Confirm Second",
+      "hook": "A question that is too closed can confirm your hypothesis without revealing what you had not considered.",
+      "lesson": "Open questions help expand information; closed questions are useful afterward to verify a specific detail.",
+      "mission": "In one conversation, use an open question first and then a closed question to confirm one specific point.",
+      "prompts": [
+        "What was your open question?",
+        "What new information appeared?",
+        "What detail did you confirm afterward?",
+        "What would you have missed if you started with the closed question?"
+      ]
+    },
+    "fr": {
+      "title": "Ouvrez d’abord, confirmez ensuite",
+      "hook": "Une question trop fermée peut confirmer votre hypothèse sans révéler ce que vous n’aviez pas envisagé.",
+      "lesson": "Les questions ouvertes permettent d’élargir l’information ; les questions fermées deviennent utiles ensuite pour vérifier un détail précis.",
+      "mission": "Dans une conversation, utilisez d’abord une question ouverte, puis une question fermée pour confirmer un point spécifique.",
+      "prompts": [
+        "Quelle était votre question ouverte ?",
+        "Quelle nouvelle information est apparue ?",
+        "Quel détail avez-vous confirmé ensuite ?",
+        "Qu’auriez-vous manqué en commençant par la question fermée ?"
+      ]
+    }
+  },
+  {
+    "d": 26,
+    "es": {
+      "title": "Pregunta lo que estás infiriendo",
+      "hook": "Lo implícito puede sentirse obvio para ti y ser completamente distinto para la otra persona.",
+      "lesson": "Cuando una conclusión depende de algo que no fue dicho, convertir la inferencia en pregunta reduce errores y hace visible la información faltante.",
+      "mission": "Detecta hoy una conclusión basada en algo implícito y conviértela en una pregunta explícita.",
+      "prompts": [
+        "¿Qué estabas infiriendo?",
+        "¿Qué parte nunca fue dicha directamente?",
+        "¿Qué pregunta hiciste?",
+        "¿Tu inferencia era correcta, parcial o incorrecta?"
+      ]
+    },
+    "en": {
+      "title": "Ask About What You Are Inferring",
+      "hook": "What feels implied and obvious to you may be completely different for the other person.",
+      "lesson": "When a conclusion depends on something that was never said, turning the inference into a question reduces errors and makes missing information visible.",
+      "mission": "Notice one conclusion today that depends on something implicit and turn it into an explicit question.",
+      "prompts": [
+        "What were you inferring?",
+        "What part had never been said directly?",
+        "What did you ask?",
+        "Was your inference correct, partial, or incorrect?"
+      ]
+    },
+    "fr": {
+      "title": "Posez une question sur ce que vous déduisez",
+      "hook": "Ce qui vous paraît implicite et évident peut être complètement différent pour l’autre personne.",
+      "lesson": "Lorsqu’une conclusion dépend de quelque chose qui n’a jamais été dit, transformer l’inférence en question réduit les erreurs et rend visible l’information manquante.",
+      "mission": "Repérez aujourd’hui une conclusion fondée sur quelque chose d’implicite et transformez-la en question explicite.",
+      "prompts": [
+        "Que déduisiez-vous ?",
+        "Quelle partie n’avait jamais été dite directement ?",
+        "Qu’avez-vous demandé ?",
+        "Votre déduction était-elle correcte, partielle ou incorrecte ?"
+      ]
+    }
+  },
+  {
+    "d": 27,
+    "es": {
+      "title": "Verifica antes de contar tu versión",
+      "hook": "Tu experiencia también importa, pero introducirla demasiado pronto puede desplazar la conversación antes de haber entendido al otro.",
+      "lesson": "Confirmar primero la perspectiva recibida crea una base más precisa para después agregar tu propia información o desacuerdo.",
+      "mission": "En una conversación donde quieras contar tu versión, verifica primero en una frase lo que entendiste de la otra persona.",
+      "prompts": [
+        "¿Qué querías responder o explicar?",
+        "¿Qué verificaste antes?",
+        "¿Qué confirmó o corrigió la otra persona?",
+        "¿Cómo cambió tu propia respuesta después?"
+      ]
+    },
+    "en": {
+      "title": "Verify Before Telling Your Side",
+      "hook": "Your experience matters too, but introducing it too early can shift the conversation before you have understood the other person.",
+      "lesson": "Confirming the perspective you received first creates a more accurate base for adding your own information or disagreement afterward.",
+      "mission": "In one conversation where you want to explain your side, first verify in one sentence what you understood from the other person.",
+      "prompts": [
+        "What did you want to reply or explain?",
+        "What did you verify first?",
+        "What did the other person confirm or correct?",
+        "How did your own response change afterward?"
+      ]
+    },
+    "fr": {
+      "title": "Vérifiez avant de donner votre version",
+      "hook": "Votre expérience compte également, mais l’introduire trop tôt peut déplacer la conversation avant que vous ayez compris l’autre personne.",
+      "lesson": "Confirmer d’abord la perspective reçue crée une base plus précise pour ajouter ensuite vos propres informations ou votre désaccord.",
+      "mission": "Dans une conversation où vous souhaitez expliquer votre version, vérifiez d’abord en une phrase ce que vous avez compris de l’autre personne.",
+      "prompts": [
+        "Que vouliez-vous répondre ou expliquer ?",
+        "Qu’avez-vous vérifié d’abord ?",
+        "Qu’est-ce que l’autre personne a confirmé ou corrigé ?",
+        "Comment votre propre réponse a-t-elle changé ensuite ?"
+      ]
+    }
+  },
+  {
+    "d": 28,
+    "es": {
+      "title": "Aclara antes de responder por escrito",
+      "hook": "Los mensajes escritos eliminan tono, contexto y retroalimentación inmediata; una frase breve puede cargar más ambigüedad de la que parece.",
+      "lesson": "Responder a un mensaje ambiguo como si fuera claro puede crear una conversación completa alrededor de una interpretación equivocada.",
+      "mission": "Si recibes hoy un mensaje, email o texto ambiguo, formula una pregunta precisa antes de responder al supuesto significado.",
+      "prompts": [
+        "¿Qué mensaje era ambiguo?",
+        "¿Qué ibas a asumir?",
+        "¿Qué pregunta enviaste?",
+        "¿Qué se aclaró antes de continuar?"
+      ]
+    },
+    "en": {
+      "title": "Clarify Before Replying in Writing",
+      "hook": "Written messages remove tone, context, and immediate feedback; one short sentence can carry more ambiguity than it seems.",
+      "lesson": "Replying to an ambiguous message as though it were clear can create an entire conversation around the wrong interpretation.",
+      "mission": "If you receive an ambiguous message, email, or text today, ask one precise question before replying to the meaning you assumed.",
+      "prompts": [
+        "Which message was ambiguous?",
+        "What were you about to assume?",
+        "What question did you send?",
+        "What became clear before you continued?"
+      ]
+    },
+    "fr": {
+      "title": "Clarifiez avant de répondre par écrit",
+      "hook": "Les messages écrits suppriment le ton, le contexte et le retour immédiat ; une phrase courte peut contenir plus d’ambiguïté qu’il n’y paraît.",
+      "lesson": "Répondre à un message ambigu comme s’il était clair peut créer toute une conversation autour d’une mauvaise interprétation.",
+      "mission": "Si vous recevez aujourd’hui un message, un e-mail ou un texte ambigu, posez une question précise avant de répondre au sens que vous avez supposé.",
+      "prompts": [
+        "Quel message était ambigu ?",
+        "Qu’alliez-vous supposer ?",
+        "Quelle question avez-vous envoyée ?",
+        "Qu’est-ce qui a été clarifié avant de continuer ?"
+      ]
+    }
+  },
+  {
+    "d": 29,
+    "es": {
+      "title": "Tu patrón de malentendido",
+      "hook": "Dos semanas de clarificación empiezan a mostrar dónde suelen aparecer tus errores: palabras vagas, intención asumida, detalles operativos o tensión.",
+      "lesson": "Conocer tu tipo de malentendido más frecuente te permite elegir la herramienta adecuada antes de que el problema crezca.",
+      "mission": "Revisa tus prácticas de esta etapa y clasifica los tres tipos de ambigüedad que más se repitieron.",
+      "prompts": [
+        "Tipo de ambigüedad #1",
+        "Tipo de ambigüedad #2",
+        "Tipo de ambigüedad #3",
+        "¿Qué pregunta o técnica funcionó mejor para ti?",
+        "¿Dónde sigues asumiendo demasiado rápido?"
+      ]
+    },
+    "en": {
+      "title": "Your Misunderstanding Pattern",
+      "hook": "Two weeks of clarification begin to reveal where your errors tend to appear: vague words, assumed intent, operational details, or tension.",
+      "lesson": "Knowing your most common misunderstanding pattern helps you choose the right tool before the problem grows.",
+      "mission": "Review your practices from this stage and classify the three types of ambiguity that appeared most often.",
+      "prompts": [
+        "Ambiguity type #1",
+        "Ambiguity type #2",
+        "Ambiguity type #3",
+        "Which question or technique worked best for you?",
+        "Where do you still assume too quickly?"
+      ]
+    },
+    "fr": {
+      "title": "Votre schéma de malentendu",
+      "hook": "Deux semaines de clarification commencent à montrer où apparaissent le plus souvent vos erreurs : mots vagues, intention supposée, détails opérationnels ou tension.",
+      "lesson": "Connaître votre type de malentendu le plus fréquent vous aide à choisir le bon outil avant que le problème ne s’amplifie.",
+      "mission": "Relisez vos pratiques de cette étape et classez les trois types d’ambiguïté qui se sont le plus répétés.",
+      "prompts": [
+        "Type d’ambiguïté n° 1",
+        "Type d’ambiguïté n° 2",
+        "Type d’ambiguïté n° 3",
+        "Quelle question ou technique a le mieux fonctionné pour vous ?",
+        "Dans quelles situations supposez-vous encore trop vite ?"
+      ]
+    }
+  },
+  {
+    "d": 30,
+    "es": {
+      "title": "Segunda revisión: menos suposiciones",
+      "hook": "La meta de esta etapa no es preguntar por todo. Es reconocer cuándo una suposición tiene suficiente importancia como para verificarla.",
+      "lesson": "Clarificar bien combina escucha, criterio y economía: preguntar lo necesario, en el momento adecuado y de la forma más precisa posible.",
+      "mission": "Cierra esta etapa eligiendo dos herramientas de clarificación que quieras conservar antes de pasar a entrenar cómo expresas tus propias ideas.",
+      "prompts": [
+        "¿Qué suposición corriges hoy más rápido que al inicio?",
+        "¿Qué herramienta de clarificación #1 conservarás?",
+        "¿Qué herramienta #2 conservarás?",
+        "¿Qué conversación reciente habría salido peor sin verificar significado?",
+        "¿Qué necesitas entrenar ahora al expresar tus ideas?"
+      ]
+    },
+    "en": {
+      "title": "Second Review: Fewer Assumptions",
+      "hook": "The goal of this stage is not to question everything. It is to recognize when an assumption matters enough to verify.",
+      "lesson": "Good clarification combines listening, judgment, and economy: ask what is necessary, at the right moment, as precisely as possible.",
+      "mission": "Close this stage by choosing two clarification tools you want to keep before moving on to training how you express your own ideas.",
+      "prompts": [
+        "Which assumption do you correct faster now than at the beginning?",
+        "Which clarification tool #1 will you keep?",
+        "Which tool #2 will you keep?",
+        "Which recent conversation would have gone worse without verifying meaning?",
+        "What do you now need to train in expressing your ideas?"
+      ]
+    },
+    "fr": {
+      "title": "Deuxième révision : moins de suppositions",
+      "hook": "L’objectif de cette étape n’est pas de tout remettre en question. Il s’agit de reconnaître quand une supposition est suffisamment importante pour être vérifiée.",
+      "lesson": "Une bonne clarification combine écoute, jugement et économie : poser la question nécessaire, au bon moment et de la manière la plus précise possible.",
+      "mission": "Terminez cette étape en choisissant deux outils de clarification que vous souhaitez conserver avant de passer à l’entraînement de l’expression de vos propres idées.",
+      "prompts": [
+        "Quelle supposition corrigez-vous aujourd’hui plus rapidement qu’au début ?",
+        "Quel outil de clarification n° 1 allez-vous conserver ?",
+        "Quel outil n° 2 allez-vous conserver ?",
+        "Quelle conversation récente aurait moins bien tourné sans vérification du sens ?",
+        "Que devez-vous maintenant entraîner dans la manière d’exprimer vos idées ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE2=COMMUNICATION_DEEP_STAGE2_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
 const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
-const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_BASE_DAYS.slice(15)];
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_BASE_DAYS.slice(30)];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -4259,6 +4854,7 @@ installDeepProgramI18n(CONFIDENCE_DEEP_STAGE4_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE5_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE6_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE1_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE2_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
