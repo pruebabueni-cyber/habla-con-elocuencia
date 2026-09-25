@@ -8483,25 +8483,17 @@ submitFeedback=async function(){
   document.getElementById('feedbackMessage').value='';
   nexoraTrack('feedback_submitted',{feedback_type:type}).catch(()=>{});
 
-  let ackStatus='pending';
-  try{
-    const {data:ack,error:ackError}=await nexoraDb.functions.invoke('feedback-acknowledgement',{body:{feedback_id:created.id}});
-    if(!ackError&&ack?.email_status)ackStatus=ack.email_status;
-  }catch(error){console.warn('NEXORA feedback acknowledgement',error)}
-
+  // Email acknowledgement is queued server-side by the feedback INSERT trigger.
+  // Do not invoke the webhook function directly from the browser: it requires
+  // an internal secret and is intentionally not a public client endpoint.
   await renderFeedback();
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
-  const sent={
-    es:'Mensaje recibido. También te enviamos una confirmación por correo.',
-    en:'Message received. We also sent you an email confirmation.',
-    fr:'Message reçu. Nous vous avons également envoyé une confirmation par e-mail.'
-  };
   const received={
     es:'Mensaje recibido. Gracias por ayudarnos a mejorar NEXORA.',
     en:'Message received. Thank you for helping us improve NEXORA.',
     fr:'Message reçu. Merci de nous aider à améliorer NEXORA.'
   };
-  toast((ackStatus==='sent'?sent:received)[lang]||(ackStatus==='sent'?sent.es:received.es));
+  toast(received[lang]||received.es);
 };
 
 function nexoraFeedbackStatus(status){
