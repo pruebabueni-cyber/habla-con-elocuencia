@@ -2551,7 +2551,573 @@ const CONFIDENCE_DAYS=[...CONFIDENCE_DEEP_STAGE1,...CONFIDENCE_DEEP_STAGE2,...CO
 
 
 
-const COMMUNICATION_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
+const COMMUNICATION_DEEP_STAGE1_CONTENT=[
+  {
+    "d": 1,
+    "es": {
+      "title": "Cómo escuchas hoy",
+      "hook": "Antes de entrenar la escucha, conviene observar qué haces realmente cuando otra persona habla.",
+      "lesson": "Escuchar no es solo permanecer en silencio. La atención puede irse, adelantarse o empezar a preparar una respuesta mucho antes de que la otra persona termine.",
+      "mission": "Elige una conversación real de hoy y observa tu forma de escuchar sin intentar corregirla todavía.",
+      "prompts": [
+        "¿En qué momento dejaste de recibir información?",
+        "¿Qué empezó a ocupar tu atención?",
+        "¿Qué parte de lo que dijo la otra persona recuerdas con precisión?"
+      ]
+    },
+    "en": {
+      "title": "How You Listen Today",
+      "hook": "Before training listening, it helps to observe what you actually do while another person is speaking.",
+      "lesson": "Listening is more than staying quiet. Attention can drift, jump ahead, or begin preparing a reply long before the other person finishes.",
+      "mission": "Choose one real conversation today and observe how you listen without trying to fix it yet.",
+      "prompts": [
+        "When did you stop taking in information?",
+        "What began occupying your attention?",
+        "What part of what the other person said do you remember accurately?"
+      ]
+    },
+    "fr": {
+      "title": "Votre façon d’écouter aujourd’hui",
+      "hook": "Avant d’entraîner votre écoute, il est utile d’observer ce que vous faites réellement pendant que l’autre personne parle.",
+      "lesson": "Écouter ne consiste pas seulement à rester silencieux. L’attention peut se disperser, anticiper ou commencer à préparer une réponse bien avant que l’autre personne ait terminé.",
+      "mission": "Choisissez aujourd’hui une conversation réelle et observez votre manière d’écouter sans chercher encore à la corriger.",
+      "prompts": [
+        "À quel moment avez-vous cessé de recevoir l’information ?",
+        "Qu’est-ce qui a commencé à occuper votre attention ?",
+        "Quelle partie de ce que l’autre personne a dit vous souvenez-vous avec précision ?"
+      ]
+    }
+  },
+  {
+    "d": 2,
+    "es": {
+      "title": "La respuesta que preparas",
+      "hook": "Puedes parecer atento y, al mismo tiempo, estar ensayando lo que vas a decir.",
+      "lesson": "Preparar la respuesta demasiado pronto reduce la información que realmente recibes y aumenta la probabilidad de responder a una versión incompleta del mensaje.",
+      "mission": "En una conversación, detecta el instante exacto en que empieces a construir tu respuesta mientras la otra persona todavía habla.",
+      "prompts": [
+        "¿Qué estabas preparando para decir?",
+        "¿Qué dejaste de escuchar en ese momento?",
+        "¿Qué ocurrió cuando volviste a escuchar?"
+      ]
+    },
+    "en": {
+      "title": "The Reply You Start Rehearsing",
+      "hook": "You can look attentive while already rehearsing what you are going to say.",
+      "lesson": "Preparing a reply too early reduces the information you actually receive and increases the chance of responding to an incomplete version of the message.",
+      "mission": "In one conversation, catch the exact moment you begin building your reply while the other person is still speaking.",
+      "prompts": [
+        "What were you preparing to say?",
+        "What did you stop hearing at that moment?",
+        "What happened when you returned your attention to listening?"
+      ]
+    },
+    "fr": {
+      "title": "La réponse que vous préparez déjà",
+      "hook": "Vous pouvez sembler attentif tout en répétant intérieurement ce que vous allez dire.",
+      "lesson": "Préparer sa réponse trop tôt réduit l’information réellement reçue et augmente le risque de répondre à une version incomplète du message.",
+      "mission": "Dans une conversation, repérez le moment précis où vous commencez à construire votre réponse alors que l’autre personne parle encore.",
+      "prompts": [
+        "Que prépariez-vous à dire ?",
+        "Qu’avez-vous cessé d’entendre à ce moment-là ?",
+        "Que s’est-il passé lorsque vous avez ramené votre attention vers l’écoute ?"
+      ]
+    }
+  },
+  {
+    "d": 3,
+    "es": {
+      "title": "No completes la frase",
+      "hook": "Interrumpir no siempre significa hablar encima del otro. A veces ocurre cuando terminas mentalmente su frase antes de tiempo.",
+      "lesson": "Anticipar el final de una idea puede hacerte responder a lo que esperabas escuchar en lugar de a lo que realmente se dijo.",
+      "mission": "Hoy, cuando sientas que ya sabes cómo terminará una frase, espera y deja que la persona la complete por sí misma.",
+      "prompts": [
+        "¿Qué creías que iba a decir?",
+        "¿Qué terminó diciendo realmente?",
+        "¿Hubo alguna diferencia importante?"
+      ]
+    },
+    "en": {
+      "title": "Do Not Finish the Sentence",
+      "hook": "Interrupting does not always mean speaking over someone. Sometimes it happens when you finish their sentence in your head too soon.",
+      "lesson": "Predicting the end of an idea can make you respond to what you expected to hear rather than what was actually said.",
+      "mission": "Today, when you feel sure you know how a sentence will end, wait and let the person complete it on their own.",
+      "prompts": [
+        "What did you think they were going to say?",
+        "What did they actually say?",
+        "Was there any important difference?"
+      ]
+    },
+    "fr": {
+      "title": "Ne terminez pas la phrase",
+      "hook": "Interrompre ne signifie pas toujours parler par-dessus l’autre. Cela peut aussi arriver lorsque vous terminez mentalement sa phrase trop tôt.",
+      "lesson": "Anticiper la fin d’une idée peut vous amener à répondre à ce que vous vous attendiez à entendre plutôt qu’à ce qui a réellement été dit.",
+      "mission": "Aujourd’hui, lorsque vous pensez savoir comment une phrase va se terminer, attendez et laissez la personne la compléter elle-même.",
+      "prompts": [
+        "Que pensiez-vous qu’elle allait dire ?",
+        "Qu’a-t-elle réellement dit ?",
+        "Y avait-il une différence importante ?"
+      ]
+    }
+  },
+  {
+    "d": 4,
+    "es": {
+      "title": "Una conversación sin pantalla",
+      "hook": "La escucha compite con todo lo que también reclama tus ojos y tu atención.",
+      "lesson": "Cambiar entre una conversación y una pantalla fragmenta la atención, incluso cuando sientes que puedes seguir ambas cosas.",
+      "mission": "Elige una conversación de al menos cinco minutos y mantenla sin mirar teléfono, reloj inteligente, pestañas o notificaciones.",
+      "prompts": [
+        "¿Qué quitaste de tu alcance o vista?",
+        "¿Cuántas veces sentiste el impulso de mirar otra cosa?",
+        "¿Qué notaste de la conversación al eliminar esa competencia?"
+      ]
+    },
+    "en": {
+      "title": "One Conversation Without a Screen",
+      "hook": "Listening competes with everything else asking for your eyes and attention.",
+      "lesson": "Switching between a conversation and a screen fragments attention even when you feel capable of following both.",
+      "mission": "Choose one conversation lasting at least five minutes and keep it free from checking your phone, smartwatch, tabs, or notifications.",
+      "prompts": [
+        "What did you remove from reach or view?",
+        "How many times did you feel the urge to check something else?",
+        "What did you notice about the conversation once that competition was removed?"
+      ]
+    },
+    "fr": {
+      "title": "Une conversation sans écran",
+      "hook": "L’écoute est en concurrence avec tout ce qui sollicite aussi vos yeux et votre attention.",
+      "lesson": "Passer d’une conversation à un écran fragmente l’attention, même lorsque vous avez l’impression de pouvoir suivre les deux.",
+      "mission": "Choisissez une conversation d’au moins cinq minutes et restez-y sans regarder votre téléphone, votre montre connectée, vos onglets ou vos notifications.",
+      "prompts": [
+        "Qu’avez-vous retiré de votre portée ou de votre champ de vision ?",
+        "Combien de fois avez-vous eu envie de regarder autre chose ?",
+        "Qu’avez-vous remarqué dans la conversation une fois cette concurrence supprimée ?"
+      ]
+    }
+  },
+  {
+    "d": 5,
+    "es": {
+      "title": "Lo que dijo, no lo que asumiste",
+      "hook": "Una conversación puede cambiar mucho entre las palabras que recibes y la interpretación que les añades.",
+      "lesson": "Separar observación de interpretación ayuda a escuchar con mayor precisión antes de decidir qué significa algo.",
+      "mission": "Después de una conversación, escribe una frase que la persona dijo casi literalmente y, por separado, la interpretación que tú hiciste.",
+      "prompts": [
+        "¿Qué dijo exactamente o casi exactamente?",
+        "¿Qué significado le añadiste tú?",
+        "¿Qué parte era dato y qué parte era interpretación?"
+      ]
+    },
+    "en": {
+      "title": "What They Said, Not What You Assumed",
+      "hook": "A conversation can change a great deal between the words you receive and the meaning you add to them.",
+      "lesson": "Separating observation from interpretation helps you listen more accurately before deciding what something means.",
+      "mission": "After one conversation, write one sentence the person said as close to verbatim as you can, then separately write your interpretation.",
+      "prompts": [
+        "What did they say exactly or nearly exactly?",
+        "What meaning did you add?",
+        "Which part was data and which part was interpretation?"
+      ]
+    },
+    "fr": {
+      "title": "Ce qui a été dit, pas ce que vous avez supposé",
+      "hook": "Une conversation peut beaucoup changer entre les mots que vous recevez et le sens que vous leur ajoutez.",
+      "lesson": "Séparer l’observation de l’interprétation aide à écouter avec davantage de précision avant de décider ce que quelque chose signifie.",
+      "mission": "Après une conversation, écrivez une phrase prononcée par l’autre personne aussi fidèlement que possible, puis notez séparément votre interprétation.",
+      "prompts": [
+        "Qu’a-t-elle dit exactement ou presque exactement ?",
+        "Quel sens avez-vous ajouté ?",
+        "Quelle partie relevait des faits et quelle partie de l’interprétation ?"
+      ]
+    }
+  },
+  {
+    "d": 6,
+    "es": {
+      "title": "Escucha también el cambio",
+      "hook": "Las palabras importan, pero una conversación también contiene cambios observables en ritmo, volumen, pausas y energía.",
+      "lesson": "Notar señales no verbales puede ampliar la información disponible, siempre que no las conviertas automáticamente en certezas sobre lo que la otra persona siente.",
+      "mission": "En una conversación, observa un cambio de ritmo, tono, volumen o pausa sin interpretar todavía su causa.",
+      "prompts": [
+        "¿Qué cambio observaste?",
+        "¿En qué momento apareció?",
+        "¿Qué sabes con certeza y qué estarías adivinando?"
+      ]
+    },
+    "en": {
+      "title": "Listen for the Change Too",
+      "hook": "Words matter, but conversations also contain observable changes in pace, volume, pauses, and energy.",
+      "lesson": "Noticing nonverbal signals can expand the information available as long as you do not automatically turn them into certainty about what the other person feels.",
+      "mission": "In one conversation, notice a change in pace, tone, volume, or pause without deciding yet what caused it.",
+      "prompts": [
+        "What change did you observe?",
+        "When did it appear?",
+        "What do you know for sure, and what would you be guessing?"
+      ]
+    },
+    "fr": {
+      "title": "Écoutez aussi les changements",
+      "hook": "Les mots comptent, mais une conversation contient aussi des changements observables de rythme, de volume, de pauses et d’énergie.",
+      "lesson": "Repérer les signaux non verbaux peut enrichir l’information disponible, à condition de ne pas les transformer automatiquement en certitudes sur ce que ressent l’autre personne.",
+      "mission": "Dans une conversation, observez un changement de rythme, de ton, de volume ou de pause sans encore décider de sa cause.",
+      "prompts": [
+        "Quel changement avez-vous observé ?",
+        "À quel moment est-il apparu ?",
+        "Que savez-vous avec certitude et qu’est-ce qui relèverait d’une supposition ?"
+      ]
+    }
+  },
+  {
+    "d": 7,
+    "es": {
+      "title": "Sigue el hilo",
+      "hook": "Escuchar bien también significa conservar la conexión entre una idea y la siguiente.",
+      "lesson": "Cuando la atención se fragmenta, puedes recordar frases aisladas pero perder la estructura de lo que la otra persona intentaba explicar.",
+      "mission": "Durante una conversación, identifica mentalmente los tres puntos principales en el orden en que aparezcan.",
+      "prompts": [
+        "Punto principal #1",
+        "Punto principal #2",
+        "Punto principal #3",
+        "¿Cómo se conectaban entre sí?"
+      ]
+    },
+    "en": {
+      "title": "Follow the Thread",
+      "hook": "Good listening also means keeping the connection between one idea and the next.",
+      "lesson": "When attention fragments, you may remember isolated sentences while losing the structure of what the other person was trying to explain.",
+      "mission": "During one conversation, mentally identify the three main points in the order they appear.",
+      "prompts": [
+        "Main point #1",
+        "Main point #2",
+        "Main point #3",
+        "How were they connected?"
+      ]
+    },
+    "fr": {
+      "title": "Suivez le fil",
+      "hook": "Bien écouter signifie aussi conserver le lien entre une idée et la suivante.",
+      "lesson": "Lorsque l’attention se fragmente, vous pouvez vous souvenir de phrases isolées tout en perdant la structure de ce que l’autre personne cherchait à expliquer.",
+      "mission": "Pendant une conversation, identifiez mentalement les trois points principaux dans l’ordre où ils apparaissent.",
+      "prompts": [
+        "Point principal n° 1",
+        "Point principal n° 2",
+        "Point principal n° 3",
+        "Comment étaient-ils reliés ?"
+      ]
+    }
+  },
+  {
+    "d": 8,
+    "es": {
+      "title": "Dos segundos antes de responder",
+      "hook": "Responder de inmediato puede convertir una conversación en una carrera por ocupar el siguiente turno.",
+      "lesson": "Una pausa breve después de que alguien termina ayuda a confirmar que realmente terminó y te da espacio para responder a la idea completa.",
+      "mission": "En tres intercambios de hoy, espera aproximadamente dos segundos después de que la otra persona termine antes de responder.",
+      "prompts": [
+        "¿En qué conversación lo probaste?",
+        "¿Qué ocurrió durante la pausa?",
+        "¿Cambió algo en tu respuesta?"
+      ]
+    },
+    "en": {
+      "title": "Two Seconds Before You Reply",
+      "hook": "Answering immediately can turn a conversation into a race to claim the next turn.",
+      "lesson": "A brief pause after someone finishes helps confirm that they are actually done and gives you space to respond to the complete idea.",
+      "mission": "In three exchanges today, wait about two seconds after the other person finishes before replying.",
+      "prompts": [
+        "In which conversation did you try it?",
+        "What happened during the pause?",
+        "Did anything change in your response?"
+      ]
+    },
+    "fr": {
+      "title": "Deux secondes avant de répondre",
+      "hook": "Répondre immédiatement peut transformer une conversation en course pour prendre le prochain tour de parole.",
+      "lesson": "Une brève pause après que l’autre personne a terminé aide à vérifier qu’elle a vraiment fini et vous donne l’espace nécessaire pour répondre à l’idée complète.",
+      "mission": "Dans trois échanges aujourd’hui, attendez environ deux secondes après que l’autre personne a terminé avant de répondre.",
+      "prompts": [
+        "Dans quelle conversation avez-vous essayé ?",
+        "Que s’est-il passé pendant la pause ?",
+        "Votre réponse a-t-elle changé ?"
+      ]
+    }
+  },
+  {
+    "d": 9,
+    "es": {
+      "title": "Escucha cuando no estás de acuerdo",
+      "hook": "Es fácil escuchar mientras todo encaja contigo. La calidad de la escucha se pone a prueba cuando aparece desacuerdo.",
+      "lesson": "El desacuerdo puede activar defensa, contraargumentos y búsqueda selectiva de errores antes de haber comprendido la posición completa.",
+      "mission": "En una conversación donde discrepes, retrasa tu contraargumento hasta poder identificar con precisión la idea central de la otra persona.",
+      "prompts": [
+        "¿Con qué no estabas de acuerdo?",
+        "¿Cuál era realmente su punto principal?",
+        "¿Qué parte habrías pasado por alto si hubieras respondido de inmediato?"
+      ]
+    },
+    "en": {
+      "title": "Listen When You Disagree",
+      "hook": "Listening is easy when everything fits your view. Its quality is tested when disagreement appears.",
+      "lesson": "Disagreement can trigger defensiveness, counterarguments, and selective error-finding before you have understood the full position.",
+      "mission": "In one conversation where you disagree, delay your counterargument until you can accurately identify the other person’s central point.",
+      "prompts": [
+        "What did you disagree with?",
+        "What was their actual main point?",
+        "What would you have missed if you had replied immediately?"
+      ]
+    },
+    "fr": {
+      "title": "Écoutez même en désaccord",
+      "hook": "Il est facile d’écouter lorsque tout correspond à votre point de vue. La qualité de l’écoute se révèle lorsque le désaccord apparaît.",
+      "lesson": "Le désaccord peut déclencher défense, contre-arguments et recherche sélective d’erreurs avant même d’avoir compris la position complète.",
+      "mission": "Dans une conversation où vous n’êtes pas d’accord, retardez votre contre-argument jusqu’à pouvoir identifier précisément l’idée centrale de l’autre personne.",
+      "prompts": [
+        "Sur quoi étiez-vous en désaccord ?",
+        "Quel était réellement son point principal ?",
+        "Qu’auriez-vous manqué si vous aviez répondu immédiatement ?"
+      ]
+    }
+  },
+  {
+    "d": 10,
+    "es": {
+      "title": "Tu disparador de mala escucha",
+      "hook": "No todas las conversaciones te sacan de la escucha por la misma razón.",
+      "lesson": "Crítica, repetición, tono, prisa, autoridad o un tema sensible pueden cambiar tu atención antes de que lo notes.",
+      "mission": "Identifica hoy una condición que haga que dejes de escuchar bien y observa tu primera reacción automática.",
+      "prompts": [
+        "¿Cuál fue el disparador?",
+        "¿Qué reacción apareció primero?",
+        "¿Qué información empezaste a perder?",
+        "¿Cómo podrías reconocer antes ese patrón?"
+      ]
+    },
+    "en": {
+      "title": "Your Poor-Listening Trigger",
+      "hook": "Not every conversation pulls you out of listening for the same reason.",
+      "lesson": "Criticism, repetition, tone, hurry, authority, or a sensitive topic can shift your attention before you notice it.",
+      "mission": "Identify one condition today that makes you stop listening well and observe your first automatic reaction.",
+      "prompts": [
+        "What was the trigger?",
+        "What reaction appeared first?",
+        "What information did you start missing?",
+        "How could you recognize that pattern earlier?"
+      ]
+    },
+    "fr": {
+      "title": "Votre déclencheur de mauvaise écoute",
+      "hook": "Toutes les conversations ne vous font pas décrocher pour la même raison.",
+      "lesson": "La critique, la répétition, le ton, la précipitation, l’autorité ou un sujet sensible peuvent détourner votre attention avant même que vous le remarquiez.",
+      "mission": "Identifiez aujourd’hui une condition qui dégrade votre écoute et observez votre première réaction automatique.",
+      "prompts": [
+        "Quel était le déclencheur ?",
+        "Quelle réaction est apparue en premier ?",
+        "Quelle information avez-vous commencé à perdre ?",
+        "Comment pourriez-vous reconnaître ce schéma plus tôt ?"
+      ]
+    }
+  },
+  {
+    "d": 11,
+    "es": {
+      "title": "La parte que casi pierdes",
+      "hook": "La atención suele caer al final de una explicación, justo cuando puede aparecer una condición, excepción o petición importante.",
+      "lesson": "Escuchar hasta el final reduce la tendencia a responder basándote solo en la primera parte del mensaje.",
+      "mission": "En una conversación de hoy, presta especial atención a los últimos treinta segundos antes de responder.",
+      "prompts": [
+        "¿Qué apareció al final que no estaba al principio?",
+        "¿Era un detalle, una condición, una emoción o una petición?",
+        "¿Cómo habría cambiado tu respuesta si no lo hubieras escuchado?"
+      ]
+    },
+    "en": {
+      "title": "The Part You Almost Missed",
+      "hook": "Attention often drops near the end of an explanation, exactly when an important condition, exception, or request may appear.",
+      "lesson": "Listening through the end reduces the tendency to respond based only on the first part of a message.",
+      "mission": "In one conversation today, give special attention to the final thirty seconds before you reply.",
+      "prompts": [
+        "What appeared at the end that was not present at the beginning?",
+        "Was it a detail, condition, emotion, or request?",
+        "How would your reply have changed if you had missed it?"
+      ]
+    },
+    "fr": {
+      "title": "La partie que vous avez failli manquer",
+      "hook": "L’attention baisse souvent vers la fin d’une explication, précisément au moment où peut apparaître une condition, une exception ou une demande importante.",
+      "lesson": "Écouter jusqu’au bout réduit la tendance à répondre uniquement à partir de la première partie du message.",
+      "mission": "Dans une conversation aujourd’hui, accordez une attention particulière aux trente dernières secondes avant de répondre.",
+      "prompts": [
+        "Qu’est-ce qui est apparu à la fin et qui n’était pas présent au début ?",
+        "Était-ce un détail, une condition, une émotion ou une demande ?",
+        "Comment votre réponse aurait-elle changé si vous ne l’aviez pas entendu ?"
+      ]
+    }
+  },
+  {
+    "d": 12,
+    "es": {
+      "title": "No arregles todavía",
+      "hook": "A veces dejas de escuchar porque ya estás buscando la solución.",
+      "lesson": "Saltar demasiado pronto a consejos o soluciones puede hacer que respondas a un problema distinto del que la otra persona está intentando expresar.",
+      "mission": "En una conversación donde alguien comparta una dificultad, escucha hasta el final sin ofrecer una solución durante la primera parte del intercambio.",
+      "prompts": [
+        "¿Cuándo apareció tu impulso de resolver?",
+        "¿Qué habrías aconsejado demasiado pronto?",
+        "¿Qué entendiste mejor al seguir escuchando?"
+      ]
+    },
+    "en": {
+      "title": "Do Not Fix It Yet",
+      "hook": "Sometimes you stop listening because you have already started solving.",
+      "lesson": "Jumping too quickly to advice or solutions can make you respond to a different problem from the one the other person is trying to express.",
+      "mission": "In one conversation where someone shares a difficulty, listen through the end without offering a solution during the first part of the exchange.",
+      "prompts": [
+        "When did the urge to solve appear?",
+        "What would you have advised too early?",
+        "What did you understand better by continuing to listen?"
+      ]
+    },
+    "fr": {
+      "title": "Ne cherchez pas encore à résoudre",
+      "hook": "Parfois, vous cessez d’écouter parce que vous avez déjà commencé à chercher une solution.",
+      "lesson": "Passer trop vite aux conseils ou aux solutions peut vous faire répondre à un problème différent de celui que l’autre personne essaie d’exprimer.",
+      "mission": "Dans une conversation où quelqu’un partage une difficulté, écoutez jusqu’au bout sans proposer de solution pendant la première partie de l’échange.",
+      "prompts": [
+        "À quel moment l’envie de résoudre est-elle apparue ?",
+        "Quel conseil auriez-vous donné trop tôt ?",
+        "Qu’avez-vous mieux compris en continuant d’écouter ?"
+      ]
+    }
+  },
+  {
+    "d": 13,
+    "es": {
+      "title": "Sostén una conversación más larga",
+      "hook": "Escuchar cinco segundos es fácil. Mantener atención útil durante una explicación larga requiere otra capacidad.",
+      "lesson": "La atención sostenida puede recuperarse cuando se desvía si detectas el desvío y vuelves deliberadamente al hilo de la conversación.",
+      "mission": "Elige una conversación o explicación de al menos diez minutos. Cada vez que notes que tu atención se fue, vuelve al último punto que recuerdes sin fingir que seguiste todo.",
+      "prompts": [
+        "¿Cuántas veces notaste que tu atención se desvió?",
+        "¿Qué la sacó de la conversación?",
+        "¿Cómo regresaste?",
+        "¿Qué tan completo quedó tu recuerdo del mensaje?"
+      ]
+    },
+    "en": {
+      "title": "Stay with a Longer Conversation",
+      "hook": "Listening for five seconds is easy. Maintaining useful attention through a longer explanation requires a different capacity.",
+      "lesson": "Sustained attention can be recovered after it drifts if you notice the drift and deliberately return to the conversation’s thread.",
+      "mission": "Choose a conversation or explanation lasting at least ten minutes. Each time you notice your attention has wandered, return to the last point you remember instead of pretending you followed everything.",
+      "prompts": [
+        "How many times did you notice your attention drift?",
+        "What pulled it away?",
+        "How did you return?",
+        "How complete was your memory of the message?"
+      ]
+    },
+    "fr": {
+      "title": "Restez présent dans une conversation plus longue",
+      "hook": "Écouter pendant cinq secondes est facile. Maintenir une attention utile pendant une explication plus longue demande une autre capacité.",
+      "lesson": "Une attention soutenue peut être récupérée après une distraction si vous remarquez le décrochage et revenez délibérément au fil de la conversation.",
+      "mission": "Choisissez une conversation ou une explication d’au moins dix minutes. Chaque fois que vous remarquez que votre attention s’est éloignée, revenez au dernier point dont vous vous souvenez au lieu de faire semblant d’avoir tout suivi.",
+      "prompts": [
+        "Combien de fois avez-vous remarqué que votre attention s’éloignait ?",
+        "Qu’est-ce qui l’a détournée ?",
+        "Comment êtes-vous revenu ?",
+        "Dans quelle mesure vous souvenez-vous du message dans son ensemble ?"
+      ]
+    }
+  },
+  {
+    "d": 14,
+    "es": {
+      "title": "Tu patrón de escucha",
+      "hook": "Catorce días empiezan a mostrar algo más útil que una impresión: tus condiciones reales de buena y mala escucha.",
+      "lesson": "Reconocer patrones propios permite diseñar respuestas más específicas que simplemente decirte “presta más atención”.",
+      "mission": "Revisa tus registros y detecta dos condiciones que mejoran tu escucha y dos que la deterioran.",
+      "prompts": [
+        "Condición que ayuda #1",
+        "Condición que ayuda #2",
+        "Condición que dificulta #1",
+        "Condición que dificulta #2",
+        "¿Qué patrón se repite con mayor claridad?"
+      ]
+    },
+    "en": {
+      "title": "Your Listening Pattern",
+      "hook": "Fourteen days begin to reveal something more useful than an impression: the real conditions behind your good and poor listening.",
+      "lesson": "Recognizing your own patterns allows for more specific adjustments than simply telling yourself to “pay more attention.”",
+      "mission": "Review your records and identify two conditions that improve your listening and two that make it worse.",
+      "prompts": [
+        "Helpful condition #1",
+        "Helpful condition #2",
+        "Difficult condition #1",
+        "Difficult condition #2",
+        "What pattern repeats most clearly?"
+      ]
+    },
+    "fr": {
+      "title": "Votre schéma d’écoute",
+      "hook": "Quatorze jours commencent à révéler quelque chose de plus utile qu’une impression : les conditions réelles de votre bonne et de votre mauvaise écoute.",
+      "lesson": "Reconnaître vos propres schémas permet des ajustements plus précis que de simplement vous dire « soyez plus attentif ».",
+      "mission": "Relisez vos entrées et identifiez deux conditions qui améliorent votre écoute et deux qui la détériorent.",
+      "prompts": [
+        "Condition favorable n° 1",
+        "Condition favorable n° 2",
+        "Condition difficile n° 1",
+        "Condition difficile n° 2",
+        "Quel schéma se répète le plus clairement ?"
+      ]
+    }
+  },
+  {
+    "d": 15,
+    "es": {
+      "title": "Primera revisión: recibir antes de responder",
+      "hook": "Quince días de práctica deberían mostrarte dónde se rompe tu escucha y qué conductas ya puedes cambiar de forma deliberada.",
+      "lesson": "La siguiente etapa no consiste en escuchar más fuerte, sino en usar lo que recibes para aclarar significado sin asumir.",
+      "mission": "Revisa la etapa y elige dos conductas de escucha que quieres conservar como base antes de comenzar a entrenar clarificación.",
+      "prompts": [
+        "¿Qué error de escucha aparecía más al principio?",
+        "¿Qué conducta mejoró de forma observable?",
+        "¿Qué hábito quieres conservar #1?",
+        "¿Qué hábito quieres conservar #2?",
+        "¿Qué situación todavía pone a prueba tu escucha?"
+      ]
+    },
+    "en": {
+      "title": "First Review: Receive Before You Reply",
+      "hook": "Fifteen days of practice should show you where your listening breaks down and which behaviors you can now change deliberately.",
+      "lesson": "The next stage is not about listening harder. It is about using what you receive to clarify meaning without assuming.",
+      "mission": "Review this stage and choose two listening behaviors you want to keep as your foundation before beginning clarification training.",
+      "prompts": [
+        "Which listening error appeared most often at the beginning?",
+        "Which behavior improved in an observable way?",
+        "Which habit do you want to keep #1?",
+        "Which habit do you want to keep #2?",
+        "What situation still tests your listening?"
+      ]
+    },
+    "fr": {
+      "title": "Première révision : recevoir avant de répondre",
+      "hook": "Quinze jours de pratique devraient vous montrer où votre écoute se détériore et quels comportements vous pouvez désormais modifier délibérément.",
+      "lesson": "L’étape suivante ne consiste pas à écouter plus fort. Il s’agit d’utiliser ce que vous recevez pour clarifier le sens sans supposer.",
+      "mission": "Relisez cette étape et choisissez deux comportements d’écoute que vous souhaitez conserver comme base avant de commencer l’entraînement à la clarification.",
+      "prompts": [
+        "Quelle erreur d’écoute apparaissait le plus souvent au début ?",
+        "Quel comportement s’est amélioré de manière observable ?",
+        "Quelle habitude voulez-vous conserver n° 1 ?",
+        "Quelle habitude voulez-vous conserver n° 2 ?",
+        "Quelle situation met encore votre écoute à l’épreuve ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE1=COMMUNICATION_DEEP_STAGE1_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
+const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_BASE_DAYS.slice(15)];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -3692,6 +4258,7 @@ installDeepProgramI18n(CONFIDENCE_DEEP_STAGE3_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE4_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE5_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE6_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE1_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
