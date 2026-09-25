@@ -6131,7 +6131,602 @@ const COMMUNICATION_DEEP_STAGE6_CONTENT=[
 const COMMUNICATION_DEEP_STAGE6=COMMUNICATION_DEEP_STAGE6_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
 const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_DEEP_STAGE5,...COMMUNICATION_DEEP_STAGE6];
-const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
+const FOCUS_DEEP_STAGE1_CONTENT=[
+  {
+    "d": 1,
+    "es": {
+      "title": "Tu atención real hoy",
+      "hook": "Antes de proteger tu enfoque necesitas ver cómo funciona tu atención en un día normal, no en un día ideal.",
+      "lesson": "La atención es limitada. Observar cuándo cambia de objetivo ofrece datos más útiles que describirte simplemente como “distraído” o “concentrado”.",
+      "mission": "Elige un bloque importante de 20–30 minutos y registra cada cambio de foco, aunque dure solo unos segundos.",
+      "prompts": [
+        "¿Qué tarea querías sostener?",
+        "¿Cuántas veces cambiaste de foco?",
+        "¿Qué provocó cada cambio?",
+        "¿Cuál de esos cambios fue decidido y cuál automático?"
+      ]
+    },
+    "en": {
+      "title": "Your Real Attention Today",
+      "hook": "Before protecting your focus, you need to see how your attention actually behaves on a normal day, not an ideal one.",
+      "lesson": "Attention is limited. Observing when it changes targets gives you better data than simply labeling yourself “distracted” or “focused.”",
+      "mission": "Choose one important 20–30 minute block and record every shift in focus, even if it lasts only a few seconds.",
+      "prompts": [
+        "What task were you trying to sustain?",
+        "How many times did your focus shift?",
+        "What triggered each shift?",
+        "Which shifts were intentional and which were automatic?"
+      ]
+    },
+    "fr": {
+      "title": "Votre attention réelle aujourd’hui",
+      "hook": "Avant de protéger votre concentration, vous devez voir comment votre attention fonctionne réellement au cours d’une journée normale, et non idéale.",
+      "lesson": "L’attention est limitée. Observer les moments où elle change de cible fournit des données plus utiles que de vous qualifier simplement de « distrait » ou de « concentré ».",
+      "mission": "Choisissez une plage importante de 20 à 30 minutes et notez chaque changement d’attention, même s’il ne dure que quelques secondes.",
+      "prompts": [
+        "Quelle tâche vouliez-vous maintenir ?",
+        "Combien de fois votre attention a-t-elle changé de cible ?",
+        "Qu’est-ce qui a déclenché chaque changement ?",
+        "Quels changements étaient intentionnels et lesquels étaient automatiques ?"
+      ]
+    }
+  },
+  {
+    "d": 2,
+    "es": {
+      "title": "El primer desvío",
+      "hook": "La distracción suele empezar antes de que abras otra aplicación o abandones la tarea.",
+      "lesson": "Detectar la primera señal —un impulso, pensamiento, sonido o incomodidad— permite distinguir el disparador de la conducta que viene después.",
+      "mission": "Durante un bloque de enfoque, identifica el primer momento en que sientas ganas de cambiar de tarea y registra qué apareció justo antes.",
+      "prompts": [
+        "¿Cuál fue la primera señal?",
+        "¿Fue externa o interna?",
+        "¿Qué hiciste inmediatamente después?",
+        "¿Cuánto tiempo pasó antes de volver?"
+      ]
+    },
+    "en": {
+      "title": "The First Drift",
+      "hook": "Distraction often begins before you open another app or leave the task.",
+      "lesson": "Catching the first cue—an urge, thought, sound, or discomfort—helps separate the trigger from the behavior that follows.",
+      "mission": "During one focus block, identify the first moment you feel like switching tasks and record what appeared immediately before it.",
+      "prompts": [
+        "What was the first cue?",
+        "Was it external or internal?",
+        "What did you do immediately afterward?",
+        "How long did it take you to return?"
+      ]
+    },
+    "fr": {
+      "title": "Le premier décrochage",
+      "hook": "La distraction commence souvent avant même que vous ouvriez une autre application ou quittiez la tâche.",
+      "lesson": "Repérer le premier signal — une impulsion, une pensée, un son ou un inconfort — aide à distinguer le déclencheur du comportement qui suit.",
+      "mission": "Pendant une plage de concentration, repérez le premier moment où vous avez envie de changer de tâche et notez ce qui est apparu juste avant.",
+      "prompts": [
+        "Quel a été le premier signal ?",
+        "Était-il externe ou interne ?",
+        "Qu’avez-vous fait immédiatement après ?",
+        "Combien de temps vous a-t-il fallu pour revenir ?"
+      ]
+    }
+  },
+  {
+    "d": 3,
+    "es": {
+      "title": "El teléfono antes de tocarlo",
+      "hook": "Muchas veces la atención ya se fue hacia el teléfono antes de que tu mano lo alcance.",
+      "lesson": "La cercanía física y visual de un estímulo puede aumentar la frecuencia con la que lo consideras, incluso cuando no hay una notificación.",
+      "mission": "Durante un bloque importante, observa cada impulso de mirar el teléfono sin cambiar todavía su ubicación. Solo cuenta los impulsos.",
+      "prompts": [
+        "¿Cuántos impulsos aparecieron?",
+        "¿Qué estabas haciendo cuando aparecieron?",
+        "¿Había una notificación real?",
+        "¿Qué porcentaje de los impulsos surgió sin señal externa?"
+      ]
+    },
+    "en": {
+      "title": "The Phone Before You Touch It",
+      "hook": "Your attention often moves toward the phone before your hand ever reaches it.",
+      "lesson": "The physical and visual proximity of a stimulus can increase how often you consider it, even when no notification appears.",
+      "mission": "During one important block, notice every urge to check your phone without changing its location yet. Just count the urges.",
+      "prompts": [
+        "How many urges appeared?",
+        "What were you doing when they appeared?",
+        "Was there an actual notification?",
+        "What percentage of the urges appeared without an external cue?"
+      ]
+    },
+    "fr": {
+      "title": "Le téléphone avant même de le toucher",
+      "hook": "Votre attention se tourne souvent vers le téléphone avant même que votre main ne l’atteigne.",
+      "lesson": "La proximité physique et visuelle d’un stimulus peut augmenter la fréquence à laquelle vous y pensez, même sans notification.",
+      "mission": "Pendant une plage importante, observez chaque envie de consulter votre téléphone sans encore changer son emplacement. Comptez simplement les impulsions.",
+      "prompts": [
+        "Combien d’impulsions sont apparues ?",
+        "Que faisiez-vous lorsqu’elles sont apparues ?",
+        "Y avait-il réellement une notification ?",
+        "Quel pourcentage des impulsions est apparu sans signal externe ?"
+      ]
+    }
+  },
+  {
+    "d": 4,
+    "es": {
+      "title": "Distracción interna",
+      "hook": "No toda interrupción viene de afuera. A veces tu propia mente abre otra tarea.",
+      "lesson": "Pensamientos sobre pendientes, ideas nuevas o preocupaciones pueden competir con la tarea actual aunque el entorno esté en silencio.",
+      "mission": "Haz un bloque de 20 minutos y anota en una hoja cualquier pensamiento que te invite a hacer otra cosa. No lo ejecutes; solo captúralo.",
+      "prompts": [
+        "¿Qué pensamiento apareció?",
+        "¿Era urgente o solo parecía urgente?",
+        "¿Pudiste volver a la tarea después de anotarlo?",
+        "¿Cuál se repitió más?"
+      ]
+    },
+    "en": {
+      "title": "Internal Distraction",
+      "hook": "Not every interruption comes from outside. Sometimes your own mind opens another task.",
+      "lesson": "Thoughts about unfinished work, new ideas, or worries can compete with the current task even in a quiet environment.",
+      "mission": "Do one 20-minute block and write down any thought that invites you to do something else. Do not act on it; just capture it.",
+      "prompts": [
+        "What thought appeared?",
+        "Was it truly urgent or did it only feel urgent?",
+        "Could you return to the task after writing it down?",
+        "Which thought repeated most?"
+      ]
+    },
+    "fr": {
+      "title": "La distraction intérieure",
+      "hook": "Toutes les interruptions ne viennent pas de l’extérieur. Parfois, votre propre esprit ouvre une autre tâche.",
+      "lesson": "Les pensées concernant des choses à faire, de nouvelles idées ou des préoccupations peuvent concurrencer la tâche en cours, même dans un environnement silencieux.",
+      "mission": "Faites une plage de 20 minutes et notez sur une feuille toute pensée qui vous invite à faire autre chose. Ne l’exécutez pas ; capturez-la simplement.",
+      "prompts": [
+        "Quelle pensée est apparue ?",
+        "Était-elle réellement urgente ou semblait-elle seulement urgente ?",
+        "Avez-vous pu revenir à la tâche après l’avoir notée ?",
+        "Quelle pensée s’est répétée le plus ?"
+      ]
+    }
+  },
+  {
+    "d": 5,
+    "es": {
+      "title": "El costo de cambiar",
+      "hook": "Cambiar de tarea puede tomar segundos; recuperar el contexto puede tomar mucho más.",
+      "lesson": "El cambio frecuente de tarea exige reconstruir qué estabas haciendo, qué decisión seguía y qué información estaba activa en tu mente.",
+      "mission": "Hoy mide una sola interrupción: desde que abandonas la tarea hasta que recuperas exactamente el punto donde estabas.",
+      "prompts": [
+        "¿Qué interrumpió el trabajo?",
+        "¿Cuánto duró la interrupción?",
+        "¿Cuánto tardaste adicionalmente en recuperar el contexto?",
+        "¿Qué tuviste que reconstruir?"
+      ]
+    },
+    "en": {
+      "title": "The Cost of Switching",
+      "hook": "Switching tasks may take seconds; rebuilding context can take much longer.",
+      "lesson": "Frequent task switching requires reconstructing what you were doing, which decision came next, and what information was active in your mind.",
+      "mission": "Measure one interruption today: from the moment you leave the task until you recover the exact point where you were working.",
+      "prompts": [
+        "What interrupted the work?",
+        "How long did the interruption itself last?",
+        "How much additional time did it take to recover context?",
+        "What did you have to reconstruct?"
+      ]
+    },
+    "fr": {
+      "title": "Le coût du changement de tâche",
+      "hook": "Changer de tâche peut prendre quelques secondes ; reconstruire le contexte peut prendre beaucoup plus de temps.",
+      "lesson": "Les changements fréquents de tâche obligent à reconstruire ce que vous faisiez, la décision suivante et les informations actives dans votre esprit.",
+      "mission": "Mesurez aujourd’hui une seule interruption : depuis le moment où vous quittez la tâche jusqu’à celui où vous retrouvez exactement votre point de travail.",
+      "prompts": [
+        "Qu’est-ce qui a interrompu le travail ?",
+        "Combien de temps l’interruption elle-même a-t-elle duré ?",
+        "Combien de temps supplémentaire a-t-il fallu pour retrouver le contexte ?",
+        "Qu’avez-vous dû reconstruire ?"
+      ]
+    }
+  },
+  {
+    "d": 6,
+    "es": {
+      "title": "La pestaña que te llama",
+      "hook": "Un entorno digital lleno de opciones mantiene múltiples rutas de salida visibles.",
+      "lesson": "Cada pestaña, ventana o aplicación abierta puede funcionar como señal de otra tarea y aumentar la competencia por tu atención.",
+      "mission": "Antes de un bloque, cuenta cuántas pestañas, ventanas o aplicaciones están abiertas. Trabaja 20 minutos sin cerrarlas todavía y observa cuáles atraen tu atención.",
+      "prompts": [
+        "¿Cuántas opciones estaban visibles?",
+        "¿Cuál te llamó más?",
+        "¿Qué relación tenía con tu tarea principal?",
+        "¿Cuál podrías sacar del campo visual en otra ocasión?"
+      ]
+    },
+    "en": {
+      "title": "The Tab That Calls You",
+      "hook": "A digital environment full of options keeps multiple exit routes visible.",
+      "lesson": "Each open tab, window, or app can act as a cue for another task and increase competition for your attention.",
+      "mission": "Before one block, count how many tabs, windows, or apps are open. Work for 20 minutes without closing them yet and observe which ones pull at your attention.",
+      "prompts": [
+        "How many options were visible?",
+        "Which one pulled at you most?",
+        "How was it related to your main task?",
+        "Which one could you remove from view next time?"
+      ]
+    },
+    "fr": {
+      "title": "L’onglet qui vous appelle",
+      "hook": "Un environnement numérique rempli d’options garde visibles de nombreuses voies de sortie.",
+      "lesson": "Chaque onglet, fenêtre ou application ouverte peut devenir un signal vers une autre tâche et augmenter la concurrence pour votre attention.",
+      "mission": "Avant une plage de travail, comptez le nombre d’onglets, de fenêtres ou d’applications ouverts. Travaillez 20 minutes sans encore les fermer et observez lesquels attirent votre attention.",
+      "prompts": [
+        "Combien d’options étaient visibles ?",
+        "Laquelle vous a attiré le plus ?",
+        "Quel lien avait-elle avec votre tâche principale ?",
+        "Laquelle pourriez-vous retirer de votre champ visuel la prochaine fois ?"
+      ]
+    }
+  },
+  {
+    "d": 7,
+    "es": {
+      "title": "Tu reloj de atención",
+      "hook": "Tu capacidad de concentrarte no es idéntica a todas las horas del día.",
+      "lesson": "Energía, sueño, alimentación, carga mental y ritmo diario pueden cambiar cuánto esfuerzo requiere sostener una tarea.",
+      "mission": "Compara dos bloques similares realizados en horas distintas y registra cómo cambió tu facilidad para mantener el foco.",
+      "prompts": [
+        "¿A qué hora fue el primer bloque?",
+        "¿A qué hora fue el segundo?",
+        "¿En cuál apareció menos esfuerzo para sostener la tarea?",
+        "¿Qué otra condición pudo influir?"
+      ]
+    },
+    "en": {
+      "title": "Your Attention Clock",
+      "hook": "Your ability to focus is not identical at every hour of the day.",
+      "lesson": "Energy, sleep, food, mental load, and daily rhythm can change how much effort it takes to sustain a task.",
+      "mission": "Compare two similar blocks completed at different times and record how your ability to maintain focus changed.",
+      "prompts": [
+        "What time was the first block?",
+        "What time was the second?",
+        "Which block required less effort to sustain?",
+        "What other condition may have influenced the difference?"
+      ]
+    },
+    "fr": {
+      "title": "Votre horloge d’attention",
+      "hook": "Votre capacité de concentration n’est pas identique à toutes les heures de la journée.",
+      "lesson": "L’énergie, le sommeil, l’alimentation, la charge mentale et votre rythme quotidien peuvent modifier l’effort nécessaire pour maintenir une tâche.",
+      "mission": "Comparez deux plages de travail similaires réalisées à des heures différentes et notez comment votre facilité à maintenir l’attention a changé.",
+      "prompts": [
+        "À quelle heure a eu lieu la première plage ?",
+        "À quelle heure a eu lieu la seconde ?",
+        "Dans laquelle le maintien de la tâche a-t-il demandé moins d’effort ?",
+        "Quelle autre condition a pu influencer la différence ?"
+      ]
+    }
+  },
+  {
+    "d": 8,
+    "es": {
+      "title": "El impulso no es una orden",
+      "hook": "Sentir ganas de cambiar de tarea no significa que tengas que obedecerlas.",
+      "lesson": "Un impulso puede aumentar, disminuir o desaparecer si lo observas brevemente sin convertirlo de inmediato en conducta.",
+      "mission": "Durante un bloque, cuando aparezca el impulso de cambiar de tarea, espera 60 segundos antes de decidir. Observa qué pasa con la intensidad.",
+      "prompts": [
+        "¿Qué querías hacer?",
+        "Intensidad inicial del impulso, 0–10",
+        "Intensidad después de 60 segundos, 0–10",
+        "¿Qué decidiste hacer después?"
+      ]
+    },
+    "en": {
+      "title": "An Urge Is Not an Order",
+      "hook": "Feeling like switching tasks does not mean you have to obey the urge.",
+      "lesson": "An urge can rise, fall, or disappear when you observe it briefly instead of immediately turning it into behavior.",
+      "mission": "During one block, when the urge to switch tasks appears, wait 60 seconds before deciding. Observe what happens to its intensity.",
+      "prompts": [
+        "What did you want to do?",
+        "Initial urge intensity, 0–10",
+        "Urge intensity after 60 seconds, 0–10",
+        "What did you decide to do afterward?"
+      ]
+    },
+    "fr": {
+      "title": "Une impulsion n’est pas un ordre",
+      "hook": "Avoir envie de changer de tâche ne signifie pas que vous devez obéir à cette envie.",
+      "lesson": "Une impulsion peut augmenter, diminuer ou disparaître si vous l’observez brièvement au lieu de la transformer immédiatement en comportement.",
+      "mission": "Pendant une plage de travail, lorsqu’une envie de changer de tâche apparaît, attendez 60 secondes avant de décider. Observez l’évolution de son intensité.",
+      "prompts": [
+        "Qu’aviez-vous envie de faire ?",
+        "Intensité initiale de l’impulsion, 0–10",
+        "Intensité après 60 secondes, 0–10",
+        "Qu’avez-vous décidé de faire ensuite ?"
+      ]
+    }
+  },
+  {
+    "d": 9,
+    "es": {
+      "title": "Lo incompleto que te persigue",
+      "hook": "Una tarea abierta puede seguir ocupando atención incluso cuando ya empezaste otra.",
+      "lesson": "Los pendientes sin un próximo paso claro pueden reaparecer mentalmente porque el sistema todavía no sabe cuándo o cómo se retomarán.",
+      "mission": "Identifica un pendiente que aparezca repetidamente mientras trabajas y define por escrito su próximo paso y cuándo lo atenderás.",
+      "prompts": [
+        "¿Qué pendiente reaparecía?",
+        "¿Cuál es su próximo paso concreto?",
+        "¿Cuándo lo atenderás?",
+        "¿Cambió cuánto apareció después de definirlo?"
+      ]
+    },
+    "en": {
+      "title": "The Unfinished Task That Follows You",
+      "hook": "An unfinished task can keep occupying attention even after you have started something else.",
+      "lesson": "Open loops without a clear next step can keep resurfacing because your system still does not know when or how they will be handled.",
+      "mission": "Identify one unfinished task that repeatedly enters your mind while you work, then write its next action and when you will handle it.",
+      "prompts": [
+        "Which unfinished task kept resurfacing?",
+        "What is its concrete next action?",
+        "When will you handle it?",
+        "Did it appear less often after you defined the next step?"
+      ]
+    },
+    "fr": {
+      "title": "La tâche inachevée qui vous suit",
+      "hook": "Une tâche inachevée peut continuer à occuper votre attention même après que vous en avez commencé une autre.",
+      "lesson": "Les tâches ouvertes sans prochaine étape claire peuvent revenir mentalement parce que votre système ne sait toujours pas quand ni comment elles seront reprises.",
+      "mission": "Identifiez une tâche inachevée qui revient souvent pendant votre travail, puis écrivez sa prochaine action et le moment où vous la traiterez.",
+      "prompts": [
+        "Quelle tâche inachevée revenait ?",
+        "Quelle est sa prochaine action concrète ?",
+        "Quand allez-vous la traiter ?",
+        "Est-elle revenue moins souvent après avoir défini la prochaine étape ?"
+      ]
+    }
+  },
+  {
+    "d": 10,
+    "es": {
+      "title": "Qué sucede justo antes de abandonar",
+      "hook": "El final de un bloque de enfoque suele empezar con una transición pequeña: confusión, aburrimiento, dificultad o falta de claridad.",
+      "lesson": "Reconocer qué estado precede al abandono ayuda a diferenciar una necesidad real de pausa de una salida automática ante la fricción.",
+      "mission": "Hoy detecta el momento exacto en que quieras abandonar una tarea y nombra qué estabas experimentando justo antes.",
+      "prompts": [
+        "¿Qué estabas haciendo?",
+        "¿Qué apareció: aburrimiento, dificultad, confusión, cansancio u otra cosa?",
+        "¿Necesitabas una pausa real o querías escapar de la fricción?",
+        "¿Qué hiciste finalmente?"
+      ]
+    },
+    "en": {
+      "title": "What Happens Right Before You Leave",
+      "hook": "The end of a focus block often starts with a small transition: confusion, boredom, difficulty, or lack of clarity.",
+      "lesson": "Recognizing the state that precedes quitting helps distinguish a real need for a break from an automatic exit when friction appears.",
+      "mission": "Today, catch the exact moment you want to leave a task and name what you were experiencing immediately beforehand.",
+      "prompts": [
+        "What were you doing?",
+        "What appeared: boredom, difficulty, confusion, fatigue, or something else?",
+        "Did you need a real break or did you want to escape the friction?",
+        "What did you ultimately do?"
+      ]
+    },
+    "fr": {
+      "title": "Ce qui se passe juste avant d’abandonner",
+      "hook": "La fin d’une plage de concentration commence souvent par une petite transition : confusion, ennui, difficulté ou manque de clarté.",
+      "lesson": "Reconnaître l’état qui précède l’abandon aide à distinguer un vrai besoin de pause d’une sortie automatique face à la friction.",
+      "mission": "Aujourd’hui, repérez le moment exact où vous avez envie de quitter une tâche et nommez ce que vous ressentiez juste avant.",
+      "prompts": [
+        "Que faisiez-vous ?",
+        "Qu’est-ce qui est apparu : ennui, difficulté, confusion, fatigue ou autre chose ?",
+        "Aviez-vous réellement besoin d’une pause ou vouliez-vous échapper à la friction ?",
+        "Qu’avez-vous finalement fait ?"
+      ]
+    }
+  },
+  {
+    "d": 11,
+    "es": {
+      "title": "La claridad antes del foco",
+      "hook": "A veces lo que parece falta de concentración es no saber exactamente qué hacer después.",
+      "lesson": "Cuando una tarea es ambigua, la mente debe decidir continuamente el siguiente paso, aumentando fricción y oportunidades de desviarse.",
+      "mission": "Antes de empezar un bloque, escribe una sola acción observable que debe estar terminada al final. Luego observa si cambia tu facilidad para sostenerte.",
+      "prompts": [
+        "¿Cuál fue la acción observable?",
+        "¿Qué tan clara estaba la tarea antes, 0–10?",
+        "¿Qué tan fácil fue mantener el foco, 0–10?",
+        "¿En qué momento volvió a aparecer ambigüedad?"
+      ]
+    },
+    "en": {
+      "title": "Clarity Before Focus",
+      "hook": "Sometimes what looks like poor concentration is not knowing exactly what to do next.",
+      "lesson": "When a task is ambiguous, your mind must repeatedly decide the next step, increasing friction and opportunities to drift.",
+      "mission": "Before one block, write a single observable action that should be complete by the end. Then observe whether sustaining focus becomes easier.",
+      "prompts": [
+        "What was the observable action?",
+        "How clear was the task beforehand, 0–10?",
+        "How easy was it to maintain focus, 0–10?",
+        "When did ambiguity appear again?"
+      ]
+    },
+    "fr": {
+      "title": "La clarté avant la concentration",
+      "hook": "Parfois, ce qui ressemble à un manque de concentration vient simplement du fait de ne pas savoir exactement quoi faire ensuite.",
+      "lesson": "Lorsqu’une tâche est ambiguë, votre esprit doit décider en permanence de l’étape suivante, ce qui augmente la friction et les possibilités de décrochage.",
+      "mission": "Avant une plage de travail, écrivez une seule action observable qui doit être terminée à la fin. Observez ensuite si le maintien de l’attention devient plus facile.",
+      "prompts": [
+        "Quelle était l’action observable ?",
+        "Quel était le niveau de clarté de la tâche avant de commencer, de 0 à 10 ?",
+        "À quel point a-t-il été facile de maintenir l’attention, de 0 à 10 ?",
+        "À quel moment l’ambiguïté est-elle réapparue ?"
+      ]
+    }
+  },
+  {
+    "d": 12,
+    "es": {
+      "title": "Tu bloque base",
+      "hook": "Para mejorar la concentración necesitas una medida de partida que no dependa de impresiones.",
+      "lesson": "Un bloque base te permite comparar cambios futuros usando una duración y una tarea relativamente estables.",
+      "mission": "Elige una tarea de dificultad moderada, trabaja sin interrupciones voluntarias y registra cuánto tiempo puedes sostenerla antes de decidir conscientemente parar.",
+      "prompts": [
+        "¿Qué tarea usaste?",
+        "¿Cuántos minutos sostuviste el bloque?",
+        "¿Cuántos impulsos de cambiar aparecieron?",
+        "¿Por qué terminaste el bloque?"
+      ]
+    },
+    "en": {
+      "title": "Your Baseline Focus Block",
+      "hook": "To improve concentration, you need a starting measure that is not based only on impressions.",
+      "lesson": "A baseline block lets you compare future changes using a relatively stable task and duration.",
+      "mission": "Choose a moderately difficult task, work without voluntary interruptions, and record how long you can sustain it before consciously deciding to stop.",
+      "prompts": [
+        "What task did you use?",
+        "How many minutes did you sustain the block?",
+        "How many urges to switch appeared?",
+        "Why did you end the block?"
+      ]
+    },
+    "fr": {
+      "title": "Votre plage de concentration de référence",
+      "hook": "Pour améliorer votre concentration, vous avez besoin d’un point de départ qui ne repose pas uniquement sur des impressions.",
+      "lesson": "Une plage de référence permet de comparer les changements futurs à partir d’une tâche et d’une durée relativement stables.",
+      "mission": "Choisissez une tâche de difficulté modérée, travaillez sans interruption volontaire et notez combien de temps vous pouvez la maintenir avant de décider consciemment de vous arrêter.",
+      "prompts": [
+        "Quelle tâche avez-vous utilisée ?",
+        "Combien de minutes avez-vous maintenu la plage ?",
+        "Combien d’envies de changer de tâche sont apparues ?",
+        "Pourquoi avez-vous terminé la plage ?"
+      ]
+    }
+  },
+  {
+    "d": 13,
+    "es": {
+      "title": "Dónde enfocas mejor sin esfuerzo extra",
+      "hook": "No todo tu enfoque depende de disciplina. Algunas condiciones ya están trabajando a tu favor.",
+      "lesson": "Identificar contextos donde la concentración ocurre con menos esfuerzo permite distinguir capacidad personal de condiciones ambientales.",
+      "mission": "Busca hoy una situación en la que te concentres mejor de lo habitual y reconstruye qué condiciones estaban presentes.",
+      "prompts": [
+        "¿Dónde estabas?",
+        "¿Qué hora era?",
+        "¿Qué estaba ausente del entorno?",
+        "¿Qué estaba claro sobre la tarea?",
+        "¿Qué condición podrías reproducir?"
+      ]
+    },
+    "en": {
+      "title": "Where You Focus Better Without Extra Effort",
+      "hook": "Not all of your focus depends on discipline. Some conditions are already working in your favor.",
+      "lesson": "Identifying contexts where concentration happens with less effort helps separate personal capacity from environmental conditions.",
+      "mission": "Find one situation today where you focus better than usual and reconstruct the conditions that were present.",
+      "prompts": [
+        "Where were you?",
+        "What time was it?",
+        "What was absent from the environment?",
+        "What was clear about the task?",
+        "Which condition could you reproduce?"
+      ]
+    },
+    "fr": {
+      "title": "Là où vous vous concentrez mieux sans effort supplémentaire",
+      "hook": "Votre concentration ne dépend pas uniquement de la discipline. Certaines conditions travaillent déjà en votre faveur.",
+      "lesson": "Identifier les contextes où la concentration demande moins d’effort aide à distinguer votre capacité personnelle des conditions environnementales.",
+      "mission": "Repérez aujourd’hui une situation dans laquelle vous vous concentrez mieux que d’habitude et reconstruisez les conditions présentes.",
+      "prompts": [
+        "Où étiez-vous ?",
+        "Quelle heure était-il ?",
+        "Qu’est-ce qui était absent de l’environnement ?",
+        "Qu’est-ce qui était clair concernant la tâche ?",
+        "Quelle condition pourriez-vous reproduire ?"
+      ]
+    }
+  },
+  {
+    "d": 14,
+    "es": {
+      "title": "Tu mapa de fragmentación",
+      "hook": "Después de casi dos semanas ya no necesitas adivinar qué te distrae más.",
+      "lesson": "Agrupar interrupciones por tipo permite ver si el problema principal viene del entorno, de hábitos digitales, de pensamientos internos, de ambigüedad o de energía.",
+      "mission": "Revisa tus registros y clasifica tus interrupciones en cinco categorías: entorno, digital, interna, tarea ambigua y energía/cansancio.",
+      "prompts": [
+        "¿Cuál categoría apareció más?",
+        "¿Cuál apareció menos?",
+        "¿Qué interrupción tuvo mayor costo de regreso?",
+        "¿Qué categoría parece más modificable ahora?"
+      ]
+    },
+    "en": {
+      "title": "Your Fragmentation Map",
+      "hook": "After nearly two weeks, you no longer need to guess what distracts you most.",
+      "lesson": "Grouping interruptions by type reveals whether the main problem comes from the environment, digital habits, internal thoughts, task ambiguity, or energy.",
+      "mission": "Review your records and classify your interruptions into five categories: environment, digital, internal, ambiguous task, and energy/fatigue.",
+      "prompts": [
+        "Which category appeared most?",
+        "Which appeared least?",
+        "Which interruption had the highest return cost?",
+        "Which category seems most changeable right now?"
+      ]
+    },
+    "fr": {
+      "title": "Votre carte de fragmentation",
+      "hook": "Après presque deux semaines, vous n’avez plus besoin de deviner ce qui vous distrait le plus.",
+      "lesson": "Regrouper les interruptions par type permet de voir si le problème principal vient de l’environnement, des habitudes numériques, des pensées internes, de l’ambiguïté de la tâche ou de l’énergie.",
+      "mission": "Relisez vos entrées et classez vos interruptions en cinq catégories : environnement, numérique, interne, tâche ambiguë et énergie/fatigue.",
+      "prompts": [
+        "Quelle catégorie est apparue le plus souvent ?",
+        "Laquelle est apparue le moins ?",
+        "Quelle interruption a eu le coût de retour le plus élevé ?",
+        "Quelle catégorie semble la plus modifiable maintenant ?"
+      ]
+    }
+  },
+  {
+    "d": 15,
+    "es": {
+      "title": "Primera revisión: ya sabes dónde se rompe",
+      "hook": "Quince días de observación deben dejarte con algo más útil que “necesito concentrarme más”: un diagnóstico inicial.",
+      "lesson": "La siguiente etapa funciona mejor cuando no intentas eliminar todo el ruido a la vez, sino cuando eliges las fuentes de interrupción con mayor impacto y capacidad de cambio.",
+      "mission": "Revisa la etapa y selecciona las dos fuentes de fragmentación que vas a reducir primero en los próximos 15 días.",
+      "prompts": [
+        "¿Cuál es tu principal fuente de fragmentación?",
+        "¿Cuál es la segunda?",
+        "¿Qué evidencia acumulaste para elegirlas?",
+        "¿Qué condición ya sabes que favorece tu enfoque?",
+        "¿Cuál fue tu bloque base de concentración?"
+      ]
+    },
+    "en": {
+      "title": "First Review: You Know Where Focus Breaks",
+      "hook": "Fifteen days of observation should leave you with something more useful than “I need to focus more”: an initial diagnosis.",
+      "lesson": "The next stage works better when you do not try to eliminate all noise at once, but instead choose the interruption sources with the greatest impact and the greatest potential for change.",
+      "mission": "Review this stage and choose the two sources of fragmentation you will reduce first during the next 15 days.",
+      "prompts": [
+        "What is your main source of fragmentation?",
+        "What is the second?",
+        "What evidence did you gather to choose them?",
+        "Which condition do you already know supports your focus?",
+        "What was your baseline focus block?"
+      ]
+    },
+    "fr": {
+      "title": "Première révision : vous savez où la concentration se rompt",
+      "hook": "Quinze jours d’observation devraient vous laisser quelque chose de plus utile que « je dois mieux me concentrer » : un diagnostic initial.",
+      "lesson": "L’étape suivante fonctionne mieux lorsque vous n’essayez pas d’éliminer tout le bruit à la fois, mais lorsque vous choisissez les sources d’interruption ayant le plus d’impact et le plus grand potentiel de changement.",
+      "mission": "Relisez cette étape et choisissez les deux sources de fragmentation que vous réduirez en priorité au cours des 15 prochains jours.",
+      "prompts": [
+        "Quelle est votre principale source de fragmentation ?",
+        "Quelle est la deuxième ?",
+        "Quelles preuves avez-vous accumulées pour les choisir ?",
+        "Quelle condition savez-vous déjà favorable à votre concentration ?",
+        "Quelle était votre plage de concentration de référence ?"
+      ]
+    }
+  }
+];
+const FOCUS_DEEP_STAGE1=FOCUS_DEEP_STAGE1_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+const FOCUS_BASE_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
+const FOCUS_DAYS=[...FOCUS_DEEP_STAGE1,...FOCUS_BASE_DAYS.slice(15)];
 
 
 const PROGRAM_LEARNING={
@@ -7277,6 +7872,7 @@ installDeepProgramI18n(COMMUNICATION_DEEP_STAGE3_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE4_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE5_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE6_CONTENT);
+installDeepProgramI18n(FOCUS_DEEP_STAGE1_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
