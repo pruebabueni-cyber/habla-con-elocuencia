@@ -3711,8 +3711,594 @@ const COMMUNICATION_DEEP_STAGE2_CONTENT=[
 ];
 const COMMUNICATION_DEEP_STAGE2=COMMUNICATION_DEEP_STAGE2_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
+const COMMUNICATION_DEEP_STAGE3_CONTENT=[
+  {
+    "d": 31,
+    "es": {
+      "title": "Tu punto en una frase",
+      "hook": "Si no puedes identificar tu idea central, la otra persona tendrá que buscarla dentro de todo lo que dices.",
+      "lesson": "Una idea principal clara funciona como eje del mensaje: permite decidir qué información apoya el punto y qué información distrae.",
+      "mission": "Antes de explicar algo importante hoy, escribe tu punto principal en una sola frase y úsala como guía al hablar.",
+      "prompts": [
+        "¿Cuál era tu punto en una frase?",
+        "¿Qué parte de tu explicación apoyaba directamente ese punto?",
+        "¿Qué parte podías dejar fuera?"
+      ]
+    },
+    "en": {
+      "title": "Your Point in One Sentence",
+      "hook": "If you cannot identify your central idea, the other person has to search for it inside everything you say.",
+      "lesson": "A clear main idea acts as the message’s anchor: it helps you decide what supports the point and what distracts from it.",
+      "mission": "Before explaining something important today, write your main point in one sentence and use it as your guide when speaking.",
+      "prompts": [
+        "What was your point in one sentence?",
+        "Which part of your explanation directly supported it?",
+        "What could you leave out?"
+      ]
+    },
+    "fr": {
+      "title": "Votre idée principale en une phrase",
+      "hook": "Si vous ne pouvez pas identifier votre idée centrale, l’autre personne devra la chercher dans tout ce que vous dites.",
+      "lesson": "Une idée principale claire sert d’axe au message : elle aide à décider quelles informations soutiennent le propos et lesquelles le dispersent.",
+      "mission": "Avant d’expliquer quelque chose d’important aujourd’hui, écrivez votre idée principale en une phrase et utilisez-la comme fil conducteur lorsque vous parlez.",
+      "prompts": [
+        "Quelle était votre idée principale en une phrase ?",
+        "Quelle partie de votre explication soutenait directement cette idée ?",
+        "Quelle partie pouviez-vous laisser de côté ?"
+      ]
+    }
+  },
+  {
+    "d": 32,
+    "es": {
+      "title": "¿Qué quieres que ocurra?",
+      "hook": "Un mensaje puede estar lleno de información y aun así no tener una dirección clara.",
+      "lesson": "Definir el resultado que buscas —informar, pedir, decidir, persuadir o coordinar— cambia qué debes incluir y cómo debes cerrar.",
+      "mission": "Antes de una conversación o mensaje importante, define en una frase qué quieres que la otra persona sepa, haga o decida al terminar.",
+      "prompts": [
+        "¿Qué resultado buscabas?",
+        "¿Tu mensaje estaba diseñado para ese resultado?",
+        "¿Qué cambiaste al tener el objetivo claro?"
+      ]
+    },
+    "en": {
+      "title": "What Do You Want to Happen?",
+      "hook": "A message can contain plenty of information and still have no clear direction.",
+      "lesson": "Defining the outcome you want—inform, request, decide, persuade, or coordinate—changes what you should include and how you should close.",
+      "mission": "Before one important conversation or message, define in one sentence what you want the other person to know, do, or decide by the end.",
+      "prompts": [
+        "What outcome were you seeking?",
+        "Was your message designed for that outcome?",
+        "What did you change once the objective was clear?"
+      ]
+    },
+    "fr": {
+      "title": "Que voulez-vous obtenir ?",
+      "hook": "Un message peut contenir beaucoup d’informations tout en manquant de direction claire.",
+      "lesson": "Définir le résultat recherché — informer, demander, décider, convaincre ou coordonner — change ce qu’il faut inclure et la manière de conclure.",
+      "mission": "Avant une conversation ou un message important, définissez en une phrase ce que vous voulez que l’autre personne sache, fasse ou décide à la fin.",
+      "prompts": [
+        "Quel résultat recherchiez-vous ?",
+        "Votre message était-il conçu pour ce résultat ?",
+        "Qu’avez-vous changé une fois l’objectif clarifié ?"
+      ]
+    }
+  },
+  {
+    "d": 33,
+    "es": {
+      "title": "Punto, razón, ejemplo",
+      "hook": "Una idea se vuelve más fácil de seguir cuando la estructura es visible.",
+      "lesson": "Punto, razón y ejemplo forman una secuencia breve que ayuda al oyente a saber qué afirmas, por qué y cómo se ve en la práctica.",
+      "mission": "Explica hoy una idea usando exactamente tres partes: punto principal, razón y ejemplo concreto.",
+      "prompts": [
+        "Punto principal",
+        "Razón",
+        "Ejemplo",
+        "¿Qué parte hizo el mensaje más fácil de entender?"
+      ]
+    },
+    "en": {
+      "title": "Point, Reason, Example",
+      "hook": "An idea becomes easier to follow when its structure is visible.",
+      "lesson": "Point, reason, and example create a short sequence that helps the listener know what you are saying, why, and what it looks like in practice.",
+      "mission": "Explain one idea today using exactly three parts: main point, reason, and concrete example.",
+      "prompts": [
+        "Main point",
+        "Reason",
+        "Example",
+        "Which part made the message easier to understand?"
+      ]
+    },
+    "fr": {
+      "title": "Idée, raison, exemple",
+      "hook": "Une idée devient plus facile à suivre lorsque sa structure est visible.",
+      "lesson": "Idée, raison et exemple forment une séquence courte qui aide l’interlocuteur à comprendre ce que vous affirmez, pourquoi et à quoi cela ressemble concrètement.",
+      "mission": "Expliquez aujourd’hui une idée en utilisant exactement trois parties : idée principale, raison et exemple concret.",
+      "prompts": [
+        "Idée principale",
+        "Raison",
+        "Exemple",
+        "Quelle partie a rendu le message plus facile à comprendre ?"
+      ]
+    }
+  },
+  {
+    "d": 34,
+    "es": {
+      "title": "Cambia lo vago por lo concreto",
+      "hook": "Palabras como “eso”, “cosas”, “mejor”, “pronto” o “mucho” obligan al otro a completar el mensaje por ti.",
+      "lesson": "La precisión no significa hablar de forma rígida. Significa reemplazar términos amplios por información suficiente para que la otra persona sepa a qué te refieres.",
+      "mission": "Detecta hoy tres palabras vagas en un mensaje tuyo y reemplázalas por términos o datos más concretos.",
+      "prompts": [
+        "Palabra vaga #1 y reemplazo",
+        "Palabra vaga #2 y reemplazo",
+        "Palabra vaga #3 y reemplazo",
+        "¿Qué se volvió más claro?"
+      ]
+    },
+    "en": {
+      "title": "Replace Vague with Concrete",
+      "hook": "Words like “that,” “things,” “better,” “soon,” or “a lot” force the other person to complete the message for you.",
+      "lesson": "Precision does not mean sounding rigid. It means replacing broad terms with enough information for the other person to know what you mean.",
+      "mission": "Notice three vague words in one of your messages today and replace them with more concrete terms or data.",
+      "prompts": [
+        "Vague word #1 and replacement",
+        "Vague word #2 and replacement",
+        "Vague word #3 and replacement",
+        "What became clearer?"
+      ]
+    },
+    "fr": {
+      "title": "Remplacez le vague par du concret",
+      "hook": "Des mots comme « ça », « choses », « mieux », « bientôt » ou « beaucoup » obligent l’autre personne à compléter votre message à votre place.",
+      "lesson": "La précision ne signifie pas parler de façon rigide. Elle consiste à remplacer les termes généraux par suffisamment d’informations pour que l’autre personne sache ce que vous voulez dire.",
+      "mission": "Repérez aujourd’hui trois mots vagues dans l’un de vos messages et remplacez-les par des termes ou des données plus concrets.",
+      "prompts": [
+        "Mot vague n° 1 et remplacement",
+        "Mot vague n° 2 et remplacement",
+        "Mot vague n° 3 et remplacement",
+        "Qu’est-ce qui est devenu plus clair ?"
+      ]
+    }
+  },
+  {
+    "d": 35,
+    "es": {
+      "title": "La petición que estaba escondida",
+      "hook": "A veces explicas durante varios minutos cuando en realidad necesitas pedir una sola cosa.",
+      "lesson": "Una petición explícita reduce el trabajo de adivinación y permite que la otra persona responda a algo concreto.",
+      "mission": "En una conversación donde necesites algo, separa el contexto de la petición y expresa la petición en una frase directa.",
+      "prompts": [
+        "¿Qué contexto era realmente necesario?",
+        "¿Cuál fue tu petición exacta?",
+        "¿La otra persona entendió qué respuesta necesitabas?"
+      ]
+    },
+    "en": {
+      "title": "The Request That Was Hidden",
+      "hook": "Sometimes you explain for several minutes when what you really need is to ask for one thing.",
+      "lesson": "An explicit request reduces guesswork and allows the other person to respond to something concrete.",
+      "mission": "In one conversation where you need something, separate the context from the request and state the request in one direct sentence.",
+      "prompts": [
+        "What context was actually necessary?",
+        "What was your exact request?",
+        "Did the other person understand what response you needed?"
+      ]
+    },
+    "fr": {
+      "title": "La demande qui était cachée",
+      "hook": "Parfois, vous expliquez pendant plusieurs minutes alors qu’en réalité vous avez besoin de demander une seule chose.",
+      "lesson": "Une demande explicite réduit le travail d’interprétation et permet à l’autre personne de répondre à quelque chose de concret.",
+      "mission": "Dans une conversation où vous avez besoin de quelque chose, séparez le contexte de la demande et formulez celle-ci en une phrase directe.",
+      "prompts": [
+        "Quel contexte était réellement nécessaire ?",
+        "Quelle était votre demande exacte ?",
+        "L’autre personne a-t-elle compris quelle réponse vous attendiez ?"
+      ]
+    }
+  },
+  {
+    "d": 36,
+    "es": {
+      "title": "Una idea por turno",
+      "hook": "Cuando mezclas explicación, defensa, nueva petición y otro tema en la misma intervención, la claridad se diluye.",
+      "lesson": "Separar ideas permite que cada una reciba una respuesta antes de abrir la siguiente.",
+      "mission": "En una conversación de hoy, expresa una sola idea completa, detente y permite una respuesta antes de añadir la siguiente.",
+      "prompts": [
+        "¿Cuál fue la primera idea?",
+        "¿Dónde normalmente habrías añadido otra?",
+        "¿Qué ocurrió al detenerte?",
+        "¿Qué segunda idea quedó para después?"
+      ]
+    },
+    "en": {
+      "title": "One Idea per Turn",
+      "hook": "When you mix explanation, defense, a new request, and another topic in the same turn, clarity gets diluted.",
+      "lesson": "Separating ideas lets each one receive a response before the next one is opened.",
+      "mission": "In one conversation today, express one complete idea, stop, and allow a response before adding the next.",
+      "prompts": [
+        "What was the first idea?",
+        "Where would you normally have added another?",
+        "What happened when you stopped?",
+        "What second idea did you leave for later?"
+      ]
+    },
+    "fr": {
+      "title": "Une idée par tour de parole",
+      "hook": "Lorsque vous mélangez explication, défense, nouvelle demande et autre sujet dans la même intervention, la clarté se dilue.",
+      "lesson": "Séparer les idées permet à chacune de recevoir une réponse avant d’ouvrir la suivante.",
+      "mission": "Dans une conversation aujourd’hui, exprimez une idée complète, arrêtez-vous et laissez l’autre personne répondre avant d’ajouter la suivante.",
+      "prompts": [
+        "Quelle était la première idée ?",
+        "À quel endroit auriez-vous normalement ajouté autre chose ?",
+        "Que s’est-il passé lorsque vous vous êtes arrêté ?",
+        "Quelle deuxième idée avez-vous gardée pour plus tard ?"
+      ]
+    }
+  },
+  {
+    "d": 37,
+    "es": {
+      "title": "Empieza por el titular",
+      "hook": "Si el punto importante aparece al final, el oyente tiene que sostener muchos detalles sin saber para qué sirven.",
+      "lesson": "Abrir con la conclusión o el punto principal crea un mapa para interpretar los detalles que vienen después.",
+      "mission": "En un mensaje profesional o práctico, coloca primero el punto principal y después añade el contexto necesario.",
+      "prompts": [
+        "¿Cuál fue tu titular?",
+        "¿Qué contexto añadiste después?",
+        "¿Qué habrías dicho antes del titular en tu forma habitual?",
+        "¿Se entendió más rápido?"
+      ]
+    },
+    "en": {
+      "title": "Lead with the Headline",
+      "hook": "If the important point appears at the end, the listener has to hold many details without knowing what they are for.",
+      "lesson": "Opening with the conclusion or main point creates a map for interpreting the details that follow.",
+      "mission": "In one professional or practical message, put the main point first and then add only the context that is needed.",
+      "prompts": [
+        "What was your headline?",
+        "What context did you add afterward?",
+        "What would you normally have said before the headline?",
+        "Was the message understood faster?"
+      ]
+    },
+    "fr": {
+      "title": "Commencez par l’essentiel",
+      "hook": "Si le point important apparaît à la fin, l’interlocuteur doit retenir de nombreux détails sans savoir à quoi ils servent.",
+      "lesson": "Commencer par la conclusion ou l’idée principale crée une carte pour interpréter les détails qui suivent.",
+      "mission": "Dans un message professionnel ou pratique, placez l’idée principale en premier, puis ajoutez uniquement le contexte nécessaire.",
+      "prompts": [
+        "Quel était votre message essentiel ?",
+        "Quel contexte avez-vous ajouté ensuite ?",
+        "Qu’auriez-vous habituellement dit avant d’arriver à l’essentiel ?",
+        "Le message a-t-il été compris plus rapidement ?"
+      ]
+    }
+  },
+  {
+    "d": 38,
+    "es": {
+      "title": "Un ejemplo que demuestre",
+      "hook": "Decir “siempre pasa” o “esto no funciona” puede sonar fuerte sin aportar suficiente información.",
+      "lesson": "Un ejemplo concreto convierte una afirmación amplia en una situación que puede examinarse, comprenderse y discutirse.",
+      "mission": "Toma una afirmación general que quieras expresar hoy y acompáñala con un ejemplo específico y verificable.",
+      "prompts": [
+        "¿Cuál era la afirmación general?",
+        "¿Qué ejemplo elegiste?",
+        "¿Qué detalle hizo el ejemplo útil?",
+        "¿Cambió la reacción de la otra persona?"
+      ]
+    },
+    "en": {
+      "title": "An Example That Shows It",
+      "hook": "Saying “this always happens” or “this doesn’t work” can sound strong without providing enough information.",
+      "lesson": "A concrete example turns a broad claim into a situation that can be examined, understood, and discussed.",
+      "mission": "Take one general statement you want to make today and support it with one specific, observable example.",
+      "prompts": [
+        "What was the general statement?",
+        "What example did you choose?",
+        "Which detail made the example useful?",
+        "Did the other person’s response change?"
+      ]
+    },
+    "fr": {
+      "title": "Un exemple qui le montre",
+      "hook": "Dire « cela arrive toujours » ou « cela ne fonctionne pas » peut sembler catégorique sans fournir assez d’informations.",
+      "lesson": "Un exemple concret transforme une affirmation générale en situation que l’on peut examiner, comprendre et discuter.",
+      "mission": "Prenez une affirmation générale que vous souhaitez exprimer aujourd’hui et accompagnez-la d’un exemple précis et observable.",
+      "prompts": [
+        "Quelle était l’affirmation générale ?",
+        "Quel exemple avez-vous choisi ?",
+        "Quel détail a rendu l’exemple utile ?",
+        "La réaction de l’autre personne a-t-elle changé ?"
+      ]
+    }
+  },
+  {
+    "d": 39,
+    "es": {
+      "title": "Corta sin perder el sentido",
+      "hook": "Ser breve no significa borrar lo importante; significa quitar lo que no cambia la comprensión o la decisión.",
+      "lesson": "Editar un mensaje obliga a distinguir información esencial de repetición, defensa preventiva y detalles secundarios.",
+      "mission": "Toma un mensaje que hayas escrito hoy y crea una segunda versión al menos 25% más corta sin perder el punto, la información necesaria ni la petición.",
+      "prompts": [
+        "¿Cuánto medía la versión original?",
+        "¿Qué eliminaste?",
+        "¿Qué era indispensable conservar?",
+        "¿La versión corta seguía siendo completa?"
+      ]
+    },
+    "en": {
+      "title": "Shorten Without Losing Meaning",
+      "hook": "Being concise does not mean deleting what matters; it means removing what does not change understanding or the decision.",
+      "lesson": "Editing a message forces you to separate essential information from repetition, preventive defense, and secondary details.",
+      "mission": "Take one message you wrote today and create a second version at least 25% shorter without losing the point, necessary information, or request.",
+      "prompts": [
+        "How long was the original version?",
+        "What did you remove?",
+        "What was essential to keep?",
+        "Was the shorter version still complete?"
+      ]
+    },
+    "fr": {
+      "title": "Raccourcissez sans perdre le sens",
+      "hook": "Être concis ne signifie pas supprimer ce qui compte ; cela signifie retirer ce qui ne change ni la compréhension ni la décision.",
+      "lesson": "Réviser un message oblige à distinguer les informations essentielles de la répétition, de la défense préventive et des détails secondaires.",
+      "mission": "Prenez un message écrit aujourd’hui et créez une deuxième version au moins 25 % plus courte sans perdre l’idée principale, les informations nécessaires ni la demande.",
+      "prompts": [
+        "Quelle était la longueur de la version initiale ?",
+        "Qu’avez-vous supprimé ?",
+        "Qu’était-il indispensable de conserver ?",
+        "La version courte restait-elle complète ?"
+      ]
+    }
+  },
+  {
+    "d": 40,
+    "es": {
+      "title": "Explícalo sin jerga",
+      "hook": "Conocer un tema puede hacerte olvidar cuáles palabras todavía no pertenecen al mundo de la otra persona.",
+      "lesson": "La claridad depende del conocimiento compartido. Traducir jerga a lenguaje común no simplifica la idea; reduce barreras innecesarias.",
+      "mission": "Elige un término técnico o interno que uses con frecuencia y explícalo hoy sin utilizar esa palabra.",
+      "prompts": [
+        "¿Qué término elegiste?",
+        "¿Cómo lo explicaste en lenguaje común?",
+        "¿Qué ejemplo ayudó?",
+        "¿La otra persona pudo devolver la idea con sus propias palabras?"
+      ]
+    },
+    "en": {
+      "title": "Explain It Without Jargon",
+      "hook": "Knowing a subject well can make you forget which words are still unfamiliar to the other person.",
+      "lesson": "Clarity depends on shared knowledge. Translating jargon into ordinary language does not weaken the idea; it removes unnecessary barriers.",
+      "mission": "Choose one technical or internal term you use often and explain it today without using that term.",
+      "prompts": [
+        "Which term did you choose?",
+        "How did you explain it in ordinary language?",
+        "What example helped?",
+        "Could the other person restate the idea in their own words?"
+      ]
+    },
+    "fr": {
+      "title": "Expliquez-le sans jargon",
+      "hook": "Bien connaître un sujet peut vous faire oublier quels mots n’appartiennent pas encore à l’univers de l’autre personne.",
+      "lesson": "La clarté dépend des connaissances partagées. Traduire le jargon en langage courant ne simplifie pas l’idée à l’excès ; cela retire des obstacles inutiles.",
+      "mission": "Choisissez un terme technique ou interne que vous utilisez souvent et expliquez-le aujourd’hui sans employer ce terme.",
+      "prompts": [
+        "Quel terme avez-vous choisi ?",
+        "Comment l’avez-vous expliqué en langage courant ?",
+        "Quel exemple a aidé ?",
+        "L’autre personne a-t-elle pu reformuler l’idée avec ses propres mots ?"
+      ]
+    }
+  },
+  {
+    "d": 41,
+    "es": {
+      "title": "Sesenta segundos con estructura",
+      "hook": "La claridad también debe sobrevivir cuando no tienes tiempo para preparar una explicación perfecta.",
+      "lesson": "Una estructura simple puede reducir rodeos en situaciones espontáneas sin convertir tu forma de hablar en un guion rígido.",
+      "mission": "Elige un tema cotidiano y explícalo en aproximadamente 60 segundos usando apertura, punto principal y cierre.",
+      "prompts": [
+        "¿Cómo abriste?",
+        "¿Cuál fue el punto principal?",
+        "¿Cómo cerraste?",
+        "¿Dónde te desviaste o repetiste?"
+      ]
+    },
+    "en": {
+      "title": "Sixty Seconds with Structure",
+      "hook": "Clarity also needs to survive when you do not have time to prepare a perfect explanation.",
+      "lesson": "A simple structure can reduce wandering in spontaneous situations without turning your speech into a rigid script.",
+      "mission": "Choose an everyday topic and explain it in about 60 seconds using an opening, main point, and close.",
+      "prompts": [
+        "How did you open?",
+        "What was the main point?",
+        "How did you close?",
+        "Where did you wander or repeat yourself?"
+      ]
+    },
+    "fr": {
+      "title": "Soixante secondes avec une structure",
+      "hook": "La clarté doit aussi résister lorsque vous n’avez pas le temps de préparer une explication parfaite.",
+      "lesson": "Une structure simple peut réduire les détours dans les situations spontanées sans transformer votre parole en script rigide.",
+      "mission": "Choisissez un sujet quotidien et expliquez-le en environ 60 secondes avec une ouverture, une idée principale et une conclusion.",
+      "prompts": [
+        "Comment avez-vous commencé ?",
+        "Quelle était l’idée principale ?",
+        "Comment avez-vous conclu ?",
+        "À quel endroit vous êtes-vous écarté du sujet ou répété ?"
+      ]
+    }
+  },
+  {
+    "d": 42,
+    "es": {
+      "title": "Reescribe antes de enviar",
+      "hook": "El primer borrador suele reflejar cómo pensaste la idea; el segundo puede reflejar cómo necesita recibirla la otra persona.",
+      "lesson": "Revisar orden, tono, precisión y petición antes de enviar permite corregir problemas de comunicación cuando todavía cuestan poco.",
+      "mission": "Antes de enviar un mensaje importante hoy, haz una segunda pasada buscando cuatro cosas: punto principal, contexto necesario, tono y acción esperada.",
+      "prompts": [
+        "¿Qué cambiaste en el punto principal?",
+        "¿Qué contexto quitaste o añadiste?",
+        "¿Qué ajustaste en el tono?",
+        "¿Quedó clara la acción esperada?"
+      ]
+    },
+    "en": {
+      "title": "Rewrite Before You Send",
+      "hook": "A first draft often reflects how you thought through the idea; a second can reflect how the other person needs to receive it.",
+      "lesson": "Reviewing order, tone, precision, and the request before sending lets you fix communication problems while they are still inexpensive.",
+      "mission": "Before sending one important message today, make a second pass looking for four things: main point, necessary context, tone, and expected action.",
+      "prompts": [
+        "What did you change in the main point?",
+        "What context did you remove or add?",
+        "What did you adjust in the tone?",
+        "Was the expected action clear?"
+      ]
+    },
+    "fr": {
+      "title": "Réécrivez avant d’envoyer",
+      "hook": "Un premier brouillon reflète souvent la manière dont vous avez pensé l’idée ; le second peut refléter la manière dont l’autre personne a besoin de la recevoir.",
+      "lesson": "Vérifier l’ordre, le ton, la précision et la demande avant l’envoi permet de corriger les problèmes de communication lorsqu’ils coûtent encore peu.",
+      "mission": "Avant d’envoyer un message important aujourd’hui, faites une deuxième lecture en vérifiant quatre éléments : idée principale, contexte nécessaire, ton et action attendue.",
+      "prompts": [
+        "Qu’avez-vous changé dans l’idée principale ?",
+        "Quel contexte avez-vous retiré ou ajouté ?",
+        "Qu’avez-vous ajusté dans le ton ?",
+        "L’action attendue était-elle claire ?"
+      ]
+    }
+  },
+  {
+    "d": 43,
+    "es": {
+      "title": "Di tu posición sin construir una defensa",
+      "hook": "Cuando anticipas desacuerdo, puedes llenar tu mensaje de justificaciones antes de haber expresado lo que realmente piensas.",
+      "lesson": "Una posición clara puede incluir una razón sin convertirse en una defensa extensa de tu derecho a tenerla.",
+      "mission": "Expresa hoy una preferencia u opinión en dos partes: tu posición y una razón suficiente. Detente ahí antes de añadir explicaciones defensivas.",
+      "prompts": [
+        "¿Cuál fue tu posición?",
+        "¿Cuál fue la razón suficiente?",
+        "¿Qué justificación adicional sentiste ganas de añadir?",
+        "¿Qué ocurrió al detenerte?"
+      ]
+    },
+    "en": {
+      "title": "State Your Position Without Building a Defense",
+      "hook": "When you anticipate disagreement, you may fill your message with justifications before saying what you actually think.",
+      "lesson": "A clear position can include a reason without becoming a long defense of your right to hold it.",
+      "mission": "Express one preference or opinion today in two parts: your position and one sufficient reason. Stop there before adding defensive explanations.",
+      "prompts": [
+        "What was your position?",
+        "What was the sufficient reason?",
+        "What extra justification did you feel tempted to add?",
+        "What happened when you stopped?"
+      ]
+    },
+    "fr": {
+      "title": "Exprimez votre position sans construire une défense",
+      "hook": "Lorsque vous anticipez un désaccord, vous pouvez remplir votre message de justifications avant même d’avoir exprimé ce que vous pensez réellement.",
+      "lesson": "Une position claire peut inclure une raison sans devenir une longue défense de votre droit à l’avoir.",
+      "mission": "Exprimez aujourd’hui une préférence ou une opinion en deux parties : votre position et une raison suffisante. Arrêtez-vous là avant d’ajouter des explications défensives.",
+      "prompts": [
+        "Quelle était votre position ?",
+        "Quelle était la raison suffisante ?",
+        "Quelle justification supplémentaire aviez-vous envie d’ajouter ?",
+        "Que s’est-il passé lorsque vous vous êtes arrêté ?"
+      ]
+    }
+  },
+  {
+    "d": 44,
+    "es": {
+      "title": "Tu patrón al expresarte",
+      "hook": "Dos semanas de práctica permiten ver si tu dificultad principal es ordenar, concretar, pedir, resumir o confiar en que ya dijiste suficiente.",
+      "lesson": "La mejora se acelera cuando dejas de tratar todos los problemas de expresión como si fueran el mismo.",
+      "mission": "Revisa tus mensajes y prácticas de esta etapa. Identifica dos fortalezas que ya aparecen y dos patrones que todavía reducen tu claridad.",
+      "prompts": [
+        "Fortaleza #1",
+        "Fortaleza #2",
+        "Patrón que reduce claridad #1",
+        "Patrón que reduce claridad #2",
+        "¿Cuál merece entrenamiento prioritario?"
+      ]
+    },
+    "en": {
+      "title": "Your Expression Pattern",
+      "hook": "Two weeks of practice can reveal whether your main difficulty is organizing, being concrete, asking, summarizing, or trusting that you have already said enough.",
+      "lesson": "Improvement accelerates when you stop treating every expression problem as though it were the same.",
+      "mission": "Review your messages and practices from this stage. Identify two strengths that now appear and two patterns that still reduce your clarity.",
+      "prompts": [
+        "Strength #1",
+        "Strength #2",
+        "Clarity-reducing pattern #1",
+        "Clarity-reducing pattern #2",
+        "Which one deserves priority training?"
+      ]
+    },
+    "fr": {
+      "title": "Votre manière de vous exprimer",
+      "hook": "Deux semaines de pratique peuvent révéler si votre difficulté principale consiste à structurer, préciser, demander, résumer ou faire confiance au fait d’en avoir déjà dit assez.",
+      "lesson": "L’amélioration s’accélère lorsque vous cessez de traiter tous les problèmes d’expression comme s’ils étaient identiques.",
+      "mission": "Relisez vos messages et vos pratiques de cette étape. Identifiez deux forces déjà visibles et deux schémas qui réduisent encore votre clarté.",
+      "prompts": [
+        "Force n° 1",
+        "Force n° 2",
+        "Schéma qui réduit la clarté n° 1",
+        "Schéma qui réduit la clarté n° 2",
+        "Lequel mérite un entraînement prioritaire ?"
+      ]
+    }
+  },
+  {
+    "d": 45,
+    "es": {
+      "title": "Tercera revisión: claridad que se puede seguir",
+      "hook": "Expresarte con claridad no significa sonar perfecto; significa facilitar que otra persona siga tu idea y sepa qué hacer con ella.",
+      "lesson": "Ya tienes tres capas de comunicación: recibir mejor, verificar significado y construir mensajes más claros. La siguiente etapa las pondrá bajo tensión real.",
+      "mission": "Cierra esta etapa creando tus tres reglas personales para expresar ideas con claridad en conversaciones y mensajes.",
+      "prompts": [
+        "Regla personal #1",
+        "Regla personal #2",
+        "Regla personal #3",
+        "¿Qué haces hoy con más claridad que en el Día 31?",
+        "¿Qué dificultad quieres llevar a la etapa de conversaciones reales?"
+      ]
+    },
+    "en": {
+      "title": "Third Review: Clarity Others Can Follow",
+      "hook": "Expressing yourself clearly does not mean sounding perfect; it means making it easier for another person to follow your idea and know what to do with it.",
+      "lesson": "You now have three layers of communication: receiving better, verifying meaning, and building clearer messages. The next stage will put them under real tension.",
+      "mission": "Close this stage by creating three personal rules for expressing ideas clearly in conversations and messages.",
+      "prompts": [
+        "Personal rule #1",
+        "Personal rule #2",
+        "Personal rule #3",
+        "What do you do more clearly today than on Day 31?",
+        "What difficulty do you want to bring into the real-conversations stage?"
+      ]
+    },
+    "fr": {
+      "title": "Troisième révision : une clarté que l’on peut suivre",
+      "hook": "Vous exprimer clairement ne signifie pas paraître parfait ; cela signifie faciliter le suivi de votre idée et permettre à l’autre personne de savoir quoi en faire.",
+      "lesson": "Vous disposez maintenant de trois niveaux de communication : mieux recevoir, vérifier le sens et construire des messages plus clairs. L’étape suivante les mettra à l’épreuve dans des situations réelles de tension.",
+      "mission": "Terminez cette étape en créant trois règles personnelles pour exprimer clairement vos idées dans les conversations et les messages.",
+      "prompts": [
+        "Règle personnelle n° 1",
+        "Règle personnelle n° 2",
+        "Règle personnelle n° 3",
+        "Que faites-vous aujourd’hui avec plus de clarté qu’au Jour 31 ?",
+        "Quelle difficulté souhaitez-vous travailler dans l’étape des conversations réelles ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE3=COMMUNICATION_DEEP_STAGE3_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
 const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
-const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_BASE_DAYS.slice(30)];
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_BASE_DAYS.slice(45)];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -4855,6 +5441,7 @@ installDeepProgramI18n(CONFIDENCE_DEEP_STAGE5_CONTENT);
 installDeepProgramI18n(CONFIDENCE_DEEP_STAGE6_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE1_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE2_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE3_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
