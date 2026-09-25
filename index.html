@@ -8605,6 +8605,9 @@ completeDay=async function(n,isPreview){
       }
       if(event==='SIGNED_OUT'){
         currentSession=null;
+        nexoraIsAdmin=false;
+        const testerBtn=document.getElementById('testerBtn');
+        if(testerBtn)testerBtn.style.display='none';
         appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
         renderAll();
         updateAccountUI();
