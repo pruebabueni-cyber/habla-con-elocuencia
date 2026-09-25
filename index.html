@@ -4895,8 +4895,621 @@ const COMMUNICATION_DEEP_STAGE4_CONTENT=[
 ];
 const COMMUNICATION_DEEP_STAGE4=COMMUNICATION_DEEP_STAGE4_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
+const COMMUNICATION_DEEP_STAGE5_CONTENT=[
+  {
+    "d": 61,
+    "es": {
+      "title": "Posición e interés no son lo mismo",
+      "hook": "“Quiero esto” describe una posición. Entender por qué importa abre más posibilidades.",
+      "lesson": "Las posiciones muestran soluciones preferidas; los intereses muestran necesidades, prioridades o restricciones que esas soluciones intentan proteger.",
+      "mission": "Elige una diferencia real y escribe la posición de cada parte junto con el interés que podría estar detrás. Verifica al menos uno preguntando.",
+      "prompts": [
+        "Tu posición",
+        "Tu interés principal",
+        "Posición de la otra parte",
+        "¿Qué interés verificaste detrás de esa posición?",
+        "¿Qué cambió al mirar intereses y no solo posiciones?"
+      ]
+    },
+    "en": {
+      "title": "Position and Interest Are Not the Same",
+      "hook": "“I want this” describes a position. Understanding why it matters opens more possibilities.",
+      "lesson": "Positions show preferred solutions; interests show the needs, priorities, or constraints those solutions are trying to protect.",
+      "mission": "Choose one real difference and write each side’s position along with the interest that may sit behind it. Verify at least one by asking.",
+      "prompts": [
+        "Your position",
+        "Your main interest",
+        "The other side’s position",
+        "What interest did you verify behind that position?",
+        "What changed when you looked at interests instead of only positions?"
+      ]
+    },
+    "fr": {
+      "title": "Position et intérêt ne sont pas la même chose",
+      "hook": "« Je veux cela » décrit une position. Comprendre pourquoi cela compte ouvre davantage de possibilités.",
+      "lesson": "Les positions montrent des solutions préférées ; les intérêts montrent les besoins, priorités ou contraintes que ces solutions cherchent à protéger.",
+      "mission": "Choisissez une différence réelle et écrivez la position de chaque partie ainsi que l’intérêt qui pourrait se trouver derrière. Vérifiez-en au moins un en posant une question.",
+      "prompts": [
+        "Votre position",
+        "Votre intérêt principal",
+        "Position de l’autre partie",
+        "Quel intérêt avez-vous vérifié derrière cette position ?",
+        "Qu’est-ce qui a changé lorsque vous avez regardé les intérêts plutôt que seulement les positions ?"
+      ]
+    }
+  },
+  {
+    "d": 62,
+    "es": {
+      "title": "Objetivo, límite y zona flexible",
+      "hook": "Negociar sin saber qué necesitas puede llevarte a ceder de más o a defender detalles que en realidad no importan.",
+      "lesson": "Distinguir el resultado deseado, el límite que no quieres cruzar y lo que sí puedes ajustar crea criterio antes de que aparezca presión.",
+      "mission": "Antes de una negociación pequeña o grande, define tres cosas: objetivo, límite y zona flexible.",
+      "prompts": [
+        "¿Cuál es tu objetivo?",
+        "¿Cuál es tu límite?",
+        "¿Qué elementos sí puedes ajustar?",
+        "¿Qué riesgo reduces al definirlos antes?"
+      ]
+    },
+    "en": {
+      "title": "Objective, Boundary, and Flexible Zone",
+      "hook": "Negotiating without knowing what you need can make you concede too much or defend details that do not actually matter.",
+      "lesson": "Separating your desired outcome, the boundary you do not want to cross, and what you can adjust creates judgment before pressure appears.",
+      "mission": "Before one small or large negotiation, define three things: objective, boundary, and flexible zone.",
+      "prompts": [
+        "What is your objective?",
+        "What is your boundary?",
+        "Which elements can you adjust?",
+        "What risk do you reduce by defining them beforehand?"
+      ]
+    },
+    "fr": {
+      "title": "Objectif, limite et zone de flexibilité",
+      "hook": "Négocier sans savoir ce dont vous avez besoin peut vous amener à céder trop ou à défendre des détails qui comptent peu.",
+      "lesson": "Distinguer le résultat souhaité, la limite que vous ne voulez pas franchir et ce que vous pouvez ajuster crée un critère avant l’apparition de la pression.",
+      "mission": "Avant une négociation, petite ou importante, définissez trois éléments : objectif, limite et zone de flexibilité.",
+      "prompts": [
+        "Quel est votre objectif ?",
+        "Quelle est votre limite ?",
+        "Quels éléments pouvez-vous ajuster ?",
+        "Quel risque réduisez-vous en les définissant à l’avance ?"
+      ]
+    }
+  },
+  {
+    "d": 63,
+    "es": {
+      "title": "Pregunta qué protege esa posición",
+      "hook": "Una demanda rígida puede parecer menos rígida cuando entiendes qué problema intenta resolver.",
+      "lesson": "Preguntar por prioridades, restricciones y razones permite descubrir intereses sin asumirlos ni convertir la conversación en interrogatorio.",
+      "mission": "Ante una posición de la otra parte, formula una pregunta abierta para entender qué necesidad, prioridad o restricción intenta proteger.",
+      "prompts": [
+        "¿Cuál era su posición?",
+        "¿Qué pregunta hiciste?",
+        "¿Qué interés apareció?",
+        "¿Abrió alguna opción que antes no veías?"
+      ]
+    },
+    "en": {
+      "title": "Ask What That Position Is Protecting",
+      "hook": "A rigid demand may look less rigid once you understand the problem it is trying to solve.",
+      "lesson": "Asking about priorities, constraints, and reasons can uncover interests without assuming them or turning the conversation into an interrogation.",
+      "mission": "When the other side states a position, ask one open question to understand what need, priority, or constraint it is trying to protect.",
+      "prompts": [
+        "What was their position?",
+        "What did you ask?",
+        "What interest appeared?",
+        "Did it open an option you had not seen before?"
+      ]
+    },
+    "fr": {
+      "title": "Demandez ce que cette position cherche à protéger",
+      "hook": "Une demande rigide peut sembler moins rigide lorsque vous comprenez le problème qu’elle cherche à résoudre.",
+      "lesson": "Poser des questions sur les priorités, contraintes et raisons permet de découvrir les intérêts sans les supposer ni transformer la conversation en interrogatoire.",
+      "mission": "Face à une position de l’autre partie, posez une question ouverte pour comprendre quel besoin, quelle priorité ou quelle contrainte elle cherche à protéger.",
+      "prompts": [
+        "Quelle était sa position ?",
+        "Qu’avez-vous demandé ?",
+        "Quel intérêt est apparu ?",
+        "Cela a-t-il ouvert une option que vous ne voyiez pas auparavant ?"
+      ]
+    }
+  },
+  {
+    "d": 64,
+    "es": {
+      "title": "Imprescindible, preferible, intercambiable",
+      "hook": "No todo lo que quieres tiene el mismo peso.",
+      "lesson": "Clasificar variables evita tratar cada detalle como una línea roja y te ayuda a proteger lo importante mientras intercambias lo secundario.",
+      "mission": "Toma los elementos de una negociación y clasifícalos en tres grupos: imprescindible, preferible e intercambiable.",
+      "prompts": [
+        "Imprescindible",
+        "Preferible",
+        "Intercambiable",
+        "¿Qué estabas tratando antes como imprescindible sin serlo?"
+      ]
+    },
+    "en": {
+      "title": "Essential, Preferred, Tradeable",
+      "hook": "Not everything you want carries the same weight.",
+      "lesson": "Classifying variables keeps you from treating every detail as a red line and helps you protect what matters while trading what is secondary.",
+      "mission": "Take the elements of one negotiation and classify them into three groups: essential, preferred, and tradeable.",
+      "prompts": [
+        "Essential",
+        "Preferred",
+        "Tradeable",
+        "What had you been treating as essential even though it was not?"
+      ]
+    },
+    "fr": {
+      "title": "Indispensable, préférable, échangeable",
+      "hook": "Tout ce que vous souhaitez n’a pas le même poids.",
+      "lesson": "Classer les variables évite de traiter chaque détail comme une ligne rouge et vous aide à protéger l’essentiel tout en échangeant ce qui est secondaire.",
+      "mission": "Prenez les éléments d’une négociation et classez-les en trois groupes : indispensable, préférable et échangeable.",
+      "prompts": [
+        "Indispensable",
+        "Préférable",
+        "Échangeable",
+        "Qu’aviez-vous jusque-là traité comme indispensable alors que cela ne l’était pas ?"
+      ]
+    }
+  },
+  {
+    "d": 65,
+    "es": {
+      "title": "Tu alternativa si no hay acuerdo",
+      "hook": "Aceptar cualquier acuerdo parece menos necesario cuando sabes qué harás si no se logra uno.",
+      "lesson": "Una alternativa real fuera de la negociación reduce dependencia y ayuda a comparar una propuesta con algo concreto, no con el miedo a quedarte sin nada.",
+      "mission": "Define qué harías razonablemente si hoy no hubiera acuerdo. No imagines la opción perfecta: identifica la alternativa real disponible.",
+      "prompts": [
+        "¿Cuál es tu alternativa real?",
+        "¿Qué costo tiene?",
+        "¿Qué ventaja tiene?",
+        "¿Cómo cambia esa alternativa tu evaluación de un posible acuerdo?"
+      ]
+    },
+    "en": {
+      "title": "Your Alternative If There Is No Deal",
+      "hook": "Accepting any agreement feels less necessary when you know what you will do if no agreement is reached.",
+      "lesson": "A real alternative outside the negotiation reduces dependence and helps you compare an offer with something concrete rather than with the fear of having nothing.",
+      "mission": "Define what you would reasonably do if there were no agreement today. Do not imagine a perfect option; identify the real alternative available.",
+      "prompts": [
+        "What is your real alternative?",
+        "What does it cost?",
+        "What advantage does it have?",
+        "How does that alternative change your evaluation of a possible agreement?"
+      ]
+    },
+    "fr": {
+      "title": "Votre alternative en l’absence d’accord",
+      "hook": "Accepter n’importe quel accord semble moins nécessaire lorsque vous savez ce que vous ferez si aucun accord n’est trouvé.",
+      "lesson": "Une alternative réelle en dehors de la négociation réduit la dépendance et permet de comparer une proposition à quelque chose de concret plutôt qu’à la peur de n’avoir rien.",
+      "mission": "Définissez ce que vous feriez raisonnablement si aucun accord n’était trouvé aujourd’hui. N’imaginez pas l’option parfaite ; identifiez l’alternative réellement disponible.",
+      "prompts": [
+        "Quelle est votre alternative réelle ?",
+        "Quel en est le coût ?",
+        "Quel avantage présente-t-elle ?",
+        "Comment cette alternative modifie-t-elle votre évaluation d’un accord possible ?"
+      ]
+    }
+  },
+  {
+    "d": 66,
+    "es": {
+      "title": "Genera opciones antes de elegir",
+      "hook": "Cuando solo existen “mi opción” y “tu opción”, la conversación se vuelve una competencia binaria.",
+      "lesson": "Separar por un momento la creación de opciones de la decisión permite explorar combinaciones que ninguna parte había formulado al inicio.",
+      "mission": "Antes de defender una solución, genera al menos tres opciones que atiendan parte de los intereses de ambas partes.",
+      "prompts": [
+        "Opción #1",
+        "Opción #2",
+        "Opción #3",
+        "¿Qué interés protege cada una?",
+        "¿Apareció alguna combinación nueva?"
+      ]
+    },
+    "en": {
+      "title": "Generate Options Before Choosing",
+      "hook": "When only “my option” and “your option” exist, the conversation becomes a binary contest.",
+      "lesson": "Temporarily separating option generation from decision-making allows combinations to emerge that neither side had formulated at the start.",
+      "mission": "Before defending one solution, generate at least three options that address some of both sides’ interests.",
+      "prompts": [
+        "Option #1",
+        "Option #2",
+        "Option #3",
+        "What interest does each protect?",
+        "Did any new combination appear?"
+      ]
+    },
+    "fr": {
+      "title": "Générez des options avant de choisir",
+      "hook": "Lorsqu’il n’existe que « mon option » et « votre option », la conversation devient une compétition binaire.",
+      "lesson": "Séparer temporairement la création d’options de la décision permet d’explorer des combinaisons qu’aucune partie n’avait formulées au départ.",
+      "mission": "Avant de défendre une solution, générez au moins trois options qui répondent en partie aux intérêts des deux parties.",
+      "prompts": [
+        "Option n° 1",
+        "Option n° 2",
+        "Option n° 3",
+        "Quel intérêt chacune protège-t-elle ?",
+        "Une nouvelle combinaison est-elle apparue ?"
+      ]
+    }
+  },
+  {
+    "d": 67,
+    "es": {
+      "title": "Intercambia variables, no concesiones ciegas",
+      "hook": "Ceder en algo puede tener poco costo para ti y mucho valor para la otra parte, o al revés.",
+      "lesson": "Negociar varias variables permite construir intercambios basados en diferencias de prioridad en lugar de dividir todo por la mitad.",
+      "mission": "Identifica dos variables con prioridades distintas y formula un intercambio explícito: “Si ajustamos X, necesitaría Y.”",
+      "prompts": [
+        "Variable X",
+        "Variable Y",
+        "¿Qué valor tiene X para ti?",
+        "¿Qué valor tiene Y para la otra parte?",
+        "¿Qué intercambio propusiste?"
+      ]
+    },
+    "en": {
+      "title": "Trade Variables, Not Blind Concessions",
+      "hook": "Giving on one item may cost you little and matter greatly to the other side—or the reverse.",
+      "lesson": "Negotiating across several variables allows trades based on different priorities instead of splitting everything down the middle.",
+      "mission": "Identify two variables with different priorities and formulate an explicit trade: “If we adjust X, I would need Y.”",
+      "prompts": [
+        "Variable X",
+        "Variable Y",
+        "What value does X have for you?",
+        "What value does Y have for the other side?",
+        "What trade did you propose?"
+      ]
+    },
+    "fr": {
+      "title": "Échangez des variables, pas des concessions à l’aveugle",
+      "hook": "Céder sur un élément peut vous coûter peu tout en ayant beaucoup de valeur pour l’autre partie, ou l’inverse.",
+      "lesson": "Négocier plusieurs variables permet de construire des échanges fondés sur des différences de priorité au lieu de tout partager en deux.",
+      "mission": "Identifiez deux variables dont les priorités diffèrent et formulez un échange explicite : « Si nous ajustons X, j’aurais besoin de Y. »",
+      "prompts": [
+        "Variable X",
+        "Variable Y",
+        "Quelle valeur X a-t-elle pour vous ?",
+        "Quelle valeur Y a-t-elle pour l’autre partie ?",
+        "Quel échange avez-vous proposé ?"
+      ]
+    }
+  },
+  {
+    "d": 68,
+    "es": {
+      "title": "Haz una propuesta que se pueda responder",
+      "hook": "“Tenemos que mejorar esto” no es todavía una propuesta.",
+      "lesson": "Una propuesta negociable necesita suficiente especificidad para que la otra parte pueda aceptarla, rechazarla o modificarla.",
+      "mission": "Formula hoy una propuesta con quién, qué, cuándo y, si aplica, cantidad o condición.",
+      "prompts": [
+        "¿Quién?",
+        "¿Qué exactamente?",
+        "¿Cuándo?",
+        "¿Qué cantidad o condición aplica?",
+        "¿La otra persona podía responder de manera concreta?"
+      ]
+    },
+    "en": {
+      "title": "Make a Proposal That Can Be Answered",
+      "hook": "“We need to improve this” is not yet a proposal.",
+      "lesson": "A negotiable proposal needs enough specificity for the other side to accept it, reject it, or modify it.",
+      "mission": "Formulate one proposal today with who, what, when, and—when relevant—quantity or condition.",
+      "prompts": [
+        "Who?",
+        "What exactly?",
+        "When?",
+        "What quantity or condition applies?",
+        "Could the other person respond concretely?"
+      ]
+    },
+    "fr": {
+      "title": "Faites une proposition à laquelle on peut répondre",
+      "hook": "« Nous devons améliorer cela » n’est pas encore une proposition.",
+      "lesson": "Une proposition négociable doit être suffisamment précise pour que l’autre partie puisse l’accepter, la refuser ou la modifier.",
+      "mission": "Formulez aujourd’hui une proposition indiquant qui, quoi, quand et, si nécessaire, quelle quantité ou condition.",
+      "prompts": [
+        "Qui ?",
+        "Quoi exactement ?",
+        "Quand ?",
+        "Quelle quantité ou condition s’applique ?",
+        "L’autre personne pouvait-elle répondre de manière concrète ?"
+      ]
+    }
+  },
+  {
+    "d": 69,
+    "es": {
+      "title": "Prueba el acuerdo antes de cerrarlo",
+      "hook": "Decir “sí” no garantiza que ambas partes hayan entendido lo mismo.",
+      "lesson": "Resumir responsabilidades, tiempos, condiciones y próximos pasos permite detectar diferencias antes de que se conviertan en incumplimientos.",
+      "mission": "Antes de cerrar un acuerdo, resume en voz alta o por escrito qué hará cada parte y qué ocurre después.",
+      "prompts": [
+        "¿Qué harás tú?",
+        "¿Qué hará la otra parte?",
+        "¿Cuál es el plazo?",
+        "¿Qué condición o detalle debía confirmarse?",
+        "¿Ambas partes confirmaron el mismo acuerdo?"
+      ]
+    },
+    "en": {
+      "title": "Test the Agreement Before Closing It",
+      "hook": "Saying “yes” does not guarantee that both sides understood the same thing.",
+      "lesson": "Summarizing responsibilities, timing, conditions, and next steps reveals differences before they turn into missed commitments.",
+      "mission": "Before closing one agreement, summarize aloud or in writing what each side will do and what happens next.",
+      "prompts": [
+        "What will you do?",
+        "What will the other side do?",
+        "What is the timeline?",
+        "What condition or detail needed confirmation?",
+        "Did both sides confirm the same agreement?"
+      ]
+    },
+    "fr": {
+      "title": "Vérifiez l’accord avant de le conclure",
+      "hook": "Dire « oui » ne garantit pas que les deux parties aient compris la même chose.",
+      "lesson": "Résumer les responsabilités, les délais, les conditions et les prochaines étapes permet de détecter les différences avant qu’elles ne deviennent des engagements non tenus.",
+      "mission": "Avant de conclure un accord, résumez oralement ou par écrit ce que chaque partie fera et ce qui se passera ensuite.",
+      "prompts": [
+        "Que ferez-vous ?",
+        "Que fera l’autre partie ?",
+        "Quel est le délai ?",
+        "Quelle condition ou quel détail devait être confirmé ?",
+        "Les deux parties ont-elles confirmé le même accord ?"
+      ]
+    }
+  },
+  {
+    "d": 70,
+    "es": {
+      "title": "Un acuerdo no siempre es mejor que no acordar",
+      "hook": "Cerrar por cerrar puede producir un acuerdo que después no puedes o no quieres sostener.",
+      "lesson": "Evaluar una propuesta contra tus límites, intereses y alternativa permite decir no sin convertir el desacuerdo en fracaso.",
+      "mission": "Evalúa una propuesta real o simulada con tres preguntas: ¿protege lo esencial?, ¿puedo cumplirla?, ¿es mejor que mi alternativa?",
+      "prompts": [
+        "¿Protege lo esencial?",
+        "¿Puedes cumplirla de forma realista?",
+        "¿Es mejor que tu alternativa?",
+        "¿Aceptarías, ajustarías o rechazarías? ¿Por qué?"
+      ]
+    },
+    "en": {
+      "title": "A Deal Is Not Always Better Than No Deal",
+      "hook": "Closing just for the sake of closing can produce an agreement you cannot or do not want to sustain.",
+      "lesson": "Evaluating an offer against your boundaries, interests, and alternative lets you say no without treating disagreement as failure.",
+      "mission": "Evaluate one real or simulated proposal with three questions: Does it protect what is essential? Can I realistically fulfill it? Is it better than my alternative?",
+      "prompts": [
+        "Does it protect what is essential?",
+        "Can you realistically fulfill it?",
+        "Is it better than your alternative?",
+        "Would you accept, adjust, or reject it? Why?"
+      ]
+    },
+    "fr": {
+      "title": "Un accord n’est pas toujours préférable à l’absence d’accord",
+      "hook": "Conclure pour conclure peut produire un accord que vous ne pouvez pas ou ne souhaitez pas tenir.",
+      "lesson": "Évaluer une proposition au regard de vos limites, de vos intérêts et de votre alternative permet de dire non sans transformer le désaccord en échec.",
+      "mission": "Évaluez une proposition réelle ou simulée avec trois questions : protège-t-elle l’essentiel ? Puis-je réellement la respecter ? Est-elle meilleure que mon alternative ?",
+      "prompts": [
+        "Protège-t-elle l’essentiel ?",
+        "Pouvez-vous réellement la respecter ?",
+        "Est-elle meilleure que votre alternative ?",
+        "Accepteriez-vous, ajusteriez-vous ou refuseriez-vous ? Pourquoi ?"
+      ]
+    }
+  },
+  {
+    "d": 71,
+    "es": {
+      "title": "Concesiones con criterio",
+      "hook": "Una concesión hecha por presión puede parecer pequeña en el momento y convertirse en resentimiento después.",
+      "lesson": "Antes de ceder, conviene saber qué recibes, qué proteges y si la concesión sigue dentro de tu zona flexible.",
+      "mission": "Cuando consideres ceder en algo, detente y responde tres preguntas antes: ¿qué valor tiene para mí?, ¿qué valor crea para la otra parte?, ¿qué obtengo o protejo a cambio?",
+      "prompts": [
+        "¿En qué considerabas ceder?",
+        "¿Qué valor tenía para ti?",
+        "¿Qué valor tenía para la otra parte?",
+        "¿Qué recibiste o protegiste a cambio?"
+      ]
+    },
+    "en": {
+      "title": "Concessions with Judgment",
+      "hook": "A concession made under pressure can feel small in the moment and become resentment later.",
+      "lesson": "Before giving something up, it helps to know what you receive, what you protect, and whether the concession remains inside your flexible zone.",
+      "mission": "When you consider conceding on something, pause and answer three questions first: What is it worth to me? What value does it create for the other side? What do I receive or protect in return?",
+      "prompts": [
+        "What were you considering conceding?",
+        "What value did it have for you?",
+        "What value did it have for the other side?",
+        "What did you receive or protect in return?"
+      ]
+    },
+    "fr": {
+      "title": "Des concessions avec discernement",
+      "hook": "Une concession faite sous pression peut sembler minime sur le moment et devenir ensuite une source de ressentiment.",
+      "lesson": "Avant de céder, il est utile de savoir ce que vous recevez, ce que vous protégez et si la concession reste dans votre zone de flexibilité.",
+      "mission": "Lorsque vous envisagez de céder sur quelque chose, arrêtez-vous et répondez d’abord à trois questions : quelle valeur cela a-t-il pour moi ? Quelle valeur cela crée-t-il pour l’autre partie ? Que reçois-je ou protège-je en échange ?",
+      "prompts": [
+        "Sur quoi envisagiez-vous de céder ?",
+        "Quelle valeur cela avait-il pour vous ?",
+        "Quelle valeur cela avait-il pour l’autre partie ?",
+        "Qu’avez-vous reçu ou protégé en échange ?"
+      ]
+    }
+  },
+  {
+    "d": 72,
+    "es": {
+      "title": "No decidas por la presión del reloj",
+      "hook": "Urgencia real y presión para decidir no son siempre la misma cosa.",
+      "lesson": "Cuando el tiempo se usa como presión, confirmar el plazo real y pedir el espacio razonable disponible protege la calidad de la decisión.",
+      "mission": "Ante una decisión presionada por tiempo, verifica cuál es el plazo real y, si existe margen, pide un intervalo concreto para evaluar.",
+      "prompts": [
+        "¿Qué urgencia se planteó?",
+        "¿Cuál era el plazo real?",
+        "¿Qué tiempo pediste para evaluar?",
+        "¿Qué pudiste revisar antes de decidir?"
+      ]
+    },
+    "en": {
+      "title": "Do Not Decide Just Because the Clock Is Pressuring You",
+      "hook": "Real urgency and pressure to decide are not always the same thing.",
+      "lesson": "When time is used as pressure, confirming the actual deadline and asking for whatever reasonable space exists protects decision quality.",
+      "mission": "When facing a time-pressured decision, verify the real deadline and, if there is room, request a specific interval to evaluate.",
+      "prompts": [
+        "What urgency was presented?",
+        "What was the actual deadline?",
+        "How much time did you request to evaluate?",
+        "What were you able to review before deciding?"
+      ]
+    },
+    "fr": {
+      "title": "Ne décidez pas uniquement sous la pression du temps",
+      "hook": "Une véritable urgence et une pression pour décider ne sont pas toujours la même chose.",
+      "lesson": "Lorsque le temps sert de pression, confirmer l’échéance réelle et demander l’espace raisonnablement disponible protège la qualité de la décision.",
+      "mission": "Face à une décision sous pression temporelle, vérifiez l’échéance réelle et, s’il existe une marge, demandez un intervalle précis pour évaluer.",
+      "prompts": [
+        "Quelle urgence a été présentée ?",
+        "Quelle était l’échéance réelle ?",
+        "Combien de temps avez-vous demandé pour évaluer ?",
+        "Qu’avez-vous pu examiner avant de décider ?"
+      ]
+    }
+  },
+  {
+    "d": 73,
+    "es": {
+      "title": "Cuando el poder no es igual",
+      "hook": "No todas las negociaciones ocurren entre partes con el mismo poder, información o alternativas.",
+      "lesson": "Reconocer la asimetría ayuda a enfocarte en lo que sí puedes proteger: claridad, documentación, preguntas, límites, alternativas y tiempo para revisar cuando sea posible.",
+      "mission": "Analiza una negociación donde la otra parte tenga más poder. Identifica dos cosas que no controlas y tres acciones concretas que sí puedes controlar.",
+      "prompts": [
+        "¿Qué no controlas #1?",
+        "¿Qué no controlas #2?",
+        "Acción bajo tu control #1",
+        "Acción bajo tu control #2",
+        "Acción bajo tu control #3"
+      ]
+    },
+    "en": {
+      "title": "When Power Is Unequal",
+      "hook": "Not every negotiation happens between parties with equal power, information, or alternatives.",
+      "lesson": "Recognizing asymmetry helps you focus on what you can still protect: clarity, documentation, questions, boundaries, alternatives, and review time when available.",
+      "mission": "Analyze one negotiation where the other side has more power. Identify two things you do not control and three concrete actions you do control.",
+      "prompts": [
+        "What you do not control #1",
+        "What you do not control #2",
+        "Action under your control #1",
+        "Action under your control #2",
+        "Action under your control #3"
+      ]
+    },
+    "fr": {
+      "title": "Lorsque le rapport de force est inégal",
+      "hook": "Toutes les négociations ne se déroulent pas entre des parties ayant le même pouvoir, les mêmes informations ou les mêmes alternatives.",
+      "lesson": "Reconnaître l’asymétrie aide à se concentrer sur ce que vous pouvez encore protéger : clarté, documentation, questions, limites, alternatives et temps de révision lorsque c’est possible.",
+      "mission": "Analysez une négociation dans laquelle l’autre partie dispose de davantage de pouvoir. Identifiez deux éléments que vous ne contrôlez pas et trois actions concrètes que vous contrôlez.",
+      "prompts": [
+        "Ce que vous ne contrôlez pas n° 1",
+        "Ce que vous ne contrôlez pas n° 2",
+        "Action sous votre contrôle n° 1",
+        "Action sous votre contrôle n° 2",
+        "Action sous votre contrôle n° 3"
+      ]
+    }
+  },
+  {
+    "d": 74,
+    "es": {
+      "title": "Tu patrón al negociar",
+      "hook": "Dos semanas muestran si tiendes a ceder rápido, endurecerte, explicar demasiado, evitar preguntar o aceptar ambigüedad para cerrar.",
+      "lesson": "El patrón importa porque la misma técnica no corrige todos los estilos de negociación.",
+      "mission": "Revisa tus prácticas y detecta tu patrón dominante bajo presión, junto con la conducta concreta que más lo corrige.",
+      "prompts": [
+        "¿Qué patrón aparece con más frecuencia?",
+        "¿Qué lo dispara?",
+        "¿Qué costo suele tener?",
+        "¿Qué conducta lo corrige mejor?",
+        "¿Qué evidencia tienes de una negociación mejor manejada?"
+      ]
+    },
+    "en": {
+      "title": "Your Negotiation Pattern",
+      "hook": "Two weeks can show whether you tend to concede quickly, become rigid, over-explain, avoid asking, or accept ambiguity just to close.",
+      "lesson": "The pattern matters because the same technique does not correct every negotiation style.",
+      "mission": "Review your practices and identify your dominant pattern under pressure along with the concrete behavior that best corrects it.",
+      "prompts": [
+        "What pattern appears most often?",
+        "What triggers it?",
+        "What does it usually cost?",
+        "What behavior corrects it best?",
+        "What evidence do you have of a better-managed negotiation?"
+      ]
+    },
+    "fr": {
+      "title": "Votre schéma de négociation",
+      "hook": "Deux semaines peuvent montrer si vous avez tendance à céder rapidement, à vous rigidifier, à trop expliquer, à éviter de poser des questions ou à accepter l’ambiguïté simplement pour conclure.",
+      "lesson": "Le schéma compte, car la même technique ne corrige pas tous les styles de négociation.",
+      "mission": "Relisez vos pratiques et identifiez votre schéma dominant sous pression ainsi que le comportement concret qui le corrige le mieux.",
+      "prompts": [
+        "Quel schéma apparaît le plus souvent ?",
+        "Qu’est-ce qui le déclenche ?",
+        "Quel coût a-t-il généralement ?",
+        "Quel comportement le corrige le mieux ?",
+        "Quelle preuve avez-vous d’une négociation mieux gérée ?"
+      ]
+    }
+  },
+  {
+    "d": 75,
+    "es": {
+      "title": "Quinta revisión: acuerdos que puedes sostener",
+      "hook": "Negociar bien no significa obtener todo; significa tomar decisiones conscientes sobre qué proteger, qué intercambiar y cuándo no cerrar.",
+      "lesson": "Un acuerdo sostenible combina comprensión de intereses, límites claros, opciones suficientes y confirmación precisa de compromisos.",
+      "mission": "Cierra la etapa creando tu checklist personal de negociación antes de pasar a Comunicación Integrada.",
+      "prompts": [
+        "¿Qué debes definir antes de negociar?",
+        "¿Qué necesitas preguntar durante la conversación?",
+        "¿Qué nunca quieres ceder por presión?",
+        "¿Qué debes confirmar antes de cerrar?",
+        "¿Qué haces hoy con más criterio que en el Día 61?"
+      ]
+    },
+    "en": {
+      "title": "Fifth Review: Agreements You Can Sustain",
+      "hook": "Negotiating well does not mean getting everything; it means making conscious decisions about what to protect, what to trade, and when not to close.",
+      "lesson": "A sustainable agreement combines understanding of interests, clear boundaries, enough options, and precise confirmation of commitments.",
+      "mission": "Close this stage by creating your personal negotiation checklist before moving into Integrated Communication.",
+      "prompts": [
+        "What must you define before negotiating?",
+        "What do you need to ask during the conversation?",
+        "What do you never want to give up under pressure?",
+        "What must you confirm before closing?",
+        "What do you handle with more judgment now than on Day 61?"
+      ]
+    },
+    "fr": {
+      "title": "Cinquième révision : des accords que vous pouvez tenir",
+      "hook": "Bien négocier ne signifie pas tout obtenir ; cela signifie décider consciemment de ce qu’il faut protéger, de ce qui peut être échangé et du moment où il vaut mieux ne pas conclure.",
+      "lesson": "Un accord durable combine compréhension des intérêts, limites claires, options suffisantes et confirmation précise des engagements.",
+      "mission": "Terminez cette étape en créant votre checklist personnelle de négociation avant de passer à la Communication intégrée.",
+      "prompts": [
+        "Que devez-vous définir avant de négocier ?",
+        "Que devez-vous demander pendant la conversation ?",
+        "Que ne voulez-vous jamais céder sous pression ?",
+        "Que devez-vous confirmer avant de conclure ?",
+        "Que gérez-vous aujourd’hui avec plus de discernement qu’au Jour 61 ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE5=COMMUNICATION_DEEP_STAGE5_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
 const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
-const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_BASE_DAYS.slice(60)];
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_DEEP_STAGE5,...COMMUNICATION_BASE_DAYS.slice(75)];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -6041,6 +6654,7 @@ installDeepProgramI18n(COMMUNICATION_DEEP_STAGE1_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE2_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE3_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE4_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE5_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
