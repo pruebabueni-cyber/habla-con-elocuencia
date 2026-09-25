@@ -3684,16 +3684,18 @@ function applyNexoraLanguage(root=document.body){
     const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
     nodes.forEach(n=>translateTextNode(n,nexoraLanguage));
     root.querySelectorAll?.('[placeholder]').forEach(el=>{
-      const base=canonicalSpanish(el.getAttribute('placeholder'));
+      const current=el.getAttribute('placeholder');
+      const base=canonicalSpanish(current);
       const t=translatePattern(base,nexoraLanguage);
-      if(t!==base||nexoraLanguage==='es')el.setAttribute('placeholder',t);
+      if(current!==t&&(t!==base||nexoraLanguage==='es'))el.setAttribute('placeholder',t);
     });
     root.querySelectorAll?.('[aria-label],[title]').forEach(el=>{
       for(const attr of ['aria-label','title']){
         if(!el.hasAttribute(attr))continue;
-        const base=canonicalSpanish(el.getAttribute(attr));
+        const current=el.getAttribute(attr);
+        const base=canonicalSpanish(current);
         const t=translatePattern(base,nexoraLanguage);
-        if(t!==base||nexoraLanguage==='es')el.setAttribute(attr,t);
+        if(current!==t&&(t!==base||nexoraLanguage==='es'))el.setAttribute(attr,t);
       }
     });
     const select=document.getElementById('languageSelect');if(select)select.value=nexoraLanguage;
@@ -3744,11 +3746,49 @@ const nexoraI18nObserver=new MutationObserver(mutations=>{
   if(nexoraI18nApplying)return;
   let should=false;
   for(const m of mutations){
-    if((m.type==='childList'&&m.addedNodes.length)||m.type==='characterData'){should=true;break}
+    if((m.type==='childList'&&m.addedNodes.length)||m.type==='characterData'||m.type==='attributes'){should=true;break}
   }
   if(should)requestAnimationFrame(()=>applyNexoraLanguage(document.body));
 });
-nexoraI18nObserver.observe(document.body,{childList:true,characterData:true,subtree:true});
+nexoraI18nObserver.observe(document.body,{
+  childList:true,
+  characterData:true,
+  attributes:true,
+  attributeFilter:['placeholder','aria-label','title'],
+  subtree:true
+});
+
+function refreshNexoraLocale(){
+  try{
+    if(typeof renderAll==='function')renderAll();
+    const activeView=(typeof currentViewId==='function'?currentViewId():document.querySelector('.view.active')?.id)||'home';
+    if(activeView==='today'&&typeof renderExercise==='function'&&typeof pstate==='function'){
+      const s=pstate(),max=(typeof totalDays==='function'?totalDays():90);
+      const isPreview=(typeof previewDay!=='undefined'&&previewDay!==null);
+      const n=isPreview?previewDay:Math.min(s.currentDay||1,max);
+      const isReview=!isPreview&&n<(s.currentDay||1);
+      renderExercise(n,!!isPreview,isReview);
+    }
+    if(typeof renderThemeButton==='function')renderThemeButton();
+    if(document.getElementById('accountModal')?.classList.contains('open')&&typeof renderAccountModal==='function')renderAccountModal();
+    if(document.getElementById('tourLayer')?.classList.contains('open')&&typeof renderGuideStep==='function')renderGuideStep();
+    applyNexoraLanguage(document.body);
+  }catch(error){console.warn('NEXORA locale refresh',error)}
+}
+
+// Re-apply the selected locale after browser back/forward cache restores,
+// returning to the app from the background, or a language change in another tab.
+window.addEventListener('pageshow',()=>requestAnimationFrame(refreshNexoraLocale));
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible')requestAnimationFrame(refreshNexoraLocale);
+});
+window.addEventListener('storage',event=>{
+  if(event.key==='nexora_language'&&['es','en','fr'].includes(event.newValue)){
+    nexoraLanguage=event.newValue;
+    requestAnimationFrame(refreshNexoraLocale);
+  }
+});
+
 try{if(typeof renderAll==='function')renderAll()}catch{}
 applyNexoraLanguage(document.body);
 </script>
