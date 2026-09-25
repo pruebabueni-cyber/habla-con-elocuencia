@@ -4297,8 +4297,606 @@ const COMMUNICATION_DEEP_STAGE3_CONTENT=[
 ];
 const COMMUNICATION_DEEP_STAGE3=COMMUNICATION_DEEP_STAGE3_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
+const COMMUNICATION_DEEP_STAGE4_CONTENT=[
+  {
+    "d": 46,
+    "es": {
+      "title": "La conversación que estás evitando",
+      "hook": "La claridad se vuelve más importante cuando hay algo en juego.",
+      "lesson": "Evitar una conversación difícil puede reducir incomodidad a corto plazo, pero también prolongar ambigüedad, resentimiento o problemas sin resolver.",
+      "mission": "Identifica una conversación que estés evitando y descríbela sin entrar todavía a resolverla: tema, persona, riesgo percibido y resultado que necesitas.",
+      "prompts": [
+        "¿Qué conversación estás evitando?",
+        "¿Qué temes que ocurra?",
+        "¿Qué necesitas que quede claro?",
+        "¿Qué resultado realista sería suficientemente bueno?"
+      ]
+    },
+    "en": {
+      "title": "The Conversation You Are Avoiding",
+      "hook": "Clarity matters even more when something is at stake.",
+      "lesson": "Avoiding a difficult conversation may reduce discomfort in the short term, but it can also prolong ambiguity, resentment, or unresolved problems.",
+      "mission": "Identify one conversation you are avoiding and describe it without trying to solve it yet: topic, person, perceived risk, and the outcome you need.",
+      "prompts": [
+        "What conversation are you avoiding?",
+        "What are you afraid might happen?",
+        "What needs to become clear?",
+        "What realistic outcome would be good enough?"
+      ]
+    },
+    "fr": {
+      "title": "La conversation que vous évitez",
+      "hook": "La clarté devient encore plus importante lorsqu’il y a un enjeu.",
+      "lesson": "Éviter une conversation difficile peut réduire l’inconfort à court terme, mais aussi prolonger l’ambiguïté, le ressentiment ou les problèmes non résolus.",
+      "mission": "Identifiez une conversation que vous évitez et décrivez-la sans chercher encore à la résoudre : sujet, personne, risque perçu et résultat dont vous avez besoin.",
+      "prompts": [
+        "Quelle conversation évitez-vous ?",
+        "Que craignez-vous qu’il se passe ?",
+        "Qu’est-ce qui doit devenir clair ?",
+        "Quel résultat réaliste serait suffisamment satisfaisant ?"
+      ]
+    }
+  },
+  {
+    "d": 47,
+    "es": {
+      "title": "Hecho, impacto, petición",
+      "hook": "En tensión, es fácil convertir un problema concreto en una evaluación global de la otra persona.",
+      "lesson": "Separar un hecho observable, su impacto y una petición específica reduce acusaciones vagas y da a la conversación un punto de trabajo.",
+      "mission": "Formula un mensaje difícil en tres partes: hecho observable, impacto concreto y petición específica.",
+      "prompts": [
+        "Hecho observable",
+        "Impacto concreto",
+        "Petición específica",
+        "¿Qué juicio o etiqueta dejaste fuera?"
+      ]
+    },
+    "en": {
+      "title": "Fact, Impact, Request",
+      "hook": "Under tension, it is easy to turn a concrete problem into a global judgment of the other person.",
+      "lesson": "Separating an observable fact, its concrete impact, and a specific request reduces vague accusations and gives the conversation something workable.",
+      "mission": "Formulate one difficult message in three parts: observable fact, concrete impact, and specific request.",
+      "prompts": [
+        "Observable fact",
+        "Concrete impact",
+        "Specific request",
+        "What judgment or label did you leave out?"
+      ]
+    },
+    "fr": {
+      "title": "Fait, impact, demande",
+      "hook": "Sous tension, il est facile de transformer un problème concret en jugement global sur l’autre personne.",
+      "lesson": "Séparer un fait observable, son impact concret et une demande précise réduit les accusations vagues et donne à la conversation un point de travail.",
+      "mission": "Formulez un message difficile en trois parties : fait observable, impact concret et demande précise.",
+      "prompts": [
+        "Fait observable",
+        "Impact concret",
+        "Demande précise",
+        "Quel jugement ou quelle étiquette avez-vous laissé de côté ?"
+      ]
+    }
+  },
+  {
+    "d": 48,
+    "es": {
+      "title": "Baja la velocidad, no la claridad",
+      "hook": "Cuando la tensión sube, hablar más rápido puede hacer que digas más y comuniques menos.",
+      "lesson": "Reducir velocidad, hacer pausas y usar frases más cortas puede proteger la precisión sin obligarte a ceder tu punto.",
+      "mission": "En una conversación tensa o incómoda, reduce deliberadamente tu velocidad y limita cada intervención a una idea principal.",
+      "prompts": [
+        "¿Qué señal te indicó que estabas acelerando?",
+        "¿Cómo redujiste el ritmo?",
+        "¿Qué idea mantuviste como principal?",
+        "¿Qué cambió en la interacción?"
+      ]
+    },
+    "en": {
+      "title": "Slow the Pace, Not the Clarity",
+      "hook": "When tension rises, speaking faster can make you say more while communicating less.",
+      "lesson": "Slowing down, pausing, and using shorter sentences can protect precision without requiring you to abandon your point.",
+      "mission": "In one tense or uncomfortable conversation, deliberately slow your pace and keep each turn to one main idea.",
+      "prompts": [
+        "What signal showed you that you were speeding up?",
+        "How did you slow the pace?",
+        "What idea did you keep as the main point?",
+        "What changed in the interaction?"
+      ]
+    },
+    "fr": {
+      "title": "Ralentissez le rythme, pas la clarté",
+      "hook": "Lorsque la tension monte, parler plus vite peut vous faire dire davantage tout en communiquant moins.",
+      "lesson": "Ralentir, faire des pauses et utiliser des phrases plus courtes peut préserver la précision sans vous obliger à abandonner votre point de vue.",
+      "mission": "Dans une conversation tendue ou inconfortable, ralentissez délibérément votre rythme et limitez chaque intervention à une idée principale.",
+      "prompts": [
+        "Quel signal vous a montré que vous accélériez ?",
+        "Comment avez-vous ralenti le rythme ?",
+        "Quelle idée avez-vous gardée comme point principal ?",
+        "Qu’est-ce qui a changé dans l’interaction ?"
+      ]
+    }
+  },
+  {
+    "d": 49,
+    "es": {
+      "title": "Desacuerdo sin borrar al otro",
+      "hook": "Entender una posición no te obliga a compartirla.",
+      "lesson": "Puedes reconocer correctamente lo que la otra persona dijo y luego expresar una perspectiva diferente. Comprensión y acuerdo son conductas distintas.",
+      "mission": "En un desacuerdo, resume primero el punto de la otra persona de una manera que ella pueda reconocer y luego expresa tu diferencia.",
+      "prompts": [
+        "¿Cuál era su punto?",
+        "¿Cómo lo reconociste?",
+        "¿Dónde exactamente diferías?",
+        "¿Pudiste discrepar sin distorsionar su posición?"
+      ]
+    },
+    "en": {
+      "title": "Disagree Without Erasing the Other Person",
+      "hook": "Understanding a position does not require you to share it.",
+      "lesson": "You can accurately acknowledge what the other person said and then express a different perspective. Understanding and agreement are different behaviors.",
+      "mission": "In one disagreement, first summarize the other person’s point in a way they could recognize, then state where you differ.",
+      "prompts": [
+        "What was their point?",
+        "How did you acknowledge it?",
+        "Where exactly did you differ?",
+        "Were you able to disagree without distorting their position?"
+      ]
+    },
+    "fr": {
+      "title": "Être en désaccord sans effacer l’autre",
+      "hook": "Comprendre une position ne vous oblige pas à la partager.",
+      "lesson": "Vous pouvez reconnaître correctement ce que l’autre personne a dit, puis exprimer une perspective différente. Compréhension et accord sont deux comportements distincts.",
+      "mission": "Dans un désaccord, résumez d’abord le point de l’autre personne d’une manière qu’elle puisse reconnaître, puis exprimez votre différence.",
+      "prompts": [
+        "Quel était son point de vue ?",
+        "Comment l’avez-vous reconnu ?",
+        "Sur quel point précis étiez-vous en désaccord ?",
+        "Avez-vous pu être en désaccord sans déformer sa position ?"
+      ]
+    }
+  },
+  {
+    "d": 50,
+    "es": {
+      "title": "Una diferencia específica",
+      "hook": "“No estoy de acuerdo” dice que existe una diferencia, pero no muestra dónde está.",
+      "lesson": "Ubicar el desacuerdo en una premisa, prioridad, dato, interpretación o solución hace que el conflicto sea más manejable.",
+      "mission": "Toma un desacuerdo y completa esta estructura: “Coincidimos en ____. Diferimos en ____. Mi razón principal es ____.”",
+      "prompts": [
+        "¿En qué coincidían?",
+        "¿En qué diferían exactamente?",
+        "¿Cuál era tu razón principal?",
+        "¿El desacuerdo se volvió más específico?"
+      ]
+    },
+    "en": {
+      "title": "One Specific Difference",
+      "hook": "“I disagree” tells you that a difference exists, but not where it is.",
+      "lesson": "Locating the disagreement in a premise, priority, fact, interpretation, or solution makes conflict more manageable.",
+      "mission": "Take one disagreement and complete this structure: “We agree on ____. We differ on ____. My main reason is ____.”",
+      "prompts": [
+        "What did you agree on?",
+        "Where exactly did you differ?",
+        "What was your main reason?",
+        "Did the disagreement become more specific?"
+      ]
+    },
+    "fr": {
+      "title": "Une différence précise",
+      "hook": "« Je ne suis pas d’accord » indique qu’une différence existe, mais ne montre pas où elle se situe.",
+      "lesson": "Localiser le désaccord dans une prémisse, une priorité, un fait, une interprétation ou une solution rend le conflit plus gérable.",
+      "mission": "Prenez un désaccord et complétez cette structure : « Nous sommes d’accord sur ____. Nous divergeons sur ____. Ma raison principale est ____. »",
+      "prompts": [
+        "Sur quoi étiez-vous d’accord ?",
+        "Sur quoi divergiez-vous précisément ?",
+        "Quelle était votre raison principale ?",
+        "Le désaccord est-il devenu plus précis ?"
+      ]
+    }
+  },
+  {
+    "d": 51,
+    "es": {
+      "title": "Recibe feedback sin defenderte primero",
+      "hook": "El impulso de explicar puede aparecer antes de que hayas entendido la observación completa.",
+      "lesson": "Escuchar feedback primero no significa aceptarlo todo. Significa recopilar la información antes de evaluarla.",
+      "mission": "Cuando recibas una crítica o sugerencia hoy, haz una pregunta de aclaración antes de explicar, justificar o rechazar.",
+      "prompts": [
+        "¿Qué feedback recibiste?",
+        "¿Cuál fue tu primera reacción interna?",
+        "¿Qué preguntaste?",
+        "¿Qué información adicional apareció?"
+      ]
+    },
+    "en": {
+      "title": "Receive Feedback Before Defending",
+      "hook": "The urge to explain can appear before you have fully understood the observation.",
+      "lesson": "Listening to feedback first does not mean accepting all of it. It means gathering the information before evaluating it.",
+      "mission": "When you receive criticism or a suggestion today, ask one clarifying question before explaining, justifying, or rejecting it.",
+      "prompts": [
+        "What feedback did you receive?",
+        "What was your first internal reaction?",
+        "What did you ask?",
+        "What additional information appeared?"
+      ]
+    },
+    "fr": {
+      "title": "Recevez le feedback avant de vous défendre",
+      "hook": "L’envie de vous expliquer peut apparaître avant même que vous ayez compris l’observation dans son ensemble.",
+      "lesson": "Écouter d’abord un feedback ne signifie pas tout accepter. Cela signifie recueillir l’information avant de l’évaluer.",
+      "mission": "Lorsque vous recevez aujourd’hui une critique ou une suggestion, posez une question de clarification avant d’expliquer, de justifier ou de rejeter.",
+      "prompts": [
+        "Quel feedback avez-vous reçu ?",
+        "Quelle a été votre première réaction intérieure ?",
+        "Qu’avez-vous demandé ?",
+        "Quelle information supplémentaire est apparue ?"
+      ]
+    }
+  },
+  {
+    "d": 52,
+    "es": {
+      "title": "Da feedback sobre conducta, no identidad",
+      "hook": "“Eres irresponsable” describe una persona; “el informe llegó después del plazo” describe algo que puede discutirse y cambiarse.",
+      "lesson": "El feedback conductual reduce ataques globales y facilita que la otra persona identifique qué acción concreta necesita ajustar.",
+      "mission": "Convierte hoy una crítica global en feedback sobre una conducta observable, su impacto y el cambio que propones.",
+      "prompts": [
+        "¿Cuál era la crítica global?",
+        "¿Qué conducta observable había debajo?",
+        "¿Qué impacto tuvo?",
+        "¿Qué cambio específico pediste?"
+      ]
+    },
+    "en": {
+      "title": "Give Feedback About Behavior, Not Identity",
+      "hook": "“You are irresponsible” describes a person; “the report arrived after the deadline” describes something that can be discussed and changed.",
+      "lesson": "Behavior-focused feedback reduces global attacks and helps the other person identify what concrete action needs adjustment.",
+      "mission": "Turn one global criticism today into feedback about an observable behavior, its impact, and the change you are proposing.",
+      "prompts": [
+        "What was the global criticism?",
+        "What observable behavior was underneath it?",
+        "What impact did it have?",
+        "What specific change did you request?"
+      ]
+    },
+    "fr": {
+      "title": "Donnez un feedback sur le comportement, pas sur l’identité",
+      "hook": "« Vous êtes irresponsable » décrit une personne ; « le rapport est arrivé après l’échéance » décrit quelque chose que l’on peut discuter et modifier.",
+      "lesson": "Un feedback centré sur le comportement réduit les attaques globales et aide l’autre personne à identifier l’action concrète à ajuster.",
+      "mission": "Transformez aujourd’hui une critique globale en feedback sur un comportement observable, son impact et le changement que vous proposez.",
+      "prompts": [
+        "Quelle était la critique globale ?",
+        "Quel comportement observable se trouvait derrière ?",
+        "Quel impact a-t-il eu ?",
+        "Quel changement précis avez-vous demandé ?"
+      ]
+    }
+  },
+  {
+    "d": 53,
+    "es": {
+      "title": "Repara una interrupción",
+      "hook": "Una conversación no queda arruinada porque interrumpiste, reaccionaste o dijiste algo mal.",
+      "lesson": "Una reparación breve puede detener la escalada y devolver la conversación al punto útil sin convertir el error en otro debate.",
+      "mission": "Si hoy interrumpes, interpretas mal o reaccionas de forma innecesaria, repara en el momento con una frase breve y vuelve a escuchar.",
+      "prompts": [
+        "¿Qué ocurrió?",
+        "¿Cómo reparaste?",
+        "¿Qué dijiste para volver al hilo?",
+        "¿La conversación pudo continuar mejor?"
+      ]
+    },
+    "en": {
+      "title": "Repair an Interruption",
+      "hook": "A conversation is not ruined because you interrupted, reacted, or said something poorly.",
+      "lesson": "A brief repair can stop escalation and return the conversation to a useful point without turning the mistake into another debate.",
+      "mission": "If you interrupt, misinterpret, or react unnecessarily today, repair it in the moment with a brief statement and return to listening.",
+      "prompts": [
+        "What happened?",
+        "How did you repair it?",
+        "What did you say to return to the thread?",
+        "Was the conversation able to continue more productively?"
+      ]
+    },
+    "fr": {
+      "title": "Réparez une interruption",
+      "hook": "Une conversation n’est pas ruinée parce que vous avez interrompu, réagi ou mal formulé quelque chose.",
+      "lesson": "Une réparation brève peut arrêter l’escalade et ramener la conversation à un point utile sans transformer l’erreur en nouveau débat.",
+      "mission": "Si aujourd’hui vous interrompez, interprétez mal ou réagissez inutilement, réparez sur le moment avec une phrase brève puis revenez à l’écoute.",
+      "prompts": [
+        "Que s’est-il passé ?",
+        "Comment avez-vous réparé ?",
+        "Qu’avez-vous dit pour revenir au fil de la conversation ?",
+        "La conversation a-t-elle pu continuer de manière plus constructive ?"
+      ]
+    }
+  },
+  {
+    "d": 54,
+    "es": {
+      "title": "Pide una pausa antes de empeorar",
+      "hook": "Continuar hablando no siempre es la conducta más madura.",
+      "lesson": "Cuando la activación es demasiado alta para escuchar o expresarte con precisión, una pausa acordada puede proteger la conversación si incluye un momento claro para retomarla.",
+      "mission": "Si una conversación supera tu capacidad de mantener claridad, pide una pausa específica y acuerda cuándo volverán al tema.",
+      "prompts": [
+        "¿Qué señal indicó que necesitabas pausa?",
+        "¿Cómo la pediste?",
+        "¿Cuándo acordaron retomar?",
+        "¿Qué hiciste durante la pausa para volver mejor?"
+      ]
+    },
+    "en": {
+      "title": "Ask for a Pause Before It Gets Worse",
+      "hook": "Continuing to talk is not always the most mature behavior.",
+      "lesson": "When activation is too high to listen or speak accurately, an agreed pause can protect the conversation if it includes a clear time to return.",
+      "mission": "If one conversation exceeds your ability to stay clear, ask for a specific pause and agree on when you will return to the topic.",
+      "prompts": [
+        "What signal showed that you needed a pause?",
+        "How did you ask for it?",
+        "When did you agree to return?",
+        "What did you do during the pause to come back better?"
+      ]
+    },
+    "fr": {
+      "title": "Demandez une pause avant que la situation ne se dégrade",
+      "hook": "Continuer à parler n’est pas toujours le comportement le plus mature.",
+      "lesson": "Lorsque l’activation est trop forte pour écouter ou parler avec précision, une pause convenue peut protéger la conversation si elle prévoit un moment clair pour reprendre.",
+      "mission": "Si une conversation dépasse votre capacité à rester clair, demandez une pause précise et convenez du moment où vous reprendrez le sujet.",
+      "prompts": [
+        "Quel signal a montré que vous aviez besoin d’une pause ?",
+        "Comment l’avez-vous demandée ?",
+        "Quand avez-vous convenu de reprendre ?",
+        "Qu’avez-vous fait pendant la pause pour revenir dans de meilleures conditions ?"
+      ]
+    }
+  },
+  {
+    "d": 55,
+    "es": {
+      "title": "Prepara sin escribir un guion",
+      "hook": "Prepararte ayuda; intentar controlar cada frase puede hacerte menos flexible cuando la conversación toma otra dirección.",
+      "lesson": "Una preparación útil define objetivo, hechos, petición y límites, pero deja espacio para escuchar información nueva.",
+      "mission": "Antes de una conversación difícil, prepara solo cuatro elementos: objetivo, dos hechos, petición y límite. No escribas la conversación completa.",
+      "prompts": [
+        "Objetivo",
+        "Hecho #1",
+        "Hecho #2",
+        "Petición",
+        "Límite",
+        "¿Qué dejaste abierto para escuchar?"
+      ]
+    },
+    "en": {
+      "title": "Prepare Without Writing a Script",
+      "hook": "Preparation helps; trying to control every sentence can make you less flexible when the conversation moves in another direction.",
+      "lesson": "Useful preparation defines the objective, facts, request, and boundaries while leaving room to receive new information.",
+      "mission": "Before one difficult conversation, prepare only four elements: objective, two facts, request, and boundary. Do not script the whole conversation.",
+      "prompts": [
+        "Objective",
+        "Fact #1",
+        "Fact #2",
+        "Request",
+        "Boundary",
+        "What did you leave open so you could listen?"
+      ]
+    },
+    "fr": {
+      "title": "Préparez-vous sans écrire un scénario",
+      "hook": "Se préparer aide ; vouloir contrôler chaque phrase peut vous rendre moins flexible lorsque la conversation prend une autre direction.",
+      "lesson": "Une préparation utile définit l’objectif, les faits, la demande et les limites tout en laissant de la place pour recevoir de nouvelles informations.",
+      "mission": "Avant une conversation difficile, préparez seulement quatre éléments : objectif, deux faits, demande et limite. N’écrivez pas toute la conversation.",
+      "prompts": [
+        "Objectif",
+        "Fait n° 1",
+        "Fait n° 2",
+        "Demande",
+        "Limite",
+        "Qu’avez-vous laissé ouvert afin de pouvoir écouter ?"
+      ]
+    }
+  },
+  {
+    "d": 56,
+    "es": {
+      "title": "Mantén un límite sin repetir una defensa",
+      "hook": "Cuando alguien no acepta tu límite de inmediato, puedes sentir que necesitas inventar nuevas razones hasta conseguir aprobación.",
+      "lesson": "Un límite claro puede repetirse con respeto sin multiplicar justificaciones ni entrar en una negociación que no deseas abrir.",
+      "mission": "Si hoy necesitas sostener un límite, exprésalo de forma breve. Si vuelve a cuestionarse, repite el núcleo sin añadir una nueva defensa cada vez.",
+      "prompts": [
+        "¿Cuál era el límite?",
+        "¿Cómo lo expresaste primero?",
+        "¿Cómo lo repetiste?",
+        "¿Qué explicación adicional decidiste no añadir?"
+      ]
+    },
+    "en": {
+      "title": "Hold a Boundary Without Rebuilding the Defense",
+      "hook": "When someone does not accept your boundary immediately, you may feel you need to invent new reasons until you receive approval.",
+      "lesson": "A clear boundary can be repeated respectfully without multiplying justifications or entering a negotiation you do not want to open.",
+      "mission": "If you need to hold a boundary today, state it briefly. If it is questioned again, repeat the core without adding a new defense each time.",
+      "prompts": [
+        "What was the boundary?",
+        "How did you state it first?",
+        "How did you repeat it?",
+        "What extra explanation did you choose not to add?"
+      ]
+    },
+    "fr": {
+      "title": "Maintenez une limite sans reconstruire votre défense",
+      "hook": "Lorsque quelqu’un n’accepte pas immédiatement votre limite, vous pouvez avoir l’impression de devoir inventer de nouvelles raisons jusqu’à obtenir son approbation.",
+      "lesson": "Une limite claire peut être répétée avec respect sans multiplier les justifications ni ouvrir une négociation que vous ne souhaitez pas engager.",
+      "mission": "Si vous devez maintenir une limite aujourd’hui, exprimez-la brièvement. Si elle est de nouveau contestée, répétez l’essentiel sans ajouter une nouvelle défense à chaque fois.",
+      "prompts": [
+        "Quelle était la limite ?",
+        "Comment l’avez-vous exprimée la première fois ?",
+        "Comment l’avez-vous répétée ?",
+        "Quelle explication supplémentaire avez-vous choisi de ne pas ajouter ?"
+      ]
+    }
+  },
+  {
+    "d": 57,
+    "es": {
+      "title": "Encuentra la parte útil de una crítica",
+      "hook": "Una crítica puede estar mal formulada y aun así contener información que te conviene examinar.",
+      "lesson": "Separar tono, exageración y dato permite decidir qué parte merece atención sin aceptar automáticamente todo el mensaje.",
+      "mission": "Toma una crítica que recibas o recuerdes y divídela en tres: tono, afirmación y dato verificable. Decide qué parte, si alguna, te sirve.",
+      "prompts": [
+        "¿Qué tono o carga emocional había?",
+        "¿Cuál era la afirmación principal?",
+        "¿Qué dato podía verificarse?",
+        "¿Qué parte te resultó útil y qué parte descartaste?"
+      ]
+    },
+    "en": {
+      "title": "Find the Useful Part of Criticism",
+      "hook": "Criticism can be poorly delivered and still contain information worth examining.",
+      "lesson": "Separating tone, exaggeration, and data lets you decide what deserves attention without automatically accepting the whole message.",
+      "mission": "Take one criticism you receive or remember and divide it into three parts: tone, claim, and verifiable data. Decide what, if anything, is useful.",
+      "prompts": [
+        "What tone or emotional charge was present?",
+        "What was the main claim?",
+        "What data could be verified?",
+        "What part was useful, and what part did you discard?"
+      ]
+    },
+    "fr": {
+      "title": "Trouvez la partie utile d’une critique",
+      "hook": "Une critique peut être mal formulée tout en contenant une information qu’il vaut la peine d’examiner.",
+      "lesson": "Séparer le ton, l’exagération et les données permet de décider ce qui mérite votre attention sans accepter automatiquement l’ensemble du message.",
+      "mission": "Prenez une critique reçue ou dont vous vous souvenez et divisez-la en trois parties : ton, affirmation et donnée vérifiable. Décidez de ce qui vous est utile, s’il y a quelque chose.",
+      "prompts": [
+        "Quel ton ou quelle charge émotionnelle était présent ?",
+        "Quelle était l’affirmation principale ?",
+        "Quelle donnée pouvait être vérifiée ?",
+        "Quelle partie vous a été utile et quelle partie avez-vous écartée ?"
+      ]
+    }
+  },
+  {
+    "d": 58,
+    "es": {
+      "title": "No igualar intensidad",
+      "hook": "Cuando la otra persona eleva intensidad, tu sistema puede invitarte a igualarla.",
+      "lesson": "Mantener volumen, velocidad y vocabulario deliberados te permite seguir siendo claro sin competir por quién domina emocionalmente la conversación.",
+      "mission": "Ante una interacción intensa pero segura, practica mantener tu propio ritmo y volumen en lugar de imitarlos automáticamente.",
+      "prompts": [
+        "¿Qué hizo la otra persona que aumentó la intensidad?",
+        "¿Qué impulso apareció en ti?",
+        "¿Qué mantuviste deliberadamente estable?",
+        "¿Qué efecto tuvo?"
+      ]
+    },
+    "en": {
+      "title": "Do Not Match Intensity",
+      "hook": "When the other person raises the intensity, your system may invite you to match it.",
+      "lesson": "Keeping your volume, pace, and language deliberate lets you remain clear without competing over who dominates the conversation emotionally.",
+      "mission": "In one intense but safe interaction, practice maintaining your own pace and volume instead of automatically mirroring theirs.",
+      "prompts": [
+        "What did the other person do that increased the intensity?",
+        "What impulse appeared in you?",
+        "What did you deliberately keep stable?",
+        "What effect did it have?"
+      ]
+    },
+    "fr": {
+      "title": "Ne montez pas au même niveau d’intensité",
+      "hook": "Lorsque l’autre personne augmente l’intensité, votre système peut vous pousser à faire de même.",
+      "lesson": "Maintenir délibérément votre volume, votre rythme et votre vocabulaire vous permet de rester clair sans entrer dans une compétition émotionnelle.",
+      "mission": "Dans une interaction intense mais sûre, entraînez-vous à maintenir votre propre rythme et votre propre volume au lieu de les calquer automatiquement sur ceux de l’autre personne.",
+      "prompts": [
+        "Qu’a fait l’autre personne pour augmenter l’intensité ?",
+        "Quelle impulsion est apparue chez vous ?",
+        "Qu’avez-vous délibérément maintenu stable ?",
+        "Quel effet cela a-t-il eu ?"
+      ]
+    }
+  },
+  {
+    "d": 59,
+    "es": {
+      "title": "Reabre una conversación que salió mal",
+      "hook": "Una mala conversación no tiene que convertirse en la versión definitiva de la relación o del problema.",
+      "lesson": "Volver con una reparación concreta, asumir tu parte y redefinir el objetivo puede recuperar información y cooperación que se perdieron durante la tensión.",
+      "mission": "Elige una conversación reciente que salió peor de lo que querías y prepara una reapertura breve: reconoce tu parte, aclara el objetivo y propone retomar.",
+      "prompts": [
+        "¿Qué salió mal?",
+        "¿Qué parte te corresponde reconocer?",
+        "¿Cuál es el objetivo ahora?",
+        "¿Cómo propondrás retomar?"
+      ]
+    },
+    "en": {
+      "title": "Reopen a Conversation That Went Badly",
+      "hook": "One bad conversation does not have to become the final version of the relationship or the problem.",
+      "lesson": "Returning with a concrete repair, owning your part, and redefining the objective can recover information and cooperation that were lost under tension.",
+      "mission": "Choose one recent conversation that went worse than you wanted and prepare a brief reopening: acknowledge your part, clarify the objective, and propose returning to it.",
+      "prompts": [
+        "What went wrong?",
+        "What part is yours to acknowledge?",
+        "What is the objective now?",
+        "How will you propose reopening it?"
+      ]
+    },
+    "fr": {
+      "title": "Rouvrez une conversation qui s’est mal passée",
+      "hook": "Une mauvaise conversation ne doit pas devenir la version définitive de la relation ou du problème.",
+      "lesson": "Revenir avec une réparation concrète, reconnaître votre part et redéfinir l’objectif peut permettre de récupérer l’information et la coopération perdues sous tension.",
+      "mission": "Choisissez une conversation récente qui s’est moins bien passée que vous ne l’auriez souhaité et préparez une reprise brève : reconnaissez votre part, clarifiez l’objectif et proposez de reprendre.",
+      "prompts": [
+        "Qu’est-ce qui s’est mal passé ?",
+        "Quelle part vous revient-il de reconnaître ?",
+        "Quel est l’objectif maintenant ?",
+        "Comment proposerez-vous de reprendre la conversation ?"
+      ]
+    }
+  },
+  {
+    "d": 60,
+    "es": {
+      "title": "Cuarta revisión: claridad bajo tensión",
+      "hook": "La habilidad no se demuestra solo cuando la conversación es fácil.",
+      "lesson": "Escuchar, aclarar y expresarte bajo desacuerdo requiere regular ritmo, separar hechos de juicios, reparar errores y saber cuándo pausar.",
+      "mission": "Revisa esta etapa y define tu protocolo personal de cuatro pasos para una conversación difícil.",
+      "prompts": [
+        "Paso #1 antes de empezar",
+        "Paso #2 cuando aparezca tensión",
+        "Paso #3 si cometes un error o malinterpretas",
+        "Paso #4 si la conversación necesita pausa",
+        "¿Qué haces hoy mejor bajo tensión que en el Día 46?"
+      ]
+    },
+    "en": {
+      "title": "Fourth Review: Clarity Under Tension",
+      "hook": "Skill is not demonstrated only when the conversation is easy.",
+      "lesson": "Listening, clarifying, and expressing yourself under disagreement requires regulating pace, separating facts from judgments, repairing mistakes, and knowing when to pause.",
+      "mission": "Review this stage and define your own four-step protocol for a difficult conversation.",
+      "prompts": [
+        "Step #1 before you begin",
+        "Step #2 when tension appears",
+        "Step #3 if you make a mistake or misinterpret",
+        "Step #4 if the conversation needs a pause",
+        "What do you do better under tension now than on Day 46?"
+      ]
+    },
+    "fr": {
+      "title": "Quatrième révision : la clarté sous tension",
+      "hook": "La compétence ne se démontre pas uniquement lorsque la conversation est facile.",
+      "lesson": "Écouter, clarifier et s’exprimer dans le désaccord exige de réguler le rythme, de séparer les faits des jugements, de réparer les erreurs et de savoir quand faire une pause.",
+      "mission": "Relisez cette étape et définissez votre protocole personnel en quatre étapes pour une conversation difficile.",
+      "prompts": [
+        "Étape n° 1 avant de commencer",
+        "Étape n° 2 lorsque la tension apparaît",
+        "Étape n° 3 si vous commettez une erreur ou interprétez mal",
+        "Étape n° 4 si la conversation nécessite une pause",
+        "Que faites-vous aujourd’hui mieux sous tension qu’au Jour 46 ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE4=COMMUNICATION_DEEP_STAGE4_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
 const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
-const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_BASE_DAYS.slice(45)];
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_BASE_DAYS.slice(60)];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -5442,6 +6040,7 @@ installDeepProgramI18n(CONFIDENCE_DEEP_STAGE6_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE1_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE2_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE3_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE4_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
