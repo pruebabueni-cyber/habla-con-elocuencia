@@ -5508,8 +5508,629 @@ const COMMUNICATION_DEEP_STAGE5_CONTENT=[
 ];
 const COMMUNICATION_DEEP_STAGE5=COMMUNICATION_DEEP_STAGE5_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
 
-const COMMUNICATION_BASE_DAYS=buildNexora90(COMMUNICATION_STAGES,COMMUNICATION_THEMES);
-const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_DEEP_STAGE5,...COMMUNICATION_BASE_DAYS.slice(75)];
+const COMMUNICATION_DEEP_STAGE6_CONTENT=[
+  {
+    "d": 76,
+    "es": {
+      "title": "Elige tú la conversación",
+      "hook": "La etapa final empieza retirando parte de la guía: ahora tú decides dónde vale la pena aplicar lo aprendido.",
+      "lesson": "La autonomía comunicativa aparece cuando puedes detectar una situación real, decidir si necesita escucha, clarificación, expresión, conversación difícil o negociación y elegir tu conducta.",
+      "mission": "Elige por tu cuenta una conversación real de hoy y decide qué habilidad de las etapas anteriores necesita.",
+      "prompts": [
+        "¿Qué conversación elegiste?",
+        "¿Qué habilidad necesita?",
+        "¿Qué evidencia usaste para decidirlo?",
+        "¿Qué conducta concreta practicarás?"
+      ]
+    },
+    "en": {
+      "title": "Choose the Conversation Yourself",
+      "hook": "The final stage begins by removing some guidance: now you decide where what you have learned is worth applying.",
+      "lesson": "Communication autonomy appears when you can recognize a real situation, decide whether it needs listening, clarification, expression, difficult-conversation skills, or negotiation, and choose your behavior.",
+      "mission": "Choose one real conversation today on your own and decide which skill from the previous stages it needs.",
+      "prompts": [
+        "What conversation did you choose?",
+        "Which skill does it need?",
+        "What evidence did you use to decide?",
+        "What concrete behavior will you practice?"
+      ]
+    },
+    "fr": {
+      "title": "Choisissez vous-même la conversation",
+      "hook": "La dernière étape commence par retirer une partie du guidage : c’est maintenant à vous de décider où appliquer ce que vous avez appris.",
+      "lesson": "L’autonomie en communication apparaît lorsque vous pouvez repérer une situation réelle, décider si elle nécessite écoute, clarification, expression, gestion d’une conversation difficile ou négociation, puis choisir votre comportement.",
+      "mission": "Choisissez vous-même une conversation réelle aujourd’hui et décidez quelle compétence des étapes précédentes elle nécessite.",
+      "prompts": [
+        "Quelle conversation avez-vous choisie ?",
+        "De quelle compétence a-t-elle besoin ?",
+        "Sur quelles observations vous êtes-vous appuyé pour décider ?",
+        "Quel comportement concret allez-vous pratiquer ?"
+      ]
+    }
+  },
+  {
+    "d": 77,
+    "es": {
+      "title": "Diagnostica antes de usar una técnica",
+      "hook": "Una herramienta útil en la conversación equivocada puede producir un resultado pobre.",
+      "lesson": "Comunicación integrada significa diagnosticar la necesidad antes de aplicar una fórmula: a veces hace falta escuchar; otras, preguntar, decir algo claro, poner un límite o negociar.",
+      "mission": "Antes de una conversación, identifica dos posibles necesidades y elige una sola habilidad inicial. Ajusta después según la información que aparezca.",
+      "prompts": [
+        "¿Qué dos necesidades eran posibles?",
+        "¿Con cuál habilidad empezaste?",
+        "¿Qué información apareció después?",
+        "¿Tuviste que cambiar de habilidad?"
+      ]
+    },
+    "en": {
+      "title": "Diagnose Before Using a Technique",
+      "hook": "A useful tool used in the wrong conversation can produce a poor result.",
+      "lesson": "Integrated communication means diagnosing the need before applying a formula: sometimes you need to listen; other times ask, state something clearly, set a boundary, or negotiate.",
+      "mission": "Before one conversation, identify two possible needs and choose just one initial skill. Adjust afterward based on the information that appears.",
+      "prompts": [
+        "What two needs were possible?",
+        "Which skill did you start with?",
+        "What information appeared afterward?",
+        "Did you need to change skills?"
+      ]
+    },
+    "fr": {
+      "title": "Diagnostiquez avant d’utiliser une technique",
+      "hook": "Un outil utile employé dans la mauvaise conversation peut produire un mauvais résultat.",
+      "lesson": "Une communication intégrée consiste à diagnostiquer le besoin avant d’appliquer une formule : parfois il faut écouter ; d’autres fois, questionner, exprimer clairement, poser une limite ou négocier.",
+      "mission": "Avant une conversation, identifiez deux besoins possibles et choisissez une seule compétence de départ. Ajustez ensuite selon les informations qui apparaissent.",
+      "prompts": [
+        "Quels étaient les deux besoins possibles ?",
+        "Avec quelle compétence avez-vous commencé ?",
+        "Quelle information est apparue ensuite ?",
+        "Avez-vous dû changer de compétence ?"
+      ]
+    }
+  },
+  {
+    "d": 78,
+    "es": {
+      "title": "Practica antes de abrir NEXORA",
+      "hook": "La herramienta debe ayudarte a construir capacidad, no convertirse en permiso para comunicarte.",
+      "lesson": "Retrasar el registro permite comprobar si ya reconoces y ejecutas conductas útiles sin necesitar primero una instrucción externa.",
+      "mission": "Realiza hoy una práctica de comunicación antes de abrir NEXORA. Vuelve después únicamente para registrar qué elegiste y qué ocurrió.",
+      "prompts": [
+        "¿Qué hiciste antes de abrir NEXORA?",
+        "¿Cómo elegiste la habilidad?",
+        "¿Qué salió bien sin guía inmediata?",
+        "¿Qué todavía necesitó más criterio?"
+      ]
+    },
+    "en": {
+      "title": "Practice Before Opening NEXORA",
+      "hook": "The tool should help you build capacity, not become permission to communicate.",
+      "lesson": "Delaying the check-in tests whether you can now recognize and perform useful behaviors without first needing an external instruction.",
+      "mission": "Do one communication practice today before opening NEXORA. Return afterward only to record what you chose and what happened.",
+      "prompts": [
+        "What did you do before opening NEXORA?",
+        "How did you choose the skill?",
+        "What went well without immediate guidance?",
+        "What still required more judgment?"
+      ]
+    },
+    "fr": {
+      "title": "Pratiquez avant d’ouvrir NEXORA",
+      "hook": "L’outil doit vous aider à construire une capacité, pas devenir une permission de communiquer.",
+      "lesson": "Retarder la consultation permet de vérifier si vous savez désormais reconnaître et exécuter des comportements utiles sans avoir besoin d’abord d’une instruction extérieure.",
+      "mission": "Réalisez aujourd’hui une pratique de communication avant d’ouvrir NEXORA. Revenez ensuite uniquement pour noter ce que vous avez choisi et ce qui s’est passé.",
+      "prompts": [
+        "Qu’avez-vous fait avant d’ouvrir NEXORA ?",
+        "Comment avez-vous choisi la compétence ?",
+        "Qu’est-ce qui s’est bien passé sans guidage immédiat ?",
+        "Qu’est-ce qui a encore nécessité davantage de discernement ?"
+      ]
+    }
+  },
+  {
+    "d": 79,
+    "es": {
+      "title": "La misma habilidad en otro contexto",
+      "hook": "Una habilidad no está integrada si solo funciona con una persona, en un lugar o cuando tienes mucho tiempo para prepararte.",
+      "lesson": "Generalizar significa adaptar la misma capacidad a contextos distintos sin copiar exactamente la forma original.",
+      "mission": "Elige una habilidad que ya manejas bien y úsala hoy en un contexto diferente al habitual: trabajo, familia, amistad, servicio, texto o conversación breve.",
+      "prompts": [
+        "¿Qué habilidad elegiste?",
+        "¿En qué contexto la usabas normalmente?",
+        "¿Cuál fue el contexto nuevo?",
+        "¿Qué tuviste que adaptar?"
+      ]
+    },
+    "en": {
+      "title": "The Same Skill in a New Context",
+      "hook": "A skill is not fully integrated if it only works with one person, in one place, or when you have plenty of time to prepare.",
+      "lesson": "Generalization means adapting the same capacity to different contexts without copying the original form exactly.",
+      "mission": "Choose one skill you already handle well and use it today in a different context: work, family, friendship, service, text, or a brief conversation.",
+      "prompts": [
+        "Which skill did you choose?",
+        "In what context did you normally use it?",
+        "What was the new context?",
+        "What did you need to adapt?"
+      ]
+    },
+    "fr": {
+      "title": "La même compétence dans un autre contexte",
+      "hook": "Une compétence n’est pas pleinement intégrée si elle ne fonctionne qu’avec une personne, dans un lieu ou lorsque vous avez beaucoup de temps pour vous préparer.",
+      "lesson": "Généraliser signifie adapter la même capacité à différents contextes sans reproduire exactement la forme initiale.",
+      "mission": "Choisissez une compétence que vous maîtrisez déjà bien et utilisez-la aujourd’hui dans un contexte différent : travail, famille, amitié, service, message écrit ou conversation brève.",
+      "prompts": [
+        "Quelle compétence avez-vous choisie ?",
+        "Dans quel contexte l’utilisiez-vous habituellement ?",
+        "Quel était le nouveau contexte ?",
+        "Qu’avez-vous dû adapter ?"
+      ]
+    }
+  },
+  {
+    "d": 80,
+    "es": {
+      "title": "Adapta sin perder tu punto",
+      "hook": "Hablar igual con todo el mundo no es autenticidad; a veces es falta de adaptación.",
+      "lesson": "El contexto cambia vocabulario, cantidad de detalle, canal, ritmo y formalidad, pero no exige abandonar el propósito ni distorsionar lo que quieres decir.",
+      "mission": "Comunica hoy el mismo tipo de idea a dos públicos distintos y adapta la forma sin cambiar el núcleo.",
+      "prompts": [
+        "¿Cuál era el núcleo del mensaje?",
+        "Público/contexto #1: ¿qué adaptaste?",
+        "Público/contexto #2: ¿qué adaptaste?",
+        "¿Qué permaneció igual?"
+      ]
+    },
+    "en": {
+      "title": "Adapt Without Losing Your Point",
+      "hook": "Speaking the same way to everyone is not necessarily authenticity; sometimes it is a lack of adaptation.",
+      "lesson": "Context changes vocabulary, level of detail, channel, pace, and formality, but it does not require abandoning your purpose or distorting what you mean.",
+      "mission": "Communicate the same kind of idea to two different audiences today and adapt the form without changing the core.",
+      "prompts": [
+        "What was the core of the message?",
+        "Audience/context #1: what did you adapt?",
+        "Audience/context #2: what did you adapt?",
+        "What stayed the same?"
+      ]
+    },
+    "fr": {
+      "title": "Adaptez sans perdre votre message",
+      "hook": "Parler de la même façon à tout le monde n’est pas forcément de l’authenticité ; c’est parfois un manque d’adaptation.",
+      "lesson": "Le contexte modifie le vocabulaire, le niveau de détail, le canal, le rythme et la formalité, sans vous obliger à abandonner votre objectif ni à déformer ce que vous voulez dire.",
+      "mission": "Communiquez aujourd’hui le même type d’idée à deux publics différents et adaptez la forme sans changer le fond.",
+      "prompts": [
+        "Quel était le cœur du message ?",
+        "Public/contexte n° 1 : qu’avez-vous adapté ?",
+        "Public/contexte n° 2 : qu’avez-vous adapté ?",
+        "Qu’est-ce qui est resté identique ?"
+      ]
+    }
+  },
+  {
+    "d": 81,
+    "es": {
+      "title": "Tres habilidades en una conversación",
+      "hook": "Las conversaciones reales rara vez permanecen dentro de una sola categoría.",
+      "lesson": "Una interacción puede exigir escuchar primero, aclarar después y finalmente expresar o negociar. Integrar significa cambiar de herramienta sin perder el hilo.",
+      "mission": "En una conversación significativa, identifica y usa conscientemente al menos tres habilidades distintas en el orden que la situación requiera.",
+      "prompts": [
+        "Habilidad #1 y por qué apareció primero",
+        "Habilidad #2 y por qué fue necesaria",
+        "Habilidad #3 y por qué fue necesaria",
+        "¿Dónde cambiaste de herramienta?",
+        "¿Qué habría ocurrido usando solo una?"
+      ]
+    },
+    "en": {
+      "title": "Three Skills in One Conversation",
+      "hook": "Real conversations rarely stay inside one category.",
+      "lesson": "One interaction may require listening first, clarification next, and then expression or negotiation. Integration means changing tools without losing the thread.",
+      "mission": "In one meaningful conversation, consciously identify and use at least three different skills in the order the situation requires.",
+      "prompts": [
+        "Skill #1 and why it came first",
+        "Skill #2 and why it was needed",
+        "Skill #3 and why it was needed",
+        "Where did you change tools?",
+        "What might have happened if you used only one?"
+      ]
+    },
+    "fr": {
+      "title": "Trois compétences dans une même conversation",
+      "hook": "Les conversations réelles restent rarement dans une seule catégorie.",
+      "lesson": "Une interaction peut exiger d’abord l’écoute, puis la clarification, et enfin l’expression ou la négociation. Intégrer signifie changer d’outil sans perdre le fil.",
+      "mission": "Dans une conversation significative, identifiez et utilisez consciemment au moins trois compétences différentes dans l’ordre exigé par la situation.",
+      "prompts": [
+        "Compétence n° 1 et pourquoi elle est venue en premier",
+        "Compétence n° 2 et pourquoi elle était nécessaire",
+        "Compétence n° 3 et pourquoi elle était nécessaire",
+        "À quel moment avez-vous changé d’outil ?",
+        "Qu’aurait-il pu se passer en n’en utilisant qu’un seul ?"
+      ]
+    }
+  },
+  {
+    "d": 82,
+    "es": {
+      "title": "Tu protocolo para una conversación importante",
+      "hook": "A esta altura ya no necesitas un guion universal. Necesitas un proceso propio para pensar antes, durante y después.",
+      "lesson": "Un protocolo personal reduce improvisación innecesaria sin quitar flexibilidad: objetivo, escucha, verificación, expresión, límite y cierre.",
+      "mission": "Diseña tu propio protocolo de cinco pasos para una conversación importante y úsalo en una situación real o próxima.",
+      "prompts": [
+        "Paso #1",
+        "Paso #2",
+        "Paso #3",
+        "Paso #4",
+        "Paso #5",
+        "¿Qué parte del protocolo depende más de tu criterio?"
+      ]
+    },
+    "en": {
+      "title": "Your Protocol for an Important Conversation",
+      "hook": "At this point you no longer need a universal script. You need your own process for thinking before, during, and after.",
+      "lesson": "A personal protocol reduces unnecessary improvisation without removing flexibility: objective, listening, verification, expression, boundary, and close.",
+      "mission": "Design your own five-step protocol for an important conversation and use it in a real or upcoming situation.",
+      "prompts": [
+        "Step #1",
+        "Step #2",
+        "Step #3",
+        "Step #4",
+        "Step #5",
+        "Which part of the protocol depends most on your judgment?"
+      ]
+    },
+    "fr": {
+      "title": "Votre protocole pour une conversation importante",
+      "hook": "À ce stade, vous n’avez plus besoin d’un script universel. Vous avez besoin de votre propre processus pour réfléchir avant, pendant et après.",
+      "lesson": "Un protocole personnel réduit l’improvisation inutile sans supprimer la flexibilité : objectif, écoute, vérification, expression, limite et conclusion.",
+      "mission": "Concevez votre propre protocole en cinq étapes pour une conversation importante et utilisez-le dans une situation réelle ou prochaine.",
+      "prompts": [
+        "Étape n° 1",
+        "Étape n° 2",
+        "Étape n° 3",
+        "Étape n° 4",
+        "Étape n° 5",
+        "Quelle partie du protocole dépend le plus de votre discernement ?"
+      ]
+    }
+  },
+  {
+    "d": 83,
+    "es": {
+      "title": "Corrige en tiempo real",
+      "hook": "La comunicación madura no depende de no equivocarte; depende también de notar el error y ajustar mientras todavía estás dentro de la conversación.",
+      "lesson": "Autocorregir una interrupción, una suposición, un tono o una frase confusa evita esperar hasta después para hacer lo que ya puedes reparar ahora.",
+      "mission": "Durante una conversación, identifica un error propio en tiempo real y corrígelo sin esperar a que la otra persona lo señale.",
+      "prompts": [
+        "¿Qué error detectaste?",
+        "¿Cómo te diste cuenta?",
+        "¿Qué dijiste o hiciste para corregirlo?",
+        "¿Qué efecto tuvo la reparación inmediata?"
+      ]
+    },
+    "en": {
+      "title": "Correct Yourself in Real Time",
+      "hook": "Mature communication does not depend on never making mistakes; it also depends on noticing and adjusting while you are still inside the conversation.",
+      "lesson": "Self-correcting an interruption, assumption, tone, or unclear sentence prevents you from waiting until later to repair something you can fix now.",
+      "mission": "During one conversation, identify one of your own mistakes in real time and correct it without waiting for the other person to point it out.",
+      "prompts": [
+        "What mistake did you notice?",
+        "How did you realize it?",
+        "What did you say or do to correct it?",
+        "What effect did the immediate repair have?"
+      ]
+    },
+    "fr": {
+      "title": "Corrigez-vous en temps réel",
+      "hook": "Une communication mature ne dépend pas de l’absence totale d’erreurs ; elle dépend aussi de votre capacité à les remarquer et à ajuster pendant la conversation.",
+      "lesson": "Corriger vous-même une interruption, une supposition, un ton ou une phrase confuse évite d’attendre plus tard pour réparer ce que vous pouvez déjà corriger.",
+      "mission": "Pendant une conversation, identifiez l’une de vos propres erreurs en temps réel et corrigez-la sans attendre que l’autre personne la signale.",
+      "prompts": [
+        "Quelle erreur avez-vous détectée ?",
+        "Comment vous en êtes-vous rendu compte ?",
+        "Qu’avez-vous dit ou fait pour la corriger ?",
+        "Quel effet la réparation immédiate a-t-elle eu ?"
+      ]
+    }
+  },
+  {
+    "d": 84,
+    "es": {
+      "title": "Elige el canal, no solo las palabras",
+      "hook": "Una conversación correcta en el canal equivocado puede seguir siendo una mala decisión de comunicación.",
+      "lesson": "Texto, email, llamada, video y conversación presencial ofrecen distintos niveles de contexto, velocidad, registro y posibilidad de aclaración.",
+      "mission": "Toma un mensaje importante y decide conscientemente cuál canal es más adecuado antes de enviarlo. Explica tu criterio.",
+      "prompts": [
+        "¿Qué necesitabas comunicar?",
+        "¿Qué canales eran posibles?",
+        "¿Cuál elegiste?",
+        "¿Qué característica del mensaje hizo ese canal más adecuado?"
+      ]
+    },
+    "en": {
+      "title": "Choose the Channel, Not Just the Words",
+      "hook": "A well-worded conversation in the wrong channel can still be a poor communication decision.",
+      "lesson": "Text, email, phone, video, and in-person conversation offer different levels of context, speed, record, and opportunity for clarification.",
+      "mission": "Take one important message and consciously decide which channel is most appropriate before sending it. Explain your reasoning.",
+      "prompts": [
+        "What did you need to communicate?",
+        "Which channels were possible?",
+        "Which did you choose?",
+        "What characteristic of the message made that channel more appropriate?"
+      ]
+    },
+    "fr": {
+      "title": "Choisissez le canal, pas seulement les mots",
+      "hook": "Une conversation bien formulée dans le mauvais canal peut malgré tout constituer une mauvaise décision de communication.",
+      "lesson": "Message texte, e-mail, téléphone, vidéo et conversation en personne offrent différents niveaux de contexte, de rapidité, de traçabilité et de possibilité de clarification.",
+      "mission": "Prenez un message important et décidez consciemment quel canal est le plus approprié avant de l’envoyer. Expliquez votre critère.",
+      "prompts": [
+        "Que deviez-vous communiquer ?",
+        "Quels canaux étaient possibles ?",
+        "Lequel avez-vous choisi ?",
+        "Quelle caractéristique du message rendait ce canal plus approprié ?"
+      ]
+    }
+  },
+  {
+    "d": 85,
+    "es": {
+      "title": "Cuando la otra persona no coopera",
+      "hook": "Tu habilidad de comunicación no controla la disposición, honestidad o regulación de la otra persona.",
+      "lesson": "La autonomía incluye distinguir lo que puedes mejorar de lo que no puedes obligar: puedes aclarar, poner límites, documentar, pausar o salir de una interacción que no es productiva o segura.",
+      "mission": "Analiza una interacción difícil donde la otra persona no coopere. Elige una acción bajo tu control sin asumir responsabilidad por controlar su reacción.",
+      "prompts": [
+        "¿Qué conducta de la otra persona no controlas?",
+        "¿Qué sí controlas tú?",
+        "¿Qué acción elegiste?",
+        "¿Qué límite o criterio indica cuándo pausar o salir?"
+      ]
+    },
+    "en": {
+      "title": "When the Other Person Does Not Cooperate",
+      "hook": "Your communication skill does not control the other person’s willingness, honesty, or regulation.",
+      "lesson": "Autonomy includes separating what you can improve from what you cannot force: you can clarify, set boundaries, document, pause, or leave an interaction that is not productive or safe.",
+      "mission": "Analyze one difficult interaction where the other person is not cooperating. Choose one action under your control without taking responsibility for controlling their reaction.",
+      "prompts": [
+        "What behavior from the other person do you not control?",
+        "What do you control?",
+        "What action did you choose?",
+        "What boundary or criterion tells you when to pause or leave?"
+      ]
+    },
+    "fr": {
+      "title": "Lorsque l’autre personne ne coopère pas",
+      "hook": "Votre compétence en communication ne contrôle ni la volonté, ni l’honnêteté, ni la régulation de l’autre personne.",
+      "lesson": "L’autonomie consiste aussi à distinguer ce que vous pouvez améliorer de ce que vous ne pouvez pas imposer : vous pouvez clarifier, poser des limites, documenter, faire une pause ou quitter une interaction qui n’est ni productive ni sûre.",
+      "mission": "Analysez une interaction difficile dans laquelle l’autre personne ne coopère pas. Choisissez une action sous votre contrôle sans vous attribuer la responsabilité de contrôler sa réaction.",
+      "prompts": [
+        "Quel comportement de l’autre personne ne contrôlez-vous pas ?",
+        "Que contrôlez-vous ?",
+        "Quelle action avez-vous choisie ?",
+        "Quelle limite ou quel critère vous indique quand faire une pause ou partir ?"
+      ]
+    }
+  },
+  {
+    "d": 86,
+    "es": {
+      "title": "Explica por qué funciona",
+      "hook": "Cuando puedes explicar una habilidad con tus propias palabras, tienes que organizar lo aprendido en lugar de repetir una instrucción.",
+      "lesson": "Enseñar o explicar un principio revela lagunas de comprensión y fortalece tu capacidad de elegir cuándo aplicarlo.",
+      "mission": "Elige una habilidad de comunicación del programa y explícasela a otra persona —o escríbela como si fueras a enseñarla— usando un ejemplo propio.",
+      "prompts": [
+        "¿Qué habilidad elegiste?",
+        "¿Cómo la explicaste con tus palabras?",
+        "¿Qué ejemplo usaste?",
+        "¿Qué parte descubriste que todavía necesitabas entender mejor?"
+      ]
+    },
+    "en": {
+      "title": "Explain Why It Works",
+      "hook": "When you can explain a skill in your own words, you have to organize what you learned instead of repeating an instruction.",
+      "lesson": "Teaching or explaining a principle reveals gaps in understanding and strengthens your ability to choose when to apply it.",
+      "mission": "Choose one communication skill from the program and explain it to another person—or write it as though you were teaching it—using one of your own examples.",
+      "prompts": [
+        "Which skill did you choose?",
+        "How did you explain it in your own words?",
+        "What example did you use?",
+        "What part did you discover you still needed to understand better?"
+      ]
+    },
+    "fr": {
+      "title": "Expliquez pourquoi cela fonctionne",
+      "hook": "Lorsque vous pouvez expliquer une compétence avec vos propres mots, vous devez organiser ce que vous avez appris au lieu de répéter une instruction.",
+      "lesson": "Enseigner ou expliquer un principe révèle les lacunes de compréhension et renforce votre capacité à choisir quand l’appliquer.",
+      "mission": "Choisissez une compétence de communication du programme et expliquez-la à une autre personne — ou écrivez-la comme si vous alliez l’enseigner — en utilisant un exemple personnel.",
+      "prompts": [
+        "Quelle compétence avez-vous choisie ?",
+        "Comment l’avez-vous expliquée avec vos propres mots ?",
+        "Quel exemple avez-vous utilisé ?",
+        "Quelle partie avez-vous découvert devoir encore mieux comprendre ?"
+      ]
+    }
+  },
+  {
+    "d": 87,
+    "es": {
+      "title": "Comunica según tus valores",
+      "hook": "Ser eficaz no basta si la forma de comunicarte contradice la persona que quieres ser.",
+      "lesson": "Honestidad, respeto, claridad, cuidado, justicia o firmeza pueden actuar como criterios cuando varias respuestas serían técnicamente posibles.",
+      "mission": "Elige una conversación de hoy y define antes qué valor quieres representar en tu manera de comunicarte. Después evalúa si tu conducta fue congruente.",
+      "prompts": [
+        "¿Qué valor elegiste?",
+        "¿Qué opciones de respuesta tenías?",
+        "¿Qué hiciste?",
+        "¿Qué parte fue congruente con ese valor?",
+        "¿Qué ajustarías la próxima vez?"
+      ]
+    },
+    "en": {
+      "title": "Communicate from Your Values",
+      "hook": "Being effective is not enough if the way you communicate contradicts the person you want to be.",
+      "lesson": "Honesty, respect, clarity, care, fairness, or firmness can act as criteria when several responses would be technically possible.",
+      "mission": "Choose one conversation today and decide beforehand which value you want your communication to represent. Afterward, evaluate whether your behavior was congruent with it.",
+      "prompts": [
+        "Which value did you choose?",
+        "What response options did you have?",
+        "What did you do?",
+        "What part was congruent with that value?",
+        "What would you adjust next time?"
+      ]
+    },
+    "fr": {
+      "title": "Communiquez selon vos valeurs",
+      "hook": "Être efficace ne suffit pas si votre manière de communiquer contredit la personne que vous souhaitez être.",
+      "lesson": "Honnêteté, respect, clarté, attention, équité ou fermeté peuvent servir de critères lorsque plusieurs réponses seraient techniquement possibles.",
+      "mission": "Choisissez une conversation aujourd’hui et décidez à l’avance quelle valeur vous voulez représenter dans votre manière de communiquer. Ensuite, évaluez si votre comportement était cohérent avec elle.",
+      "prompts": [
+        "Quelle valeur avez-vous choisie ?",
+        "Quelles options de réponse aviez-vous ?",
+        "Qu’avez-vous fait ?",
+        "Quelle partie était cohérente avec cette valeur ?",
+        "Qu’ajusteriez-vous la prochaine fois ?"
+      ]
+    }
+  },
+  {
+    "d": 88,
+    "es": {
+      "title": "Saber cuándo no continuar",
+      "hook": "No toda conversación merece más palabras, más argumentos o más tiempo.",
+      "lesson": "Cerrar, aplazar o abandonar respetuosamente una interacción puede ser una decisión comunicativa válida cuando no hay condiciones para avanzar, el tema está resuelto o continuar cruza un límite.",
+      "mission": "Identifica una interacción donde la mejor decisión sea cerrar, posponer o no seguir argumentando. Hazlo con una frase clara que explique el siguiente paso cuando corresponda.",
+      "prompts": [
+        "¿Por qué continuar no era útil?",
+        "¿Elegiste cerrar, posponer o salir?",
+        "¿Qué dijiste?",
+        "¿Quedó claro si habrá un siguiente paso?"
+      ]
+    },
+    "en": {
+      "title": "Know When Not to Continue",
+      "hook": "Not every conversation deserves more words, more arguments, or more time.",
+      "lesson": "Closing, postponing, or respectfully leaving an interaction can be a valid communication decision when there are no conditions for progress, the issue is resolved, or continuing crosses a boundary.",
+      "mission": "Identify one interaction where the best decision is to close, postpone, or stop arguing. Do it with one clear sentence that explains the next step when appropriate.",
+      "prompts": [
+        "Why was continuing not useful?",
+        "Did you choose to close, postpone, or leave?",
+        "What did you say?",
+        "Was it clear whether there would be a next step?"
+      ]
+    },
+    "fr": {
+      "title": "Savoir quand ne pas continuer",
+      "hook": "Toutes les conversations ne méritent pas davantage de mots, d’arguments ou de temps.",
+      "lesson": "Conclure, reporter ou quitter respectueusement une interaction peut être une décision de communication valable lorsqu’il n’existe pas de conditions pour avancer, que le sujet est résolu ou que continuer franchit une limite.",
+      "mission": "Identifiez une interaction dans laquelle la meilleure décision consiste à conclure, reporter ou arrêter d’argumenter. Faites-le avec une phrase claire qui indique la suite lorsqu’il y en a une.",
+      "prompts": [
+        "Pourquoi continuer n’était-il pas utile ?",
+        "Avez-vous choisi de conclure, reporter ou partir ?",
+        "Qu’avez-vous dit ?",
+        "Était-il clair s’il y aurait une prochaine étape ?"
+      ]
+    }
+  },
+  {
+    "d": 89,
+    "es": {
+      "title": "Conversación de integración",
+      "hook": "Hoy no entrenas una técnica aislada. Pones a prueba el sistema completo en una conversación que realmente importa.",
+      "lesson": "La integración se observa cuando puedes preparar lo necesario, escuchar información nueva, cambiar de estrategia, expresar tu punto, proteger límites y cerrar con claridad sin depender de una secuencia rígida.",
+      "mission": "Elige una conversación real y significativa. Antes define solo tu propósito y límite; durante, decide tú mismo qué habilidades usar. Después reconstruye tus decisiones.",
+      "prompts": [
+        "¿Cuál era tu propósito?",
+        "¿Cuál era tu límite?",
+        "¿Qué habilidades usaste y en qué orden?",
+        "¿Dónde cambiaste de estrategia?",
+        "¿Qué resultado produjo la conversación?",
+        "¿Qué harías distinto la próxima vez?"
+      ]
+    },
+    "en": {
+      "title": "Integration Conversation",
+      "hook": "Today you are not training one isolated technique. You are testing the whole system in a conversation that genuinely matters.",
+      "lesson": "Integration shows up when you can prepare what is necessary, receive new information, change strategy, express your point, protect boundaries, and close clearly without depending on a rigid sequence.",
+      "mission": "Choose one real, meaningful conversation. Beforehand define only your purpose and boundary; during it, decide for yourself which skills to use. Afterward, reconstruct your decisions.",
+      "prompts": [
+        "What was your purpose?",
+        "What was your boundary?",
+        "Which skills did you use and in what order?",
+        "Where did you change strategy?",
+        "What result did the conversation produce?",
+        "What would you do differently next time?"
+      ]
+    },
+    "fr": {
+      "title": "Conversation d’intégration",
+      "hook": "Aujourd’hui, vous n’entraînez pas une technique isolée. Vous mettez à l’épreuve l’ensemble du système dans une conversation qui compte réellement.",
+      "lesson": "L’intégration apparaît lorsque vous pouvez préparer ce qui est nécessaire, recevoir de nouvelles informations, changer de stratégie, exprimer votre point, protéger vos limites et conclure clairement sans dépendre d’une séquence rigide.",
+      "mission": "Choisissez une conversation réelle et significative. Avant, définissez seulement votre objectif et votre limite ; pendant, décidez vous-même quelles compétences utiliser. Après, reconstruisez vos décisions.",
+      "prompts": [
+        "Quel était votre objectif ?",
+        "Quelle était votre limite ?",
+        "Quelles compétences avez-vous utilisées et dans quel ordre ?",
+        "À quel moment avez-vous changé de stratégie ?",
+        "Quel résultat la conversation a-t-elle produit ?",
+        "Que feriez-vous différemment la prochaine fois ?"
+      ]
+    }
+  },
+  {
+    "d": 90,
+    "es": {
+      "title": "Evaluación final: tu sistema de comunicación",
+      "hook": "Noventa días no significan comunicación perfecta. Significan que ahora puedes comparar tu conducta actual con un punto de partida y decidir qué mantener.",
+      "lesson": "El progreso útil se ve en evidencia: escuchar con más precisión, asumir menos, expresar con mayor claridad, manejar mejor la tensión, negociar con criterio y corregirte con más autonomía.",
+      "mission": "Haz una evaluación final comparando tu conducta actual con el inicio y diseña un plan de mantenimiento de 30 días basado en tus dos habilidades más fuertes y tus dos áreas que todavía necesitan práctica.",
+      "prompts": [
+        "¿Qué haces hoy que no hacías al inicio?",
+        "¿Dónde asumes menos y verificas más?",
+        "¿Qué expresas hoy con mayor claridad?",
+        "¿Qué manejas mejor bajo tensión?",
+        "¿Qué habilidad fuerte #1 quieres mantener?",
+        "¿Qué habilidad fuerte #2 quieres mantener?",
+        "¿Qué área #1 necesita seguir practicándose?",
+        "¿Qué área #2 necesita seguir practicándose?",
+        "¿Cuál será tu práctica de mantenimiento durante los próximos 30 días?"
+      ]
+    },
+    "en": {
+      "title": "Final Assessment: Your Communication System",
+      "hook": "Ninety days do not mean perfect communication. They mean you can now compare your current behavior with a starting point and decide what to maintain.",
+      "lesson": "Useful progress appears in evidence: listening more accurately, assuming less, expressing yourself more clearly, handling tension better, negotiating with judgment, and correcting yourself with greater autonomy.",
+      "mission": "Complete a final assessment by comparing your current behavior with the beginning and design a 30-day maintenance plan based on your two strongest skills and the two areas that still need practice.",
+      "prompts": [
+        "What do you do today that you did not do at the beginning?",
+        "Where do you assume less and verify more?",
+        "What do you express more clearly today?",
+        "What do you handle better under tension?",
+        "Which strong skill #1 do you want to maintain?",
+        "Which strong skill #2 do you want to maintain?",
+        "Which area #1 still needs practice?",
+        "Which area #2 still needs practice?",
+        "What will your maintenance practice be for the next 30 days?"
+      ]
+    },
+    "fr": {
+      "title": "Évaluation finale : votre système de communication",
+      "hook": "Quatre-vingt-dix jours ne signifient pas une communication parfaite. Ils signifient que vous pouvez désormais comparer votre comportement actuel à votre point de départ et décider de ce que vous souhaitez maintenir.",
+      "lesson": "Un progrès utile se voit dans les preuves : écouter avec plus de précision, moins supposer, s’exprimer avec davantage de clarté, mieux gérer la tension, négocier avec discernement et se corriger avec plus d’autonomie.",
+      "mission": "Faites une évaluation finale en comparant votre comportement actuel au début du programme et concevez un plan de maintien sur 30 jours fondé sur vos deux compétences les plus solides et les deux domaines qui nécessitent encore de la pratique.",
+      "prompts": [
+        "Que faites-vous aujourd’hui que vous ne faisiez pas au début ?",
+        "Dans quelles situations supposez-vous moins et vérifiez-vous davantage ?",
+        "Qu’exprimez-vous aujourd’hui avec plus de clarté ?",
+        "Que gérez-vous mieux sous tension ?",
+        "Quelle compétence forte n° 1 souhaitez-vous maintenir ?",
+        "Quelle compétence forte n° 2 souhaitez-vous maintenir ?",
+        "Quel domaine n° 1 nécessite encore de la pratique ?",
+        "Quel domaine n° 2 nécessite encore de la pratique ?",
+        "Quelle sera votre pratique de maintien au cours des 30 prochains jours ?"
+      ]
+    }
+  }
+];
+const COMMUNICATION_DEEP_STAGE6=COMMUNICATION_DEEP_STAGE6_CONTENT.map(x=>D(x.d,x.es.title,x.es.hook,x.es.lesson,x.es.mission,x.es.prompts));
+
+const COMMUNICATION_DAYS=[...COMMUNICATION_DEEP_STAGE1,...COMMUNICATION_DEEP_STAGE2,...COMMUNICATION_DEEP_STAGE3,...COMMUNICATION_DEEP_STAGE4,...COMMUNICATION_DEEP_STAGE5,...COMMUNICATION_DEEP_STAGE6];
 const FOCUS_DAYS=buildNexora90(FOCUS_STAGES,FOCUS_THEMES);
 
 
@@ -6655,6 +7276,7 @@ installDeepProgramI18n(COMMUNICATION_DEEP_STAGE2_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE3_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE4_CONTENT);
 installDeepProgramI18n(COMMUNICATION_DEEP_STAGE5_CONTENT);
+installDeepProgramI18n(COMMUNICATION_DEEP_STAGE6_CONTENT);
 
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
