@@ -1590,6 +1590,28 @@
     }
     /* data-nexora-program-section-heading="v2" */
 
+
+    /* Language-safe layout: longer EN/FR copy must not overflow dynamic UI */
+    .today-title,.journey-top h2,.program-cover h1,.stage h3,.evidence h3,
+    .milestone,.program-method-copy h2,.guide-step h3,.faq summary{
+      overflow-wrap:anywhere;
+      word-break:normal;
+    }
+    .journey-top>div:first-child,.program-method-copy,.history-head>div,.profilemeta{min-width:0}
+    @media(max-width:560px){
+      .topbar{gap:8px}
+      .top-actions{gap:6px;min-width:0}
+      .iconbtn{padding:9px 10px}
+      .accountbtn{min-width:0}
+      .accountbtn .account-label{
+        max-width:92px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+      }
+      .journey-top h2,.today-title{hyphens:auto}
+    }
+    /* data-nexora-language-layout="v1" */
 </style>
 
 <script data-nexora-theme="v1">
@@ -3542,6 +3564,7 @@ function detectNexoraLanguage(){
 }
 let nexoraLanguage=detectNexoraLanguage();
 function getNexoraLanguage(){return nexoraLanguage}
+function hasManualNexoraLanguageChoice(){return localStorage.getItem('nexora_language_manual')==='1'}
 function nexoraLocale(){return ({es:'es-US',en:'en-US',fr:'fr-FR'})[getNexoraLanguage()]||'en-US'}
 function canonicalSpanish(value){
   const s=String(value||'').trim();
@@ -3683,6 +3706,7 @@ async function setNexoraLanguage(lang,announce=false,skipRemote=false){
   const activeView=(typeof currentViewId==='function'?currentViewId():document.querySelector('.view.active')?.id)||'home';
   nexoraLanguage=lang;
   localStorage.setItem('nexora_language',lang);
+  if(announce)localStorage.setItem('nexora_language_manual','1');
 
   try{
     if(typeof renderAll==='function')renderAll();
@@ -3765,6 +3789,7 @@ updateAccountUI=function(){
   });
   const emailField=document.getElementById('feedbackEmail');
   if(emailField&&currentSession&&!emailField.value)emailField.value=currentSession.email||'';
+  try{applyNexoraLanguage(btn.closest('.topbar')||document.body)}catch{}
 };
 
 renderAccountModal=function(){
@@ -3942,7 +3967,8 @@ async function nexoraEstablishSession(session,isNew=false){
     if(isNew){
       await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage(),preferred_theme:localStorage.getItem('nexora_theme')||'auto'}).eq('id',user.id);
     }else{
-      if(data?.preferred_language)await setNexoraLanguage(data.preferred_language,false,true);
+      const localManual=typeof hasManualNexoraLanguageChoice==='function'&&hasManualNexoraLanguageChoice();
+      if(data?.preferred_language&&!localManual)await setNexoraLanguage(data.preferred_language,false,true);
       if(data?.preferred_theme&&typeof setNexoraTheme==='function')setNexoraTheme(data.preferred_theme,false);
     }
   }catch{}
@@ -3952,6 +3978,11 @@ async function nexoraEstablishSession(session,isNew=false){
   updateAccountUI();
   renderAll();
   try{applyNexoraLanguage(document.body)}catch{}
+  try{
+    if(typeof hasManualNexoraLanguageChoice==='function'&&hasManualNexoraLanguageChoice()){
+      await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage()}).eq('id',user.id);
+    }
+  }catch{}
   nexoraTrack(isNew?'signup':'login').catch(()=>{});
 }
 
