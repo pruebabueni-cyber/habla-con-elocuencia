@@ -1732,6 +1732,14 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
  .progress-summary .stat span{font-size:10px}
  .progress-milestone-card{padding:18px}
 }
+
+/* Navigation simplification — primary bar is daily use; support lives under More. */
+.bottomnav{max-width:560px;width:calc(100% - 28px)}
+.bottomnav .navbtn{min-width:88px}
+@media(max-width:700px){
+ .bottomnav{width:calc(100% - 20px);max-width:520px}
+ .bottomnav .navbtn{min-width:0;font-size:11px}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -1757,6 +1765,8 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
         <div class="utility-wrap">
           <button class="iconbtn morebtn" id="moreBtn" type="button" onclick="toggleUtilityMenu(event)" aria-label="Más opciones" title="Más opciones">•••</button>
           <div class="utility-menu" id="utilityMenu" role="menu" aria-label="Más opciones">
+            <button id="guideMenuBtn" type="button" onclick="closeUtilityMenu();showView('guide')">Guía</button>
+            <button id="helpMenuBtn" type="button" onclick="closeUtilityMenu();showView('help')">Ayuda y sugerencias</button>
             <button id="scienceBtn" type="button" onclick="closeUtilityMenu();openScience()">Base científica</button>
             <button id="testerBtn" type="button" style="display:none" onclick="closeUtilityMenu();openTester()">Vista tester</button>
           </div>
@@ -2055,8 +2065,6 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
     <button class="navbtn" id="navToday" data-view="today" onclick="startToday(this)" aria-label="Hoy"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V12"/><path d="M12 20V4"/><path d="M19 20v-11"/></svg></span><span class="nav-label">Hoy</span></button>
     <button class="navbtn" id="navHistory" data-view="history" onclick="showView('history',this)" aria-label="Historia"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h8l3 3V20.5h-11z"/><path d="M14.5 3.5v3h3"/><path d="M9.5 10h5"/><path d="M9.5 13.5h5"/><path d="M9.5 17h3.2"/></svg></span><span class="nav-label">Historia</span></button>
     <button class="navbtn" id="navProgress" data-view="progress" onclick="showView('progress',this)" aria-label="Progreso"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m4 17 5-5 4 3 7-8"/><path d="M16 7h4v4"/></svg></span><span class="nav-label">Progreso</span></button>
-    <button class="navbtn" id="navGuide" data-view="guide" onclick="startGuide(this)" aria-label="Guía"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="m14.8 9.2-1.7 4-4 1.7 1.7-4z"/></svg></span><span class="nav-label">Guía</span></button>
-    <button class="navbtn" id="navHelp" data-view="help" onclick="showView('help',this)" aria-label="Ayuda"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.8 9.3a2.5 2.5 0 0 1 4.8.9c0 1.9-2.6 2.1-2.6 3.9"/><path d="M12 17.2h.01"/></svg></span><span class="nav-label">Ayuda</span></button>
   </nav>
 
   <div class="tour-layer" id="tourLayer" aria-live="polite">
