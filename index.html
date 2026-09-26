@@ -1622,6 +1622,12 @@
     .nexora-splash-loader{width:42px;height:42px;margin-top:28px;border:3px solid rgba(199,146,79,.22);border-top-color:var(--gold);border-radius:50%;animation:nexoraSplashSpin .8s linear infinite}
     @keyframes nexoraSplashSpin{to{transform:rotate(360deg)}}
     @media(prefers-reduced-motion:reduce){.nexora-splash-loader{animation-duration:1.8s}}
+
+/* UX simplification: returning users see continuation first; explanatory hero stays available to guests. */
+body.nexora-returning-user #home .hero{margin-bottom:18px}
+body.nexora-returning-user #home .hero-main .lead,body.nexora-returning-user #home .hero-main>div:last-child,body.nexora-returning-user #home .nexora-method{display:none}
+body.nexora-returning-user #home .hero-main h1{font-size:clamp(34px,6vw,52px);margin-bottom:8px}
+@media(max-width:700px){#homeContinue{border-radius:22px!important}body.nexora-returning-user #home .hero-side{display:none}}
 </style>
 
 <script data-nexora-theme="v1">
@@ -1688,10 +1694,12 @@
           <div class="guest-banner-actions"><button class="primary" onclick="openAccountFor('signup')">Crear cuenta →</button><button class="ghost" onclick="openAccountFor('login')">Ya tengo cuenta</button></div>
         </section>
 
+        <section id="homeContinue" class="card" style="display:none;margin:0 0 22px;padding:22px"></section>
+
         <div class="section-title program-section-title" id="pathsAnchor">
   <div class="program-section-heading">
-    <div class="program-section-kicker">TUS PROGRAMAS</div>
-    <h2>Elige un programa</h2>
+    <div class="program-section-kicker">PROGRAMAS</div>
+    <h2>Explora tus programas</h2>
   </div>
 </div>
         <div class="programs" id="programChoices">
@@ -2116,7 +2124,7 @@ let pendingAccountAction=null;
 function userStateKey(email=currentSession?.email){if(!email)return 'nexora_v3_state';return 'nexora_user_state_'+btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/=/g,'')}
 async function hashPassword(value){const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
-function updateAccountUI(){const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
+function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
 function openAccount(){openAccountFor(currentSession?'login':'signup')}
 function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';document.getElementById('accountModal').classList.add('open');renderAccountModal();if(!currentSession)switchAuth(mode)}
 function requireAccount(action){openAccountFor('signup',action);return false}
@@ -7285,7 +7293,15 @@ function renderPersonalPrinciple(){
   if(el)el.textContent=nexoraPersonalPrinciple();
 }
 
-function renderHome(){const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const ids=['gratitud','disciplina','confianza','enfoque','elocuencia','comunicacion'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?tx(`${s.completed.length}/${max} días`):tx('Sin comenzar')});renderPersonalPrinciple()}
+function renderHome(){const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const ids=['gratitud','disciplina','confianza','enfoque','elocuencia','comunicacion'];ids.forEach(id=>{const p=program(id),s=pstate(id),max=totalDays(p),el=document.getElementById(id+'CardProgress');if(el)el.textContent=s.baselineDone?tx(`${s.completed.length}/${max} días`):tx('Sin comenzar')});
+  const cont=document.getElementById('homeContinue');
+  const active=ids.filter(id=>{const s=pstate(id);return s.baselineDone||s.completed.length>0});
+  if(cont&&currentSession&&active.length){
+    let id=active.includes(appState.selectedProgram)?appState.selectedProgram:active[0],p=program(id),s=pstate(id),max=totalDays(p),day=Math.min(s.currentDay,max),done=s.completed.length,pct=Math.round(done/max*100);
+    const copy=lang==='en'?{k:'CONTINUE',h:`${tx(p.name)} · Day ${day}`,b:`${done} of ${max} days completed`,a:'Continue today →',x:'Your practice is ready. Pick up exactly where you left off.'}:lang==='fr'?{k:'CONTINUER',h:`${tx(p.name)} · Jour ${day}`,b:`${done} sur ${max} jours terminés`,a:'Continuer aujourd’hui →',x:'Votre pratique est prête. Reprenez exactement là où vous vous êtes arrêté.'}:{k:'CONTINUAR',h:`${tx(p.name)} · Día ${day}`,b:`${done} de ${max} días completados`,a:'Continuar hoy →',x:'Tu práctica está lista. Retoma exactamente donde quedaste.'};
+    cont.style.display='block';cont.innerHTML=`<div class="eyebrow">${copy.k}</div><h2 style="font-size:clamp(28px,5vw,38px);margin:4px 0 6px">${copy.h}</h2><p class="muted" style="margin:0 0 14px">${copy.x}</p><div class="progressbar" style="margin:0 0 8px"><div style="width:${pct}%;background:${p.accent}"></div></div><div class="tiny" style="margin-bottom:16px">${copy.b}</div><button class="primary" onclick="setProgram('${id}');startToday()">${copy.a}</button>`;
+  }else if(cont){cont.style.display='none';cont.innerHTML=''}
+  renderPersonalPrinciple()}
 let historyProgramId=null;
 function showHistoryPrograms(){historyProgramId=null;renderHistory()}
 function openProgramHistory(id){historyProgramId=id;renderHistory()}
