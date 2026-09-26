@@ -1623,11 +1623,20 @@
     @keyframes nexoraSplashSpin{to{transform:rotate(360deg)}}
     @media(prefers-reduced-motion:reduce){.nexora-splash-loader{animation-duration:1.8s}}
 
-/* UX simplification: returning users see continuation first; explanatory hero stays available to guests. */
-body.nexora-returning-user #home .hero{margin-bottom:18px}
-body.nexora-returning-user #home .hero-main .lead,body.nexora-returning-user #home .hero-main>div:last-child,body.nexora-returning-user #home .nexora-method{display:none}
-body.nexora-returning-user #home .hero-main h1{font-size:clamp(34px,6vw,52px);margin-bottom:8px}
-@media(max-width:700px){#homeContinue{border-radius:22px!important}body.nexora-returning-user #home .hero-side{display:none}}
+/* UX simplification v2: active users land on continuation, not the marketing explanation. */
+body.nexora-active-user #home .hero-main{display:none}
+body.nexora-active-user #home .hero{grid-template-columns:1fr;margin:0 0 22px;background:transparent;border:0;box-shadow:none}
+body.nexora-active-user #home .hero-side{min-height:0;padding:16px 20px;border-radius:18px}
+body.nexora-active-user #home .hero-side .small{font-size:12px;text-transform:uppercase;letter-spacing:.07em}
+body.nexora-active-user #home .hero-side .quote{font-size:clamp(20px,3vw,27px);line-height:1.25;margin-top:7px}
+body.nexora-active-user #home .nexora-method{display:none}
+body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;padding-top:24px}
+@media(max-width:700px){
+  #homeContinue{border-radius:22px!important;margin-bottom:14px!important}
+  body.nexora-active-user #home .hero{margin-bottom:16px}
+  body.nexora-active-user #home .hero-side{display:block;padding:14px 16px}
+  body.nexora-active-user #home .hero-side .quote{font-size:20px}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -1662,6 +1671,8 @@ body.nexora-returning-user #home .hero-main h1{font-size:clamp(34px,6vw,52px);ma
 
     <main>
       <section id="home" class="view active">
+        <section id="homeContinue" class="card" style="display:none;margin:0 0 22px;padding:22px"></section>
+
         <div class="hero">
           <div class="hero-main">
             <div class="eyebrow">Transformación personal</div>
@@ -1693,8 +1704,6 @@ body.nexora-returning-user #home .hero-main h1{font-size:clamp(34px,6vw,52px);ma
           <div class="guest-banner-copy"><b>Explora primero. Tu transformación empieza con tu cuenta.</b><span>Puedes conocer NEXORA y sus programas sin registrarte. Crea una cuenta para iniciar prácticas, guardar evidencias, construir tu Historia y ver tu Progreso.</span></div>
           <div class="guest-banner-actions"><button class="primary" onclick="openAccountFor('signup')">Crear cuenta →</button><button class="ghost" onclick="openAccountFor('login')">Ya tengo cuenta</button></div>
         </section>
-
-        <section id="homeContinue" class="card" style="display:none;margin:0 0 22px;padding:22px"></section>
 
         <div class="section-title program-section-title" id="pathsAnchor">
   <div class="program-section-heading">
@@ -2124,7 +2133,7 @@ let pendingAccountAction=null;
 function userStateKey(email=currentSession?.email){if(!email)return 'nexora_v3_state';return 'nexora_user_state_'+btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/=/g,'')}
 async function hashPassword(value){const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
-function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
+function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);document.body.classList.toggle('nexora-active-user',!!currentSession&&Object.keys(PROGRAMS).some(id=>{const s=pstate(id);return s.baselineDone||s.completed.length>0}));const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
 function openAccount(){openAccountFor(currentSession?'login':'signup')}
 function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';document.getElementById('accountModal').classList.add('open');renderAccountModal();if(!currentSession)switchAuth(mode)}
 function requireAccount(action){openAccountFor('signup',action);return false}
@@ -7036,7 +7045,7 @@ function renderGuideStep(){const step=GUIDE_STEPS[guideIndex];if(step.view&&curr
 function positionGuide(el){const pad=8,r=el.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;const x=Math.max(6,r.left-pad),y=Math.max(6,r.top-pad),w=Math.min(vw-x-6,r.width+pad*2),h=Math.min(vh-y-6,r.height+pad*2);const top=document.getElementById('tourShadeTop'),left=document.getElementById('tourShadeLeft'),right=document.getElementById('tourShadeRight'),bottom=document.getElementById('tourShadeBottom'),focus=document.getElementById('tourFocus'),card=document.getElementById('tourCard');Object.assign(top.style,{left:'0px',top:'0px',width:'100vw',height:y+'px'});Object.assign(left.style,{left:'0px',top:y+'px',width:x+'px',height:h+'px'});Object.assign(right.style,{left:(x+w)+'px',top:y+'px',width:Math.max(0,vw-(x+w))+'px',height:h+'px'});Object.assign(bottom.style,{left:'0px',top:(y+h)+'px',width:'100vw',height:Math.max(0,vh-(y+h))+'px'});Object.assign(focus.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});const cardW=Math.min(370,vw-24);let cx=Math.min(Math.max(12,x),vw-cardW-12);let cy=y+h+14;if(cy+250>vh)cy=Math.max(12,y-264);Object.assign(card.style,{left:cx+'px',top:cy+'px'});}
 window.addEventListener('resize',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}});
 window.addEventListener('scroll',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}},{passive:true});
-function showView(id,btn){if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='history'){historyProgramId=null;renderHistory();}if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
+function showView(id,btn){if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='home')renderHome();if(id==='history'){historyProgramId=null;renderHistory();}if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
