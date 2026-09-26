@@ -1668,6 +1668,32 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
 .today-context[open] summary:after{content:" −"}
 .today-context .practice-context{box-shadow:none}
 .today-context .lessonbox{margin-bottom:4px}
+
+/* UX simplification — History: scan programs first, expand evidence only on demand. */
+#history{max-width:820px;margin:0 auto}
+#history .history-head{margin-bottom:8px}
+#history #historyTitle{font-size:clamp(34px,6vw,48px)!important}
+#history #historyIntro{max-width:620px;line-height:1.5}
+#history .timeline{gap:10px;margin-top:16px}
+.history-program-card{display:grid!important;grid-template-columns:1fr auto;align-items:center;gap:16px;padding:18px 20px!important}
+.history-program-card h3{margin:6px 0 5px;font-size:21px}
+.history-program-card p{font-size:13px}
+.history-program-arrow{font-size:24px;color:var(--gold);font-weight:800}
+.history-entry{padding:17px 18px}
+.history-entry h3{margin:7px 0 8px;font-size:19px}
+.history-entry>p{margin:0;color:var(--ink2);line-height:1.5}
+.history-entry details{margin-top:10px;padding-top:9px;border-top:1px solid var(--line)}
+.history-entry summary{cursor:pointer;color:#76552e;font-size:12px;font-weight:800;list-style:none}
+.history-entry summary::-webkit-details-marker{display:none}
+.history-entry summary:after{content:" +";font-weight:900}
+.history-entry details[open] summary:after{content:" −"}
+.history-entry .answers{border:0;margin-top:8px;padding-top:0}
+@media(max-width:700px){
+ #history #historyTitle{font-size:34px!important}
+ #history .history-head{align-items:flex-start}
+ .history-program-card{padding:16px!important}
+ .history-entry{padding:16px}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -7355,7 +7381,7 @@ function renderHistory(){
     if(title)title.textContent=lang==='en'?'Your history by program':lang==='fr'?'Votre historique par programme':'Tu historia por programa';
     if(intro)intro.textContent=lang==='en'?'Choose a program you have started to review its history.':lang==='fr'?'Choisissez un programme commencé pour consulter son historique.':'Elige uno de los programas que has comenzado para revisar su historial.';
     if(!started.length){wrap.innerHTML=`<div class="card"><h3>${tx('Aún no hay evidencias')}</h3><p class="muted">${tx('Completa una práctica de cualquiera de tus programas y aquí comenzará a formarse tu historia personal.')}</p></div>`;return}
-    wrap.innerHTML=started.map(id=>{const p=PROGRAMS[id],s=pstate(id),last=s.entries.slice().sort((a,b)=>new Date(b.date)-new Date(a.date))[0];const date=last?new Date(last.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'}):'';const count=s.entries.length;const meta=lang==='en'?count+' '+(count===1?'entry':'entries'):lang==='fr'?count+' '+(count===1?'entrée':'entrées'):count+' '+(count===1?'registro':'registros');return `<button class="evidence" type="button" onclick="openProgramHistory('${id}')" style="width:100%;text-align:left;cursor:pointer"><small><span class="feed-program ${id==='disciplina'?'disc':''}">${tx(p.name)}</span></small><h3>${tx(p.title)}</h3><p>${meta}${date?' · '+date:''}</p></button>`}).join('');
+    wrap.innerHTML=started.map(id=>{const p=PROGRAMS[id],s=pstate(id),last=s.entries.slice().sort((a,b)=>new Date(b.date)-new Date(a.date))[0];const date=last?new Date(last.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'}):'';const count=s.entries.length;const meta=lang==='en'?count+' '+(count===1?'entry':'entries'):lang==='fr'?count+' '+(count===1?'entrée':'entrées'):count+' '+(count===1?'registro':'registros');return `<button class="evidence history-program-card" type="button" onclick="openProgramHistory('${id}')" style="width:100%;text-align:left;cursor:pointer"><span><small><span class="feed-program ${id==='disciplina'?'disc':''}">${tx(p.name)}</span></small><h3>${tx(p.title)}</h3><p>${meta}${date?' · '+date:''}</p></span><span class="history-program-arrow" aria-hidden="true">›</span></button>`}).join('');
     return;
   }
   const p=PROGRAMS[historyProgramId],entries=pstate(historyProgramId).entries.slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -7364,7 +7390,7 @@ function renderHistory(){
   if(title)title.textContent=tx(p.name);
   if(intro)intro.textContent=lang==='en'?'Your completed practices and saved evidence in this program.':lang==='fr'?'Vos pratiques terminées et les preuves enregistrées dans ce programme.':'Tus prácticas completadas y evidencias guardadas en este programa.';
   if(!entries.length){wrap.innerHTML=`<div class="card"><h3>${tx('Aún no hay evidencias')}</h3><p class="muted">${lang==='en'?'Complete a practice in this program and it will appear here.':lang==='fr'?'Terminez une pratique de ce programme et elle apparaîtra ici.':'Completa una práctica de este programa y aparecerá aquí.'}</p></div>`;return}
-  wrap.innerHTML=entries.map(e=>`<article class="evidence"><small><span class="feed-program ${historyProgramId==='disciplina'?'disc':''}">${tx(p.name)}</span> ${tx(`Día ${e.day}`)} · ${new Date(e.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'})}</small><h3>${escapeHtml(tx(e.title))}</h3><p>${escapeHtml(e.answers.find(Boolean)||'')}</p><div class="answers">${e.answers.filter(Boolean).slice(1).map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></article>`).join('')
+  wrap.innerHTML=entries.map(e=>{const ans=e.answers.filter(Boolean),more=ans.slice(1);return `<article class="evidence history-entry"><small>${tx(`Día ${e.day}`)} · ${new Date(e.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'})}</small><h3>${escapeHtml(tx(e.title))}</h3><p>${escapeHtml(ans[0]||'')}</p>${more.length?`<details><summary>${lang==='en'?'See full entry':lang==='fr'?'Voir l’entrée complète':'Ver registro completo'}</summary><div class="answers">${more.map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></details>`:''}</article>`}).join('')
 }
 function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} journey completed.`:lang==='fr'?`Parcours ${tx(p.name)} terminé.`:`Recorrido de ${tx(p.name)} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
