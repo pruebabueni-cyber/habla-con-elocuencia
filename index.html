@@ -8294,31 +8294,62 @@ async function nexoraLoadRemoteState(){
     await nexoraSyncAll();
     return;
   }
+
+  // Merge remote and local progress instead of replacing local state.
+  // Progress is monotonic: completed days are unioned, current day keeps the furthest point,
+  // and evidence keeps the most recently edited version for each day.
   const next=defaultAppState();
   next.selectedProgram=(localState.selectedProgram&&PROGRAMS[localState.selectedProgram])?localState.selectedProgram:'gratitud';
-  for(const row of states){
-    if(!next.programs[row.program_key])continue;
-    next.programs[row.program_key]={
-      ...next.programs[row.program_key],
-      baselineDone:!!row.baseline_done,
-      baseline:row.baseline||{},
-      currentDay:row.current_day||1,
-      completed:Array.isArray(row.completed_days)?row.completed_days:[],
-      entries:[]
-    };
-  }
+
+  const remoteByProgram=new Map(states.map(row=>[row.program_key,row]));
+  const remoteEvidenceByProgram=new Map();
   for(const row of evidence){
-    const state=next.programs[row.program_key];
-    if(!state)continue;
-    state.entries.push({
+    if(!remoteEvidenceByProgram.has(row.program_key))remoteEvidenceByProgram.set(row.program_key,new Map());
+    remoteEvidenceByProgram.get(row.program_key).set(row.day,{
       day:row.day,
       title:row.title,
       answers:Array.isArray(row.answers)?row.answers:[],
       date:row.updated_at||row.created_at
     });
   }
+
+  for(const key of Object.keys(next.programs)){
+    const base=next.programs[key];
+    const local=localState?.programs?.[key]||base;
+    const remote=remoteByProgram.get(key);
+
+    const remoteCompleted=Array.isArray(remote?.completed_days)?remote.completed_days:[];
+    const localCompleted=Array.isArray(local?.completed)?local.completed:[];
+    const completed=[...new Set([...remoteCompleted,...localCompleted])].sort((a,b)=>a-b);
+
+    const baselineDone=!!remote?.baseline_done||!!local?.baselineDone;
+    const baseline=(local?.baselineDone&&!remote?.baseline_done)
+      ?(local.baseline||{})
+      :(remote?.baseline||local?.baseline||{});
+
+    const entriesByDay=new Map(remoteEvidenceByProgram.get(key)||[]);
+    for(const entry of (Array.isArray(local?.entries)?local.entries:[])){
+      const previous=entriesByDay.get(entry.day);
+      const previousTime=previous?.date?Date.parse(previous.date):0;
+      const localTime=entry?.date?Date.parse(entry.date):0;
+      if(!previous||localTime>=previousTime)entriesByDay.set(entry.day,entry);
+    }
+
+    next.programs[key]={
+      ...base,
+      ...local,
+      baselineDone,
+      baseline,
+      currentDay:Math.max(1,remote?.current_day||1,local?.currentDay||1),
+      completed,
+      startedAt:local?.startedAt||remote?.started_at||null,
+      entries:[...entriesByDay.values()].sort((a,b)=>(Date.parse(b.date||0)||0)-(Date.parse(a.date||0)||0))
+    };
+  }
+
   appState=next;
   localStorage.setItem(userStateKey(),JSON.stringify(appState));
+  await nexoraSyncAll();
 }
 
 async function nexoraEstablishSession(session,isNew=false){
