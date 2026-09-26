@@ -1637,6 +1637,37 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
   body.nexora-active-user #home .hero-side{display:block;padding:14px 16px}
   body.nexora-active-user #home .hero-side .quote{font-size:20px}
 }
+
+/* UX simplification — Today: one task, less chrome, progressive detail. */
+#today .exercise-shell{max-width:720px}
+#today .today-back{margin:0 0 10px;padding:9px 12px;font-size:13px}
+#today .exercise-card{padding:clamp(20px,4vw,36px)}
+#today .exercise-day-nav{margin-bottom:14px}
+#today .practice-context{margin:14px 0}
+#today .lessonbox{margin:18px 0;padding:16px 18px}
+#today .mission{margin:18px 0 14px}
+#today .field{margin:15px 0}
+#today .completebox{margin-top:18px}
+@media(max-width:700px){
+ #today .exercise-shell{margin-top:-4px}
+ #today .exercise-card{border-radius:22px;padding:20px 18px 24px}
+ #today .exercise-card h1{font-size:34px;margin:7px 0 10px}
+ #today .exercise-card .hook{font-size:16px;line-height:1.45;margin-bottom:12px}
+ #today .day-number{font-size:10px;line-height:1.35}
+ #today .practice-context{padding:12px 13px}
+ #today .lessonbox{font-size:14px;line-height:1.5}
+ #today .mission h3{font-size:17px}
+ #today textarea{min-height:92px}
+ #today .fieldhead label{font-size:15px;line-height:1.35}
+}
+
+.today-context{margin:10px 0 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0}
+.today-context summary{cursor:pointer;color:#76552e;font-size:13px;font-weight:800;list-style:none}
+.today-context summary::-webkit-details-marker{display:none}
+.today-context summary:after{content:" +";font-weight:900}
+.today-context[open] summary:after{content:" −"}
+.today-context .practice-context{box-shadow:none}
+.today-context .lessonbox{margin-bottom:4px}
 </style>
 
 <script data-nexora-theme="v1">
@@ -1860,7 +1891,7 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
 
       <section id="today" class="view">
         <div class="exercise-shell">
-          <button class="ghost" onclick="showView('home')" style="margin-bottom:14px">← Volver</button>
+          <button class="ghost today-back" onclick="showView('home')">← Inicio</button>
           <article class="exercise-card" id="exerciseCard"></article>
         </div>
       </section>
@@ -7154,9 +7185,8 @@ function renderExercise(n,isPreview=false,isReview=false){const p=program(),s=ps
   <div class="day-number">${p.name.toUpperCase()} · ${stage.name} · DÍA ${n} DE ${max}${isPreview?' · VISTA TESTER':''}</div>
   ${isStageStart(p,n)?`<div class="stage-transition"><div class="eyebrow">Nueva etapa</div><h3>${stage.name}</h3><p>${meta.shift}</p></div>`:''}
   <h1>${day.title}</h1><p class="hook">${day.hook}</p>
-  <div class="practice-context"><div class="practice-context-left"><span class="practice-kind">${meta.mode}</span><span class="practice-autonomy">${meta.autonomy}</span></div><p>${meta.shift}</p></div>
-  <div class="lessonbox"><b>Comprender</b><br>${dayLesson(p,n)}</div>
-  <div class="mission"><div class="eyebrow">Llévalo a la práctica</div><h3>${day.mission}</h3></div>
+  <div class="mission"><div class="eyebrow">Tu práctica de hoy</div><h3>${day.mission}</h3></div>
+  <details class="today-context"><summary>Por qué esta práctica</summary><div class="practice-context"><div class="practice-context-left"><span class="practice-kind">${meta.mode}</span><span class="practice-autonomy">${meta.autonomy}</span></div><p>${meta.shift}</p></div><div class="lessonbox"><b>Comprender</b><br>${dayLesson(p,n)}</div></details>
   <div id="exerciseFields">${day.prompts.map((q,i)=>{const help=promptSupport(p,n,i,q),eid=`ex_${n}_${i}`;return `<div class="field"><div class="fieldhead"><label>${q}</label><button type="button" class="examplebtn" onclick="toggleExample('${eid}',this)">💡 Ver ejemplo</button></div><div class="examplebox" id="${eid}"><b>Ejemplo para orientarte:</b><br>${escapeHtml(help.example)}<br><span class="tiny">Úsalo solo como referencia; tu respuesta puede ser completamente distinta.</span></div><textarea id="ans_${i}" placeholder="${escapeHtml(help.placeholder)}">${escapeHtml(existing?.answers?.[i]||'')}</textarea></div>`}).join('')}</div>
   ${isStageEnd(p,n)?`<div class="stage-close"><b>Cierre de etapa · ${stage.name}</b><p>No estás repitiendo el inicio. Este punto sirve para revisar qué cambió, qué todavía requiere esfuerzo y qué capacidad entra en juego en la siguiente etapa.</p></div>`:''}
   <div class="completebox" style="padding:16px 18px"><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div><p style="margin:10px 0 0">${existing?'Tus cambios se guardarán en el historial de este programa.':'Tus respuestas se guardarán como parte del historial de este programa.'}</p></div>`}
