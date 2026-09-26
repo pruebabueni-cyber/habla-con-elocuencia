@@ -1694,6 +1694,44 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
  .history-program-card{padding:16px!important}
  .history-entry{padding:16px}
 }
+
+/* UX simplification — Progress: answer "where am I?" before explaining metrics. */
+#progress{max-width:900px;margin:0 auto}
+.progress-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:14px}
+.progress-head h1{font-size:clamp(36px,6vw,50px);letter-spacing:-.05em;margin:0}
+.progress-head .eyebrow{margin-bottom:7px}
+.progress-head .program-switch{margin:0;justify-content:flex-end}
+.progress-summary{padding:24px 26px}
+.progress-summary-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+.progress-summary .bigmetric{font-size:64px;line-height:.95}
+.progress-summary #progressProgramLabel{margin:7px 0 18px}
+.progress-stage-compact{text-align:right;padding-top:6px}
+.progress-stage-compact span{display:block;margin-bottom:4px}
+.progress-stage-compact b{font-size:18px}
+.progress-milestone-card{margin-top:14px;padding:20px 24px}
+.progress-milestone-card .eyebrow{margin-bottom:10px}
+.progress-milestone-card .milestones{margin-top:0}
+.progress-stage-detail{margin-top:12px;padding:14px 18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,249,.72)}
+.progress-stage-detail summary{cursor:pointer;font-size:13px;font-weight:850;color:#76552e;list-style:none}
+.progress-stage-detail summary::-webkit-details-marker{display:none}
+.progress-stage-detail summary:after{content:" +";font-weight:900}
+.progress-stage-detail[open] summary:after{content:" −"}
+.progress-stage-detail p{margin:12px 0 0;line-height:1.55}
+@media(max-width:700px){
+ .progress-head{display:block}
+ .progress-head .program-switch{margin-top:14px;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:2px}
+ .progress-head .switchbtn{flex:0 0 auto}
+ .progress-summary{padding:20px}
+ .progress-summary-top{align-items:flex-end}
+ .progress-summary .bigmetric{font-size:56px}
+ .progress-stage-compact{max-width:45%}
+ .progress-stage-compact b{font-size:15px}
+ .progress-summary .statrow{gap:7px}
+ .progress-summary .stat{padding:12px 8px}
+ .progress-summary .stat b{font-size:20px}
+ .progress-summary .stat span{font-size:10px}
+ .progress-milestone-card{padding:18px}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -1929,31 +1967,30 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
       </section>
 
       <section id="progress" class="view">
-        <div class="program-switch" id="progressSwitch"></div>
-        <div class="progress-layout">
-          <section class="card">
-            <div class="eyebrow">Progreso</div>
-            <div class="bigmetric" id="progressPct">0%</div>
-            <p class="muted" id="progressProgramLabel"></p>
-            <div class="progressbar"><div id="progressFill" style="width:0%"></div></div>
-            <div class="statrow">
-              <div class="stat"><b id="statDays">0</b><span>días completados</span></div>
-              <div class="stat"><b id="statEvidence">0</b><span>evidencias</span></div>
-              <div class="stat"><b id="statThird">0</b><span id="statThirdLabel">señales</span></div>
-            </div>
-          </section>
-          <section class="card">
-            <div class="eyebrow">Hitos</div>
-            <h2 style="font-size:30px">No medimos solo uso. Buscamos evidencia de transformación.</h2>
-            <p class="muted" style="line-height:1.55">Los hitos de 15, 30, 60 y 90 días te devuelven lo que has practicado y registrado.</p>
-            <div class="milestones" id="milestones"></div>
-          </section>
+        <div class="progress-head">
+          <div><div class="eyebrow">Progreso</div><h1 id="progressTitle">Tu avance</h1></div>
+          <div class="program-switch" id="progressSwitch"></div>
         </div>
-        <section class="card" style="margin-top:18px">
-          <div class="eyebrow">Etapa actual</div>
-          <h2 id="currentStageTitle" style="font-size:32px;margin-bottom:8px"></h2>
-          <p id="currentStageDesc" class="muted" style="line-height:1.6;max-width:760px"></p>
+        <section class="card progress-summary">
+          <div class="progress-summary-top">
+            <div><div class="bigmetric" id="progressPct">0%</div><p class="muted" id="progressProgramLabel"></p></div>
+            <div class="progress-stage-compact"><span class="tiny">Etapa actual</span><b id="currentStageTitle"></b></div>
+          </div>
+          <div class="progressbar"><div id="progressFill" style="width:0%"></div></div>
+          <div class="statrow">
+            <div class="stat"><b id="statDays">0</b><span>días completados</span></div>
+            <div class="stat"><b id="statEvidence">0</b><span>evidencias</span></div>
+            <div class="stat"><b id="statThird">0</b><span id="statThirdLabel">señales</span></div>
+          </div>
         </section>
+        <section class="card progress-milestone-card">
+          <div class="eyebrow">Hitos</div>
+          <div class="milestones" id="milestones"></div>
+        </section>
+        <details class="progress-stage-detail">
+          <summary>Sobre tu etapa actual</summary>
+          <p id="currentStageDesc" class="muted"></p>
+        </details>
       </section>
 
       <section id="guide" class="view">
@@ -7392,7 +7429,7 @@ function renderHistory(){
   if(!entries.length){wrap.innerHTML=`<div class="card"><h3>${tx('Aún no hay evidencias')}</h3><p class="muted">${lang==='en'?'Complete a practice in this program and it will appear here.':lang==='fr'?'Terminez une pratique de ce programme et elle apparaîtra ici.':'Completa una práctica de este programa y aparecerá aquí.'}</p></div>`;return}
   wrap.innerHTML=entries.map(e=>{const ans=e.answers.filter(Boolean),more=ans.slice(1);return `<article class="evidence history-entry"><small>${tx(`Día ${e.day}`)} · ${new Date(e.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'})}</small><h3>${escapeHtml(tx(e.title))}</h3><p>${escapeHtml(ans[0]||'')}</p>${more.length?`<details><summary>${lang==='en'?'See full entry':lang==='fr'?'Voir l’entrée complète':'Ver registro completo'}</summary><div class="answers">${more.map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></details>`:''}</article>`}).join('')
 }
-function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} journey completed.`:lang==='fr'?`Parcours ${tx(p.name)} terminé.`:`Recorrido de ${tx(p.name)} completado.`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
+function renderProgress(){renderSwitch('progressSwitch');const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const pt=document.getElementById('progressTitle');if(pt)pt.textContent=lang==='en'?'Your progress':lang==='fr'?'Votre progression':'Tu avance';document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} · ${s.completed.length} of ${max} days completed`:lang==='fr'?`${tx(p.name)} · ${s.completed.length} jours sur ${max} terminés`:`${tx(p.name)} · ${s.completed.length} de ${max} días completados`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function renderAll(){renderHome();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
