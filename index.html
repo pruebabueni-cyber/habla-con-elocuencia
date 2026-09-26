@@ -7048,6 +7048,44 @@ function startToday(btn){if(!currentSession)return requireAccount('today');const
 function openProgramDay(n){if(!currentSession)return requireAccount('today');const s=pstate(),max=totalDays(),limit=Math.min(s.currentDay,max);if(n<1||n>limit){toast('Ese día todavía no está disponible.');return}previewDay=null;renderExercise(n,false,n<s.currentDay||s.completed.includes(n));showView('today')}
 function navigateExerciseDay(n,isPreview=false){const max=totalDays();if(n<1||n>max)return;if(isPreview){previewDay=n;renderExercise(n,true,false);showView('today');return}openProgramDay(n)}
 function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
+function concretePromptExample(p,n,i,q){
+  const t=(q||'').toLowerCase();
+  const rules=[
+    [/no quieres minimizar|no quiero minimizar/,'“No quiero minimizar que, aunque me sentí incómodo, esta vez no evité la situación y pude mantenerme firme.”'],
+    [/qué surgió después|que surgió después|surgió después/,'“Después de esa conversación entendí que podía expresar lo que necesitaba sin sentirme culpable.”'],
+    [/qué ocurrió|que ocurrió|ocurrió|pasó|sucedió/,'“Hoy tuve una conversación difícil con un compañero. Me puse nervioso, pero expliqué mi punto sin levantar la voz.”'],
+    [/qué sentiste|que sentiste|cómo te sentiste|como te sentiste|emoción/,'“Al principio sentí tensión y ganas de evitarlo; después sentí alivio por haberlo enfrentado.”'],
+    [/qué aprendiste|que aprendiste|aprendiste|aprendizaje/,'“Aprendí que puedo decir lo que necesito con calma sin tener que justificarme demasiado.”'],
+    [/qué valoras|que valoras|agradec|gratitud/,'“Hoy valoré que mi hermana me llamara para saber cómo estaba; ese gesto me hizo sentir acompañado.”'],
+    [/persona|quién|quien/,'“Mi compañero Luis se tomó unos minutos para ayudarme a resolver algo que no entendía.”'],
+    [/cuerpo|capacidad/,'“Hoy pude caminar varias cuadras sin dificultad y me di cuenta de cuánto doy por sentado poder moverme con libertad.”'],
+    [/entorno|lugar|espacio/,'“Esta mañana entró luz por la ventana y el silencio de la casa me ayudó a empezar el día con calma.”'],
+    [/recibiste|recibí|ayuda/,'“Un compañero me explicó un proceso que no conocía y me ahorró casi una hora de trabajo.”'],
+    [/dificultad|obstáculo|obstaculo|reto/,'“Quería posponer una llamada incómoda, pero la hice antes del mediodía y pude resolver el asunto.”'],
+    [/tarea|acción|accion|promesa|hiciste/,'“Apagué las notificaciones y dediqué veinte minutos a terminar el correo que llevaba dos días posponiendo.”'],
+    [/distracción|distraccion/,'“Dejé el teléfono en otra habitación durante veinte minutos y terminé lo que estaba haciendo sin revisarlo.”'],
+    [/señal|momento|cuándo|cuando/,'“Después de servirme el café, abrí mi agenda y elegí una sola tarea para empezar.”'],
+    [/idea|frase|mensaje/,'“Quiero proponer este cambio porque nos puede ahorrar tiempo y reducir errores.”'],
+    [/conversación|conversacion|pregunta|escuch/,'“En vez de responder de inmediato, le pregunté qué era lo que más le preocupaba y esperé a que terminara.”'],
+    [/límite|limite/,'“Dije que hoy no podía asumir otra tarea y propuse revisarla mañana, sin dar una explicación larga.”'],
+    [/miedo|insegur|confianza/,'“Aunque dudé antes de hablar, compartí mi opinión en la reunión sin disculparme por tener un punto de vista distinto.”'],
+    [/enfoque|atención|atencion|concentr/,'“Cerré las pestañas que no necesitaba y trabajé veinticinco minutos únicamente en el informe.”'],
+    [/disciplina|constancia|empez|iniciar/,'“No tenía ganas de hacerlo, pero puse un temporizador de cinco minutos y empecé por la parte más sencilla.”'],
+    [/comunic|expres|decir|dijiste/,'“Le dije: ‘Necesito que acordemos una hora concreta para evitar confusiones’, en vez de asumir que lo entendería.”'],
+    [/hablar|voz|pausa|muletilla|elocu/,'“Antes de responder hice una pausa, dije la idea principal en una frase y luego expliqué solo lo necesario.”']
+  ];
+  for(const [re,ex] of rules)if(re.test(t))return ex;
+  const pools={
+    gratitud:['“Hoy agradecí tener unos minutos tranquilos para desayunar; normalmente lo hago con prisa y ni lo noto.”','“Me di cuenta de que tener agua caliente cada mañana es una comodidad cotidiana que casi nunca reconozco.”'],
+    disciplina:['“Tenía pendiente enviar un correo y, en vez de seguir posponiéndolo, abrí el borrador y lo terminé en diez minutos.”','“Preparé esta noche lo que necesito para mañana para no depender de mis ganas al despertar.”'],
+    confianza:['“Di mi opinión aunque no estaba seguro de que los demás estuvieran de acuerdo y pude sostenerla con calma.”','“Pedí una aclaración en vez de fingir que había entendido todo.”'],
+    enfoque:['“Puse el teléfono en silencio y trabajé veinte minutos en una sola tarea hasta terminarla.”','“Noté que estaba cambiando de tarea constantemente, cerré lo demás y volví al documento principal.”'],
+    elocuencia:['“Expliqué mi idea empezando por el punto principal y eliminé dos detalles que no ayudaban al mensaje.”','“Hice una pausa antes de responder y hablé más despacio para que la idea quedara clara.”'],
+    comunicacion:['“En vez de asumir lo que la otra persona quería decir, le pregunté: ‘¿Qué necesitas de mí exactamente?’”','“Dije lo que necesitaba de forma directa: ‘Prefiero que me avises antes para poder organizarme.’”']
+  };
+  const arr=pools[p.id]||['“Hoy ocurrió algo concreto que me hizo actuar de una manera distinta a la habitual, y pude reconocerlo al final del día.”'];
+  return arr[(n+i)%arr.length];
+}
 function promptSupport(p,n,i,q){
   const t=q.toLowerCase();
   if(p.id==='gratitud'&&n===1){
@@ -7084,6 +7122,8 @@ function promptSupport(p,n,i,q){
   else if(t.includes('señal')){placeholder='Ej.: después del café, al llegar a casa, a las 7:00…';example='Ejemplo: “Después de cepillarme los dientes, preparo la ropa del día siguiente.”';}
   else if(t.includes('idea')||t.includes('frase')){placeholder='Escribe la idea en una frase sencilla…';example='Ejemplo: “Quiero proponer este cambio porque reduce tiempo y errores.”';}
   else if(t.includes('conversación')||t.includes('pregunta')){placeholder='Describe una conversación específica…';example='Ejemplo: “En vez de responder rápido, pregunté qué era lo que más le preocupaba.”';}
+  const genericInstruction=!example||!/[“"]/u.test(example)||/^(Piensa|Describe|Busca|Elige|Puede ser|Resume|No busques)/i.test(example.trim());
+  if(genericInstruction)example=concretePromptExample(p,n,i,q);
   return {placeholder,example};
 }
 function toggleExample(id,btn){const box=document.getElementById(id);if(!box)return;const open=box.classList.toggle('open');btn.textContent=open?'Ocultar ejemplo':'💡 Ver ejemplo'}
