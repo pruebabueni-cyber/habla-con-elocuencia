@@ -1616,14 +1616,10 @@
     /* Branded splash while Supabase restores the session. */
     html.nexora-auth-pending body{overflow:hidden}
     html.nexora-auth-pending body::before{content:"";position:fixed;z-index:9998;inset:0;background:var(--paper);background:radial-gradient(circle at 8% 0%,rgba(229,191,125,.26),transparent 30%),radial-gradient(circle at 100% 20%,rgba(131,153,135,.19),transparent 28%),var(--paper)}
-    html.nexora-auth-pending body::after{content:"";position:fixed;z-index:9999;left:50%;top:50%;width:88px;height:88px;transform:translate(-50%,-78%);border-radius:28px;background:linear-gradient(135deg,var(--ink),#31435e);box-shadow:0 18px 46px rgba(16,24,39,.22),inset 0 0 0 1px rgba(255,255,255,.08)}
     .nexora-splash{display:none}
-    html.nexora-auth-pending .nexora-splash{display:flex;position:fixed;z-index:10000;inset:0;pointer-events:none;align-items:center;justify-content:center;flex-direction:column;padding-top:148px}
-    .nexora-splash-mark{position:absolute;top:calc(50% - 68px);left:50%;width:88px;height:88px;transform:translate(-50%,-50%);z-index:10001}
-    .nexora-splash-mark::before,.nexora-splash-mark::after{content:"";position:absolute;top:20px;width:12px;height:50px;border-radius:999px;background:var(--gold2);transform:rotate(-24deg)}
-    .nexora-splash-mark::before{left:25px}.nexora-splash-mark::after{right:23px;opacity:.75}
-    .nexora-splash-name{font-size:clamp(28px,5vw,38px);font-weight:900;letter-spacing:.22em;color:var(--ink);margin-left:.22em}
-    .nexora-splash-loader{width:42px;height:42px;margin-top:24px;border:3px solid rgba(199,146,79,.22);border-top-color:var(--gold);border-radius:50%;animation:nexoraSplashSpin .8s linear infinite}
+    html.nexora-auth-pending .nexora-splash{display:flex;position:fixed;z-index:10000;inset:0;pointer-events:none;align-items:center;justify-content:center;flex-direction:column}
+    .nexora-splash-logo{display:block;width:min(680px,78vw);height:auto;max-height:180px;object-fit:contain}
+    .nexora-splash-loader{width:42px;height:42px;margin-top:28px;border:3px solid rgba(199,146,79,.22);border-top-color:var(--gold);border-radius:50%;animation:nexoraSplashSpin .8s linear infinite}
     @keyframes nexoraSplashSpin{to{transform:rotate(360deg)}}
     @media(prefers-reduced-motion:reduce){.nexora-splash-loader{animation-duration:1.8s}}
 </style>
@@ -1639,7 +1635,7 @@
 </head>
 
 <body>
-  <div class="nexora-splash" aria-hidden="true"><span class="nexora-splash-mark"></span><div class="nexora-splash-name">NEXORA</div><span class="nexora-splash-loader"></span></div>
+  <div class="nexora-splash" aria-hidden="true"><img class="nexora-splash-logo" src="assets/nexora-logo-official.svg" alt=""><span class="nexora-splash-loader"></span></div>
   <div class="toast" id="toast"></div>
   <div class="shell">
     <header class="topbar">
