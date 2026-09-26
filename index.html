@@ -7885,7 +7885,13 @@ function detectNexoraLanguage(){
   return 'en';
 }
 let nexoraLanguage=detectNexoraLanguage();
+queueMicrotask(updateNexoraDocumentLocale);
 function getNexoraLanguage(){return nexoraLanguage}
+function updateNexoraDocumentLocale(){
+  const lang=['es','en','fr'].includes(nexoraLanguage)?nexoraLanguage:'en';
+  document.documentElement.lang=lang;
+  document.title=({es:'NEXORA — Transformación personal',en:'NEXORA — Personal Transformation',fr:'NEXORA — Transformation personnelle'})[lang];
+}
 function hasManualNexoraLanguageChoice(){return localStorage.getItem('nexora_language_manual')==='1'}
 function nexoraLocale(){return ({es:'es-US',en:'en-US',fr:'fr-FR'})[getNexoraLanguage()]||'en-US'}
 function canonicalSpanish(value){
@@ -8029,6 +8035,7 @@ async function setNexoraLanguage(lang,announce=false,skipRemote=false){
   if(!['es','en','fr'].includes(lang))lang='es';
   const activeView=(typeof currentViewId==='function'?currentViewId():document.querySelector('.view.active')?.id)||'home';
   nexoraLanguage=lang;
+  updateNexoraDocumentLocale();
   localStorage.setItem('nexora_language',lang);
   if(announce)localStorage.setItem('nexora_language_manual','1');
 
