@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" class="nexora-auth-pending">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -1612,6 +1612,11 @@
       .journey-top h2,.today-title{hyphens:auto}
     }
     /* data-nexora-language-layout="v1" */
+
+    /* Prevent authenticated users from flashing the guest experience while Supabase restores the session. */
+    html.nexora-auth-pending body{overflow:hidden}
+    html.nexora-auth-pending body::before{content:"";position:fixed;z-index:9998;inset:0;background:var(--paper);background:radial-gradient(circle at 8% 0%,rgba(229,191,125,.26),transparent 30%),radial-gradient(circle at 100% 20%,rgba(131,153,135,.19),transparent 28%),var(--paper)}
+    html.nexora-auth-pending body::after{content:"NEXORA";position:fixed;z-index:9999;left:50%;top:50%;transform:translate(-50%,-50%);font-weight:900;letter-spacing:.18em;color:var(--ink);font-size:18px}
 </style>
 
 <script data-nexora-theme="v1">
@@ -8375,6 +8380,7 @@ async function nexoraEstablishSession(session,isNew=false){
   await nexoraLoadRemoteState();
   updateAccountUI();
   renderAll();
+  document.documentElement.classList.remove('nexora-auth-pending');
   try{applyNexoraLanguage(document.body)}catch{}
   try{
     if(typeof hasManualNexoraLanguageChoice==='function'&&hasManualNexoraLanguageChoice()){
@@ -8598,6 +8604,7 @@ completeDay=async function(n,isPreview){
     appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||appState||defaultAppState();
     updateAccountUI();
     renderAll();
+    document.documentElement.classList.remove('nexora-auth-pending');
   };
   try{
     const nexoraRecoveryHint=(location.hash.includes('type=recovery')||location.search.includes('type=recovery'));
