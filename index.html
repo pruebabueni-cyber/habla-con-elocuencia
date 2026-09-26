@@ -8356,9 +8356,11 @@ async function nexoraEstablishSession(session,isNew=false){
   if(!session?.user)return;
   const user=session.user;
   let name=user.user_metadata?.display_name||user.email?.split('@')[0]||'Usuario';
+  let shouldAutoGuide=false;
   try{
-    const {data}=await nexoraDb.from('profiles').select('display_name,email,preferred_language,preferred_theme').eq('id',user.id).maybeSingle();
+    const {data}=await nexoraDb.from('profiles').select('display_name,email,preferred_language,preferred_theme,onboarding_seen_at').eq('id',user.id).maybeSingle();
     if(data?.display_name)name=data.display_name;
+    shouldAutoGuide=!!data&&!data.onboarding_seen_at;
     if(isNew){
       await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage(),preferred_theme:localStorage.getItem('nexora_theme')||'auto'}).eq('id',user.id);
     }else{
@@ -8380,6 +8382,12 @@ async function nexoraEstablishSession(session,isNew=false){
     }
   }catch{}
   nexoraTrack(isNew?'signup':'login').catch(()=>{});
+  if(shouldAutoGuide){
+    try{
+      await nexoraDb.from('profiles').update({onboarding_seen_at:new Date().toISOString()}).eq('id',user.id);
+    }catch{}
+    setTimeout(()=>{try{startGuide()}catch{}},420);
+  }
 }
 
 createDemoAccount=async function(){
