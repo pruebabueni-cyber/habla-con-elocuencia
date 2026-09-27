@@ -1746,6 +1746,29 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
  .bottomnav{width:calc(100% - 20px);max-width:520px}
  .bottomnav .navbtn{min-width:0;font-size:11px}
 }
+
+/* UX simplification — Guide: quick orientation first, details only when requested. */
+#guide{max-width:800px;margin:0 auto}
+#guide .guide-head{max-width:700px}
+#guide .guide-head h1{font-size:clamp(34px,5vw,48px);letter-spacing:-.05em;margin-bottom:10px}
+#guide .guide-head .lead{max-width:650px;font-size:16px;line-height:1.55;margin-bottom:18px}
+#guide .guide-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+#guide .guide-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:0}
+#guide .guide-step{padding:0;border-radius:16px;min-height:0;overflow:hidden}
+#guide .guide-step summary{display:grid;grid-template-columns:32px 1fr auto;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;list-style:none;font-size:15px;font-weight:850}
+#guide .guide-step summary::-webkit-details-marker{display:none}
+#guide .guide-step summary:after{content:"+";color:var(--gold);font-size:18px;font-weight:900}
+#guide .guide-step[open] summary:after{content:"−"}
+#guide .guide-num{width:32px;height:32px;margin:0;border-radius:10px}
+#guide .guide-step p{margin:0;padding:0 16px 16px 60px;font-size:14px;line-height:1.55}
+#guide .guide-faq{margin-top:28px;padding-top:24px;border-top:1px solid var(--line)}
+#guide .guide-faq .faq{margin-top:12px}
+@media(max-width:560px){
+ #guide .guide-head h1{font-size:34px}
+ #guide .guide-head .lead{font-size:15px}
+ #guide .guide-step summary{padding:12px 13px}
+ #guide .guide-step p{padding:0 13px 14px 57px}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -2011,23 +2034,24 @@ body.nexora-active-user #pathsAnchor.program-section-title{margin-top:28px;paddi
       </section>
 
       <section id="guide" class="view">
-        <div class="eyebrow">Guía de NEXORA</div>
-        <h1 style="font-size:clamp(38px,6vw,60px);letter-spacing:-.055em;margin-bottom:12px">Aprende a usar la plataforma sin complicarte.</h1>
-        <p class="lead">Primero puedes recorrer NEXORA de forma interactiva. Después, esta página queda como referencia rápida para cuando quieras recordar cómo funciona algo.</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px">
-          <button class="primary" onclick="startGuide()">Repetir recorrido interactivo →</button>
-          <button class="ghost" onclick="goHome()">Ir al inicio</button>
+        <div class="guide-head">
+          <div class="eyebrow">Guía de NEXORA</div>
+          <h1>Aprende a usar la plataforma sin complicarte.</h1>
+          <p class="lead">Primero puedes recorrer NEXORA de forma interactiva. Después, esta página queda como referencia rápida para cuando quieras recordar cómo funciona algo.</p>
+          <div class="guide-actions">
+            <button class="primary" onclick="startGuide()">Repetir recorrido interactivo →</button>
+          </div>
         </div>
         <div class="guide-grid">
-          <article class="guide-step"><div class="guide-num">1</div><h3>Elige tu idioma y apariencia</h3><p>NEXORA puede mostrarse en español, inglés o francés. También puedes dejar el tema en automático para seguir tu dispositivo, o elegir claro u oscuro manualmente.</p></article>
-          <article class="guide-step"><div class="guide-num">2</div><h3>Elige un programa</h3><p>Empieza por cualquiera de los programas disponibles. Cada programa conserva su propio progreso.</p></article>
-          <article class="guide-step"><div class="guide-num">3</div><h3>Marca tu punto de partida</h3><p>Antes del primer día respondes una evaluación breve. No es un examen; sirve para comparar tu evolución.</p></article>
-          <article class="guide-step"><div class="guide-num">4</div><h3>Haz la práctica del día</h3><p>Lee lo necesario, actúa fuera de la pantalla y vuelve para registrar lo que realmente ocurrió.</p></article>
-          <article class="guide-step"><div class="guide-num">5</div><h3>Guarda evidencia</h3><p>Historia conserva tus respuestas y experiencias. La meta no es acumular puntos, sino ver pruebas de cambio.</p></article>
-          <article class="guide-step"><div class="guide-num">6</div><h3>Mira tu progreso</h3><p>Los hitos y etapas te muestran dónde estás. El calendario orienta; no decide por ti cuándo una conducta está integrada.</p></article>
-          <article class="guide-step"><div class="guide-num">7</div><h3>Regresa, no te castigues</h3><p>Si pierdes un día, continúas. NEXORA está diseñada para sostener práctica real, no una racha perfecta.</p></article>
+          <details class="guide-step"><summary><span class="guide-num">1</span><span>Elige tu idioma y apariencia</span></summary><p>NEXORA puede mostrarse en español, inglés o francés. También puedes dejar el tema en automático para seguir tu dispositivo, o elegir claro u oscuro manualmente.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">2</span><span>Elige un programa</span></summary><p>Empieza por cualquiera de los programas disponibles. Cada programa conserva su propio progreso.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">3</span><span>Marca tu punto de partida</span></summary><p>Antes del primer día respondes una evaluación breve. No es un examen; sirve para comparar tu evolución.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">4</span><span>Haz la práctica del día</span></summary><p>Lee lo necesario, actúa fuera de la pantalla y vuelve para registrar lo que realmente ocurrió.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">5</span><span>Guarda evidencia</span></summary><p>Historia conserva tus respuestas y experiencias. La meta no es acumular puntos, sino ver pruebas de cambio.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">6</span><span>Mira tu progreso</span></summary><p>Los hitos y etapas te muestran dónde estás. El calendario orienta; no decide por ti cuándo una conducta está integrada.</p></details>
+          <details class="guide-step"><summary><span class="guide-num">7</span><span>Regresa, no te castigues</span></summary><p>Si pierdes un día, continúas. NEXORA está diseñada para sostener práctica real, no una racha perfecta.</p></details>
         </div>
-        <section class="card" style="margin-top:22px">
+        <section class="guide-faq">
           <div class="eyebrow">Preguntas frecuentes</div>
           <div class="faq">
             <details><summary>¿Tengo que completar todos los programas a la vez?</summary><p>No. Puedes trabajar uno solo o alternar, pero cada programa mantiene su progreso separado.</p></details>
