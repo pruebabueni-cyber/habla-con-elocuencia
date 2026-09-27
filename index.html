@@ -2291,7 +2291,7 @@ let pendingAccountAction=null;
 function userStateKey(email=currentSession?.email){if(!email)return 'nexora_v3_state';return 'nexora_user_state_'+btoa(unescape(encodeURIComponent(email.toLowerCase()))).replace(/=/g,'')}
 async function hashPassword(value){const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('')}
 function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
-function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);document.body.classList.toggle('nexora-active-user',!!currentSession&&Object.keys(PROGRAMS).some(id=>{const s=pstate(id);return s.baselineDone||s.completed.length>0}));const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
+function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);document.body.classList.toggle('nexora-active-user',!!currentSession&&Object.keys(PROGRAMS).some(id=>{const s=pstate(id);return s.baselineDone||s.completed.length>0}));const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
 function openAccount(){openAccountFor(currentSession?'login':'signup')}
 function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';openModal('accountModal');renderAccountModal();if(!currentSession)switchAuth(mode)}
 function requireAccount(action){openAccountFor('signup',action);return false}
@@ -8446,7 +8446,7 @@ updateAccountUI=function(){
     label.textContent=who.split(' ')[0];
     av.textContent=who.trim().charAt(0).toUpperCase()||'N';
   }else{
-    label.textContent='Crear cuenta';
+    label.textContent='Cuenta';
     av.textContent='+';
   }
   const banner=document.getElementById('guestBanner');
@@ -8842,6 +8842,7 @@ logoutDemoAccount=async function(){
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
   closeModal('accountModal');
+  showView('home');
   toast('Sesión cerrada.');
 };
 
