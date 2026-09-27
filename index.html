@@ -7220,8 +7220,8 @@ document.addEventListener('keydown',e=>{
   const items=modalFocusables(modal);
   if(!items.length){e.preventDefault();modal.querySelector('.modalbox')?.focus();return;}
   const first=items[0],last=items[items.length-1],active=document.activeElement;
-  if(e.shiftKey&&(active===first||!modal.contains(active))){e.preventDefault();last.focus();}
-  else if(!e.shiftKey&&(active===last||!modal.contains(active))){e.preventDefault();first.focus();}
+  if(e.shiftKey&&(active===first||!items.includes(active))){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&(active===last||!items.includes(active))){e.preventDefault();first.focus();}
 });
 const GUIDE_STEPS=[
   {target:'#accountBtn',title:'Tu cuenta',text:'Aquí creas tu cuenta o entras a la que ya tienes. Tu progreso en cada programa queda vinculado a tu perfil.',view:'home'},
