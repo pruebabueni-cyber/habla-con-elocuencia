@@ -1787,6 +1787,12 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
  #accountModal .modalbox{padding:22px 18px}
  #accountModal .modalbox h2{font-size:27px}
 }
+
+/* Accessible modal behavior — keep the background fixed while dialog content scrolls. */
+body.modal-open{overflow:hidden}
+.modal.open{overscroll-behavior:contain}
+.modalbox{-webkit-overflow-scrolling:touch}
+.modalbox:focus{outline:none}
 </style>
 
 <script data-nexora-theme="v1">
@@ -2129,7 +2135,7 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
     </section>
   </div>
 
-  <div class="modal" id="baselineModal"><div class="modalbox">
+  <div class="modal" id="baselineModal" role="dialog" aria-modal="true" aria-labelledby="baselineTitle"><div class="modalbox">
     <div class="modalhead">
       <div class="copy">
         <div class="eyebrow">Antes de comenzar</div><h2 id="baselineTitle">Queremos conocerte como eres hoy.</h2>
@@ -2144,10 +2150,10 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
     </div>
   </div></div>
 
-  <div class="modal" id="scienceModal"><div class="modalbox">
+  <div class="modal" id="scienceModal" role="dialog" aria-modal="true" aria-labelledby="scienceModalTitle"><div class="modalbox">
     <div class="modalhead">
       <div class="copy">
-        <div class="eyebrow">Base científica</div><h2>La experiencia evita promesas exageradas.</h2>
+        <div class="eyebrow">Base científica</div><h2 id="scienceModalTitle">La experiencia evita promesas exageradas.</h2>
       </div>
       <button class="closex" aria-label="Cerrar" onclick="closeModal('scienceModal')">×</button>
     </div>
@@ -2164,11 +2170,10 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
     <p class="muted" style="line-height:1.75;margin-top:16px">La aplicación no supone que completar un calendario transforma automáticamente a una persona. Los cierres sirven como puntos de evaluación, integración y consolidación.</p>
     <div class="modal-actions">
       <button class="primary" style="flex:1" onclick="closeModal('scienceModal')">Entendido</button>
-      <button class="ghost" onclick="closeModal('scienceModal')">Cerrar</button>
     </div>
   </div></div>
 
-  <div class="modal" id="programLibraryModal"><div class="modalbox program-library-box">
+  <div class="modal" id="programLibraryModal" role="dialog" aria-modal="true" aria-labelledby="programLibraryTitle"><div class="modalbox program-library-box">
     <div class="modalhead">
       <div class="copy">
         <div class="eyebrow">Fundamentos del programa</div>
@@ -2187,10 +2192,10 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
     </div>
   </div></div>
 
-  <div class="modal" id="testerModal"><div class="modalbox">
+  <div class="modal" id="testerModal" role="dialog" aria-modal="true" aria-labelledby="testerModalTitle"><div class="modalbox">
     <div class="modalhead">
       <div class="copy">
-        <div class="eyebrow">Vista tester</div><h2>Inspecciona los programas sin esperar a completar cada recorrido.</h2>
+        <div class="eyebrow">Vista tester</div><h2 id="testerModalTitle">Inspecciona los programas sin esperar a completar cada recorrido.</h2>
         <p class="muted" style="line-height:1.65">Elige el programa y abre cualquier día. Así podemos comparar cómo se siente cada experiencia dentro de NEXORA.</p>
       </div>
       <button class="closex" aria-label="Cerrar" onclick="closeModal('testerModal')">×</button>
@@ -2204,7 +2209,7 @@ html[data-theme="dark"] #accountModal .account-action-box{background:#111720;bor
     </div>
   </div></div>
 
-  <div class="modal" id="accountModal"><div class="modalbox">
+  <div class="modal" id="accountModal" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle"><div class="modalbox">
     <div class="modalhead"><div class="copy"><h2 id="accountModalTitle">Tu espacio personal en NEXORA</h2></div><button class="closex" aria-label="Cerrar" onclick="closeModal('accountModal')">×</button></div>
     <div id="authBox">
       <div class="auth-tabs"><button class="authtab active" id="loginTab" onclick="switchAuth('login')">Entrar</button><button class="authtab" id="signupTab" onclick="switchAuth('signup')">Crear cuenta</button></div>
@@ -2288,7 +2293,7 @@ async function hashPassword(value){const data=new TextEncoder().encode(value);co
 function accounts(){return JSON.parse(localStorage.getItem(ACCOUNT_KEY)||'{}')}
 function updateAccountUI(){document.body.classList.toggle('nexora-returning-user',!!currentSession);document.body.classList.toggle('nexora-active-user',!!currentSession&&Object.keys(PROGRAMS).some(id=>{const s=pstate(id);return s.baselineDone||s.completed.length>0}));const btn=document.getElementById('accountBtn'),label=document.getElementById('accountLabel'),av=document.getElementById('accountAvatar');if(!btn)return;if(currentSession){label.textContent=currentSession.name.split(' ')[0];av.textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{label.textContent='Crear cuenta';av.textContent='+'}const banner=document.getElementById('guestBanner');if(banner)banner.style.display=currentSession?'none':'flex';['navToday','navHistory','navProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('restricted',!currentSession)});const f=document.getElementById('feedbackEmail');if(f&&currentSession&&!f.value)f.value=currentSession.email}
 function openAccount(){openAccountFor(currentSession?'login':'signup')}
-function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';document.getElementById('accountModal').classList.add('open');renderAccountModal();if(!currentSession)switchAuth(mode)}
+function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';openModal('accountModal');renderAccountModal();if(!currentSession)switchAuth(mode)}
 function requireAccount(action){openAccountFor('signup',action);return false}
 function runPendingAccountAction(){const action=pendingAccountAction;pendingAccountAction=null;if(!action)return;if(action==='beginProgram')beginProgram();else if(action==='today')startToday();else if(action==='history')showView('history');else if(action==='progress')showView('progress')}
 function renderAccountModal(){const auth=document.getElementById('authBox'),profile=document.getElementById('profileBox');if(currentSession){auth.style.display='none';profile.classList.add('active');document.getElementById('profileName').textContent=currentSession.name;document.getElementById('profileEmail').textContent=currentSession.email;document.getElementById('profileAvatar').textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{auth.style.display='block';profile.classList.remove('active')}}
@@ -7166,16 +7171,58 @@ function openProgramLibrary(){
   document.getElementById('programLibraryTitle').textContent='Fundamentos de '+p.name;
   document.getElementById('programLibraryIntro').textContent=lib.intro;
   document.getElementById('programLibraryGrid').innerHTML=lib.modules.map((m,i)=>`<article class="library-module"><div class="library-index">Fundamento ${String(i+1).padStart(2,'0')}</div><h3>${m.title}</h3><p>${m.body}</p><div class="library-use"><b>Dentro del programa:</b> ${m.use}</div></article>`).join('');
-  document.getElementById('programLibraryModal').classList.add('open');
+  openModal('programLibraryModal');
 }
 function totalDays(p=program()){return p.days.length}
 function stageForDay(p,n){return p.stages.find((st,i)=>{const nums=(st.range.match(/\d+/g)||[]).map(Number);return nums.length>=2?n>=nums[0]&&n<=nums[1]:i===p.stages.length-1})||p.stages[p.stages.length-1]}
 function save(){localStorage.setItem(userStateKey(),JSON.stringify(appState));renderAll()}
 function toast(t){const el=document.getElementById('toast');const msg=(typeof translatePattern==='function'?translatePattern(t,typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'):t);el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
-function closeModal(id){document.getElementById(id).classList.remove('open')}
-function closeOpenModal(){const open=document.querySelector('.modal.open');if(open)open.classList.remove('open')}
-document.addEventListener('click',e=>{if(e.target.classList && e.target.classList.contains('modal')) e.target.classList.remove('open')})
-document.addEventListener('keydown',e=>{if(e.key==='Escape') closeOpenModal()})
+let nexoraModalReturnFocus=null;
+function modalFocusables(modal){
+  return [...modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])')]
+    .filter(el=>el.offsetParent!==null&&getComputedStyle(el).visibility!=='hidden');
+}
+function openModal(id){
+  const modal=document.getElementById(id);
+  if(!modal)return;
+  if(!document.querySelector('.modal.open')&&document.activeElement instanceof HTMLElement)nexoraModalReturnFocus=document.activeElement;
+  modal.classList.add('open');
+  document.body.classList.add('modal-open');
+  const box=modal.querySelector('.modalbox');
+  if(box){
+    box.setAttribute('tabindex','-1');
+    requestAnimationFrame(()=>box.focus());
+  }
+}
+function closeModal(id){
+  const modal=document.getElementById(id);
+  if(!modal)return;
+  modal.classList.remove('open');
+  if(!document.querySelector('.modal.open')){
+    document.body.classList.remove('modal-open');
+    const restore=nexoraModalReturnFocus;
+    nexoraModalReturnFocus=null;
+    if(restore&&document.contains(restore))requestAnimationFrame(()=>restore.focus());
+  }
+}
+function closeOpenModal(){
+  const open=document.querySelector('.modal.open');
+  if(open)closeModal(open.id);
+}
+document.addEventListener('click',e=>{
+  if(e.target.classList&&e.target.classList.contains('modal'))closeModal(e.target.id);
+});
+document.addEventListener('keydown',e=>{
+  const modal=document.querySelector('.modal.open');
+  if(!modal)return;
+  if(e.key==='Escape'){closeModal(modal.id);return;}
+  if(e.key!=='Tab')return;
+  const items=modalFocusables(modal);
+  if(!items.length){e.preventDefault();modal.querySelector('.modalbox')?.focus();return;}
+  const first=items[0],last=items[items.length-1],active=document.activeElement;
+  if(e.shiftKey&&(active===first||!modal.contains(active))){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&(active===last||!modal.contains(active))){e.preventDefault();first.focus();}
+});
 const GUIDE_STEPS=[
   {target:'#accountBtn',title:'Tu cuenta',text:'Aquí creas tu cuenta o entras a la que ya tienes. Tu progreso en cada programa queda vinculado a tu perfil.',view:'home'},
   {target:'#programChoices',title:'Elige un programa',text:'Empieza por cualquiera de los programas disponibles. Cada programa conserva su progreso por separado.',view:'home'},
@@ -7202,13 +7249,13 @@ function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
 function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
-function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();document.getElementById('baselineModal').classList.add('open')}else startToday()}
+function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();openModal('baselineModal')}else startToday()}
 function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
 function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
 function saveBaseline(){const p=program(),s=pstate(),ans={};for(let i=0;i<p.baseline.length;i++){const el=document.querySelector(`[data-q="${i}"].sel`);if(!el){toast(`Responde las ${p.baseline.length} preguntas antes de continuar.`);return}ans[i]=+el.dataset.v}s.baselineDone=true;s.baseline=ans;save();closeModal('baselineModal');toast(`Ya tenemos tu punto de partida en ${p.name}.`);setTimeout(startToday,350)}
-function openScience(){document.getElementById('scienceModal').classList.add('open')}
+function openScience(){openModal('scienceModal')}
 function syncTesterMax(){const id=document.getElementById('testerProgram').value,p=program(id),input=document.getElementById('testerDay');input.max=totalDays(p);if(+input.value>totalDays(p))input.value=totalDays(p)}
-function openTester(){if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();document.getElementById('testerModal').classList.add('open')}
+function openTester(){if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();openModal('testerModal')}
 function jumpToDay(){if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
 function resetDemo(){if(confirm('¿Reiniciar el progreso de esta sesión de prueba?')){appState=defaultAppState();previewDay=null;localStorage.removeItem(userStateKey());renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
 function startToday(btn){if(!currentSession)return requireAccount('today');const s=pstate();if(!s.baselineDone){beginProgram();return}previewDay=null;const n=Math.min(s.currentDay,totalDays());renderExercise(n,false,false);showView('today',btn)}
@@ -8748,7 +8795,7 @@ async function requestPasswordReset(){
 
 function showPasswordRecovery(){
   nexoraRecoveryMode=true;
-  document.getElementById('accountModal').classList.add('open');
+  openModal('accountModal');
   const auth=document.getElementById('authBox'),profile=document.getElementById('profileBox');
   if(auth)auth.style.display='block';
   if(profile)profile.classList.remove('active');
