@@ -8979,7 +8979,7 @@ completeDay=async function(n,isPreview){
         });
         subscription=pending?.data?.subscription||null;
         if(settled)try{subscription?.unsubscribe()}catch{}
-        setTimeout(()=>finish(null),2500);
+        setTimeout(()=>finish(null),10000);
       });
     }
     if(session)await nexoraEstablishSession(session,false);
