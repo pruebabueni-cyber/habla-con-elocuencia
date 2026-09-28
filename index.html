@@ -8694,40 +8694,91 @@ async function nexoraLoadRemoteState(){
   await nexoraSyncAll();
 }
 
+const nexoraWithin=(work,ms,fallback=null)=>Promise.race([
+  Promise.resolve(work),
+  new Promise(resolve=>setTimeout(()=>resolve(fallback),ms))
+]);
+
 async function nexoraEstablishSession(session,isNew=false){
   if(!session?.user)return;
   const user=session.user;
+  const sessionId=user.id;
   let name=user.user_metadata?.display_name||user.email?.split('@')[0]||'Usuario';
   let shouldAutoGuide=false;
+
+  // Render the authenticated shell from the user-specific local cache first.
+  // Remote profile/progress enrichment must never keep the splash on screen.
+  currentSession={id:sessionId,email:user.email||'',name};
   try{
-    const {data}=await nexoraDb.from('profiles').select('display_name,email,preferred_language,preferred_theme,onboarding_seen_at').eq('id',user.id).maybeSingle();
+    const localState=JSON.parse(localStorage.getItem(userStateKey(sessionId))||'null');
+    appState=localState?.programs?localState:defaultAppState();
+  }catch{
+    appState=defaultAppState();
+  }
+  updateAccountUI();
+  renderAll();
+  document.documentElement.classList.remove('nexora-auth-pending');
+  try{applyNexoraLanguage(document.body)}catch{}
+
+  try{
+    const profileResult=await nexoraWithin(
+      nexoraDb.from('profiles').select('display_name,email,preferred_language,preferred_theme,onboarding_seen_at').eq('id',sessionId).maybeSingle(),
+      4000,
+      null
+    );
+    const data=profileResult?.data||null;
     if(data?.display_name)name=data.display_name;
     shouldAutoGuide=!!data&&!data.onboarding_seen_at;
     if(isNew){
-      await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage(),preferred_theme:localStorage.getItem('nexora_theme')||'auto'}).eq('id',user.id);
+      await nexoraWithin(
+        nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage(),preferred_theme:localStorage.getItem('nexora_theme')||'auto'}).eq('id',sessionId),
+        4000,
+        null
+      );
     }else{
       const localManual=typeof hasManualNexoraLanguageChoice==='function'&&hasManualNexoraLanguageChoice();
       if(data?.preferred_language&&!localManual)await setNexoraLanguage(data.preferred_language,false,true);
       if(data?.preferred_theme&&typeof setNexoraTheme==='function')setNexoraTheme(data.preferred_theme,false);
     }
   }catch{}
-  currentSession={id:user.id,email:user.email||'',name};
-  await nexoraDb.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',user.id);
-  await nexoraRefreshAdminAccess();
-  await nexoraLoadRemoteState();
+
+  if(currentSession?.id!==sessionId)return;
+  currentSession={id:sessionId,email:user.email||'',name};
   updateAccountUI();
-  renderAll();
-  document.documentElement.classList.remove('nexora-auth-pending');
-  try{applyNexoraLanguage(document.body)}catch{}
+
+  const remoteStatePromise=Promise.resolve(nexoraLoadRemoteState())
+    .then(()=>{
+      if(currentSession?.id!==sessionId)return;
+      updateAccountUI();
+      renderAll();
+      try{applyNexoraLanguage(document.body)}catch{}
+    })
+    .catch(()=>{});
+
+  await Promise.allSettled([
+    nexoraWithin(nexoraDb.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',sessionId),4000,null),
+    nexoraWithin(nexoraRefreshAdminAccess(),4000,false),
+    nexoraWithin(remoteStatePromise,8000,null)
+  ]);
+
+  if(currentSession?.id!==sessionId)return;
   try{
     if(typeof hasManualNexoraLanguageChoice==='function'&&hasManualNexoraLanguageChoice()){
-      await nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage()}).eq('id',user.id);
+      await nexoraWithin(
+        nexoraDb.from('profiles').update({preferred_language:getNexoraLanguage()}).eq('id',sessionId),
+        4000,
+        null
+      );
     }
   }catch{}
   nexoraTrack(isNew?'signup':'login').catch(()=>{});
   if(shouldAutoGuide){
     try{
-      await nexoraDb.from('profiles').update({onboarding_seen_at:new Date().toISOString()}).eq('id',user.id);
+      await nexoraWithin(
+        nexoraDb.from('profiles').update({onboarding_seen_at:new Date().toISOString()}).eq('id',sessionId),
+        4000,
+        null
+      );
     }catch{}
     setTimeout(()=>{try{startGuide()}catch{}},420);
   }
@@ -8949,7 +9000,7 @@ completeDay=async function(n,isPreview){
     const nexoraAuthCacheKey='sb-nnfcppwruhethardmmvq-auth-token';
     let session=null;
     try{
-      const result=await nexoraDb.auth.getSession();
+      const result=await nexoraWithin(nexoraDb.auth.getSession(),4000,null);
       session=result?.data?.session||null;
     }catch(sessionError){
       // A browser can retain an obsolete/corrupted Supabase auth payload.
@@ -8957,7 +9008,7 @@ completeDay=async function(n,isPreview){
       console.warn('NEXORA session cache recovery',sessionError);
       try{localStorage.removeItem(nexoraAuthCacheKey)}catch{}
       try{
-        const retry=await nexoraDb.auth.getSession();
+        const retry=await nexoraWithin(nexoraDb.auth.getSession(),4000,null);
         session=retry?.data?.session||null;
       }catch(retryError){
         console.warn('NEXORA session retry',retryError);
@@ -8979,7 +9030,7 @@ completeDay=async function(n,isPreview){
         });
         subscription=pending?.data?.subscription||null;
         if(settled)try{subscription?.unsubscribe()}catch{}
-        setTimeout(()=>finish(null),10000);
+        setTimeout(()=>finish(null),4000);
       });
     }
     if(session)await nexoraEstablishSession(session,false);
