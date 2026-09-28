@@ -472,7 +472,13 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     }
     .top-actions{gap:8px}
     .utility-wrap{position:relative}
-    .morebtn{width:44px;min-width:44px;padding-left:0!important;padding-right:0!important;font-size:17px;letter-spacing:2px}
+    .morebtn{width:44px;min-width:44px;padding:0!important;display:grid;place-items:center}
+    .hamburger-icon{width:23px;height:18px;display:flex;flex-direction:column;justify-content:space-between}
+    .hamburger-icon span{display:block;width:100%;height:2px;border-radius:999px;background:currentColor;transform-origin:center;transition:transform .2s ease,opacity .16s ease}
+    .morebtn[aria-expanded="true"] .hamburger-icon span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+    .morebtn[aria-expanded="true"] .hamburger-icon span:nth-child(2){opacity:0}
+    .morebtn[aria-expanded="true"] .hamburger-icon span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+    .utility-account-btn,.utility-account-divider{display:none!important}
     .utility-menu{
       position:absolute;right:0;top:calc(100% + 9px);z-index:90;
       width:205px;padding:7px;border:1px solid var(--line);
@@ -495,6 +501,7 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     }
     html[data-theme="dark"] .utility-menu button{color:#d9dfe7}
     html[data-theme="dark"] .utility-menu button:hover{background:#202a38;color:#fff}
+    html[data-theme="dark"] .utility-account-icon{border-color:#465365}
     .utility-setting{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:7px 12px}
     .utility-setting label{font-size:12px;font-weight:800;color:var(--muted)}
     .utility-setting .langselect{width:68px;min-width:68px;padding:7px 8px;border-radius:10px}
@@ -558,9 +565,12 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
         flex-wrap:nowrap!important;
         gap:7px!important;
       }
-      .accountbtn{width:48px;min-width:48px;justify-content:center;padding:8px!important}
-      .morebtn{width:44px;min-width:44px}
-      .utility-menu{right:0;width:228px;max-width:calc(100vw - 28px)}
+      .accountbtn{display:none!important}
+      .morebtn{width:46px;min-width:46px;height:46px;border-radius:14px}
+      .utility-menu{right:0;width:min(320px,calc(100vw - 28px));max-width:calc(100vw - 28px);padding:10px}
+      .utility-menu .utility-account-btn{display:flex!important;align-items:center;gap:11px;width:100%;font-size:15px;color:var(--ink);padding:12px}
+      .utility-account-icon{width:28px;height:28px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font-size:17px;line-height:1}
+      .utility-menu .utility-account-divider{display:block!important;height:1px;background:var(--line);margin:5px 7px}
       #pathsAnchor{margin-top:36px;padding-top:28px}
       .site-footer{margin-top:42px;padding:26px 14px 92px}
       .hero{margin-bottom:30px}
@@ -1818,8 +1828,10 @@ body.modal-open{overflow:hidden}
       <div class="top-actions">
         <button class="iconbtn accountbtn" id="accountBtn" onclick="openAccount()"><span class="avatar" id="accountAvatar">?</span><span class="account-label" id="accountLabel">Entrar</span></button>
         <div class="utility-wrap">
-          <button class="iconbtn morebtn" id="moreBtn" type="button" onclick="toggleUtilityMenu(event)" aria-label="Más opciones" title="Más opciones">•••</button>
+          <button class="iconbtn morebtn" id="moreBtn" type="button" onclick="toggleUtilityMenu(event)" aria-label="Más opciones" aria-expanded="false" aria-controls="utilityMenu" title="Más opciones"><span class="hamburger-icon" aria-hidden="true"><span></span><span></span><span></span></span></button>
           <div class="utility-menu" id="utilityMenu" role="menu" aria-label="Más opciones">
+            <button class="utility-account-btn" id="utilityAccountBtn" type="button" onclick="closeUtilityMenu();openAccount()"><span class="utility-account-icon" aria-hidden="true">◯</span><span>Cuenta</span></button>
+            <div class="utility-account-divider" aria-hidden="true"></div>
             <div class="utility-setting"><label for="languageSelect">Idioma</label><select class="langselect" id="languageSelect" aria-label="Idioma / Language / Langue" onchange="setNexoraLanguage(this.value,true)"><option value="es">ES</option><option value="en">EN</option><option value="fr">FR</option></select></div>
             <button class="themebtn utility-theme-btn" id="themeBtn" type="button" onclick="cycleTheme()" aria-label="Cambiar tema" title="Tema"><span>Tema</span><span class="utility-theme-value"><span id="themeIcon">◐</span><span class="theme-label" id="themeLabel">Auto</span></span></button>
             <div class="utility-divider" aria-hidden="true"></div>
