@@ -9013,11 +9013,13 @@ async function nexoraEstablishSession(session,isNew=false){
     })
     .catch(()=>{});
 
-  await Promise.allSettled([
+  // The authenticated shell is already usable. Finish remote enrichment in the
+  // background so login is not delayed by profile/admin/progress round trips.
+  Promise.allSettled([
     nexoraWithin(nexoraDb.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',sessionId),4000,null),
     nexoraWithin(nexoraRefreshAdminAccess(),4000,false),
     nexoraWithin(remoteStatePromise,8000,null)
-  ]);
+  ]).catch(()=>{});
 
   if(currentSession?.id!==sessionId)return;
   try{
@@ -9132,12 +9134,20 @@ loginDemoAccount=async function(){
   const email=document.getElementById('loginEmail').value.trim().toLowerCase();
   const password=document.getElementById('loginPassword').value;
   if(!email||!password){toast('Escribe tu correo y contraseña.');return;}
+  // Preserve the path selected before authentication. Establishing a session
+  // can merge remote state and change selectedProgram.
+  const selectedBeforeLogin=appState?.selectedProgram;
   const {data,error}=await nexoraDb.auth.signInWithPassword({email,password});
   if(error){toast(nexoraFriendlyAuthError(error.message));return;}
   await nexoraEstablishSession(data.session,false);
+  if(selectedBeforeLogin&&PROGRAMS[selectedBeforeLogin]){
+    appState.selectedProgram=selectedBeforeLogin;
+    localStorage.setItem(userStateKey(),JSON.stringify(appState));
+    renderAll();
+  }
   closeModal('accountModal');
   toast('Bienvenido de nuevo.');
-  setTimeout(runPendingAccountAction,220);
+  setTimeout(runPendingAccountAction,80);
 };
 
 logoutDemoAccount=async function(){
