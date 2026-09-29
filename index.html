@@ -9160,21 +9160,27 @@ loginDemoAccount=async function(){
 };
 
 logoutDemoAccount=async function(){
-  // Close the account UI immediately; sign-out/network cleanup must not leave
-  // the profile dialog visible.
-  closeModal('accountModal');
-  closeOpenModal();
+  // Supabase remains the source of truth for authentication. Do not clear the
+  // local UI first: an unsuccessful sign-out would make the app look signed out
+  // while a valid session still exists.
+  const {error}=await nexoraDb.auth.signOut();
+  if(error){
+    console.warn('NEXORA sign out failed',error);
+    toast('No pudimos cerrar la sesión. Inténtalo nuevamente.');
+    return;
+  }
   pendingAccountAction=null;
   currentSession=null;
   nexoraIsAdmin=false;
   const testerBtn=document.getElementById('testerBtn');
   if(testerBtn)testerBtn.style.display='none';
   appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
+  closeModal('accountModal');
+  closeOpenModal();
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
   showView('home');
-  try{await nexoraDb.auth.signOut()}catch(error){console.warn('NEXORA sign out cleanup',error)}
   toast('Sesión cerrada.');
 };
 
