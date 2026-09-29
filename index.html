@@ -7489,7 +7489,27 @@ function syncTesterMax(){const id=document.getElementById('testerProgram').value
 function openTester(){if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}document.getElementById('testerProgram').value=appState.selectedProgram;document.getElementById('testerDay').value=previewDay||pstate().currentDay;syncTesterMax();openModal('testerModal')}
 function jumpToDay(){if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}const id=document.getElementById('testerProgram').value;appState.selectedProgram=id;const max=totalDays(program(id));const n=Math.max(1,Math.min(max,+document.getElementById('testerDay').value||1));previewDay=n;save();closeModal('testerModal');renderExercise(n,true);showView('today');toast(`Vista tester: ${program().name} · Día ${n}`)}
 function resetDemo(){if(confirm('¿Reiniciar el progreso de esta sesión de prueba?')){appState=defaultAppState();previewDay=null;localStorage.removeItem(userStateKey());renderAll();closeModal('testerModal');showView('home');toast('Prueba reiniciada')}}
-function startToday(btn){if(!currentSession)return requireAccount('today');const s=pstate();if(!s.baselineDone){beginProgram();return}previewDay=null;const n=Math.min(s.currentDay,totalDays());renderExercise(n,false,false);showView('today',btn)}
+function startToday(btn){
+  if(!currentSession)return requireAccount('today');
+  // The bottom "Hoy" button must continue an already-started experience.
+  // Browsing an unstarted program must not hijack the user's current practice.
+  if(btn?.id==='navToday'){
+    const activeIds=Object.keys(PROGRAMS).filter(id=>{
+      const state=pstate(id);
+      return state.baselineDone||state.completed.length>0||state.entries.length>0;
+    });
+    if(activeIds.length&&!activeIds.includes(appState.selectedProgram)){
+      appState.selectedProgram=activeIds[0];
+      localStorage.setItem(userStateKey(),JSON.stringify(appState));
+    }
+  }
+  const s=pstate();
+  if(!s.baselineDone){beginProgram();return}
+  previewDay=null;
+  const n=Math.min(s.currentDay,totalDays());
+  renderExercise(n,false,false);
+  showView('today',btn);
+}
 function openProgramDay(n){if(!currentSession)return requireAccount('today');const s=pstate(),max=totalDays(),limit=Math.min(s.currentDay,max);if(n<1||n>limit){toast('Ese día todavía no está disponible.');return}previewDay=null;renderExercise(n,false,n<s.currentDay||s.completed.includes(n));showView('today')}
 function navigateExerciseDay(n,isPreview=false){const max=totalDays();if(n<1||n>max)return;if(isPreview){previewDay=n;renderExercise(n,true,false);showView('today');return}openProgramDay(n)}
 function dayLesson(p,n){const d=p.days[n-1],st=stageForDay(p,n);return d.lesson||st.principle||st.desc}
