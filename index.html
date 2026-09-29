@@ -7370,7 +7370,41 @@ function renderGuideStep(){const step=GUIDE_STEPS[guideIndex];if(step.view&&curr
 function positionGuide(el){const pad=8,r=el.getBoundingClientRect(),vw=window.innerWidth,vh=window.innerHeight;const x=Math.max(6,r.left-pad),y=Math.max(6,r.top-pad),w=Math.min(vw-x-6,r.width+pad*2),h=Math.min(vh-y-6,r.height+pad*2);const top=document.getElementById('tourShadeTop'),left=document.getElementById('tourShadeLeft'),right=document.getElementById('tourShadeRight'),bottom=document.getElementById('tourShadeBottom'),focus=document.getElementById('tourFocus'),card=document.getElementById('tourCard');Object.assign(top.style,{left:'0px',top:'0px',width:'100vw',height:y+'px'});Object.assign(left.style,{left:'0px',top:y+'px',width:x+'px',height:h+'px'});Object.assign(right.style,{left:(x+w)+'px',top:y+'px',width:Math.max(0,vw-(x+w))+'px',height:h+'px'});Object.assign(bottom.style,{left:'0px',top:(y+h)+'px',width:'100vw',height:Math.max(0,vh-(y+h))+'px'});Object.assign(focus.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});const cardW=Math.min(370,vw-24);let cx=Math.min(Math.max(12,x),vw-cardW-12);let cy=y+h+14;if(cy+250>vh)cy=Math.max(12,y-264);Object.assign(card.style,{left:cx+'px',top:cy+'px'});}
 window.addEventListener('resize',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}});
 window.addEventListener('scroll',()=>{if(document.getElementById('tourLayer')?.classList.contains('open')){const step=GUIDE_STEPS[guideIndex],el=document.querySelector(step.target);if(el)positionGuide(el)}},{passive:true});
-function showView(id,btn){if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));window.scrollTo({top:0,behavior:'smooth'});if(id==='home')renderHome();if(id==='history'){historyProgramId=null;renderHistory();}if(id==='progress')renderProgress();if(id==='help')renderFeedback()}
+let nexoraHandlingPopState=false;
+function nexoraWriteViewHistory(id,mode='push'){
+  if(nexoraHandlingPopState||mode==='none')return;
+  const state={...(history.state||{}),nexoraView:id};
+  if(mode==='replace'){history.replaceState(state,document.title,location.href);return}
+  if(history.state?.nexoraView!==id)history.pushState(state,document.title,location.href);
+}
+function showView(id,btn,historyMode='push'){
+  if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);
+  const previous=document.querySelector('.view.active')?.id||'home';
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='home')renderHome();
+  if(id==='history'){historyProgramId=null;renderHistory();}
+  if(id==='progress')renderProgress();
+  if(id==='help')renderFeedback();
+  if(previous!==id||historyMode==='replace')nexoraWriteViewHistory(id,historyMode);
+}
+window.addEventListener('popstate',event=>{
+  const requested=event.state?.nexoraView;
+  if(!requested)return;
+  const target=(!currentSession&&['today','history','progress'].includes(requested))?'home':requested;
+  if(!document.getElementById(target))return;
+  nexoraHandlingPopState=true;
+  closeOpenModal();
+  previewDay=null;
+  journeyOpen=false;
+  showView(target,null,'none');
+  nexoraHandlingPopState=false;
+});
+try{
+  history.replaceState({...(history.state||{}),nexoraView:document.querySelector('.view.active')?.id||'home'},document.title,location.href);
+}catch{}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
@@ -9199,7 +9233,7 @@ function nexoraResetFreshGuestHome(){
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
-  showView('home');
+  showView('home',null,'replace');
   window.scrollTo({top:0,behavior:'auto'});
 }
 
@@ -9209,7 +9243,7 @@ logoutDemoAccount=async function(){
   closeModal('accountModal');
   closeOpenModal();
   document.body.classList.remove('modal-open');
-  showView('home');
+  showView('home',null,'replace');
 
   const {error}=await nexoraDb.auth.signOut();
   if(error){
