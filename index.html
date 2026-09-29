@@ -1846,6 +1846,34 @@ body.modal-open{overflow:hidden}
   document.documentElement.dataset.themePref=pref;
 })();
 </script>
+<style data-nexora-goal-plan="v1">
+#programChoices .goal-plan-card{background:linear-gradient(145deg,var(--card),rgba(131,153,135,.14));}
+#programChoices .goal-plan-card:focus-visible,.goal-choice:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.goal-plan-shell{max-width:680px;margin:0 auto 40px;padding:clamp(22px,5vw,42px);background:var(--card);border:1px solid var(--line);border-radius:26px;box-shadow:var(--shadow)}
+.goal-plan-shell h1{font-size:clamp(30px,6vw,45px);line-height:1.1;letter-spacing:-.04em;margin:10px 0}
+.goal-plan-shell .lead{font-size:16px;line-height:1.55;margin:0 0 24px;color:var(--muted)}
+.goal-plan-track{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;margin:0 0 24px}
+.goal-plan-track .goal-track-dots{display:flex;gap:5px;margin-left:auto}
+.goal-plan-track .goal-track-dots span{width:20px;height:6px;border-radius:8px;background:var(--line)}
+.goal-plan-track .goal-track-dots span.current{background:var(--gold)}
+.goal-plan-content{min-height:200px}
+.goal-plan-content label{display:block;font-weight:700;margin-bottom:10px}
+.goal-plan-content textarea,.goal-plan-content input{width:100%;box-sizing:border-box;font:inherit;padding:15px;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink)}
+.goal-plan-content textarea{min-height:124px;resize:vertical}
+.goal-plan-content .tiny{margin-top:8px;line-height:1.5}
+.goal-choices{display:grid;gap:10px}
+.goal-choice{width:100%;min-height:56px;padding:14px 16px;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--paper);color:var(--ink);font:inherit;cursor:pointer}
+.goal-choice.selected{border:2px solid var(--gold);background:rgba(199,146,79,.13);font-weight:700}
+.goal-plan-actions{display:flex;gap:10px;justify-content:space-between;margin-top:26px}
+.goal-plan-actions button{min-height:46px}
+.goal-plan-summary{display:grid;gap:12px;margin:16px 0}
+.goal-plan-summary>div{padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:var(--paper);line-height:1.5}
+.goal-plan-summary strong{display:block;margin-bottom:3px}
+.goal-plan-reason{color:var(--muted);line-height:1.55}
+.goal-plan-confirmed{padding:18px;border-radius:16px;background:rgba(131,153,135,.15);line-height:1.55}
+html[data-theme="dark"] #programChoices .goal-plan-card{background:linear-gradient(145deg,var(--card),rgba(131,153,135,.12))}
+@media(max-width:560px){.goal-plan-shell{padding:22px 18px;border-radius:22px}.goal-plan-actions{flex-wrap:wrap}.goal-plan-actions .primary{flex:1}}
+</style>
 </head>
 
 <body>
@@ -1940,6 +1968,15 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
+          <article class="program goal-plan-card available" role="button" tabindex="0" onclick="openGoalPlan()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openGoalPlan()}">
+            <div class="program-copy">
+              <span class="program-kicker">ALCANZA TUS OBJETIVOS</span>
+              <h3>Da forma a tu próximo paso</h3>
+              <p>Cuéntanos qué quieres lograr y crea un plan breve que puedas ajustar.</p>
+              <div class="program-meta"><span class="program-kind">PLAN GUIADO</span><span class="program-progress">Explorar plan →</span></div>
+            </div>
+            <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m8.8 12 2.2 2.2 4.5-4.5"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
+          </article>
           <article class="program disciplina available" onclick="openProgram('disciplina')">
             <div class="program-copy">
               <span class="program-kicker">DISCIPLINA</span>
@@ -2014,6 +2051,18 @@ body.modal-open{overflow:hidden}
           </article>
         </div>
 
+      </section>
+
+      <section id="goalPlan" class="view">
+        <button class="ghost path-back" type="button" onclick="showView('home')">← Explora</button>
+        <div class="goal-plan-shell">
+          <div class="eyebrow" id="goalPlanKind"></div>
+          <h1 id="goalPlanHeading"></h1>
+          <p class="lead" id="goalPlanIntro"></p>
+          <div class="goal-plan-track" id="goalPlanTrack" aria-live="polite"></div>
+          <div id="goalPlanContent"></div>
+          <div class="goal-plan-actions" id="goalPlanActions"></div>
+        </div>
       </section>
 
       <section id="program" class="view">
@@ -8595,6 +8644,8 @@ async function setNexoraLanguage(lang,announce=false,skipRemote=false){
       renderExercise(n,!!isPreview,isReview);
     }
 
+    if(typeof renderGoalCard==='function')renderGoalCard();
+    if(activeView==='goalPlan'&&typeof renderGoalPlan==='function')renderGoalPlan();
     if(typeof renderThemeButton==='function')renderThemeButton();
     if(document.getElementById('accountModal')?.classList.contains('open')&&typeof renderAccountModal==='function')renderAccountModal();
     if(document.getElementById('tourLayer')?.classList.contains('open')&&typeof renderGuideStep==='function')renderGuideStep();
@@ -9395,6 +9446,103 @@ setNexoraTheme=function(pref,announce=true){
   }catch{}
   try{applyNexoraLanguage(document.body)}catch{}
 };
+</script>
+<script data-nexora-goal-plan="v1">
+const GOAL_COPY={
+ es:{card:['ALCANZA TUS OBJETIVOS','Da forma a tu próximo paso','Cuéntanos qué quieres lograr y crea un plan breve que puedas ajustar.','PLAN GUIADO','Explorar plan →'],kind:'Plan guiado · Alcanza tus objetivos',intro:'Un paso a la vez. Podrás revisar tus respuestas antes de empezar.',step:'Paso',of:'de',back:'← Atrás',next:'Continuar →',explore:'← Explora',edit:'Editar respuestas',confirm:'Confirmar mi plan →',start:'Explorar',missingGoal:'Escribe un objetivo concreto para continuar.',missingChoice:'Elige una opción para continuar.',
+  headings:['¿Qué quieres cambiar o conseguir?','¿Dónde quieres cambiarlo?','¿Qué te está frenando más?','¿Qué tan preparado te sientes para empezar?','Tu propuesta de plan','Revisa y ajusta tu plan'],
+  hints:['Escríbelo con tus palabras. Puede ser algo pequeño.','Elige el contexto principal.','Elige el obstáculo que más pesa ahora.','Esto nos ayuda a ajustar el primer paso.','Estas sugerencias se basan en lo que elegiste; puedes cambiarlas.','Puedes editar tu primera acción antes de confirmar.'],
+  placeholder:'Ej.: quiero hablar con más seguridad en reuniones',
+  contexts:{home:'En casa',work:'En el trabajo',social:'En mi vida social',other:'En otro contexto'},
+  obstacles:{motivation:'Me cuesta empezar',consistency:'Me falta constancia',focus:'Me distraigo',confidence:'Dudo de mí',communication:'Me cuesta comunicarme'},
+  readiness:{small:'Necesito empezar muy pequeño',steady:'Puedo dar un paso esta semana',ready:'Estoy listo para actuar ahora'},
+  labels:{goal:'Tu objetivo',context:'Contexto',obstacle:'Obstáculo principal',readiness:'Punto de partida',first:'Tu primera acción',route:'Capacidades recomendadas'},
+  because:'Por qué este plan',reason:'La recomendación sigue el obstáculo que elegiste. Si necesitas empezar muy pequeño, Motivación ayuda a poner en marcha una primera acción. Puedes ajustar el plan según tu experiencia.',actionPrompt:'Escribe una primera acción observable (opcional)',actionPlaceholder:'Ej.: enviar un mensaje el martes a las 10',
+  actionDefault:'Dedica {minutes} minutos a un primer paso concreto hacia tu objetivo {context}.',
+  resultTitle:'Tu plan está listo',resultText:'Empieza con esta acción. Después podrás explorar las capacidades sugeridas y ajustar tu rumbo con lo que aprendas.',noGuarantee:'Es una propuesta inicial, no una evaluación ni una promesa de resultados.'},
+ en:{card:['REACH YOUR GOALS','Shape your next step','Tell us what you want to achieve and create a short plan you can adjust.','GUIDED PLAN','Explore plan →'],kind:'Guided plan · Reach your goals',intro:'One step at a time. You can review your answers before you begin.',step:'Step',of:'of',back:'← Back',next:'Continue →',explore:'← Explore',edit:'Edit answers',confirm:'Confirm my plan →',start:'Explore',missingGoal:'Write a specific goal to continue.',missingChoice:'Choose an option to continue.',
+  headings:['What would you like to change or achieve?','Where would you like to make this change?','What is holding you back most?','How ready do you feel to begin?','Your suggested plan','Review and adjust your plan'],
+  hints:['Use your own words. A small goal is fine.','Choose the main setting.','Choose the biggest obstacle right now.','This helps us size the first step.','These suggestions follow your choices; you can change them.','You can edit your first action before confirming.'],
+  placeholder:'For example: I want to speak more confidently in meetings',
+  contexts:{home:'At home',work:'At work',social:'In my social life',other:'Somewhere else'},
+  obstacles:{motivation:'I struggle to get started',consistency:'I struggle to stay consistent',focus:'I get distracted',confidence:'I doubt myself',communication:'I struggle to communicate'},
+  readiness:{small:'I need a very small start',steady:'I can take a step this week',ready:'I am ready to act now'},
+  labels:{goal:'Your goal',context:'Setting',obstacle:'Main obstacle',readiness:'Starting point',first:'Your first action',route:'Suggested skills'},
+  because:'Why this plan',reason:'The suggestion follows the obstacle you chose. If you need a very small start, Motivation can help you take the first action. Adjust the plan as you learn what works.',actionPrompt:'Write an observable first action (optional)',actionPlaceholder:'For example: send a message Tuesday at 10',
+  actionDefault:'Spend {minutes} minutes on a concrete first step toward your goal {context}.',
+  resultTitle:'Your plan is ready',resultText:'Start with this action. Then explore the suggested skills and adjust your direction based on what you learn.',noGuarantee:'This is an initial suggestion, not an assessment or a promise of results.'},
+ fr:{card:['ATTEIGNEZ VOS OBJECTIFS','Définissez votre prochain pas','Dites-nous ce que vous souhaitez accomplir et créez un plan court et adaptable.','PLAN GUIDÉ','Découvrir le plan →'],kind:'Plan guidé · Atteignez vos objectifs',intro:'Une étape à la fois. Vous pourrez revoir vos réponses avant de commencer.',step:'Étape',of:'sur',back:'← Retour',next:'Continuer →',explore:'← Explorer',edit:'Modifier mes réponses',confirm:'Confirmer mon plan →',start:'Découvrir',missingGoal:'Décrivez un objectif précis pour continuer.',missingChoice:'Choisissez une option pour continuer.',
+  headings:['Que souhaitez-vous changer ou accomplir ?','Dans quel cadre souhaitez-vous changer ?','Quel est votre principal frein ?','Vous sentez-vous prêt à commencer ?','Votre proposition de plan','Relisez et ajustez votre plan'],
+  hints:['Exprimez-le avec vos mots. Un petit objectif suffit.','Choisissez le cadre principal.','Choisissez le frein le plus important actuellement.','Cela nous aide à adapter le premier pas.','Ces suggestions découlent de vos choix ; vous pouvez les ajuster.','Vous pouvez modifier votre première action avant de confirmer.'],
+  placeholder:'Par exemple : prendre la parole avec plus d’assurance en réunion',
+  contexts:{home:'À la maison',work:'Au travail',social:'Dans ma vie sociale',other:'Dans un autre contexte'},
+  obstacles:{motivation:'J’ai du mal à commencer',consistency:'J’ai du mal à être régulier',focus:'Je me laisse distraire',confidence:'Je doute de moi',communication:'J’ai du mal à communiquer'},
+  readiness:{small:'Je dois commencer très progressivement',steady:'Je peux faire un pas cette semaine',ready:'Je suis prêt à agir maintenant'},
+  labels:{goal:'Votre objectif',context:'Cadre',obstacle:'Frein principal',readiness:'Point de départ',first:'Votre première action',route:'Compétences suggérées'},
+  because:'Pourquoi ce plan',reason:'La suggestion correspond au frein que vous avez choisi. Si vous devez commencer très progressivement, Motivation peut vous aider à passer à une première action. Ajustez le plan selon votre expérience.',actionPrompt:'Décrivez une première action observable (facultatif)',actionPlaceholder:'Par exemple : envoyer un message mardi à 10 h',
+  actionDefault:'Consacrez {minutes} minutes à une première action concrète vers votre objectif {context}.',
+  resultTitle:'Votre plan est prêt',resultText:'Commencez par cette action. Découvrez ensuite les compétences suggérées et adaptez votre direction selon ce que vous apprenez.',noGuarantee:'Il s’agit d’une première proposition, pas d’une évaluation ni d’une promesse de résultat.'}
+};
+const goalDraft={step:0,goal:'',context:'',obstacle:'',readiness:'',action:'',confirmed:false};
+function goalLang(){return ['es','en','fr'].includes(getNexoraLanguage())?getNexoraLanguage():'en'}
+function goalCopy(){return GOAL_COPY[goalLang()]}
+function renderGoalCard(){const card=document.querySelector('.goal-plan-card');if(!card)return;const v=goalCopy().card;['.program-kicker','h3','p','.program-kind','.program-progress'].forEach((selector,i)=>{card.querySelector(selector).textContent=v[i]})}
+function goalEsc(value){return escapeHtml(value)}
+function goalPrograms(){
+ const obstacleMap={motivation:'motivacion',consistency:'disciplina',focus:'enfoque',confidence:'confianza',communication:'comunicacion'};
+ const main=obstacleMap[goalDraft.obstacle]||'motivacion';
+ return goalDraft.readiness==='small'&&main!=='motivacion'?['motivacion',main]:[main];
+}
+function goalAction(){
+ const t=goalCopy(),minutes=goalDraft.readiness==='small'?5:goalDraft.readiness==='ready'?15:10;
+ const places={es:{home:'en casa',work:'en el trabajo',social:'en tu vida social',other:'en ese contexto'},en:{home:'at home',work:'at work',social:'in your social life',other:'in that setting'},fr:{home:'à la maison',work:'au travail',social:'dans votre vie sociale',other:'dans ce cadre'}};
+ const context=places[goalLang()][goalDraft.context]||'';
+ return goalDraft.action.trim()||t.actionDefault.replace('{minutes}',minutes).replace('{context}',context);
+}
+function goalProgramName(id){
+ const names={motivacion:{es:'Motivación',en:'Motivation',fr:'Motivation'},disciplina:{es:'Disciplina',en:'Discipline',fr:'Discipline'},enfoque:{es:'Enfoque',en:'Focus',fr:'Concentration'},confianza:{es:'Confianza',en:'Confidence',fr:'Confiance'},comunicacion:{es:'Comunicación',en:'Communication',fr:'Communication'}};
+ return names[id][goalLang()];
+}
+function goalSummary(){
+ const t=goalCopy(),fields=[[t.labels.goal,goalDraft.goal.trim()],[t.labels.context,t.contexts[goalDraft.context]],[t.labels.obstacle,t.obstacles[goalDraft.obstacle]],[t.labels.readiness,t.readiness[goalDraft.readiness]]];
+ return '<div class="goal-plan-summary">'+fields.map(([label,value])=>'<div><strong>'+goalEsc(label)+'</strong>'+goalEsc(value||'')+'</div>').join('')+'</div>';
+}
+function openGoalPlan(){goalDraft.confirmed=false;goalDraft.step=0;showView('goalPlan');renderGoalPlan()}
+function setGoalChoice(field,value){goalDraft[field]=value;renderGoalPlan()}
+function nextGoalStep(){
+ const t=goalCopy(),step=goalDraft.step;
+ const key=['goal','context','obstacle','readiness'][step];
+ if(step===0){goalDraft.goal=document.getElementById('goalInput').value.trim();if(!goalDraft.goal){toast(t.missingGoal);return}}
+ if(step>0&&step<4&&!goalDraft[key]){toast(t.missingChoice);return}
+ if(step===5){goalDraft.action=document.getElementById('goalActionInput').value.trim();goalDraft.confirmed=true;renderGoalPlan();return}
+ goalDraft.step=Math.min(5,step+1);renderGoalPlan();window.scrollTo({top:0,behavior:'smooth'})
+}
+function backGoalStep(){if(goalDraft.confirmed){goalDraft.confirmed=false;goalDraft.step=5}else if(goalDraft.step===0){showView('home');return}else goalDraft.step--;renderGoalPlan();window.scrollTo({top:0,behavior:'smooth'})}
+function renderGoalPlan(){
+ const root=document.getElementById('goalPlan');if(!root)return;
+ const t=goalCopy(),s=goalDraft.step,content=document.getElementById('goalPlanContent'),actions=document.getElementById('goalPlanActions');
+ root.querySelector('.path-back').textContent=t.explore;
+ document.getElementById('goalPlanKind').textContent=t.kind;
+ document.getElementById('goalPlanHeading').textContent=goalDraft.confirmed?t.resultTitle:t.headings[s];
+ document.getElementById('goalPlanIntro').textContent=goalDraft.confirmed?t.resultText:t.hints[s];
+ document.getElementById('goalPlanTrack').innerHTML=goalDraft.confirmed?'':goalEsc(t.step+' '+(s+1)+' '+t.of+' 6')+'<div class="goal-track-dots" aria-hidden="true">'+Array.from({length:6},(_,i)=>'<span class="'+(i<=s?'current':'')+'"></span>').join('')+'</div>';
+ let html='';
+ if(goalDraft.confirmed){
+   html=goalSummary()+'<div class="goal-plan-confirmed"><strong>'+goalEsc(t.labels.first)+'</strong><p>'+goalEsc(goalAction())+'</p><small>'+goalEsc(t.noGuarantee)+'</small></div>';
+ }else if(s===0){
+   html='<label for="goalInput">'+goalEsc(t.headings[0])+'</label><textarea id="goalInput" oninput="goalDraft.goal=this.value" maxlength="240" placeholder="'+goalEsc(t.placeholder)+'">'+goalEsc(goalDraft.goal)+'</textarea>';
+ }else if(s>=1&&s<=3){
+   const key=['','context','obstacle','readiness'][s];
+   html='<div class="goal-choices" role="group" aria-label="'+goalEsc(t.headings[s])+'">'+Object.entries(s===3?t.readiness:t[key+'s']).map(([value,label])=>'<button type="button" class="goal-choice '+(goalDraft[key]===value?'selected':'')+'" aria-pressed="'+(goalDraft[key]===value)+'" onclick="setGoalChoice(\''+key+'\',\''+value+'\')">'+goalEsc(label)+'</button>').join('')+'</div>';
+ }else if(s===4){
+   html=goalSummary()+'<div class="goal-plan-summary"><div><strong>'+goalEsc(t.labels.route)+'</strong>'+goalPrograms().map(goalProgramName).map(goalEsc).join(' → ')+'</div><div><strong>'+goalEsc(t.labels.first)+'</strong>'+goalEsc(goalAction())+'</div></div><p class="goal-plan-reason"><strong>'+goalEsc(t.because)+'.</strong> '+goalEsc(t.reason)+'</p>';
+ }else{
+   html=goalSummary()+'<div class="goal-plan-summary"><div><strong>'+goalEsc(t.labels.route)+'</strong>'+goalPrograms().map(goalProgramName).map(goalEsc).join(' → ')+'</div></div><label for="goalActionInput">'+goalEsc(t.actionPrompt)+'</label><input id="goalActionInput" oninput="goalDraft.action=this.value" maxlength="180" placeholder="'+goalEsc(t.actionPlaceholder)+'" value="'+goalEsc(goalDraft.action)+'"><p class="tiny">'+goalEsc(goalAction())+'</p><p class="goal-plan-reason">'+goalEsc(t.noGuarantee)+'</p>';
+ }
+ content.className='goal-plan-content';content.innerHTML=html;
+ actions.innerHTML='<button type="button" class="ghost" onclick="backGoalStep()">'+goalEsc(t.back)+'</button>'+(goalDraft.confirmed?'<div>'+goalPrograms().map(id=>'<button type="button" class="primary" style="margin:4px" onclick="openProgram(\''+id+'\')">'+goalEsc(t.start+' '+goalProgramName(id))+' →</button>').join('')+' <button type="button" class="ghost" onclick="goalDraft.confirmed=false;goalDraft.step=0;renderGoalPlan()">'+goalEsc(t.edit)+'</button></div>':'<button type="button" class="primary" onclick="nextGoalStep()">'+goalEsc(s===5?t.confirm:t.next)+'</button>'+(s>=4?'<button type="button" class="ghost" onclick="goalDraft.step=0;renderGoalPlan()">'+goalEsc(t.edit)+'</button>':''));
+}
+renderGoalCard();
 </script>
 </body>
 </html>
