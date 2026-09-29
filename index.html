@@ -9058,7 +9058,7 @@ createDemoAccount=async function(){
   const email=document.getElementById('signupEmail').value.trim().toLowerCase();
   const password=document.getElementById('signupPassword').value;
   const selectedBeforeSignup=appState?.selectedProgram;
-  const pendingProgram=(selectedBeforeSignup&&PROGRAMS[selectedBeforeSignup])?selectedBeforeSignup:null;
+  const pendingProgram=(pendingAccountAction==='beginProgram'&&selectedBeforeSignup&&PROGRAMS[selectedBeforeSignup])?selectedBeforeSignup:null;
   if(!name||!email.includes('@')||password.length<6){
     toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');
     return;
@@ -9089,6 +9089,10 @@ createDemoAccount=async function(){
       }
       closeModal('accountModal');
       toast('Cuenta creada. Tu experiencia personal ya está conectada a NEXORA.');
+      if(!pendingProgram){
+        renderHome();
+        showView('home');
+      }
       setTimeout(runPendingAccountAction,80);
     }else{
       toast('Cuenta creada. Revisa tu correo para confirmar tu dirección y luego entra.');
@@ -9153,7 +9157,7 @@ loginDemoAccount=async function(){
   // Preserve the path selected before authentication. Establishing a session
   // can merge remote state and change selectedProgram.
   const selectedBeforeLogin=appState?.selectedProgram;
-  const pendingProgram=(selectedBeforeLogin&&PROGRAMS[selectedBeforeLogin])?selectedBeforeLogin:null;
+  const pendingProgram=(pendingAccountAction==='beginProgram'&&selectedBeforeLogin&&PROGRAMS[selectedBeforeLogin])?selectedBeforeLogin:null;
   const {data,error}=await nexoraDb.auth.signInWithPassword({email,password});
   if(error){toast(nexoraFriendlyAuthError(error.message));return;}
   await nexoraEstablishSession(data.session,false);
@@ -9165,6 +9169,10 @@ loginDemoAccount=async function(){
   }
   closeModal('accountModal');
   toast('Bienvenido de nuevo.');
+  if(!pendingProgram){
+    renderHome();
+    showView('home');
+  }
   setTimeout(()=>{
     if(pendingProgram){
       appState.selectedProgram=pendingProgram;
