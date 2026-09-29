@@ -9175,6 +9175,27 @@ loginDemoAccount=async function(){
   },80);
 };
 
+function nexoraResetFreshGuestHome(){
+  try{
+    localStorage.removeItem('nexora_guest_state_v1');
+    localStorage.removeItem('nexora_v3_state');
+    localStorage.removeItem('nexora_v2_state');
+    localStorage.removeItem(SESSION_KEY);
+  }catch{}
+  const fresh=defaultAppState();
+  Object.keys(PROGRAMS).forEach(id=>{fresh.programs[id]=defaultProgramState()});
+  fresh.selectedProgram='gratitud';
+  appState=fresh;
+  previewDay=null;
+  journeyOpen=false;
+  historyProgramId=null;
+  renderAll();
+  updateAccountUI();
+  try{applyNexoraLanguage(document.body)}catch{}
+  showView('home');
+  window.scrollTo({top:0,behavior:'auto'});
+}
+
 logoutDemoAccount=async function(){
   // Release the UI immediately so sign-out can never leave the app trapped
   // behind the account modal while Supabase emits SIGNED_OUT.
@@ -9195,11 +9216,7 @@ logoutDemoAccount=async function(){
   nexoraIsAdmin=false;
   const testerBtn=document.getElementById('testerBtn');
   if(testerBtn)testerBtn.style.display='none';
-  appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
-  renderAll();
-  updateAccountUI();
-  try{applyNexoraLanguage(document.body)}catch{}
-  showView('home');
+  nexoraResetFreshGuestHome();
   toast('Sesión cerrada.');
 };
 
@@ -9378,14 +9395,10 @@ completeDay=async function(n,isPreview){
         nexoraIsAdmin=false;
         const testerBtn=document.getElementById('testerBtn');
         if(testerBtn)testerBtn.style.display='none';
-        appState=JSON.parse(localStorage.getItem('nexora_guest_state_v1')||'null')||defaultAppState();
         closeModal('accountModal');
         closeOpenModal();
         document.body.classList.remove('modal-open');
-        renderAll();
-        updateAccountUI();
-        try{applyNexoraLanguage(document.body)}catch{}
-        showView('home');
+        nexoraResetFreshGuestHome();
       }else if(session&&session.user?.id!==currentSession?.id){
         await nexoraEstablishSession(session,false);
       }
