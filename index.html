@@ -2300,7 +2300,6 @@ body.modal-open{overflow:hidden}
     </div>
     <div class="profilebox" id="profileBox">
       <div class="profilehero"><div class="avatar" id="profileAvatar">N</div><div class="profilemeta"><b id="profileName">Usuario</b><span id="profileEmail"></span></div></div>
-      <p class="profile-note">Tu progreso, tus registros y tus preferencias quedan vinculados a esta cuenta para que puedas continuar desde otros dispositivos.</p>
       <div class="profile-actions">
         <button class="ghost" id="changeEmailBtn" type="button" aria-expanded="false" onclick="toggleChangeEmail()">Cambiar correo</button>
         <div class="account-action-box" id="changeEmailBox" style="display:none">
@@ -2314,7 +2313,7 @@ body.modal-open{overflow:hidden}
           <div class="field"><label>Confirmar contraseña</label><div class="password-field"><input id="accountNewPasswordConfirm" type="password" autocomplete="new-password" placeholder="Repite tu nueva contraseña" style="width:100%;border:1px solid var(--line);padding:13px;border-radius:14px"><button class="password-toggle" type="button" onclick="togglePasswordVisibility(this)" aria-controls="accountNewPasswordConfirm" aria-label="Mostrar contraseña" title="Mostrar contraseña" aria-pressed="false"><svg class="eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg><svg class="eye-closed" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"></path><path d="M10.6 5.2A11.8 11.8 0 0 1 12 5c7 0 10 7 10 7a18.5 18.5 0 0 1-2.1 3.2"></path><path d="M6.6 6.6C3.4 8.7 2 12 2 12s3.5 7 10 7a10.8 10.8 0 0 0 5.4-1.4"></path><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"></path></svg></button></div></div>
           <button class="primary" id="saveAccountPasswordBtn" type="button" style="width:100%" onclick="saveAccountPassword()">Guardar nueva contraseña</button>
         </div>
-        <button class="authlink profile-logout" type="button" onclick="logoutDemoAccount()">Cerrar sesión</button>
+        <button class="ghost profile-logout" type="button" onclick="logoutDemoAccount()">Cerrar sesión</button>
       </div>
     </div>
   </div></div>
@@ -7378,7 +7377,7 @@ function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView(
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
-function openProgram(id){if(id&&PROGRAMS[id]) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
+function openProgram(id){if(id&&PROGRAMS[id]) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();if(!currentSession){openAccountFor('signup','beginProgram');return}renderProgram();showView('program')}
 function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();openModal('baselineModal')}else startToday()}
 function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
 function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
@@ -9048,6 +9047,8 @@ createDemoAccount=async function(){
   const name=document.getElementById('signupName').value.trim();
   const email=document.getElementById('signupEmail').value.trim().toLowerCase();
   const password=document.getElementById('signupPassword').value;
+  const selectedBeforeSignup=appState?.selectedProgram;
+  const pendingProgram=(selectedBeforeSignup&&PROGRAMS[selectedBeforeSignup])?selectedBeforeSignup:null;
   if(!name||!email.includes('@')||password.length<6){
     toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');
     return;
@@ -9071,9 +9072,14 @@ createDemoAccount=async function(){
     }
     if(data.session){
       await nexoraEstablishSession(data.session,true);
+      if(pendingProgram){
+        appState.selectedProgram=pendingProgram;
+        localStorage.setItem(userStateKey(),JSON.stringify(appState));
+        renderAll();
+      }
       closeModal('accountModal');
       toast('Cuenta creada. Tu experiencia personal ya está conectada a NEXORA.');
-      setTimeout(runPendingAccountAction,220);
+      setTimeout(runPendingAccountAction,80);
     }else{
       toast('Cuenta creada. Revisa tu correo para confirmar tu dirección y luego entra.');
       switchAuth('login');
