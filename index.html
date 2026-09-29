@@ -7378,7 +7378,7 @@ function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView(
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
-function openProgram(id){if(id) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
+function openProgram(id){if(id&&PROGRAMS[id]) appState.selectedProgram=id;previewDay=null;journeyOpen=false;save();renderProgram();showView('program')}
 function beginProgram(){if(!currentSession)return requireAccount('beginProgram');const s=pstate();if(!s.baselineDone){buildBaseline();openModal('baselineModal')}else startToday()}
 function buildBaseline(){const p=program();document.getElementById('baselineTitle').textContent=`Antes de comenzar ${p.name}, queremos conocerte como eres hoy.`;const wrap=document.getElementById('baselineQuestions');wrap.innerHTML='';p.baseline.forEach((q,i)=>{wrap.innerHTML+=`<div class="q"><b>${q}</b><div class="scale">${[1,2,3,4,5].map(n=>`<button type="button" data-q="${i}" data-v="${n}" onclick="selectScale(this)">${n}</button>`).join('')}</div><div class="tiny" style="display:flex;justify-content:space-between"><span>Casi nunca</span><span>Muy frecuentemente</span></div></div>`})}
 function selectScale(b){document.querySelectorAll(`[data-q="${b.dataset.q}"]`).forEach(x=>x.classList.remove('sel'));b.classList.add('sel')}
@@ -9137,21 +9137,34 @@ loginDemoAccount=async function(){
   // Preserve the path selected before authentication. Establishing a session
   // can merge remote state and change selectedProgram.
   const selectedBeforeLogin=appState?.selectedProgram;
+  const pendingProgram=(selectedBeforeLogin&&PROGRAMS[selectedBeforeLogin])?selectedBeforeLogin:null;
   const {data,error}=await nexoraDb.auth.signInWithPassword({email,password});
   if(error){toast(nexoraFriendlyAuthError(error.message));return;}
   await nexoraEstablishSession(data.session,false);
-  if(selectedBeforeLogin&&PROGRAMS[selectedBeforeLogin]){
-    appState.selectedProgram=selectedBeforeLogin;
+  if(pendingProgram){
+    appState.selectedProgram=pendingProgram;
     localStorage.setItem(userStateKey(),JSON.stringify(appState));
     renderAll();
+    renderProgram();
   }
   closeModal('accountModal');
   toast('Bienvenido de nuevo.');
-  setTimeout(runPendingAccountAction,80);
+  setTimeout(()=>{
+    if(pendingProgram){
+      appState.selectedProgram=pendingProgram;
+      renderProgram();
+      showView('program');
+    }
+    runPendingAccountAction();
+  },80);
 };
 
 logoutDemoAccount=async function(){
-  await nexoraDb.auth.signOut();
+  // Close the account UI immediately; sign-out/network cleanup must not leave
+  // the profile dialog visible.
+  closeModal('accountModal');
+  closeOpenModal();
+  pendingAccountAction=null;
   currentSession=null;
   nexoraIsAdmin=false;
   const testerBtn=document.getElementById('testerBtn');
@@ -9160,8 +9173,8 @@ logoutDemoAccount=async function(){
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
-  closeModal('accountModal');
   showView('home');
+  try{await nexoraDb.auth.signOut()}catch(error){console.warn('NEXORA sign out cleanup',error)}
   toast('Sesión cerrada.');
 };
 
