@@ -2192,6 +2192,20 @@ body.modal-open{overflow:hidden}
     </section>
   </div>
 
+  <div class="modal" id="exitConfirmModal" role="dialog" aria-modal="true" aria-labelledby="exitConfirmTitle"><div class="modalbox" style="width:min(430px,100%)">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow">NEXORA</div>
+        <h2 id="exitConfirmTitle">¿Seguro que deseas salir de NEXORA?</h2>
+        <p class="muted" id="exitConfirmText" style="line-height:1.6;margin-top:10px">Volverás a la página anterior fuera de la plataforma.</p>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="ghost" id="exitCancelBtn" type="button" style="flex:1" onclick="nexoraCancelExit()">Cancelar</button>
+      <button class="primary" id="exitConfirmBtn" type="button" style="flex:1" onclick="nexoraConfirmExit()">Salir</button>
+    </div>
+  </div></div>
+
   <div class="modal" id="baselineModal" role="dialog" aria-modal="true" aria-labelledby="baselineTitle"><div class="modalbox">
     <div class="modalhead">
       <div class="copy">
@@ -7375,6 +7389,8 @@ function nexoraWriteViewHistory(id,mode='push'){
   if(nexoraHandlingPopState||mode==='none')return;
   const state={...(history.state||{}),nexoraView:id};
   if(mode==='replace'){history.replaceState(state,document.title,location.href);return}
+  state.nexoraExitRoot=false;
+  state.nexoraExitGuard=false;
   if(history.state?.nexoraView!==id)history.pushState(state,document.title,location.href);
 }
 function showView(id,btn,historyMode='push'){
@@ -7390,7 +7406,44 @@ function showView(id,btn,historyMode='push'){
   if(id==='help')renderFeedback();
   if(previous!==id||historyMode==='replace')nexoraWriteViewHistory(id,historyMode);
 }
+let nexoraAllowExit=false;
+function nexoraOpenExitConfirm(){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const copy={
+    es:{title:'¿Seguro que deseas salir de NEXORA?',text:'Volverás a la página anterior fuera de la plataforma.',cancel:'Cancelar',exit:'Salir'},
+    en:{title:'Are you sure you want to leave NEXORA?',text:'You will return to the previous page outside the platform.',cancel:'Cancel',exit:'Leave'},
+    fr:{title:'Voulez-vous vraiment quitter NEXORA ?',text:'Vous reviendrez à la page précédente en dehors de la plateforme.',cancel:'Annuler',exit:'Quitter'}
+  }[lang]||null;
+  const c=copy||{title:'¿Seguro que deseas salir de NEXORA?',text:'Volverás a la página anterior fuera de la plataforma.',cancel:'Cancelar',exit:'Salir'};
+  document.getElementById('exitConfirmTitle').textContent=c.title;
+  document.getElementById('exitConfirmText').textContent=c.text;
+  document.getElementById('exitCancelBtn').textContent=c.cancel;
+  document.getElementById('exitConfirmBtn').textContent=c.exit;
+  openModal('exitConfirmModal');
+}
+function nexoraCancelExit(){
+  closeModal('exitConfirmModal');
+}
+function nexoraConfirmExit(){
+  nexoraAllowExit=true;
+  closeModal('exitConfirmModal');
+  history.go(-2);
+}
 window.addEventListener('popstate',event=>{
+  if(event.state?.nexoraExitRoot&&!nexoraAllowExit){
+    const currentView=document.querySelector('.view.active')?.id||'home';
+    nexoraHandlingPopState=true;
+    closeOpenModal();
+    previewDay=null;
+    journeyOpen=false;
+    showView('home',null,'none');
+    nexoraHandlingPopState=false;
+    try{
+      history.pushState({...(event.state||{}),nexoraView:'home',nexoraExitRoot:false,nexoraExitGuard:true},document.title,location.href);
+    }catch{}
+    setTimeout(nexoraOpenExitConfirm,0);
+    return;
+  }
   const requested=event.state?.nexoraView;
   if(!requested)return;
   const target=(!currentSession&&['today','history','progress'].includes(requested))?'home':requested;
@@ -7403,7 +7456,13 @@ window.addEventListener('popstate',event=>{
   nexoraHandlingPopState=false;
 });
 try{
-  history.replaceState({...(history.state||{}),nexoraView:document.querySelector('.view.active')?.id||'home'},document.title,location.href);
+  const initialView=document.querySelector('.view.active')?.id||'home';
+  if(!history.state?.nexoraExitRoot&&!history.state?.nexoraExitGuard){
+    history.replaceState({...(history.state||{}),nexoraView:initialView,nexoraExitRoot:true,nexoraExitGuard:false},document.title,location.href);
+    history.pushState({...(history.state||{}),nexoraView:initialView,nexoraExitRoot:false,nexoraExitGuard:true},document.title,location.href);
+  }else{
+    history.replaceState({...(history.state||{}),nexoraView:initialView},document.title,location.href);
+  }
 }catch{}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
