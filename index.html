@@ -743,10 +743,6 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
 
 
     /* NEXORA experience grouping v1 · reuses approved program cards */
-    #programChoices .experience-item{display:none}
-    #programChoices .experience-item.is-open{display:grid}
-    #programChoices .experience-category.is-open .program-arrow{transform:rotate(90deg);background:#172236;color:#fff}
-    html[data-theme="dark"] #programChoices .experience-category.is-open .program-arrow{background:#e5bf7d;color:#172236}
     /* NEXORA high-end program cards v1 */
     #programChoices.programs{
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1921,7 +1917,7 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
         <div class="programs" id="programChoices">
-          <article class="program available experience-category" data-category="programas" onclick="toggleExperienceCategory('programas',this)">
+          <article class="program available experience-category" data-category="programas" onclick="openExperienceCategory('programas')">
             <div class="program-copy">
               <span class="program-kicker">NEXORA</span>
               <h3>Programas</h3>
@@ -1930,7 +1926,7 @@ body.modal-open{overflow:hidden}
             </div>
             <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
           </article>
-          <article class="program available experience-category" data-category="entrenamientos" onclick="toggleExperienceCategory('entrenamientos',this)">
+          <article class="program available experience-category" data-category="entrenamientos" onclick="openExperienceCategory('entrenamientos')">
             <div class="program-copy">
               <span class="program-kicker">NEXORA</span>
               <h3>Entrenamientos</h3>
@@ -1939,7 +1935,7 @@ body.modal-open{overflow:hidden}
             </div>
             <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 12h14"/><circle cx="12" cy="12" r="8"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
           </article>
-          <article class="program available experience-category" data-category="objetivos" onclick="toggleExperienceCategory('objetivos',this)">
+          <article class="program available experience-category" data-category="objetivos" onclick="openExperienceCategory('objetivos')">
             <div class="program-copy">
               <span class="program-kicker">NEXORA</span>
               <h3>Objetivos</h3>
@@ -2058,6 +2054,17 @@ body.modal-open{overflow:hidden}
           </article>
         </div>
 
+      </section>
+
+      <section id="experienceCategory" class="view">
+        <button class="ghost path-back" type="button" onclick="goHome()">← <span id="experienceCategoryBack">Volver</span></button>
+        <div class="section-title program-section-title" style="margin-top:8px">
+          <div class="program-section-heading">
+            <div class="program-section-kicker" id="experienceCategoryKicker">EXPLORA</div>
+            <h2 id="experienceCategoryTitle">Programas</h2>
+          </div>
+        </div>
+        <div class="programs" id="experienceCategoryItems"></div>
       </section>
 
       <section id="goalsPlan" class="view">
@@ -7522,18 +7529,32 @@ try{
     history.replaceState({...(history.state||{}),nexoraView:initialView},document.title,location.href);
   }
 }catch{}
-function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
+function goHome(){restoreExperienceItems();closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
-function toggleExperienceCategory(type,trigger){
-  const items=[...document.querySelectorAll('#programChoices .experience-item')];
-  const categories=[...document.querySelectorAll('#programChoices .experience-category')];
-  const opening=!trigger.classList.contains('is-open');
-  categories.forEach(card=>card.classList.remove('is-open'));
-  items.forEach(card=>card.classList.remove('is-open'));
-  if(opening){
-    trigger.classList.add('is-open');
-    items.filter(card=>card.dataset.experienceType===type).forEach(card=>card.classList.add('is-open'));
-  }
+const NEXORA_EXPERIENCE_CATEGORY_COPY={
+  programas:{es:['PROGRAMAS','Programas'],en:['PROGRAMS','Programs'],fr:['PROGRAMMES','Programmes']},
+  entrenamientos:{es:['ENTRENAMIENTOS','Entrenamientos'],en:['TRAININGS','Trainings'],fr:['ENTRAÎNEMENTS','Entraînements']},
+  objetivos:{es:['OBJETIVOS','Objetivos'],en:['GOALS','Goals'],fr:['OBJECTIFS','Objectifs']}
+};
+function restoreExperienceItems(){
+  const home=document.getElementById('programChoices');
+  const holder=document.getElementById('experienceCategoryItems');
+  if(!home||!holder)return;
+  [...holder.querySelectorAll('.experience-item')].forEach(card=>home.appendChild(card));
+}
+function openExperienceCategory(type){
+  restoreExperienceItems();
+  const home=document.getElementById('programChoices');
+  const holder=document.getElementById('experienceCategoryItems');
+  if(!home||!holder)return;
+  [...home.querySelectorAll('.experience-item')].filter(card=>card.dataset.experienceType===type).forEach(card=>holder.appendChild(card));
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const copy=NEXORA_EXPERIENCE_CATEGORY_COPY[type]?.[lang]||NEXORA_EXPERIENCE_CATEGORY_COPY[type]?.es;
+  const kicker=document.getElementById('experienceCategoryKicker'),title=document.getElementById('experienceCategoryTitle'),back=document.getElementById('experienceCategoryBack');
+  if(kicker)kicker.textContent=copy?.[0]||'EXPLORA';
+  if(title)title.textContent=copy?.[1]||'Explora';
+  if(back)back.textContent=lang==='en'?'Back':lang==='fr'?'Retour':'Volver';
+  showView('experienceCategory');
 }
 function goalsPlanCopy(){
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
