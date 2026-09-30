@@ -8156,7 +8156,7 @@ function goalsPlanCopy(){
       card:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',card:'Convierte un objetivo importante en un plan claro y avanza paso a paso.',kind:'PERSONALIZACIÓN INICIAL'},
       back:'Volver',
       intro:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',text:'Convierte algo importante para ti en un objetivo claro y en un primer paso que puedas poner en práctica.',support:'No necesitas tener todo resuelto. Te guiaremos una pregunta a la vez.',start:'Comenzar →'},
-      stepLabel:n=>\`Paso \${n} de 8\`,
+      stepLabel:n=>`Paso ${n} de 8`,
       continue:'Continuar →',review:'Ver resumen →',
       resume:'Continuamos donde lo dejaste.',
       steps:{
@@ -8176,7 +8176,7 @@ function goalsPlanCopy(){
       card:{kicker:'GUIDED PLAN',title:'Reach your goals',card:'Turn an important goal into a clear plan and move forward step by step.',kind:'INITIAL PERSONALIZATION'},
       back:'Back',
       intro:{kicker:'GUIDED PLAN',title:'Reach your goals',text:'Turn something that matters to you into a clear goal and a first step you can put into practice.',support:'You do not need to have everything figured out. We will guide you one question at a time.',start:'Get started →'},
-      stepLabel:n=>\`Step \${n} of 8\`,
+      stepLabel:n=>`Step ${n} of 8`,
       continue:'Continue →',review:'Review goal →',
       resume:'Picking up where you left off.',
       steps:{
@@ -8196,7 +8196,7 @@ function goalsPlanCopy(){
       card:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',card:'Transformez un objectif important en un plan clair et avancez étape par étape.',kind:'PERSONNALISATION INITIALE'},
       back:'Retour',
       intro:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',text:'Transformez quelque chose qui compte pour vous en un objectif clair et en un premier pas que vous pouvez mettre en pratique.',support:'Vous n’avez pas besoin d’avoir tout défini. Nous vous guiderons, une question à la fois.',start:'Commencer →'},
-      stepLabel:n=>\`Étape \${n} sur 8\`,
+      stepLabel:n=>`Étape ${n} sur 8`,
       continue:'Continuer →',review:'Voir le résumé →',
       resume:'Reprenons là où vous vous étiez arrêté.',
       steps:{
@@ -8234,7 +8234,7 @@ function defaultGoalPlanState(){
   };
 }
 function goalPlanLocalKey(id=currentSession?.id){
-  return id?\`nexora_goal_plan_v1_\${id}\`:null;
+  return id?`nexora_goal_plan_v1_${id}`:null;
 }
 function loadGoalPlanLocal(id=currentSession?.id){
   const key=goalPlanLocalKey(id); if(!key)return null;
@@ -8414,7 +8414,7 @@ function goalPlanOnInput(){
 }
 function goalPlanTodayString(){
   const d=new Date();
-  return \`\${d.getFullYear()}-\${String(d.getMonth()+1).padStart(2,'0')}-\${String(d.getDate()).padStart(2,'0')}\`;
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
 }
 function goalPlanValidateStep(step){
   const x=goalsPlanCopy(),copy=x.steps[step];
@@ -8470,8 +8470,8 @@ function goalPlanFormatDate(value){
 function goalPlanHorizonText(){
   if(!goalPlanState)return '';
   const x=goalsPlanCopy(),s=x.steps[4];
-  if(goalPlanState.horizonType==='target_date')return \`\${s.targetField}: \${goalPlanFormatDate(goalPlanState.targetDate)}\`;
-  if(goalPlanState.horizonType==='ongoing')return \`\${s.reviewField}: \${goalPlanFormatDate(goalPlanState.reviewDate)}\`;
+  if(goalPlanState.horizonType==='target_date')return `${s.targetField}: ${goalPlanFormatDate(goalPlanState.targetDate)}`;
+  if(goalPlanState.horizonType==='ongoing')return `${s.reviewField}: ${goalPlanFormatDate(goalPlanState.reviewDate)}`;
   return '';
 }
 function goalPlanSummaryValues(){
@@ -8502,61 +8502,61 @@ function renderGoalsPlan(){
   if(back)back.textContent=x.back;
 
   if(goalPlanMode==='intro'||!currentSession&&goalPlanMode!=='step'){
-    root.innerHTML=\`
-      <div class="eyebrow">\${escapeHtml(x.intro.kicker)}</div>
-      <h1>\${escapeHtml(x.intro.title)}</h1>
-      <p class="lead goal-plan-help">\${escapeHtml(x.intro.text)}</p>
-      <div class="practice-context"><p>\${escapeHtml(x.intro.support)}</p></div>
-      <div class="goal-plan-actions"><button class="primary" type="button" onclick="beginGoalPlan()">\${escapeHtml(x.intro.start)}</button></div>\`;
+    root.innerHTML=`
+      <div class="eyebrow">${escapeHtml(x.intro.kicker)}</div>
+      <h1>${escapeHtml(x.intro.title)}</h1>
+      <p class="lead goal-plan-help">${escapeHtml(x.intro.text)}</p>
+      <div class="practice-context"><p>${escapeHtml(x.intro.support)}</p></div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="beginGoalPlan()">${escapeHtml(x.intro.start)}</button></div>`;
     return;
   }
 
   goalPlanEnsureLocal();
 
   if(goalPlanJustActivated&&goalPlanState?.status==='active'){
-    root.innerHTML=\`
+    root.innerHTML=`
       <div class="completebox">
-        <div class="eyebrow" style="color:#e7c890">\${escapeHtml(x.active.kicker)}</div>
-        <h3 style="font-size:26px;margin:0 0 9px">\${escapeHtml(x.active.title)}</h3>
-        <p>\${escapeHtml(x.active.text)}</p>
+        <div class="eyebrow" style="color:#e7c890">${escapeHtml(x.active.kicker)}</div>
+        <h3 style="font-size:26px;margin:0 0 9px">${escapeHtml(x.active.title)}</h3>
+        <p>${escapeHtml(x.active.text)}</p>
         <div class="complete-actions">
-          <button class="primary" type="button" onclick="goalPlanShowActiveSummary()">\${escapeHtml(x.active.view)}</button>
-          <button class="ghost" type="button" style="color:#fff;border-color:rgba(255,255,255,.25)" onclick="goalPlanReturnToGoals()">\${escapeHtml(x.active.back)}</button>
+          <button class="primary" type="button" onclick="goalPlanShowActiveSummary()">${escapeHtml(x.active.view)}</button>
+          <button class="ghost" type="button" style="color:#fff;border-color:rgba(255,255,255,.25)" onclick="goalPlanReturnToGoals()">${escapeHtml(x.active.back)}</button>
         </div>
-      </div>\`;
+      </div>`;
     return;
   }
 
   if(goalPlanMode==='activeSummary'||goalPlanState?.status==='active'&&goalPlanMode!=='step'){
     const values=goalPlanSummaryValues();
-    root.innerHTML=\`
-      <div class="eyebrow">\${escapeHtml(x.active.kicker)}</div>
-      <h1>\${escapeHtml(x.intro.title)}</h1>
-      <p class="muted goal-plan-help">\${escapeHtml(x.active.text)}</p>
-      <div class="goal-plan-summary">\${values.map((value,i)=>\`
-        <div class="q"><div class="goal-plan-summary-head"><b>\${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button" onclick="goalPlanEditStep(\${i+1>4?i+1:i+1})">\${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">\${escapeHtml(value)}</p></div>\`).join('')}</div>
-      <div class="goal-plan-actions"><button class="ghost" type="button" onclick="goalPlanReturnToGoals()">\${escapeHtml(x.active.back)}</button></div>\`;
+    root.innerHTML=`
+      <div class="eyebrow">${escapeHtml(x.active.kicker)}</div>
+      <h1>${escapeHtml(x.intro.title)}</h1>
+      <p class="muted goal-plan-help">${escapeHtml(x.active.text)}</p>
+      <div class="goal-plan-summary">${values.map((value,i)=>`
+        <div class="q"><div class="goal-plan-summary-head"><b>${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button" onclick="goalPlanEditStep(${i+1>4?i+1:i+1})">${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">${escapeHtml(value)}</p></div>`).join('')}</div>
+      <div class="goal-plan-actions"><button class="ghost" type="button" onclick="goalPlanReturnToGoals()">${escapeHtml(x.active.back)}</button></div>`;
     // Summary index 4..6 does not map directly to steps because Horizon is step 4.
     const buttons=root.querySelectorAll('.goal-plan-summary .examplebtn');
     const stepMap=[1,2,3,4,5,6,7];
-    buttons.forEach((b,i)=>b.setAttribute('onclick',\`goalPlanEditStep(\${stepMap[i]})\`));
+    buttons.forEach((b,i)=>b.setAttribute('onclick',`goalPlanEditStep(${stepMap[i]})`));
     return;
   }
 
   if(goalPlanMode==='summary'){
     const values=goalPlanSummaryValues();
-    root.innerHTML=\`
-      <div class="goal-plan-step-row"><span class="tiny">\${escapeHtml(x.stepLabel(8))}</span></div>
-      <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="8" aria-label="\${escapeHtml(x.stepLabel(8))}"><div style="width:100%"></div></div>
-      <div class="eyebrow">\${escapeHtml(x.summary.kicker)}</div>
-      <h1>\${escapeHtml(x.summary.title)}</h1>
-      <p class="muted goal-plan-help">\${escapeHtml(x.summary.help)}</p>
-      <div class="goal-plan-summary">\${values.map((value,i)=>\`
-        <div class="q"><div class="goal-plan-summary-head"><b>\${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button">\${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">\${escapeHtml(value)}</p></div>\`).join('')}</div>
-      <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanActivate()">\${escapeHtml(x.summary.save)}</button></div>\`;
+    root.innerHTML=`
+      <div class="goal-plan-step-row"><span class="tiny">${escapeHtml(x.stepLabel(8))}</span></div>
+      <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="8" aria-label="${escapeHtml(x.stepLabel(8))}"><div style="width:100%"></div></div>
+      <div class="eyebrow">${escapeHtml(x.summary.kicker)}</div>
+      <h1>${escapeHtml(x.summary.title)}</h1>
+      <p class="muted goal-plan-help">${escapeHtml(x.summary.help)}</p>
+      <div class="goal-plan-summary">${values.map((value,i)=>`
+        <div class="q"><div class="goal-plan-summary-head"><b>${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button">${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">${escapeHtml(value)}</p></div>`).join('')}</div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanActivate()">${escapeHtml(x.summary.save)}</button></div>`;
     const buttons=root.querySelectorAll('.goal-plan-summary .examplebtn');
     const stepMap=[1,2,3,4,5,6,7];
-    buttons.forEach((b,i)=>b.setAttribute('onclick',\`goalPlanEditStep(\${stepMap[i]})\`));
+    buttons.forEach((b,i)=>b.setAttribute('onclick',`goalPlanEditStep(${stepMap[i]})`));
     return;
   }
 
@@ -8567,26 +8567,26 @@ function renderGoalsPlan(){
   if(step===4){
     const selected=goalPlanState?.horizonType||'';
     const dateValue=selected==='target_date'?(goalPlanState?.targetDate||''):(selected==='ongoing'?(goalPlanState?.reviewDate||''):'');
-    field=\`
-      <div class="program-switch goal-plan-horizon-switch" role="group" aria-label="\${escapeHtml(copy.question)}">
-        <button type="button" class="switchbtn \${selected==='target_date'?'active':''}" aria-pressed="\${selected==='target_date'}" onclick="goalPlanSelectHorizon('target_date')">\${escapeHtml(copy.target)}</button>
-        <button type="button" class="switchbtn \${selected==='ongoing'?'active':''}" aria-pressed="\${selected==='ongoing'}" onclick="goalPlanSelectHorizon('ongoing')">\${escapeHtml(copy.ongoing)}</button>
+    field=`
+      <div class="program-switch goal-plan-horizon-switch" role="group" aria-label="${escapeHtml(copy.question)}">
+        <button type="button" class="switchbtn ${selected==='target_date'?'active':''}" aria-pressed="${selected==='target_date'}" onclick="goalPlanSelectHorizon('target_date')">${escapeHtml(copy.target)}</button>
+        <button type="button" class="switchbtn ${selected==='ongoing'?'active':''}" aria-pressed="${selected==='ongoing'}" onclick="goalPlanSelectHorizon('ongoing')">${escapeHtml(copy.ongoing)}</button>
       </div>
-      \${selected?\`<div class="field"><label for="goalPlanDate">\${escapeHtml(selected==='target_date'?copy.targetField:copy.reviewField)}</label><input class="goal-plan-date-input" id="goalPlanDate" type="date" min="\${goalPlanTodayString()}" value="\${escapeHtml(dateValue)}" oninput="goalPlanOnInput()" onchange="goalPlanOnInput()"></div>\`:''}\`;
+      ${selected?`<div class="field"><label for="goalPlanDate">${escapeHtml(selected==='target_date'?copy.targetField:copy.reviewField)}</label><input class="goal-plan-date-input" id="goalPlanDate" type="date" min="${goalPlanTodayString()}" value="${escapeHtml(dateValue)}" oninput="goalPlanOnInput()" onchange="goalPlanOnInput()"></div>`:''}`;
   }else{
-    const ref=step===7?\`<div class="goal-plan-first-step-ref"><b>\${escapeHtml(copy.firstStep)}</b><p>\${escapeHtml(goalPlanState?.firstStepText||'')}</p></div>\`:'';
-    field=\`\${ref}<div class="field"><label for="goalPlanAnswer">\${escapeHtml(copy.question)}</label><textarea id="goalPlanAnswer" placeholder="\${escapeHtml(copy.placeholder)}" oninput="goalPlanOnInput()">\${escapeHtml(goalPlanStepValue(step))}</textarea></div>\`;
+    const ref=step===7?`<div class="goal-plan-first-step-ref"><b>${escapeHtml(copy.firstStep)}</b><p>${escapeHtml(goalPlanState?.firstStepText||'')}</p></div>`:'';
+    field=`${ref}<div class="field"><label for="goalPlanAnswer">${escapeHtml(copy.question)}</label><textarea id="goalPlanAnswer" placeholder="${escapeHtml(copy.placeholder)}" oninput="goalPlanOnInput()">${escapeHtml(goalPlanStepValue(step))}</textarea></div>`;
   }
-  const resume=goalPlanResumeNotice?\`<div class="goal-plan-resume">\${escapeHtml(x.resume)}</div>\`:'';
-  root.innerHTML=\`
-    \${resume}
-    <div class="goal-plan-step-row"><span class="tiny">\${escapeHtml(x.stepLabel(step))}</span></div>
-    <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="\${step}" aria-label="\${escapeHtml(x.stepLabel(step))}"><div style="width:\${pct}%"></div></div>
-    <div class="eyebrow">\${escapeHtml(copy.kicker)}</div>
-    <h1>\${escapeHtml(copy.question)}</h1>
-    <p class="muted goal-plan-help">\${escapeHtml(copy.help)}</p>
-    \${field}
-    <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanNext()">\${escapeHtml(step===7?x.review:x.continue)}</button></div>\`;
+  const resume=goalPlanResumeNotice?`<div class="goal-plan-resume">${escapeHtml(x.resume)}</div>`:'';
+  root.innerHTML=`
+    ${resume}
+    <div class="goal-plan-step-row"><span class="tiny">${escapeHtml(x.stepLabel(step))}</span></div>
+    <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="${step}" aria-label="${escapeHtml(x.stepLabel(step))}"><div style="width:${pct}%"></div></div>
+    <div class="eyebrow">${escapeHtml(copy.kicker)}</div>
+    <h1>${escapeHtml(copy.question)}</h1>
+    <p class="muted goal-plan-help">${escapeHtml(copy.help)}</p>
+    ${field}
+    <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanNext()">${escapeHtml(step===7?x.review:x.continue)}</button></div>`;
   goalPlanResumeNotice=false;
 }
 async function beginGoalPlan(){
