@@ -1480,6 +1480,143 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     /* data-nexora-uniform-program-cards="v1" */
 
 
+    /* NEXORA unified resource card component v1 */
+    #programChoices.programs,
+    #experienceCategoryItems.programs{
+      grid-auto-rows:1fr;
+      align-items:stretch;
+    }
+    #programChoices .program,
+    #experienceCategoryItems .program{
+      height:190px;
+      min-height:190px;
+      padding:22px 20px 20px 22px;
+      border-radius:24px;
+      grid-template-columns:minmax(0,1fr) 92px;
+      gap:18px;
+      align-items:center;
+    }
+    #programChoices .program-copy,
+    #experienceCategoryItems .program-copy{
+      display:flex;
+      flex-direction:column;
+      min-height:144px;
+      height:144px;
+    }
+    #programChoices .program-kicker,
+    #experienceCategoryItems .program-kicker{
+      min-height:14px;
+      margin-bottom:8px;
+      font-size:13px;
+      line-height:1;
+    }
+    #programChoices .program h3,
+    #experienceCategoryItems .program h3{
+      min-height:50px;
+      margin:0 0 7px;
+      font-size:24px;
+      line-height:1.05;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+      overflow:hidden;
+    }
+    #programChoices .program p,
+    #experienceCategoryItems .program p{
+      min-height:56px;
+      margin:0;
+      font-size:13px;
+      line-height:1.45;
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:3;
+      overflow:hidden;
+    }
+    #programChoices .program-meta,
+    #experienceCategoryItems .program-meta{
+      margin-top:auto;
+      padding-top:12px;
+      min-height:34px;
+    }
+    #programChoices .program-icon,
+    #experienceCategoryItems .program-icon{
+      width:72px;
+      height:72px;
+    }
+    #programChoices .program-icon svg,
+    #experienceCategoryItems .program-icon svg{
+      width:34px;
+      height:34px;
+    }
+    #programChoices .program-arrow,
+    #experienceCategoryItems .program-arrow{
+      width:36px;
+      height:36px;
+      font-size:27px;
+    }
+    @media(max-width:920px){
+      #programChoices.programs,
+      #experienceCategoryItems.programs{grid-auto-rows:auto}
+      #programChoices .program,
+      #experienceCategoryItems .program{
+        height:178px;
+        min-height:178px;
+      }
+      #programChoices .program-copy,
+      #experienceCategoryItems .program-copy{
+        height:132px;
+        min-height:132px;
+      }
+      #programChoices .program h3,
+      #experienceCategoryItems .program h3{min-height:47px}
+      #programChoices .program p,
+      #experienceCategoryItems .program p{min-height:54px}
+    }
+    @media(max-width:560px){
+      #programChoices .program,
+      #experienceCategoryItems .program{
+        height:170px;
+        min-height:170px;
+        padding:18px 16px 17px 18px;
+        grid-template-columns:minmax(0,1fr) 78px;
+        gap:12px;
+        border-radius:21px;
+      }
+      #programChoices .program-copy,
+      #experienceCategoryItems .program-copy{
+        height:126px;
+        min-height:126px;
+      }
+      #programChoices .program h3,
+      #experienceCategoryItems .program h3{
+        min-height:44px;
+        font-size:22px;
+      }
+      #programChoices .program p,
+      #experienceCategoryItems .program p{
+        min-height:50px;
+        font-size:13px;
+      }
+      #programChoices .program-icon,
+      #experienceCategoryItems .program-icon{
+        width:62px;
+        height:62px;
+      }
+      #programChoices .program-icon svg,
+      #experienceCategoryItems .program-icon svg{
+        width:29px;
+        height:29px;
+      }
+      #programChoices .program-arrow,
+      #experienceCategoryItems .program-arrow{
+        width:32px;
+        height:32px;
+        font-size:24px;
+      }
+    }
+    /* data-nexora-unified-resource-cards="v1" */
+
+
     /* NEXORA principle card method flow v1 */
     .hero-side{
       padding:30px 30px 26px;
