@@ -8222,6 +8222,7 @@ let goalPlanEditingFromSummary=false;
 let goalPlanResumeNotice=false;
 let goalPlanJustActivated=false;
 let goalPlanSyncTimer=null;
+let goalPlanLocalSaveTimer=null;
 
 function defaultGoalPlanState(){
   return {
@@ -8245,12 +8246,18 @@ function loadGoalPlanLocal(id=currentSession?.id){
 }
 function saveGoalPlanLocal(touch=true){
   const key=goalPlanLocalKey(); if(!key||!goalPlanState)return;
+  clearTimeout(goalPlanLocalSaveTimer);
   if(touch){
     goalPlanState.updatedAt=new Date().toISOString();
     goalPlanState.dirty=true;
   }
   localStorage.setItem(key,JSON.stringify(goalPlanState));
   renderGoalPlanCardState();
+}
+function goalPlanQueueLocalSave(){
+  if(!currentSession?.id||!goalPlanState)return;
+  clearTimeout(goalPlanLocalSaveTimer);
+  goalPlanLocalSaveTimer=setTimeout(()=>saveGoalPlanLocal(false),300);
 }
 function goalPlanRemoteToLocal(row){
   if(!row)return null;
@@ -8414,7 +8421,10 @@ function goalPlanCaptureCurrent(){
 }
 function goalPlanOnInput(){
   goalPlanCaptureCurrent();
-  saveGoalPlanLocal(true);
+  if(!goalPlanState)return;
+  goalPlanState.updatedAt=new Date().toISOString();
+  goalPlanState.dirty=true;
+  goalPlanQueueLocalSave();
   goalPlanQueueRemoteSync(false);
 }
 function goalPlanTodayString(){
