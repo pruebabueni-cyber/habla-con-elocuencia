@@ -742,6 +742,45 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     /* data-nexora-premium-bottomnav="v1" */
 
 
+    /* NEXORA category view keeps the exact approved program-card geometry */
+    #experienceCategoryItems.programs{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      align-items:stretch;
+    }
+    #experienceCategoryItems .program{
+      min-height:178px;
+      padding:22px 20px 20px 22px;
+      border-radius:24px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 92px;
+      gap:18px;
+      align-items:center;
+      background:linear-gradient(145deg,#fffdf9 0%,#faf6ef 100%);
+      border:1px solid rgba(191,174,149,.32);
+      box-shadow:0 12px 34px rgba(32,42,58,.065),inset 0 1px 0 rgba(255,255,255,.82);
+    }
+    #experienceCategoryItems .program-copy{min-width:0}
+    #experienceCategoryItems .program-kicker{display:block;width:max-content;margin-bottom:8px;color:#b27b32;font-size:11px;font-weight:900;letter-spacing:.13em;line-height:1}
+    #experienceCategoryItems .program h3{margin:0 0 7px;max-width:310px;font-size:25px;line-height:1.02;letter-spacing:-.035em;color:var(--ink)}
+    #experienceCategoryItems .program p{margin:0;max-width:360px;color:var(--ink2);font-size:13px;line-height:1.45}
+    #experienceCategoryItems .program-meta{margin-top:14px;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+    #experienceCategoryItems .program-kind{display:inline-flex;align-items:center;min-height:22px;padding:4px 8px;border:1px solid rgba(178,123,50,.24);border-radius:999px;background:rgba(226,190,128,.12);color:#8b612a;font-size:9px;font-weight:900;letter-spacing:.075em;line-height:1;text-transform:uppercase}
+    #experienceCategoryItems .program-progress{color:var(--muted);font-size:11px;font-weight:800}
+    #experienceCategoryItems .program-side{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px}
+    #experienceCategoryItems .program-icon{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;color:#1a2a42;background:linear-gradient(145deg,#f4eadb,#fbf8f2);border:1px solid rgba(201,166,108,.17)}
+    #experienceCategoryItems .program-icon svg{width:34px;height:34px}
+    #experienceCategoryItems .program-arrow{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#26374e;background:rgba(255,255,255,.74);border:1px solid rgba(31,42,58,.08);font-size:27px;line-height:1}
+    html[data-theme="dark"] #experienceCategoryItems .program{background:linear-gradient(145deg,#181f29,#141a23);border-color:#2b3441}
+    html[data-theme="dark"] #experienceCategoryItems .program-icon{background:linear-gradient(145deg,#242b35,#1d242d);border-color:#343d49;color:#e5bf7d}
+    @media(max-width:920px){#experienceCategoryItems.programs{grid-template-columns:1fr}#experienceCategoryItems .program{min-height:164px}}
+    @media(max-width:560px){
+      #experienceCategoryItems.programs{gap:12px}
+      #experienceCategoryItems .program{min-height:150px;padding:18px 16px 17px 18px;grid-template-columns:minmax(0,1fr) 78px;gap:12px;border-radius:21px}
+      #experienceCategoryItems .program h3{font-size:22px}
+      #experienceCategoryItems .program-icon{width:62px;height:62px}
+      #experienceCategoryItems .program-icon svg{width:29px;height:29px}
+    }
     /* NEXORA experience grouping v1 · reuses approved program cards */
     /* NEXORA high-end program cards v1 */
     #programChoices.programs{
