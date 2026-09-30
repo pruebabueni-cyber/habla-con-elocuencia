@@ -781,6 +781,81 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
       #experienceCategoryItems .program-icon{width:62px;height:62px}
       #experienceCategoryItems .program-icon svg{width:29px;height:29px}
     }
+    /* NEXORA ordered color system v1 · color follows position inside each category */
+    #programChoices .program[data-color-slot],
+    #experienceCategoryItems .program[data-color-slot]{
+      border-color:var(--program-accent-border)!important;
+    }
+    #programChoices .program[data-color-slot] .program-kicker,
+    #experienceCategoryItems .program[data-color-slot] .program-kicker{
+      color:var(--program-accent)!important;
+    }
+    #programChoices .program[data-color-slot] .program-icon,
+    #experienceCategoryItems .program[data-color-slot] .program-icon{
+      color:var(--program-accent)!important;
+      background:
+        linear-gradient(145deg,rgba(255,255,255,.55),rgba(255,255,255,.2)),
+        var(--program-accent-soft)!important;
+      border-color:var(--program-accent-border)!important;
+    }
+    #programChoices .program[data-color-slot] .program-kind,
+    #experienceCategoryItems .program[data-color-slot] .program-kind{
+      color:var(--program-accent)!important;
+      border-color:var(--program-accent-border)!important;
+      background:var(--program-accent-soft)!important;
+    }
+
+    #programChoices .program[data-color-slot="1"],
+    #experienceCategoryItems .program[data-color-slot="1"]{
+      --program-accent:#8a9a76;--program-accent-soft:rgba(138,154,118,.15);--program-accent-border:rgba(126,149,105,.30);
+      background:linear-gradient(145deg,#fbfaf2 0%,#edf2e7 100%)!important;
+    }
+    #programChoices .program[data-color-slot="2"],
+    #experienceCategoryItems .program[data-color-slot="2"]{
+      --program-accent:#6f8398;--program-accent-soft:rgba(111,131,152,.15);--program-accent-border:rgba(101,127,151,.30);
+      background:linear-gradient(145deg,#fcfaf5 0%,#e8eef3 100%)!important;
+    }
+    #programChoices .program[data-color-slot="3"],
+    #experienceCategoryItems .program[data-color-slot="3"]{
+      --program-accent:#b7775f;--program-accent-soft:rgba(183,119,95,.14);--program-accent-border:rgba(181,119,94,.28);
+      background:linear-gradient(145deg,#fffaf5 0%,#f3e7df 100%)!important;
+    }
+    #programChoices .program[data-color-slot="4"],
+    #experienceCategoryItems .program[data-color-slot="4"]{
+      --program-accent:#536f88;--program-accent-soft:rgba(83,111,136,.14);--program-accent-border:rgba(77,106,130,.30);
+      background:linear-gradient(145deg,#fbfaf6 0%,#e5edf2 100%)!important;
+    }
+    #programChoices .program[data-color-slot="5"],
+    #experienceCategoryItems .program[data-color-slot="5"]{
+      --program-accent:#8a5f73;--program-accent-soft:rgba(138,95,115,.14);--program-accent-border:rgba(135,92,112,.28);
+      background:linear-gradient(145deg,#fffaf7 0%,#f1e6eb 100%)!important;
+    }
+    #programChoices .program[data-color-slot="6"],
+    #experienceCategoryItems .program[data-color-slot="6"]{
+      --program-accent:#9a7b6a;--program-accent-soft:rgba(154,123,106,.15);--program-accent-border:rgba(151,119,101,.28);
+      background:linear-gradient(145deg,#fffaf5 0%,#f0e7e1 100%)!important;
+    }
+    #programChoices .program[data-color-slot="7"],
+    #experienceCategoryItems .program[data-color-slot="7"]{
+      --program-accent:#9a88aa;--program-accent-soft:rgba(154,136,170,.14);--program-accent-border:rgba(148,128,163,.26);
+      background:linear-gradient(145deg,#fcfafc 0%,#eee8f2 100%)!important;
+    }
+
+    html[data-theme="dark"] #programChoices .program[data-color-slot="1"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="1"]{background:linear-gradient(145deg,#18201b 0%,#151c18 100%)!important;border-color:#34433a!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="2"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="2"]{background:linear-gradient(145deg,#18202a 0%,#151b23 100%)!important;border-color:#354251!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="3"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="3"]{background:linear-gradient(145deg,#231c1a 0%,#1b1716 100%)!important;border-color:#4a3831!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="4"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="4"]{background:linear-gradient(145deg,#17212a 0%,#131b22 100%)!important;border-color:#314453!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="5"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="5"]{background:linear-gradient(145deg,#211920 0%,#19151a 100%)!important;border-color:#443440!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="6"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="6"]{background:linear-gradient(145deg,#211c19 0%,#191615 100%)!important;border-color:#433932!important}
+    html[data-theme="dark"] #programChoices .program[data-color-slot="7"],
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot="7"]{background:linear-gradient(145deg,#201b24 0%,#18151b 100%)!important;border-color:#41384a!important}
+
     /* NEXORA experience grouping v1 · reuses approved program cards */
     /* NEXORA high-end program cards v1 */
     #programChoices.programs{
@@ -7585,7 +7660,19 @@ function restoreExperienceItems(){
   [...holder.querySelectorAll('.experience-item')].forEach(card=>store.appendChild(card));
   [...home.querySelectorAll('.experience-item')].forEach(card=>store.appendChild(card));
 }
-function initializeExperienceCategories(){restoreExperienceItems()}
+function applyExperienceColorOrder(){
+  const home=document.getElementById('programChoices');
+  const store=document.getElementById('experienceItemsStore');
+  const holder=document.getElementById('experienceCategoryItems');
+  if(!home||!store||!holder)return;
+  const setSlot=(card,index)=>{if(card)card.dataset.colorSlot=String((index%7)+1)};
+  [...home.querySelectorAll('.experience-category')].forEach((card,index)=>setSlot(card,index));
+  ['programas','entrenamientos','objetivos'].forEach(type=>{
+    const cards=[...document.querySelectorAll('.experience-item[data-experience-type="'+type+'"]')];
+    cards.forEach((card,index)=>setSlot(card,index));
+  });
+}
+function initializeExperienceCategories(){restoreExperienceItems();applyExperienceColorOrder()}
 function openExperienceCategory(type){
   restoreExperienceItems();
   const store=document.getElementById('experienceItemsStore');
