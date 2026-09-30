@@ -639,6 +639,47 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     }
     /* data-nexora-progressive-programs="v1" */
 
+    /* NEXORA guided goal plan v1 — reuse approved exercise/form patterns */
+    #goalsPlan .goal-plan-shell{max-width:760px;margin:0 auto}
+    #goalsPlan .goal-plan-back{margin:0 0 10px;padding:9px 12px;font-size:13px}
+    #goalsPlan .goal-plan-card{padding:clamp(22px,5vw,42px)}
+    #goalsPlan .goal-plan-step-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+    #goalsPlan .goal-plan-step-row .tiny{font-weight:800}
+    #goalsPlan .goal-plan-progress{margin:0 0 24px}
+    #goalsPlan .goal-plan-card h1{font-size:clamp(35px,7vw,56px);line-height:1.02;letter-spacing:-.05em;margin:8px 0 14px}
+    #goalsPlan .goal-plan-help{font-size:17px;line-height:1.6;margin-bottom:20px}
+    #goalsPlan .goal-plan-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+    #goalsPlan .goal-plan-actions .primary{min-width:160px}
+    #goalsPlan .goal-plan-date-input{width:100%;border:1px solid #dcd4c8;background:#fff;color:var(--ink);border-radius:16px;padding:14px;outline:none}
+    #goalsPlan .goal-plan-date-input:focus{border-color:#ba8b50;box-shadow:0 0 0 3px rgba(199,146,79,.12)}
+    #goalsPlan .goal-plan-horizon-switch{margin:4px 0 16px}
+    #goalsPlan .goal-plan-summary .q{padding:15px 0}
+    #goalsPlan .goal-plan-summary .q:first-child{border-top:0;padding-top:0}
+    #goalsPlan .goal-plan-summary-value{color:var(--ink2);line-height:1.55;margin:6px 0 0;white-space:pre-wrap}
+    #goalsPlan .goal-plan-summary-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+    #goalsPlan .goal-plan-resume{margin:0 0 16px;padding:11px 13px;border-radius:13px;background:#f3eee6;color:var(--ink2);font-size:13px;line-height:1.45}
+    #goalsPlan .goal-plan-first-step-ref{margin:0 0 15px;padding:13px 14px;border-radius:14px;background:#faf7f2;border:1px solid var(--line)}
+    #goalsPlan .goal-plan-first-step-ref b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a4b28;margin-bottom:5px}
+    #goalsPlan .goal-plan-first-step-ref p{margin:0;color:var(--ink2);line-height:1.5}
+    #goalsPlan .completebox{margin-top:0}
+    html[data-theme="dark"] #goalsPlan .goal-plan-date-input{background:#171e28;color:#edf1f6;border-color:#344050}
+    html[data-theme="dark"] #goalsPlan .goal-plan-resume,
+    html[data-theme="dark"] #goalsPlan .goal-plan-first-step-ref{background:#202a38;border-color:#344050;color:#d7dde6}
+    html[data-theme="dark"] #goalsPlan .goal-plan-first-step-ref p{color:#d7dde6}
+    @media(max-width:700px){
+      #goalsPlan .goal-plan-card{padding:24px 18px 28px}
+      #goalsPlan .goal-plan-card h1{font-size:35px}
+      #goalsPlan .goal-plan-help{font-size:16px;line-height:1.52}
+      #goalsPlan textarea{font-size:16px;line-height:1.55;min-height:125px}
+      #goalsPlan .goal-plan-actions{display:grid;grid-template-columns:1fr}
+      #goalsPlan .goal-plan-actions .primary,
+      #goalsPlan .goal-plan-actions .ghost{width:100%}
+      #goalsPlan .goal-plan-horizon-switch{display:grid;grid-template-columns:1fr}
+    }
+    /* data-nexora-goal-plan="v1" */
+
+
+
     /* NEXORA premium bottom navigation v1 */
     .bottomnav{
       width:min(720px,calc(100% - 32px));
@@ -2573,16 +2614,11 @@ body.modal-open{overflow:hidden}
       </section>
 
       <section id="goalsPlan" class="view">
-        <button class="ghost path-back" type="button" onclick="goHome()">← <span id="goalsPlanBack">Volver</span></button>
-        <div class="card" style="max-width:760px;margin:0 auto;padding:clamp(22px,5vw,38px)">
-          <div class="eyebrow" id="goalsPlanEyebrow">PLAN GUIADO</div>
-          <h1 id="goalsPlanTitle" style="margin:6px 0 12px">Alcanza tus objetivos</h1>
-          <p class="lead" id="goalsPlanIntro" style="margin-bottom:22px">Primero vamos a aclarar qué quieres lograr. Después convertiremos ese objetivo en pasos concretos que puedas sostener.</p>
-          <div class="practice-context" style="margin-bottom:22px">
-            <div class="practice-context-left"><span class="practice-kind" id="goalsPlanStepLabel">PRIMER PASO</span></div>
-            <p id="goalsPlanStepText">Elegir un objetivo que realmente importe y definirlo con claridad.</p>
-          </div>
-          <button class="primary" type="button" id="goalsPlanStartBtn" onclick="toast(goalsPlanCopy().next)">Comenzar →</button>
+        <div class="exercise-shell goal-plan-shell">
+          <button class="ghost path-back goal-plan-back" id="goalsPlanBackBtn" type="button" onclick="goalPlanBack()">← <span id="goalsPlanBack">Volver</span></button>
+          <article class="exercise-card goal-plan-card" id="goalPlanCard">
+            <div id="goalPlanContent"></div>
+          </article>
         </div>
       </section>
 
@@ -2952,7 +2988,7 @@ function updateAccountUI(){document.body.classList.toggle('nexora-returning-user
 function openAccount(){openAccountFor(currentSession?'login':'signup')}
 function openAccountFor(mode='signup',action=null){pendingAccountAction=action;const title=document.getElementById('accountModalTitle');if(title)title.textContent=action?'Crea tu cuenta para continuar':'Tu espacio personal en NEXORA';openModal('accountModal');renderAccountModal();if(!currentSession)switchAuth(mode)}
 function requireAccount(action){openAccountFor('signup',action);return false}
-function runPendingAccountAction(){const action=pendingAccountAction;pendingAccountAction=null;if(!action)return;if(action==='beginProgram')beginProgram();else if(action==='today')startToday();else if(action==='history')showView('history');else if(action==='progress')showView('progress')}
+function runPendingAccountAction(){const action=pendingAccountAction;pendingAccountAction=null;if(!action)return;if(action==='beginProgram')beginProgram();else if(action==='beginGoalPlan')beginGoalPlan();else if(action==='today')startToday();else if(action==='history')showView('history');else if(action==='progress')showView('progress')}
 function renderAccountModal(){const auth=document.getElementById('authBox'),profile=document.getElementById('profileBox');if(currentSession){auth.style.display='none';profile.classList.add('active');document.getElementById('profileName').textContent=currentSession.name;document.getElementById('profileEmail').textContent=currentSession.email;document.getElementById('profileAvatar').textContent=currentSession.name.trim().charAt(0).toUpperCase()||'N'}else{auth.style.display='block';profile.classList.remove('active')}}
 function switchAuth(mode){document.getElementById('loginTab').classList.toggle('active',mode==='login');document.getElementById('signupTab').classList.toggle('active',mode==='signup');document.getElementById('loginPane').classList.toggle('active',mode==='login');document.getElementById('signupPane').classList.toggle('active',mode==='signup');const rp=document.getElementById('resetPane'),np=document.getElementById('newPasswordPane');if(rp)rp.classList.toggle('active',mode==='reset');if(np)np.classList.toggle('active',mode==='newpassword');const tabs=document.querySelector('.auth-tabs');if(tabs)tabs.style.display=(mode==='reset'||mode==='newpassword')?'none':''}
 async function createDemoAccount(){const name=document.getElementById('signupName').value.trim(),email=document.getElementById('signupEmail').value.trim().toLowerCase(),password=document.getElementById('signupPassword').value;if(!name||!email.includes('@')||password.length<6){toast('Completa nombre, correo válido y una contraseña de 6 caracteres.');return}const all=accounts();if(all[email]){toast('Ya existe una cuenta de prueba con ese correo.');return}all[email]={name,email,passwordHash:await hashPassword(password),createdAt:new Date().toISOString()};localStorage.setItem(ACCOUNT_KEY,JSON.stringify(all));localStorage.setItem(userStateKey(email),JSON.stringify(appState));currentSession={name,email};localStorage.setItem(SESSION_KEY,JSON.stringify(currentSession));appState=JSON.parse(localStorage.getItem(userStateKey())||'null')||defaultAppState();save();updateAccountUI();renderAll();closeModal('accountModal');toast('Cuenta creada. Tu experiencia personal ya está desbloqueada.');setTimeout(runPendingAccountAction,220)}
@@ -7966,6 +8002,9 @@ function nexoraWriteViewHistory(id,mode='push'){
 function showView(id,btn,historyMode='push'){
   if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);
   const previous=document.querySelector('.view.active')?.id||'home';
+  if(previous==='goalsPlan'&&id!=='goalsPlan'){
+    try{goalPlanCaptureCurrent();if(goalPlanState){saveGoalPlanLocal(false);goalPlanQueueRemoteSync(true)}}catch{}
+  }
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
@@ -7973,6 +8012,7 @@ function showView(id,btn,historyMode='push'){
   if(id==='home'){restoreExperienceItems();renderHome();}
   if(id==='experienceHub')restoreExperienceItems();
   if(id==='experienceCategory'&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory);
+  if(id==='goalsPlan')renderGoalsPlan();
   if(id==='history'){historyProgramId=null;renderHistory();}
   if(id==='progress')renderProgress();
   if(id==='help')renderFeedback();
@@ -8018,6 +8058,16 @@ window.addEventListener('popstate',event=>{
   }
   const requested=event.state?.nexoraView;
   if(!requested)return;
+  if(requested==='goalsPlan'&&event.state?.nexoraGoalMode){
+    nexoraHandlingPopState=true;
+    closeOpenModal();
+    previewDay=null;
+    journeyOpen=false;
+    showView('goalsPlan',null,'none');
+    goalPlanRestoreHistoryState(event.state);
+    nexoraHandlingPopState=false;
+    return;
+  }
   const target=(!currentSession&&['today','history','progress'].includes(requested))?'home':requested;
   if(!document.getElementById(target))return;
   nexoraHandlingPopState=true;
@@ -8102,17 +8152,600 @@ document.addEventListener('visibilitychange',()=>{if(document.visibilityState===
 function goalsPlanCopy(){
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   return ({
-    es:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',card:'Convierte un objetivo importante en un plan claro y avanza paso a paso.',kind:'PERSONALIZACIÓN INICIAL',status:'Explorar',back:'Volver',intro:'Primero vamos a aclarar qué quieres lograr. Después convertiremos ese objetivo en pasos concretos que puedas sostener.',step:'PRIMER PASO',stepText:'Elegir un objetivo que realmente importe y definirlo con claridad.',start:'Comenzar →',next:'El siguiente bloque construirá la definición de tu objetivo.'},
-    en:{kicker:'GUIDED PLAN',title:'Reach your goals',card:'Turn an important goal into a clear plan and move forward step by step.',kind:'INITIAL PERSONALIZATION',status:'Explore',back:'Back',intro:'First, we’ll clarify what you want to achieve. Then we’ll turn that goal into concrete steps you can sustain.',step:'FIRST STEP',stepText:'Choose a goal that truly matters and define it clearly.',start:'Get started →',next:'The next block will build your goal definition.'},
-    fr:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',card:'Transformez un objectif important en un plan clair et avancez étape par étape.',kind:'PERSONNALISATION INITIALE',status:'Découvrir',back:'Retour',intro:'Nous allons d’abord clarifier ce que vous souhaitez accomplir. Ensuite, nous transformerons cet objectif en étapes concrètes que vous pourrez maintenir.',step:'PREMIÈRE ÉTAPE',stepText:'Choisir un objectif qui compte vraiment pour vous et le définir clairement.',start:'Commencer →',next:'Le prochain bloc permettra de définir votre objectif.'}
+    es:{
+      card:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',card:'Convierte un objetivo importante en un plan claro y avanza paso a paso.',kind:'PERSONALIZACIÓN INICIAL'},
+      back:'Volver',
+      intro:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',text:'Convierte algo importante para ti en un objetivo claro y en un primer paso que puedas poner en práctica.',support:'No necesitas tener todo resuelto. Te guiaremos una pregunta a la vez.',start:'Comenzar →'},
+      stepLabel:n=>\`Paso \${n} de 8\`,
+      continue:'Continuar →',review:'Ver resumen →',
+      resume:'Continuamos donde lo dejaste.',
+      steps:{
+        1:{kicker:'OBJETIVO',question:'¿Qué quieres lograr?',help:'Piensa en un cambio o resultado que puedas reconocer en tu vida real. Escríbelo con tus propias palabras.',placeholder:'Ej.: Terminar mi certificación profesional.',validation:'Escribe un objetivo para continuar.'},
+        2:{kicker:'POR QUÉ IMPORTA',question:'¿Por qué esto importa para ti ahora?',help:'Escribe una razón que sea tuya. No tiene que sonar perfecta ni profunda; tiene que tener sentido para ti.',placeholder:'Ej.: Porque quiero abrirme más oportunidades laborales y demostrarme que puedo terminar lo que empiezo.',validation:'Escribe por qué este objetivo importa para ti.'},
+        3:{kicker:'EVIDENCIA',question:'¿Cómo sabrás que estás avanzando?',help:'Describe señales que puedas observar: algo que haces, terminas, mantienes o que cambia en tu vida real.',placeholder:'Ej.: Estudio cuatro días por semana, completo los módulos pendientes y presento el examen.',validation:'Escribe al menos una señal observable de avance.'},
+        4:{kicker:'HORIZONTE',question:'¿Tiene una fecha objetivo o es un proceso continuo?',help:'Si tiene una fecha clara, selecciónala. Si es un cambio continuo, elige cuándo quieres revisar tu avance.',target:'Tiene una fecha objetivo',targetField:'Fecha objetivo',ongoing:'Es un proceso continuo',reviewField:'Próxima revisión',choose:'Elige una opción para continuar.',dateValidation:'Selecciona una fecha.',past:'La fecha no puede ser anterior a hoy.'},
+        5:{kicker:'OBSTÁCULO',question:'¿Qué es lo más probable que te frene?',help:'Piensa en una dificultad real que suele aparecer: falta de tiempo, cansancio, distracciones, miedo, desorganización u otra barrera concreta.',placeholder:'Ej.: Llego cansado del trabajo y termino posponiendo el estudio.',validation:'Escribe el obstáculo principal que quieres tener en cuenta.'},
+        6:{kicker:'PRIMER PASO',question:'¿Cuál es el primer paso pequeño que puedes hacer?',help:'Debe ser una acción que puedas completar, no otra meta general. Hazla lo bastante pequeña como para poder empezar.',placeholder:'Ej.: Abrir el módulo 3 y estudiar durante 20 minutos.',validation:'Escribe una primera acción concreta.'},
+        7:{kicker:'MOMENTO DE INICIO',question:'¿Cuándo y dónde harás ese primer paso?',help:'Vincúlalo a un momento, lugar o señal concreta. Cuanto más claro sea el punto de inicio, menos tendrás que decidir en el momento.',placeholder:'Ej.: Mañana, después de cenar, en mi escritorio.',validation:'Define cuándo, dónde o después de qué señal empezarás.',firstStep:'Tu primer paso'}
+      },
+      summary:{kicker:'TU PLAN',title:'Este es tu punto de partida',help:'Revísalo antes de guardarlo. Puedes editar cualquier parte.',labels:['Objetivo','Por qué importa','Evidencia de avance','Horizonte','Obstáculo principal','Primer paso','Cuándo y dónde'],edit:'Editar',save:'Guardar objetivo →',saveError:'No pudimos guardar tu objetivo. Tus respuestas siguen aquí; inténtalo de nuevo.',saved:'Objetivo guardado. Ya tienes un punto de partida claro.'},
+      active:{kicker:'OBJETIVO ACTIVO',title:'Ya tienes un punto de partida claro',text:'Guardamos tu objetivo, la evidencia que quieres observar y tu primer paso. Podrás volver a editarlo cuando lo necesites.',view:'Ver mi objetivo →',back:'Volver a Objetivos'},
+      statuses:{none:'Explorar',draft:'Continuar',active:'Activo',paused:'En pausa',completed:'Completado'}
+    },
+    en:{
+      card:{kicker:'GUIDED PLAN',title:'Reach your goals',card:'Turn an important goal into a clear plan and move forward step by step.',kind:'INITIAL PERSONALIZATION'},
+      back:'Back',
+      intro:{kicker:'GUIDED PLAN',title:'Reach your goals',text:'Turn something that matters to you into a clear goal and a first step you can put into practice.',support:'You do not need to have everything figured out. We will guide you one question at a time.',start:'Get started →'},
+      stepLabel:n=>\`Step \${n} of 8\`,
+      continue:'Continue →',review:'Review goal →',
+      resume:'Picking up where you left off.',
+      steps:{
+        1:{kicker:'GOAL',question:'What do you want to achieve?',help:'Think of a change or result you would be able to recognize in real life. Write it in your own words.',placeholder:'e.g., Finish my professional certification.',validation:'Enter a goal to continue.'},
+        2:{kicker:'WHY IT MATTERS',question:'Why does this matter to you right now?',help:'Write a reason that feels true to you. It does not have to sound perfect or profound; it needs to matter to you.',placeholder:'e.g., Because I want more career opportunities and I want to prove to myself that I can finish what I start.',validation:'Tell us why this goal matters to you.'},
+        3:{kicker:'EVIDENCE',question:'How will you know you are making progress?',help:'Describe signs you can observe: something you do, finish, maintain, or notice changing in real life.',placeholder:'e.g., I study four days a week, complete the remaining modules, and take the exam.',validation:'Enter at least one observable sign of progress.'},
+        4:{kicker:'TIMELINE',question:'Does this goal have a target date, or is it an ongoing process?',help:'If it has a clear deadline, choose it. If it is ongoing, choose when you want to review your progress.',target:'It has a target date',targetField:'Target date',ongoing:'It is an ongoing process',reviewField:'Next review',choose:'Choose an option to continue.',dateValidation:'Select a date.',past:'The date cannot be earlier than today.'},
+        5:{kicker:'OBSTACLE',question:'What is most likely to get in your way?',help:'Think of a real difficulty that tends to show up: lack of time, fatigue, distractions, fear, disorganization, or another specific barrier.',placeholder:'e.g., I get home tired from work and end up putting off studying.',validation:'Enter the main obstacle you want to account for.'},
+        6:{kicker:'FIRST STEP',question:'What is one small first step you can take?',help:'Make it an action you can complete, not another broad goal. Keep it small enough to start.',placeholder:'e.g., Open module 3 and study for 20 minutes.',validation:'Enter one concrete first action.'},
+        7:{kicker:'WHEN YOU WILL START',question:'When and where will you take that first step?',help:'Tie it to a specific time, place, or cue. The clearer the starting point, the less you will have to decide in the moment.',placeholder:'e.g., Tomorrow, after dinner, at my desk.',validation:'Define when, where, or after what cue you will start.',firstStep:'Your first step'}
+      },
+      summary:{kicker:'YOUR PLAN',title:'This is your starting point',help:'Review it before saving. You can edit any part.',labels:['Goal','Why it matters','Evidence of progress','Timeline','Main obstacle','First step','When and where'],edit:'Edit',save:'Save goal →',saveError:'We could not save your goal. Your answers are still here; please try again.',saved:'Goal saved. You now have a clear starting point.'},
+      active:{kicker:'ACTIVE GOAL',title:'You now have a clear starting point',text:'We saved your goal, the evidence you want to look for, and your first step. You can come back and edit it whenever you need to.',view:'View my goal →',back:'Back to Goals'},
+      statuses:{none:'Explore',draft:'Continue',active:'Active',paused:'Paused',completed:'Completed'}
+    },
+    fr:{
+      card:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',card:'Transformez un objectif important en un plan clair et avancez étape par étape.',kind:'PERSONNALISATION INITIALE'},
+      back:'Retour',
+      intro:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',text:'Transformez quelque chose qui compte pour vous en un objectif clair et en un premier pas que vous pouvez mettre en pratique.',support:'Vous n’avez pas besoin d’avoir tout défini. Nous vous guiderons, une question à la fois.',start:'Commencer →'},
+      stepLabel:n=>\`Étape \${n} sur 8\`,
+      continue:'Continuer →',review:'Voir le résumé →',
+      resume:'Reprenons là où vous vous étiez arrêté.',
+      steps:{
+        1:{kicker:'OBJECTIF',question:'Que souhaitez-vous accomplir ?',help:'Pensez à un changement ou à un résultat que vous pourriez reconnaître dans votre vie réelle. Écrivez-le avec vos propres mots.',placeholder:'Ex. : Terminer ma certification professionnelle.',validation:'Écrivez un objectif pour continuer.'},
+        2:{kicker:'POURQUOI C’EST IMPORTANT',question:'Pourquoi est-ce important pour vous en ce moment ?',help:'Écrivez une raison qui vous appartient. Elle n’a pas besoin d’être parfaite ni profonde ; elle doit surtout avoir du sens pour vous.',placeholder:'Ex. : Parce que je veux élargir mes possibilités professionnelles et me prouver que je peux aller au bout de ce que je commence.',validation:'Expliquez pourquoi cet objectif compte pour vous.'},
+        3:{kicker:'PREUVES',question:'Comment saurez-vous que vous progressez ?',help:'Décrivez des signes observables : quelque chose que vous faites, terminez, maintenez ou voyez changer dans votre vie réelle.',placeholder:'Ex. : J’étudie quatre jours par semaine, je termine les modules restants et je passe l’examen.',validation:'Indiquez au moins un signe observable de progrès.'},
+        4:{kicker:'HORIZON',question:'Cet objectif a-t-il une date cible ou s’agit-il d’un processus continu ?',help:'S’il a une échéance claire, choisissez-la. S’il s’agit d’un processus continu, choisissez quand vous souhaitez faire le point sur vos progrès.',target:'Il a une date cible',targetField:'Date cible',ongoing:'Il s’agit d’un processus continu',reviewField:'Prochain bilan',choose:'Choisissez une option pour continuer.',dateValidation:'Sélectionnez une date.',past:'La date ne peut pas être antérieure à aujourd’hui.'},
+        5:{kicker:'OBSTACLE',question:'Qu’est-ce qui risque le plus de vous freiner ?',help:'Pensez à une difficulté réelle qui revient souvent : manque de temps, fatigue, distractions, peur, désorganisation ou autre obstacle concret.',placeholder:'Ex. : Je rentre fatigué du travail et je finis par repousser mes séances d’étude.',validation:'Indiquez le principal obstacle que vous souhaitez prendre en compte.'},
+        6:{kicker:'PREMIER PAS',question:'Quel petit premier pas pouvez-vous faire ?',help:'Choisissez une action que vous pouvez accomplir, pas un nouvel objectif général. Faites-la assez petite pour pouvoir commencer.',placeholder:'Ex. : Ouvrir le module 3 et étudier pendant 20 minutes.',validation:'Indiquez une première action concrète.'},
+        7:{kicker:'QUAND COMMENCER',question:'Quand et où ferez-vous ce premier pas ?',help:'Associez-le à un moment, un lieu ou un déclencheur concret. Plus le point de départ est clair, moins vous aurez à décider sur le moment.',placeholder:'Ex. : Demain, après le dîner, à mon bureau.',validation:'Précisez quand, où ou après quel déclencheur vous commencerez.',firstStep:'Votre premier pas'}
+      },
+      summary:{kicker:'VOTRE PLAN',title:'Voici votre point de départ',help:'Relisez-le avant de l’enregistrer. Vous pouvez modifier chaque partie.',labels:['Objectif','Pourquoi c’est important','Preuves de progrès','Horizon','Principal obstacle','Premier pas','Quand et où'],edit:'Modifier',save:'Enregistrer l’objectif →',saveError:'Nous n’avons pas pu enregistrer votre objectif. Vos réponses sont toujours ici ; réessayez.',saved:'Objectif enregistré. Vous avez maintenant un point de départ clair.'},
+      active:{kicker:'OBJECTIF ACTIF',title:'Vous avez maintenant un point de départ clair',text:'Nous avons enregistré votre objectif, les preuves que vous souhaitez observer et votre premier pas. Vous pourrez revenir le modifier quand vous en aurez besoin.',view:'Voir mon objectif →',back:'Retour aux objectifs'},
+      statuses:{none:'Découvrir',draft:'Continuer',active:'Actif',paused:'En pause',completed:'Terminé'}
+    }
   })[lang]||null;
 }
-function renderGoalsPlan(){
+
+let goalPlanState=null;
+let goalPlanMode='intro';
+let goalPlanStep=1;
+let goalPlanEditingFromSummary=false;
+let goalPlanResumeNotice=false;
+let goalPlanJustActivated=false;
+let goalPlanSyncTimer=null;
+
+function defaultGoalPlanState(){
+  return {
+    version:1,status:'draft',currentStep:1,
+    goalText:'',whyText:'',evidenceText:'',
+    horizonType:'',targetDate:'',reviewDate:'',
+    obstacleText:'',firstStepText:'',startContextText:'',
+    activatedAt:null,updatedAt:new Date().toISOString(),
+    lastRemoteUpdatedAt:null,dirty:true
+  };
+}
+function goalPlanLocalKey(id=currentSession?.id){
+  return id?\`nexora_goal_plan_v1_\${id}\`:null;
+}
+function loadGoalPlanLocal(id=currentSession?.id){
+  const key=goalPlanLocalKey(id); if(!key)return null;
+  try{
+    const raw=JSON.parse(localStorage.getItem(key)||'null');
+    return raw&&raw.version===1?{...defaultGoalPlanState(),...raw}:null;
+  }catch{return null}
+}
+function saveGoalPlanLocal(touch=true){
+  const key=goalPlanLocalKey(); if(!key||!goalPlanState)return;
+  if(touch){
+    goalPlanState.updatedAt=new Date().toISOString();
+    goalPlanState.dirty=true;
+  }
+  localStorage.setItem(key,JSON.stringify(goalPlanState));
+  renderGoalPlanCardState();
+}
+function goalPlanRemoteToLocal(row){
+  if(!row)return null;
+  return {
+    version:1,
+    status:row.status||'draft',
+    currentStep:Math.max(1,Math.min(8,row.current_step||1)),
+    goalText:row.goal_text||'',
+    whyText:row.why_text||'',
+    evidenceText:row.evidence_text||'',
+    horizonType:row.horizon_type||'',
+    targetDate:row.target_date||'',
+    reviewDate:row.review_date||'',
+    obstacleText:row.obstacle_text||'',
+    firstStepText:row.first_step_text||'',
+    startContextText:row.start_context_text||'',
+    activatedAt:row.activated_at||null,
+    updatedAt:row.updated_at||row.created_at||new Date().toISOString(),
+    lastRemoteUpdatedAt:row.updated_at||row.created_at||null,
+    dirty:false
+  };
+}
+function goalPlanRemotePayload(){
+  if(!goalPlanState||!currentSession?.id)return null;
+  return {
+    user_id:currentSession.id,
+    status:goalPlanState.status||'draft',
+    current_step:Math.max(1,Math.min(8,goalPlanState.currentStep||1)),
+    goal_text:goalPlanState.goalText||null,
+    why_text:goalPlanState.whyText||null,
+    evidence_text:goalPlanState.evidenceText||null,
+    horizon_type:goalPlanState.horizonType||null,
+    target_date:goalPlanState.horizonType==='target_date'?(goalPlanState.targetDate||null):null,
+    review_date:goalPlanState.horizonType==='ongoing'?(goalPlanState.reviewDate||null):null,
+    obstacle_text:goalPlanState.obstacleText||null,
+    first_step_text:goalPlanState.firstStepText||null,
+    start_context_text:goalPlanState.startContextText||null,
+    activated_at:goalPlanState.activatedAt||null
+  };
+}
+async function nexoraSyncGoalPlanRemote(){
+  if(!currentSession?.id||!goalPlanState)return false;
+  const sessionId=currentSession.id;
+  const payload=goalPlanRemotePayload();
+  if(!payload)return false;
+  try{
+    const {data,error}=await nexoraDb.from('goal_plans')
+      .upsert(payload,{onConflict:'user_id'})
+      .select('*')
+      .single();
+    if(error)throw error;
+    if(currentSession?.id!==sessionId)return false;
+    const remote=goalPlanRemoteToLocal(data);
+    goalPlanState={...goalPlanState,...remote,dirty:false};
+    saveGoalPlanLocal(false);
+    return true;
+  }catch(error){
+    if(goalPlanState)goalPlanState.dirty=true;
+    try{saveGoalPlanLocal(false)}catch{}
+    return false;
+  }
+}
+function goalPlanQueueRemoteSync(immediate=false){
+  if(!currentSession?.id||!goalPlanState)return;
+  clearTimeout(goalPlanSyncTimer);
+  goalPlanSyncTimer=setTimeout(()=>nexoraSyncGoalPlanRemote().catch(()=>{}),immediate?0:850);
+}
+async function nexoraHydrateGoalPlanRemote(){
+  if(!currentSession?.id)return;
+  const sessionId=currentSession.id;
+  const local=loadGoalPlanLocal(sessionId);
+  try{
+    const {data,error}=await nexoraDb.from('goal_plans').select('*').eq('user_id',sessionId).maybeSingle();
+    if(error)throw error;
+    if(currentSession?.id!==sessionId)return;
+    const remote=goalPlanRemoteToLocal(data);
+    if(local?.dirty){
+      goalPlanState=local;
+      await nexoraSyncGoalPlanRemote();
+    }else if(remote){
+      const remoteTime=Date.parse(remote.updatedAt||0)||0;
+      const localTime=Date.parse(local?.updatedAt||0)||0;
+      if(!local||remoteTime>=localTime){
+        goalPlanState=remote;
+        saveGoalPlanLocal(false);
+      }else{
+        goalPlanState={...local,dirty:true};
+        await nexoraSyncGoalPlanRemote();
+      }
+    }else if(local){
+      goalPlanState={...local,dirty:true};
+      await nexoraSyncGoalPlanRemote();
+    }else{
+      goalPlanState=null;
+    }
+  }catch{
+    goalPlanState=local||goalPlanState;
+  }
+  renderGoalPlanCardState();
+  if(document.querySelector('.view.active')?.id==='goalsPlan'){
+    if(goalPlanState?.status==='active'&&!goalPlanJustActivated)goalPlanMode='activeSummary';
+    else if(goalPlanState?.status==='draft'&&goalPlanMode==='intro'){
+      goalPlanMode='step';
+      goalPlanStep=Math.max(1,Math.min(8,goalPlanState.currentStep||1));
+      goalPlanResumeNotice=true;
+    }
+    renderGoalsPlan();
+  }
+}
+function goalPlanEnsureLocal(){
+  if(!currentSession?.id){goalPlanState=null;return null}
+  if(!goalPlanState)goalPlanState=loadGoalPlanLocal();
+  return goalPlanState;
+}
+function renderGoalPlanCardState(){
   const x=goalsPlanCopy(); if(!x)return;
-  const map={goalsPlanKicker:x.kicker,goalsPlanCardTitle:x.title,goalsPlanCardText:x.card,goalsPlanKind:x.kind,goalsPlanStatus:x.status,goalsPlanBack:x.back,goalsPlanEyebrow:x.kicker,goalsPlanTitle:x.title,goalsPlanIntro:x.intro,goalsPlanStepLabel:x.step,goalsPlanStepText:x.stepText,goalsPlanStartBtn:x.start};
+  const state=currentSession?goalPlanEnsureLocal():null;
+  const statusKey=state?.status||'none';
+  const map={
+    goalsPlanKicker:x.card.kicker,
+    goalsPlanCardTitle:x.card.title,
+    goalsPlanCardText:x.card.card,
+    goalsPlanKind:x.card.kind,
+    goalsPlanStatus:x.statuses[statusKey]||x.statuses.none
+  };
   Object.entries(map).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value});
 }
-function openGoalsPlan(){renderGoalsPlan();showView('goalsPlan')}
+function goalPlanStepValue(step){
+  if(!goalPlanState)return '';
+  return ({
+    1:goalPlanState.goalText,
+    2:goalPlanState.whyText,
+    3:goalPlanState.evidenceText,
+    5:goalPlanState.obstacleText,
+    6:goalPlanState.firstStepText,
+    7:goalPlanState.startContextText
+  })[step]||'';
+}
+function goalPlanSetStepValue(step,value){
+  if(!goalPlanState)return;
+  const key=({1:'goalText',2:'whyText',3:'evidenceText',5:'obstacleText',6:'firstStepText',7:'startContextText'})[step];
+  if(key)goalPlanState[key]=value;
+}
+function goalPlanCaptureCurrent(){
+  if(!goalPlanState||goalPlanMode!=='step')return;
+  if(goalPlanStep===4){
+    const date=document.getElementById('goalPlanDate');
+    if(date){
+      if(goalPlanState.horizonType==='target_date')goalPlanState.targetDate=date.value||'';
+      if(goalPlanState.horizonType==='ongoing')goalPlanState.reviewDate=date.value||'';
+    }
+    return;
+  }
+  const field=document.getElementById('goalPlanAnswer');
+  if(field)goalPlanSetStepValue(goalPlanStep,field.value);
+}
+function goalPlanOnInput(){
+  goalPlanCaptureCurrent();
+  saveGoalPlanLocal(true);
+  goalPlanQueueRemoteSync(false);
+}
+function goalPlanTodayString(){
+  const d=new Date();
+  return \`\${d.getFullYear()}-\${String(d.getMonth()+1).padStart(2,'0')}-\${String(d.getDate()).padStart(2,'0')}\`;
+}
+function goalPlanValidateStep(step){
+  const x=goalsPlanCopy(),copy=x.steps[step];
+  if(step===4){
+    if(!goalPlanState?.horizonType){toast(copy.choose);return false}
+    const value=goalPlanState.horizonType==='target_date'?goalPlanState.targetDate:goalPlanState.reviewDate;
+    if(!value){toast(copy.dateValidation);document.getElementById('goalPlanDate')?.focus();return false}
+    if(value<goalPlanTodayString()){toast(copy.past);document.getElementById('goalPlanDate')?.focus();return false}
+    return true;
+  }
+  const field=document.getElementById('goalPlanAnswer');
+  const value=(goalPlanStepValue(step)||'').trim();
+  if(!value){
+    toast(copy.validation);
+    field?.focus();
+    return false;
+  }
+  return true;
+}
+function goalPlanHistoryPayload(mode=goalPlanMode,step=goalPlanStep,edit=goalPlanEditingFromSummary){
+  return {...(history.state||{}),nexoraView:'goalsPlan',nexoraGoalMode:mode,nexoraGoalStep:step,nexoraGoalEdit:!!edit,nexoraExitRoot:false,nexoraExitGuard:false};
+}
+function goalPlanWriteHistory(mode='replace'){
+  if(nexoraHandlingPopState)return;
+  const state=goalPlanHistoryPayload();
+  if(mode==='push')history.pushState(state,document.title,location.href);
+  else history.replaceState(state,document.title,location.href);
+}
+function goalPlanSeedResumeHistory(step){
+  if(nexoraHandlingPopState)return;
+  history.replaceState(goalPlanHistoryPayload('intro',1,false),document.title,location.href);
+  for(let n=1;n<=step;n++){
+    history.pushState(goalPlanHistoryPayload('step',n,false),document.title,location.href);
+  }
+}
+function goalPlanRestoreHistoryState(state){
+  goalPlanEnsureLocal();
+  const requestedMode=state?.nexoraGoalMode||'intro';
+  goalPlanEditingFromSummary=!!state?.nexoraGoalEdit;
+  if(goalPlanState?.status==='active'&&requestedMode!=='intro'){
+    goalPlanMode='activeSummary';
+    goalPlanStep=8;
+  }else{
+    goalPlanMode=requestedMode;
+    goalPlanStep=Math.max(1,Math.min(8,state?.nexoraGoalStep||goalPlanState?.currentStep||1));
+  }
+  renderGoalsPlan();
+}
+function goalPlanFormatDate(value){
+  if(!value)return '';
+  try{return new Date(value+'T12:00:00').toLocaleDateString(typeof nexoraLocale==='function'?nexoraLocale():undefined,{year:'numeric',month:'short',day:'numeric'})}catch{return value}
+}
+function goalPlanHorizonText(){
+  if(!goalPlanState)return '';
+  const x=goalsPlanCopy(),s=x.steps[4];
+  if(goalPlanState.horizonType==='target_date')return \`\${s.targetField}: \${goalPlanFormatDate(goalPlanState.targetDate)}\`;
+  if(goalPlanState.horizonType==='ongoing')return \`\${s.reviewField}: \${goalPlanFormatDate(goalPlanState.reviewDate)}\`;
+  return '';
+}
+function goalPlanSummaryValues(){
+  return [
+    goalPlanState?.goalText||'',
+    goalPlanState?.whyText||'',
+    goalPlanState?.evidenceText||'',
+    goalPlanHorizonText(),
+    goalPlanState?.obstacleText||'',
+    goalPlanState?.firstStepText||'',
+    goalPlanState?.startContextText||''
+  ];
+}
+function goalPlanAllValid(){
+  if(!goalPlanState)return false;
+  const required=[goalPlanState.goalText,goalPlanState.whyText,goalPlanState.evidenceText,goalPlanState.obstacleText,goalPlanState.firstStepText,goalPlanState.startContextText];
+  if(required.some(v=>!String(v||'').trim()))return false;
+  if(!goalPlanState.horizonType)return false;
+  const d=goalPlanState.horizonType==='target_date'?goalPlanState.targetDate:goalPlanState.reviewDate;
+  return !!d&&d>=goalPlanTodayString();
+}
+function renderGoalsPlan(){
+  renderGoalPlanCardState();
+  const root=document.getElementById('goalPlanContent');
+  const back=document.getElementById('goalsPlanBack');
+  if(!root)return;
+  const x=goalsPlanCopy(); if(!x)return;
+  if(back)back.textContent=x.back;
+
+  if(goalPlanMode==='intro'||!currentSession&&goalPlanMode!=='step'){
+    root.innerHTML=\`
+      <div class="eyebrow">\${escapeHtml(x.intro.kicker)}</div>
+      <h1>\${escapeHtml(x.intro.title)}</h1>
+      <p class="lead goal-plan-help">\${escapeHtml(x.intro.text)}</p>
+      <div class="practice-context"><p>\${escapeHtml(x.intro.support)}</p></div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="beginGoalPlan()">\${escapeHtml(x.intro.start)}</button></div>\`;
+    return;
+  }
+
+  goalPlanEnsureLocal();
+
+  if(goalPlanJustActivated&&goalPlanState?.status==='active'){
+    root.innerHTML=\`
+      <div class="completebox">
+        <div class="eyebrow" style="color:#e7c890">\${escapeHtml(x.active.kicker)}</div>
+        <h3 style="font-size:26px;margin:0 0 9px">\${escapeHtml(x.active.title)}</h3>
+        <p>\${escapeHtml(x.active.text)}</p>
+        <div class="complete-actions">
+          <button class="primary" type="button" onclick="goalPlanShowActiveSummary()">\${escapeHtml(x.active.view)}</button>
+          <button class="ghost" type="button" style="color:#fff;border-color:rgba(255,255,255,.25)" onclick="goalPlanReturnToGoals()">\${escapeHtml(x.active.back)}</button>
+        </div>
+      </div>\`;
+    return;
+  }
+
+  if(goalPlanMode==='activeSummary'||goalPlanState?.status==='active'&&goalPlanMode!=='step'){
+    const values=goalPlanSummaryValues();
+    root.innerHTML=\`
+      <div class="eyebrow">\${escapeHtml(x.active.kicker)}</div>
+      <h1>\${escapeHtml(x.intro.title)}</h1>
+      <p class="muted goal-plan-help">\${escapeHtml(x.active.text)}</p>
+      <div class="goal-plan-summary">\${values.map((value,i)=>\`
+        <div class="q"><div class="goal-plan-summary-head"><b>\${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button" onclick="goalPlanEditStep(\${i+1>4?i+1:i+1})">\${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">\${escapeHtml(value)}</p></div>\`).join('')}</div>
+      <div class="goal-plan-actions"><button class="ghost" type="button" onclick="goalPlanReturnToGoals()">\${escapeHtml(x.active.back)}</button></div>\`;
+    // Summary index 4..6 does not map directly to steps because Horizon is step 4.
+    const buttons=root.querySelectorAll('.goal-plan-summary .examplebtn');
+    const stepMap=[1,2,3,4,5,6,7];
+    buttons.forEach((b,i)=>b.setAttribute('onclick',\`goalPlanEditStep(\${stepMap[i]})\`));
+    return;
+  }
+
+  if(goalPlanMode==='summary'){
+    const values=goalPlanSummaryValues();
+    root.innerHTML=\`
+      <div class="goal-plan-step-row"><span class="tiny">\${escapeHtml(x.stepLabel(8))}</span></div>
+      <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="8" aria-label="\${escapeHtml(x.stepLabel(8))}"><div style="width:100%"></div></div>
+      <div class="eyebrow">\${escapeHtml(x.summary.kicker)}</div>
+      <h1>\${escapeHtml(x.summary.title)}</h1>
+      <p class="muted goal-plan-help">\${escapeHtml(x.summary.help)}</p>
+      <div class="goal-plan-summary">\${values.map((value,i)=>\`
+        <div class="q"><div class="goal-plan-summary-head"><b>\${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button">\${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">\${escapeHtml(value)}</p></div>\`).join('')}</div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanActivate()">\${escapeHtml(x.summary.save)}</button></div>\`;
+    const buttons=root.querySelectorAll('.goal-plan-summary .examplebtn');
+    const stepMap=[1,2,3,4,5,6,7];
+    buttons.forEach((b,i)=>b.setAttribute('onclick',\`goalPlanEditStep(\${stepMap[i]})\`));
+    return;
+  }
+
+  const step=Math.max(1,Math.min(7,goalPlanStep||1));
+  goalPlanStep=step;
+  const copy=x.steps[step],pct=(step/8)*100;
+  let field='';
+  if(step===4){
+    const selected=goalPlanState?.horizonType||'';
+    const dateValue=selected==='target_date'?(goalPlanState?.targetDate||''):(selected==='ongoing'?(goalPlanState?.reviewDate||''):'');
+    field=\`
+      <div class="program-switch goal-plan-horizon-switch" role="group" aria-label="\${escapeHtml(copy.question)}">
+        <button type="button" class="switchbtn \${selected==='target_date'?'active':''}" aria-pressed="\${selected==='target_date'}" onclick="goalPlanSelectHorizon('target_date')">\${escapeHtml(copy.target)}</button>
+        <button type="button" class="switchbtn \${selected==='ongoing'?'active':''}" aria-pressed="\${selected==='ongoing'}" onclick="goalPlanSelectHorizon('ongoing')">\${escapeHtml(copy.ongoing)}</button>
+      </div>
+      \${selected?\`<div class="field"><label for="goalPlanDate">\${escapeHtml(selected==='target_date'?copy.targetField:copy.reviewField)}</label><input class="goal-plan-date-input" id="goalPlanDate" type="date" min="\${goalPlanTodayString()}" value="\${escapeHtml(dateValue)}" oninput="goalPlanOnInput()" onchange="goalPlanOnInput()"></div>\`:''}\`;
+  }else{
+    const ref=step===7?\`<div class="goal-plan-first-step-ref"><b>\${escapeHtml(copy.firstStep)}</b><p>\${escapeHtml(goalPlanState?.firstStepText||'')}</p></div>\`:'';
+    field=\`\${ref}<div class="field"><label for="goalPlanAnswer">\${escapeHtml(copy.question)}</label><textarea id="goalPlanAnswer" placeholder="\${escapeHtml(copy.placeholder)}" oninput="goalPlanOnInput()">\${escapeHtml(goalPlanStepValue(step))}</textarea></div>\`;
+  }
+  const resume=goalPlanResumeNotice?\`<div class="goal-plan-resume">\${escapeHtml(x.resume)}</div>\`:'';
+  root.innerHTML=\`
+    \${resume}
+    <div class="goal-plan-step-row"><span class="tiny">\${escapeHtml(x.stepLabel(step))}</span></div>
+    <div class="progressbar goal-plan-progress" role="progressbar" aria-valuemin="1" aria-valuemax="8" aria-valuenow="\${step}" aria-label="\${escapeHtml(x.stepLabel(step))}"><div style="width:\${pct}%"></div></div>
+    <div class="eyebrow">\${escapeHtml(copy.kicker)}</div>
+    <h1>\${escapeHtml(copy.question)}</h1>
+    <p class="muted goal-plan-help">\${escapeHtml(copy.help)}</p>
+    \${field}
+    <div class="goal-plan-actions"><button class="primary" type="button" onclick="goalPlanNext()">\${escapeHtml(step===7?x.review:x.continue)}</button></div>\`;
+  goalPlanResumeNotice=false;
+}
+async function beginGoalPlan(){
+  if(!currentSession)return requireAccount('beginGoalPlan');
+  goalPlanEnsureLocal();
+  if(!goalPlanState){
+    await nexoraHydrateGoalPlanRemote().catch(()=>{});
+    goalPlanEnsureLocal();
+  }
+  if(goalPlanState?.status==='active'){
+    goalPlanJustActivated=false;
+    goalPlanMode='activeSummary';
+    goalPlanStep=8;
+    renderGoalsPlan();
+    goalPlanWriteHistory('replace');
+    return;
+  }
+  if(!goalPlanState)goalPlanState=defaultGoalPlanState();
+  goalPlanState.status='draft';
+  goalPlanStep=Math.max(1,Math.min(7,goalPlanState.currentStep||1));
+  goalPlanMode='step';
+  goalPlanEditingFromSummary=false;
+  saveGoalPlanLocal(true);
+  goalPlanQueueRemoteSync(true);
+  renderGoalsPlan();
+  goalPlanWriteHistory('push');
+  try{nexoraTrack('goal_plan_started',{step:goalPlanStep}).catch(()=>{})}catch{}
+}
+function goalPlanSelectHorizon(type){
+  if(!goalPlanState)return;
+  goalPlanState.horizonType=type;
+  saveGoalPlanLocal(true);
+  goalPlanQueueRemoteSync(false);
+  renderGoalsPlan();
+}
+async function goalPlanNext(){
+  goalPlanCaptureCurrent();
+  if(!goalPlanValidateStep(goalPlanStep))return;
+  if(goalPlanStep===4){
+    if(goalPlanState.horizonType==='target_date')goalPlanState.reviewDate='';
+    if(goalPlanState.horizonType==='ongoing')goalPlanState.targetDate='';
+  }
+  saveGoalPlanLocal(true);
+  await nexoraSyncGoalPlanRemote().catch(()=>false);
+  if(goalPlanEditingFromSummary){
+    goalPlanEditingFromSummary=false;
+    history.back();
+    return;
+  }
+  if(goalPlanStep<7){
+    goalPlanStep++;
+    goalPlanState.currentStep=goalPlanStep;
+    saveGoalPlanLocal(true);
+    goalPlanQueueRemoteSync(false);
+    goalPlanMode='step';
+    renderGoalsPlan();
+    goalPlanWriteHistory('push');
+  }else{
+    goalPlanState.currentStep=8;
+    saveGoalPlanLocal(true);
+    goalPlanQueueRemoteSync(false);
+    goalPlanMode='summary';
+    goalPlanStep=8;
+    renderGoalsPlan();
+    goalPlanWriteHistory('push');
+  }
+}
+function goalPlanEditStep(step){
+  goalPlanCaptureCurrent();
+  if(!goalPlanState)return;
+  goalPlanEditingFromSummary=true;
+  goalPlanMode='step';
+  goalPlanStep=step;
+  renderGoalsPlan();
+  goalPlanWriteHistory('push');
+}
+async function goalPlanActivate(){
+  goalPlanCaptureCurrent();
+  if(!goalPlanAllValid()){
+    const x=goalsPlanCopy();
+    toast(x.summary.saveError);
+    return;
+  }
+  const previousStatus=goalPlanState.status;
+  const previousActivated=goalPlanState.activatedAt;
+  goalPlanState.status='active';
+  goalPlanState.currentStep=8;
+  goalPlanState.activatedAt=goalPlanState.activatedAt||new Date().toISOString();
+  saveGoalPlanLocal(true);
+  const ok=await nexoraSyncGoalPlanRemote();
+  if(!ok){
+    goalPlanState.status=previousStatus==='active'?'active':'draft';
+    goalPlanState.activatedAt=previousActivated||null;
+    goalPlanState.dirty=true;
+    saveGoalPlanLocal(false);
+    toast(goalsPlanCopy().summary.saveError);
+    goalPlanMode='summary';
+    renderGoalsPlan();
+    return;
+  }
+  goalPlanJustActivated=true;
+  goalPlanMode='activeSummary';
+  goalPlanStep=8;
+  renderGoalsPlan();
+  goalPlanWriteHistory('replace');
+  toast(goalsPlanCopy().summary.saved);
+  try{nexoraTrack('goal_plan_activated').catch(()=>{})}catch{}
+}
+function goalPlanShowActiveSummary(){
+  goalPlanJustActivated=false;
+  goalPlanMode='activeSummary';
+  goalPlanStep=8;
+  renderGoalsPlan();
+  goalPlanWriteHistory('replace');
+}
+function goalPlanReturnToGoals(){
+  goalPlanCaptureCurrent();
+  if(goalPlanState)saveGoalPlanLocal(false);
+  goalPlanQueueRemoteSync(true);
+  goalPlanJustActivated=false;
+  rememberExperienceCategory('objetivos');
+  populateExperienceCategory('objetivos');
+  showView('experienceCategory');
+}
+function goalPlanBack(){
+  goalPlanCaptureCurrent();
+  if(goalPlanState){
+    saveGoalPlanLocal(false);
+    goalPlanQueueRemoteSync(true);
+  }
+  if(goalPlanJustActivated||goalPlanMode==='activeSummary'){
+    goalPlanReturnToGoals();
+    return;
+  }
+  history.back();
+}
+function openGoalsPlan(){
+  const local=currentSession?loadGoalPlanLocal():null;
+  goalPlanState=local||goalPlanState;
+  goalPlanJustActivated=false;
+  goalPlanEditingFromSummary=false;
+  if(goalPlanState?.status==='active'){
+    goalPlanMode='activeSummary';
+    goalPlanStep=8;
+  }else if(goalPlanState?.status==='draft'){
+    goalPlanMode='step';
+    goalPlanStep=Math.max(1,Math.min(7,goalPlanState.currentStep||1));
+    goalPlanResumeNotice=true;
+  }else{
+    goalPlanMode='intro';
+    goalPlanStep=1;
+  }
+  showView('goalsPlan');
+  renderGoalsPlan();
+  if(goalPlanMode==='step'&&goalPlanStep>1)goalPlanSeedResumeHistory(goalPlanStep);
+  else goalPlanWriteHistory('replace');
+  if(currentSession?.id)nexoraHydrateGoalPlanRemote().catch(()=>{});
+}
+
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
@@ -9470,6 +10103,7 @@ async function nexoraRefreshAdminAccess(){
 }
 let nexoraSyncTimer=null;
 let nexoraRecoveryMode=false;
+window.addEventListener('online',()=>{try{if(currentSession?.id&&goalPlanState?.dirty)goalPlanQueueRemoteSync(true)}catch{}});
 
 userStateKey=function(id=currentSession?.id){
   return id ? 'nexora_user_state_'+id : 'nexora_guest_state_v1';
@@ -9754,6 +10388,7 @@ async function nexoraEstablishSession(session,isNew=false){
   }catch{
     appState=defaultAppState();
   }
+  try{goalPlanState=loadGoalPlanLocal(sessionId)}catch{goalPlanState=null}
   // Release the splash before any render path can fail.
   try{window.__nexoraReleaseSplash?.()}catch{document.documentElement.classList.remove('nexora-auth-pending')}
   try{updateAccountUI()}catch(error){console.warn('NEXORA account shell',error)}
@@ -9800,7 +10435,8 @@ async function nexoraEstablishSession(session,isNew=false){
   Promise.allSettled([
     nexoraWithin(nexoraDb.from('profiles').update({last_seen_at:new Date().toISOString()}).eq('id',sessionId),4000,null),
     nexoraWithin(nexoraRefreshAdminAccess(),4000,false),
-    nexoraWithin(remoteStatePromise,8000,null)
+    nexoraWithin(remoteStatePromise,8000,null),
+    nexoraWithin(typeof nexoraHydrateGoalPlanRemote==='function'?nexoraHydrateGoalPlanRemote():Promise.resolve(),8000,null)
   ]).catch(()=>{});
 
   if(currentSession?.id!==sessionId)return;
@@ -9970,6 +10606,12 @@ function nexoraResetFreshGuestHome(){
   previewDay=null;
   journeyOpen=false;
   historyProgramId=null;
+  goalPlanState=null;
+  goalPlanMode='intro';
+  goalPlanStep=1;
+  goalPlanEditingFromSummary=false;
+  goalPlanResumeNotice=false;
+  goalPlanJustActivated=false;
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
