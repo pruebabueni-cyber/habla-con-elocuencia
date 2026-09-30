@@ -1916,6 +1916,18 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
         <div class="programs" id="programChoices">
+          <article class="program available" id="goalsPlanCard" onclick="openGoalsPlan()">
+            <div class="program-copy">
+              <span class="program-kicker" id="goalsPlanKicker">PLAN GUIADO</span>
+              <h3 id="goalsPlanCardTitle">Alcanza tus objetivos</h3>
+              <p id="goalsPlanCardText">Convierte un objetivo importante en un plan claro y avanza paso a paso.</p>
+              <div class="program-meta"><span class="program-kind" id="goalsPlanKind">PERSONALIZACIÓN INICIAL</span><span class="program-progress" id="goalsPlanStatus">Explorar</span></div>
+            </div>
+            <div class="program-side">
+              <span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3M12 22v-3M2 12h3"/></svg></span>
+              <span class="program-arrow" aria-hidden="true">›</span>
+            </div>
+          </article>
           <article class="program gratitud available" onclick="openProgram('gratitud')">
             <div class="program-copy">
               <span class="program-kicker">GRATITUD</span>
@@ -2014,6 +2026,20 @@ body.modal-open{overflow:hidden}
           </article>
         </div>
 
+      </section>
+
+      <section id="goalsPlan" class="view">
+        <button class="backlink" type="button" onclick="goHome()">← <span id="goalsPlanBack">Volver</span></button>
+        <div class="card" style="max-width:760px;margin:0 auto;padding:clamp(22px,5vw,38px)">
+          <div class="eyebrow" id="goalsPlanEyebrow">PLAN GUIADO</div>
+          <h1 id="goalsPlanTitle" style="margin:6px 0 12px">Alcanza tus objetivos</h1>
+          <p class="lead" id="goalsPlanIntro" style="margin-bottom:22px">Primero vamos a aclarar qué quieres lograr. Después convertiremos ese objetivo en pasos concretos que puedas sostener.</p>
+          <div class="practice-context" style="margin-bottom:22px">
+            <div class="practice-context-left"><span class="practice-kind" id="goalsPlanStepLabel">PRIMER PASO</span></div>
+            <p id="goalsPlanStepText">Elegir un objetivo que realmente importe y definirlo con claridad.</p>
+          </div>
+          <button class="primary" type="button" id="goalsPlanStartBtn" onclick="toast(goalsPlanCopy().next)">Comenzar →</button>
+        </div>
       </section>
 
       <section id="program" class="view">
@@ -7466,6 +7492,20 @@ try{
 }catch{}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function goalsPlanCopy(){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  return ({
+    es:{kicker:'PLAN GUIADO',title:'Alcanza tus objetivos',card:'Convierte un objetivo importante en un plan claro y avanza paso a paso.',kind:'PERSONALIZACIÓN INICIAL',status:'Explorar',back:'Volver',intro:'Primero vamos a aclarar qué quieres lograr. Después convertiremos ese objetivo en pasos concretos que puedas sostener.',step:'PRIMER PASO',stepText:'Elegir un objetivo que realmente importe y definirlo con claridad.',start:'Comenzar →',next:'El siguiente bloque construirá la definición de tu objetivo.'},
+    en:{kicker:'GUIDED PLAN',title:'Reach your goals',card:'Turn an important goal into a clear plan and move forward step by step.',kind:'INITIAL PERSONALIZATION',status:'Explore',back:'Back',intro:'First, we’ll clarify what you want to achieve. Then we’ll turn that goal into concrete steps you can sustain.',step:'FIRST STEP',stepText:'Choose a goal that truly matters and define it clearly.',start:'Get started →',next:'The next block will build your goal definition.'},
+    fr:{kicker:'PLAN GUIDÉ',title:'Atteignez vos objectifs',card:'Transformez un objectif important en un plan clair et avancez étape par étape.',kind:'PERSONNALISATION INITIALE',status:'Découvrir',back:'Retour',intro:'Nous allons d’abord clarifier ce que vous souhaitez accomplir. Ensuite, nous transformerons cet objectif en étapes concrètes que vous pourrez maintenir.',step:'PREMIÈRE ÉTAPE',stepText:'Choisir un objectif qui compte vraiment pour vous et le définir clairement.',start:'Commencer →',next:'Le prochain bloc permettra de définir votre objectif.'}
+  })[lang]||null;
+}
+function renderGoalsPlan(){
+  const x=goalsPlanCopy(); if(!x)return;
+  const map={goalsPlanKicker:x.kicker,goalsPlanCardTitle:x.title,goalsPlanCardText:x.card,goalsPlanKind:x.kind,goalsPlanStatus:x.status,goalsPlanBack:x.back,goalsPlanEyebrow:x.kicker,goalsPlanTitle:x.title,goalsPlanIntro:x.intro,goalsPlanStepLabel:x.step,goalsPlanStepText:x.stepText,goalsPlanStartBtn:x.start};
+  Object.entries(map).forEach(([id,value])=>{const el=document.getElementById(id);if(el)el.textContent=value});
+}
+function openGoalsPlan(){renderGoalsPlan();showView('goalsPlan')}
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
 function updateJourneyVisibility(){const details=document.getElementById('programJourneyDetails');const btn=document.getElementById('journeyToggleBtn');if(!details||!btn)return;const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);details.classList.toggle('open',journeyOpen);btn.textContent=tx(journeyOpen?'Ocultar recorrido ↑':'Ver recorrido completo ↓')}
 function setProgram(id){appState.selectedProgram=id;previewDay=null;save()}
@@ -7792,7 +7832,7 @@ function renderHistory(){
 }
 function renderProgress(){renderSwitch('progressSwitch');const started=Object.keys(PROGRAMS).filter(id=>{const state=pstate(id);return state.baselineDone||state.completed.length>0||state.entries.length>0}),progressId=started.includes(appState.selectedProgram)?appState.selectedProgram:(started[0]||appState.selectedProgram),p=program(progressId),s=pstate(progressId),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const pt=document.getElementById('progressTitle');if(pt)pt.textContent=lang==='en'?'Your progress':lang==='fr'?'Votre progression':'Tu avance';document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} · ${s.completed.length} of ${max} days completed`:lang==='fr'?`${tx(p.name)} · ${s.completed.length} jours sur ${max} terminés`:`${tx(p.name)} · ${s.completed.length} de ${max} días completados`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function renderAll(){renderHome();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
+function renderAll(){renderHome();renderGoalsPlan();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
 </script>
 
