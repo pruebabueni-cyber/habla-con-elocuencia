@@ -1735,6 +1735,93 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     /* data-nexora-card-visual-fidelity="v1" */
 
 
+    /* NEXORA original card visual identity restore v1
+       Preserve the approved typography and neutral icon surfaces.
+       Color differentiates the card surface and icon glyph, not the program-name text. */
+    #programChoices .program[data-color-slot] .program-kicker,
+    #experienceCategoryItems .program[data-color-slot] .program-kicker{
+      color:#a87435!important;
+      font-family:inherit;
+      font-size:13px;
+      letter-spacing:.115em;
+      font-weight:950;
+      line-height:1;
+      margin-bottom:10px;
+    }
+    #programChoices .program[data-color-slot] h3,
+    #experienceCategoryItems .program[data-color-slot] h3{
+      color:var(--ink)!important;
+      font-family:inherit;
+      font-size:24px;
+      line-height:1.05;
+      margin-bottom:8px;
+    }
+    #programChoices .program[data-color-slot] p,
+    #experienceCategoryItems .program[data-color-slot] p{
+      color:var(--ink2)!important;
+      font-family:inherit;
+      font-size:13px;
+      line-height:1.45;
+    }
+    #programChoices .program[data-color-slot] .program-icon,
+    #experienceCategoryItems .program[data-color-slot] .program-icon{
+      color:var(--program-accent)!important;
+      background:linear-gradient(145deg,#f1e2cc,#fbf4e9)!important;
+      border-color:rgba(188,156,109,.22)!important;
+    }
+    #programChoices .program[data-color-slot] .program-kind,
+    #experienceCategoryItems .program[data-color-slot] .program-kind{
+      color:#8b612a!important;
+      border-color:rgba(178,123,50,.24)!important;
+      background:rgba(226,190,128,.12)!important;
+    }
+    #programChoices .program[data-color-slot] .program-arrow,
+    #experienceCategoryItems .program[data-color-slot] .program-arrow{
+      color:var(--program-accent)!important;
+      background:rgba(255,255,255,.78)!important;
+      border-color:var(--program-accent-border)!important;
+    }
+    html[data-theme="dark"] #programChoices .program[data-color-slot] .program-kicker,
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot] .program-kicker{
+      color:#e0b978!important;
+    }
+    html[data-theme="dark"] #programChoices .program[data-color-slot] .program-icon,
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot] .program-icon{
+      color:var(--program-accent)!important;
+      background:linear-gradient(145deg,rgba(255,255,255,.04),rgba(255,255,255,.015))!important;
+      border-color:var(--program-accent-border)!important;
+    }
+    html[data-theme="dark"] #programChoices .program[data-color-slot] .program-kind,
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot] .program-kind{
+      color:#e0b978!important;
+      border-color:rgba(224,185,120,.28)!important;
+      background:rgba(224,185,120,.09)!important;
+    }
+    html[data-theme="dark"] #programChoices .program[data-color-slot] .program-arrow,
+    html[data-theme="dark"] #experienceCategoryItems .program[data-color-slot] .program-arrow{
+      background:rgba(255,255,255,.045)!important;
+    }
+    @media(max-width:560px){
+      #programChoices .program[data-color-slot] .program-kicker,
+      #experienceCategoryItems .program[data-color-slot] .program-kicker{
+        font-size:14px;
+        letter-spacing:.105em;
+        margin-bottom:9px;
+      }
+      #programChoices .program[data-color-slot] h3,
+      #experienceCategoryItems .program[data-color-slot] h3{
+        font-size:23px;
+        line-height:1.08;
+      }
+      #programChoices .program[data-color-slot] p,
+      #experienceCategoryItems .program[data-color-slot] p{
+        font-size:14px;
+        line-height:1.5;
+      }
+    }
+    /* data-nexora-original-card-visual="v1" */
+
+
     /* NEXORA principle card method flow v1 */
     .hero-side{
       padding:30px 30px 26px;
