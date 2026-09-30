@@ -1821,6 +1821,27 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     }
     /* data-nexora-original-card-visual="v1" */
 
+    /* NEXORA card copy cleanup v1
+       Remove redundant category/program labels while preserving the approved card system.
+       Increase supporting copy consistently across categories and all internal resources. */
+    #programChoices .experience-category .program-kind,
+    #experienceCategoryItems .program[data-experience-type="programas"] .program-kind{
+      display:none!important;
+    }
+    #programChoices .experience-category .program-meta{
+      justify-content:flex-end;
+      padding-right:2px;
+    }
+    #experienceCategoryItems .program[data-experience-type="programas"] .program-meta{
+      justify-content:flex-start;
+    }
+    #programChoices .experience-category p,
+    #experienceCategoryItems .program p{
+      font-size:15px!important;
+      line-height:1.5!important;
+    }
+    /* data-nexora-card-copy-cleanup="v1" */
+
 
     /* NEXORA principle card method flow v1 */
     .hero-side{
