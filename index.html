@@ -7504,7 +7504,7 @@ function showView(id,btn,historyMode='push'){
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   window.scrollTo({top:0,behavior:'smooth'});
-  if(id==='home')renderHome();
+  if(id==='home'){restoreExperienceItems();renderHome();}
   if(id==='history'){historyProgramId=null;renderHistory();}
   if(id==='progress')renderProgress();
   if(id==='help')renderFeedback();
@@ -7568,7 +7568,7 @@ try{
     history.replaceState({...(history.state||{}),nexoraView:initialView},document.title,location.href);
   }
 }catch{}
-function goHome(){restoreExperienceItems();closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
+function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
 const NEXORA_EXPERIENCE_CATEGORY_COPY={
   programas:{es:['PROGRAMAS','Programas'],en:['PROGRAMS','Programs'],fr:['PROGRAMMES','Programmes']},
