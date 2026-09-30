@@ -742,6 +742,11 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     /* data-nexora-premium-bottomnav="v1" */
 
 
+    /* NEXORA experience grouping v1 · reuses approved program cards */
+    #programChoices .experience-item{display:none}
+    #programChoices .experience-item.is-open{display:grid}
+    #programChoices .experience-category.is-open .program-arrow{transform:rotate(90deg);background:#172236;color:#fff}
+    html[data-theme="dark"] #programChoices .experience-category.is-open .program-arrow{background:#e5bf7d;color:#172236}
     /* NEXORA high-end program cards v1 */
     #programChoices.programs{
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -1882,7 +1887,7 @@ body.modal-open{overflow:hidden}
             <div class="eyebrow">Transformación personal</div>
             <h1>¿Qué quieres transformar en tu vida?</h1>
             <p class="lead"><strong>NEXORA</strong> convierte intención en práctica: pequeñas acciones, reflexión y evidencia real de lo que estás construyendo.</p>
-            <div><button class="primary" onclick="scrollToPaths()">Explorar programas →</button></div>
+            <div><button class="primary" onclick="scrollToPaths()">Ver programas y recursos →</button></div>
           </div>
           <aside class="hero-side">
             <div class="principle-block">
@@ -1916,7 +1921,34 @@ body.modal-open{overflow:hidden}
   </div>
 </div>
         <div class="programs" id="programChoices">
-          <article class="program available" id="goalsPlanCard" onclick="openGoalsPlan()">
+          <article class="program available experience-category" data-category="programas" onclick="toggleExperienceCategory('programas',this)">
+            <div class="program-copy">
+              <span class="program-kicker">NEXORA</span>
+              <h3>Programas</h3>
+              <p>Procesos de 90 días para desarrollar cambios de forma progresiva.</p>
+              <div class="program-meta"><span class="program-kind">PROGRAMAS</span><span class="program-progress">Ver contenido</span></div>
+            </div>
+            <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
+          </article>
+          <article class="program available experience-category" data-category="entrenamientos" onclick="toggleExperienceCategory('entrenamientos',this)">
+            <div class="program-copy">
+              <span class="program-kicker">NEXORA</span>
+              <h3>Entrenamientos</h3>
+              <p>Experiencias breves para trabajar una necesidad concreta.</p>
+              <div class="program-meta"><span class="program-kind">ENTRENAMIENTOS</span><span class="program-progress">Ver contenido</span></div>
+            </div>
+            <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 12h14"/><circle cx="12" cy="12" r="8"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
+          </article>
+          <article class="program available experience-category" data-category="objetivos" onclick="toggleExperienceCategory('objetivos',this)">
+            <div class="program-copy">
+              <span class="program-kicker">NEXORA</span>
+              <h3>Objetivos</h3>
+              <p>Planes guiados para convertir una meta importante en pasos claros.</p>
+              <div class="program-meta"><span class="program-kind">OBJETIVOS</span><span class="program-progress">Ver contenido</span></div>
+            </div>
+            <div class="program-side"><span class="program-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M22 12h-3"/></svg></span><span class="program-arrow" aria-hidden="true">›</span></div>
+          </article>
+          <article class="program available experience-item" data-experience-type="objetivos" id="goalsPlanCard" onclick="openGoalsPlan()">
             <div class="program-copy">
               <span class="program-kicker" id="goalsPlanKicker">PLAN GUIADO</span>
               <h3 id="goalsPlanCardTitle">Alcanza tus objetivos</h3>
@@ -1928,7 +1960,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program gratitud available" onclick="openProgram('gratitud')">
+          <article class="program gratitud available experience-item" data-experience-type="programas" onclick="openProgram('gratitud')">
             <div class="program-copy">
               <span class="program-kicker">GRATITUD</span>
               <h3>Una mirada más plena</h3>
@@ -1940,7 +1972,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program motivacion available" onclick="openProgram('motivacion')">
+          <article class="program motivacion available experience-item" data-experience-type="entrenamientos" onclick="openProgram('motivacion')">
             <div class="program-copy">
               <span class="program-kicker">MOTIVACIÓN</span>
               <h3>Recupera el impulso para empezar</h3>
@@ -1952,7 +1984,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program disciplina available" onclick="openProgram('disciplina')">
+          <article class="program disciplina available experience-item" data-experience-type="programas" onclick="openProgram('disciplina')">
             <div class="program-copy">
               <span class="program-kicker">DISCIPLINA</span>
               <h3>Construye la mejor versión de ti</h3>
@@ -1964,7 +1996,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program confianza available" onclick="openProgram('confianza')">
+          <article class="program confianza available experience-item" data-experience-type="programas" onclick="openProgram('confianza')">
             <div class="program-copy">
               <span class="program-kicker">CONFIANZA</span>
               <h3>Actúa incluso con incomodidad</h3>
@@ -1976,7 +2008,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program enfoque available" onclick="openProgram('enfoque')">
+          <article class="program enfoque available experience-item" data-experience-type="programas" onclick="openProgram('enfoque')">
             <div class="program-copy">
               <span class="program-kicker">ENFOQUE</span>
               <h3>Menos ruido, más progreso</h3>
@@ -1988,7 +2020,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program elocuencia available" onclick="openProgram('elocuencia')">
+          <article class="program elocuencia available experience-item" data-experience-type="programas" onclick="openProgram('elocuencia')">
             <div class="program-copy">
               <span class="program-kicker">ELOCUENCIA</span>
               <h3>Habla con intención</h3>
@@ -2000,7 +2032,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program comunicacion available" onclick="openProgram('comunicacion')">
+          <article class="program comunicacion available experience-item" data-experience-type="programas" onclick="openProgram('comunicacion')">
             <div class="program-copy">
               <span class="program-kicker">COMUNICACIÓN</span>
               <h3>Conecta con mayor claridad</h3>
@@ -2012,7 +2044,7 @@ body.modal-open{overflow:hidden}
               <span class="program-arrow" aria-hidden="true">›</span>
             </div>
           </article>
-          <article class="program emocional locked">
+          <article class="program emocional locked experience-item" data-experience-type="programas">
             <div class="program-copy">
               <span class="program-kicker">INTELIGENCIA EMOCIONAL</span>
               <h3>Entiende lo que sientes</h3>
@@ -7492,6 +7524,17 @@ try{
 }catch{}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
 function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function toggleExperienceCategory(type,trigger){
+  const items=[...document.querySelectorAll('#programChoices .experience-item')];
+  const categories=[...document.querySelectorAll('#programChoices .experience-category')];
+  const opening=!trigger.classList.contains('is-open');
+  categories.forEach(card=>card.classList.remove('is-open'));
+  items.forEach(card=>card.classList.remove('is-open'));
+  if(opening){
+    trigger.classList.add('is-open');
+    items.filter(card=>card.dataset.experienceType===type).forEach(card=>card.classList.add('is-open'));
+  }
+}
 function goalsPlanCopy(){
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   return ({
@@ -7846,6 +7889,20 @@ const NEXORA_TRANSLATIONS_EXTRA_EMAIL_CHANGE={"Cambiar correo":{"en":"Change ema
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_EMAIL_CHANGE);
 const NEXORA_TRANSLATIONS_EXTRA_VISUAL_V1={"Más opciones":{"en":"More options","fr":"Plus d’options"},"Aquí encuentras funciones secundarias como Base científica, sin recargar la pantalla principal.":{"en":"Find secondary tools here, such as Scientific basis and Tester view, without crowding the main screen.","fr":"Retrouvez ici les fonctions secondaires, comme les Fondements scientifiques et la Vue test, sans surcharger l’écran principal."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_VISUAL_V1);
+const NEXORA_TRANSLATIONS_EXTRA_RESOURCE_GROUPS_V1={
+  "Ver programas y recursos →":{"en":"View programs and resources →","fr":"Voir les programmes et ressources →"},
+  "Programas":{"en":"Programs","fr":"Programmes"},
+  "Procesos de 90 días para desarrollar cambios de forma progresiva.":{"en":"90-day programs designed to build change progressively.","fr":"Des programmes de 90 jours pour construire le changement progressivement."},
+  "PROGRAMAS":{"en":"PROGRAMS","fr":"PROGRAMMES"},
+  "Entrenamientos":{"en":"Trainings","fr":"Entraînements"},
+  "Experiencias breves para trabajar una necesidad concreta.":{"en":"Short experiences focused on a specific need.","fr":"Des expériences courtes pour travailler un besoin précis."},
+  "ENTRENAMIENTOS":{"en":"TRAININGS","fr":"ENTRAÎNEMENTS"},
+  "Objetivos":{"en":"Goals","fr":"Objectifs"},
+  "Planes guiados para convertir una meta importante en pasos claros.":{"en":"Guided plans that turn an important goal into clear steps.","fr":"Des plans guidés pour transformer un objectif important en étapes claires."},
+  "OBJETIVOS":{"en":"GOALS","fr":"OBJECTIFS"},
+  "Ver contenido":{"en":"View content","fr":"Voir le contenu"}
+};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_RESOURCE_GROUPS_V1);
 const NEXORA_TRANSLATIONS_EXTRA_EXPERIENCE_TYPES_V1={"EXPLORA":{"en":"EXPLORE","fr":"EXPLORER"},"Elige cómo quieres avanzar":{"en":"Choose how you want to move forward","fr":"Choisissez comment vous souhaitez avancer"},"PROGRAMA · 90 DÍAS":{"en":"PROGRAM · 90 DAYS","fr":"PROGRAMME · 90 JOURS"},"ENTRENAMIENTO":{"en":"TRAINING","fr":"ENTRAÎNEMENT"},"ENTRENAMIENTO · 7 DÍAS":{"en":"TRAINING · 7 DAYS","fr":"ENTRAÎNEMENT · 7 JOURS"},"PLAN GUIADO":{"en":"GUIDED PLAN","fr":"PLAN GUIDÉ"}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_EXPERIENCE_TYPES_V1);
 const NEXORA_TRANSLATIONS_EXTRA_MOTIVATION_TRAINING_V1={
