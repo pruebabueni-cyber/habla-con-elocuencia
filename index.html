@@ -1480,133 +1480,177 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     /* data-nexora-uniform-program-cards="v1" */
 
 
-    /* NEXORA unified resource card component v1 */
+    /* NEXORA card sizing groups v2
+       Outer category cards share one size.
+       Inner resource cards share another size. */
     #programChoices.programs,
     #experienceCategoryItems.programs{
       grid-auto-rows:1fr;
       align-items:stretch;
     }
-    #programChoices .program,
+
+    /* Shared internal geometry */
+    #programChoices .experience-category,
     #experienceCategoryItems .program{
-      height:214px;
-      min-height:214px;
       padding:22px 20px 20px 22px;
       border-radius:24px;
       grid-template-columns:minmax(0,1fr) 92px;
       gap:18px;
       align-items:center;
     }
-    #programChoices .program-copy,
+    #programChoices .experience-category .program-copy,
     #experienceCategoryItems .program-copy{
       display:flex;
       flex-direction:column;
-      min-height:170px;
-      height:170px;
     }
-    #programChoices .program-kicker,
+    #programChoices .experience-category .program-kicker,
     #experienceCategoryItems .program-kicker{
       min-height:14px;
       margin-bottom:8px;
       font-size:13px;
       line-height:1;
     }
-    #programChoices .program h3,
+    #programChoices .experience-category h3,
     #experienceCategoryItems .program h3{
       min-height:50px;
       margin:0 0 7px;
       font-size:24px;
       line-height:1.05;
     }
-    #programChoices .program p,
+    #programChoices .experience-category p,
     #experienceCategoryItems .program p{
-      min-height:56px;
       margin:0;
       font-size:13px;
       line-height:1.45;
     }
-    #programChoices .program-meta,
+    #programChoices .experience-category .program-meta,
     #experienceCategoryItems .program-meta{
       margin-top:auto;
       padding-top:12px;
       min-height:34px;
     }
-    #programChoices .program-icon,
+    #programChoices .experience-category .program-icon,
     #experienceCategoryItems .program-icon{
       width:72px;
       height:72px;
     }
-    #programChoices .program-icon svg,
+    #programChoices .experience-category .program-icon svg,
     #experienceCategoryItems .program-icon svg{
       width:34px;
       height:34px;
     }
-    #programChoices .program-arrow,
+    #programChoices .experience-category .program-arrow,
     #experienceCategoryItems .program-arrow{
       width:36px;
       height:36px;
       font-size:27px;
     }
+
+    /* The three cards on Explora: equal to each other, intentionally more compact. */
+    #programChoices .experience-category{
+      height:190px;
+      min-height:190px;
+    }
+    #programChoices .experience-category .program-copy{
+      height:146px;
+      min-height:146px;
+    }
+    #programChoices .experience-category p{
+      min-height:38px;
+    }
+
+    /* Everything inside Programas / Entrenamientos / Objetivos: one uniform size. */
+    #experienceCategoryItems .program{
+      height:214px;
+      min-height:214px;
+    }
+    #experienceCategoryItems .program-copy{
+      height:170px;
+      min-height:170px;
+    }
+    #experienceCategoryItems .program p{
+      min-height:56px;
+    }
+
     @media(max-width:920px){
       #programChoices.programs,
       #experienceCategoryItems.programs{grid-auto-rows:auto}
-      #programChoices .program,
+
+      #programChoices .experience-category{
+        height:190px;
+        min-height:190px;
+      }
+      #programChoices .experience-category .program-copy{
+        height:146px;
+        min-height:146px;
+      }
+
       #experienceCategoryItems .program{
         height:210px;
         min-height:210px;
       }
-      #programChoices .program-copy,
       #experienceCategoryItems .program-copy{
         height:166px;
         min-height:166px;
       }
-      #programChoices .program h3,
       #experienceCategoryItems .program h3{min-height:47px}
-      #programChoices .program p,
       #experienceCategoryItems .program p{min-height:54px}
     }
+
     @media(max-width:560px){
-      #programChoices .program,
+      #programChoices .experience-category,
       #experienceCategoryItems .program{
-        height:210px;
-        min-height:210px;
         padding:18px 16px 17px 18px;
         grid-template-columns:minmax(0,1fr) 78px;
         gap:12px;
         border-radius:21px;
       }
-      #programChoices .program-copy,
+
+      #programChoices .experience-category{
+        height:188px;
+        min-height:188px;
+      }
+      #programChoices .experience-category .program-copy{
+        height:148px;
+        min-height:148px;
+      }
+
+      #experienceCategoryItems .program{
+        height:210px;
+        min-height:210px;
+      }
       #experienceCategoryItems .program-copy{
         height:170px;
         min-height:170px;
       }
-      #programChoices .program h3,
+
+      #programChoices .experience-category h3,
       #experienceCategoryItems .program h3{
         min-height:44px;
         font-size:22px;
       }
-      #programChoices .program p,
+      #programChoices .experience-category p,
       #experienceCategoryItems .program p{
-        min-height:50px;
         font-size:13px;
       }
-      #programChoices .program-icon,
+      #programChoices .experience-category .program-icon,
       #experienceCategoryItems .program-icon{
         width:62px;
         height:62px;
       }
-      #programChoices .program-icon svg,
+      #programChoices .experience-category .program-icon svg,
       #experienceCategoryItems .program-icon svg{
         width:29px;
         height:29px;
       }
-      #programChoices .program-arrow,
+      #programChoices .experience-category .program-arrow,
       #experienceCategoryItems .program-arrow{
         width:32px;
         height:32px;
         font-size:24px;
       }
     }
-    /* data-nexora-unified-resource-cards="v1" */
+    /* data-nexora-card-sizing-groups="v2" */
 
 
     /* NEXORA principle card method flow v1 */
