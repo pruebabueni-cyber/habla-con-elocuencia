@@ -8327,12 +8327,17 @@ async function nexoraHydrateGoalPlanRemote(){
     if(error)throw error;
     if(currentSession?.id!==sessionId)return;
     const remote=goalPlanRemoteToLocal(data);
+    const remoteTime=Date.parse(remote?.updatedAt||0)||0;
+    const localTime=Date.parse(local?.updatedAt||0)||0;
     if(local?.dirty){
-      goalPlanState=local;
-      await nexoraSyncGoalPlanRemote();
+      if(remote&&remoteTime>localTime){
+        goalPlanState=remote;
+        saveGoalPlanLocal(false);
+      }else{
+        goalPlanState=local;
+        await nexoraSyncGoalPlanRemote();
+      }
     }else if(remote){
-      const remoteTime=Date.parse(remote.updatedAt||0)||0;
-      const localTime=Date.parse(local?.updatedAt||0)||0;
       if(!local||remoteTime>=localTime){
         goalPlanState=remote;
         saveGoalPlanLocal(false);
@@ -8591,6 +8596,7 @@ function renderGoalsPlan(){
 }
 async function beginGoalPlan(){
   if(!currentSession)return requireAccount('beginGoalPlan');
+  const alreadyInGoalPlan=(typeof currentViewId==='function'?currentViewId():document.querySelector('.view.active')?.id)==='goalsPlan';
   goalPlanEnsureLocal();
   if(!goalPlanState){
     await nexoraHydrateGoalPlanRemote().catch(()=>{});
@@ -8600,6 +8606,7 @@ async function beginGoalPlan(){
     goalPlanJustActivated=false;
     goalPlanMode='activeSummary';
     goalPlanStep=8;
+    if(!alreadyInGoalPlan)showView('goalsPlan');
     renderGoalsPlan();
     goalPlanWriteHistory('replace');
     return;
@@ -8611,8 +8618,9 @@ async function beginGoalPlan(){
   goalPlanEditingFromSummary=false;
   saveGoalPlanLocal(true);
   goalPlanQueueRemoteSync(true);
+  if(!alreadyInGoalPlan)showView('goalsPlan');
   renderGoalsPlan();
-  goalPlanWriteHistory('push');
+  goalPlanWriteHistory(alreadyInGoalPlan?'push':'replace');
   try{nexoraTrack('goal_plan_started',{step:goalPlanStep}).catch(()=>{})}catch{}
 }
 function goalPlanSelectHorizon(type){
@@ -10450,7 +10458,7 @@ async function nexoraEstablishSession(session,isNew=false){
     }
   }catch{}
   nexoraTrack(isNew?'signup':'login').catch(()=>{});
-  if(shouldAutoGuide){
+  if(shouldAutoGuide&&!pendingAccountAction){
     try{
       await nexoraWithin(
         nexoraDb.from('profiles').update({onboarding_seen_at:new Date().toISOString()}).eq('id',sessionId),
