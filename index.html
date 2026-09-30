@@ -2095,6 +2095,8 @@ body.modal-open{overflow:hidden}
 
       </section>
 
+      <div id="experienceItemsStore" hidden></div>
+
       <section id="experienceCategory" class="view">
         <button class="ghost path-back" type="button" onclick="goHome()">← <span id="experienceCategoryBack">Volver</span></button>
         <div class="section-title program-section-title" style="margin-top:8px">
@@ -7576,17 +7578,20 @@ const NEXORA_EXPERIENCE_CATEGORY_COPY={
   objetivos:{es:['OBJETIVOS','Objetivos'],en:['GOALS','Goals'],fr:['OBJECTIFS','Objectifs']}
 };
 function restoreExperienceItems(){
-  const home=document.getElementById('programChoices');
+  const store=document.getElementById('experienceItemsStore');
   const holder=document.getElementById('experienceCategoryItems');
-  if(!home||!holder)return;
-  [...holder.querySelectorAll('.experience-item')].forEach(card=>home.appendChild(card));
+  const home=document.getElementById('programChoices');
+  if(!store||!holder||!home)return;
+  [...holder.querySelectorAll('.experience-item')].forEach(card=>store.appendChild(card));
+  [...home.querySelectorAll('.experience-item')].forEach(card=>store.appendChild(card));
 }
+function initializeExperienceCategories(){restoreExperienceItems()}
 function openExperienceCategory(type){
   restoreExperienceItems();
-  const home=document.getElementById('programChoices');
+  const store=document.getElementById('experienceItemsStore');
   const holder=document.getElementById('experienceCategoryItems');
-  if(!home||!holder)return;
-  [...home.querySelectorAll('.experience-item')].filter(card=>card.dataset.experienceType===type).forEach(card=>holder.appendChild(card));
+  if(!store||!holder)return;
+  [...store.querySelectorAll('.experience-item')].filter(card=>card.dataset.experienceType===type).forEach(card=>holder.appendChild(card));
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   const copy=NEXORA_EXPERIENCE_CATEGORY_COPY[type]?.[lang]||NEXORA_EXPERIENCE_CATEGORY_COPY[type]?.es;
   const kicker=document.getElementById('experienceCategoryKicker'),title=document.getElementById('experienceCategoryTitle'),back=document.getElementById('experienceCategoryBack');
@@ -7935,7 +7940,7 @@ function renderHistory(){
 }
 function renderProgress(){renderSwitch('progressSwitch');const started=Object.keys(PROGRAMS).filter(id=>{const state=pstate(id);return state.baselineDone||state.completed.length>0||state.entries.length>0}),progressId=started.includes(appState.selectedProgram)?appState.selectedProgram:(started[0]||appState.selectedProgram),p=program(progressId),s=pstate(progressId),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const pt=document.getElementById('progressTitle');if(pt)pt.textContent=lang==='en'?'Your progress':lang==='fr'?'Votre progression':'Tu avance';document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} · ${s.completed.length} of ${max} days completed`:lang==='fr'?`${tx(p.name)} · ${s.completed.length} jours sur ${max} terminés`:`${tx(p.name)} · ${s.completed.length} de ${max} días completados`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function renderAll(){renderHome();renderGoalsPlan();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
+function renderAll(){initializeExperienceCategories();renderHome();renderGoalsPlan();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
 </script>
 
