@@ -662,6 +662,16 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
     #goalsPlan .goal-plan-first-step-ref b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a4b28;margin-bottom:5px}
     #goalsPlan .goal-plan-first-step-ref p{margin:0;color:var(--ink2);line-height:1.5}
     #goalsPlan .completebox{margin-top:0}
+    #goalsPlan .goal-checkin-current{margin:18px 0 20px}
+    #goalsPlan .goal-checkin-current b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#6a4b28;margin-bottom:5px}
+    #goalsPlan .goal-checkin-current p{margin:0;color:var(--ink2);line-height:1.5}
+    #goalsPlan .goal-checkin-recent{margin-top:24px}
+    #goalsPlan .goal-checkin-recent .q{padding:14px 0}
+    #goalsPlan .goal-checkin-recent-date{display:block;margin-bottom:5px}
+    #goalsPlan .goal-checkin-recent p{margin:0;color:var(--ink2);line-height:1.5}
+    #goalsPlan .goal-checkin-fields{display:grid;gap:16px}
+    html[data-theme="dark"] #goalsPlan .goal-checkin-current{background:#202a38;border-color:#344050}
+    html[data-theme="dark"] #goalsPlan .goal-checkin-current p{color:#d7dde6}
     html[data-theme="dark"] #goalsPlan .goal-plan-date-input{background:#171e28;color:#edf1f6;border-color:#344050}
     html[data-theme="dark"] #goalsPlan .goal-plan-resume,
     html[data-theme="dark"] #goalsPlan .goal-plan-first-step-ref{background:#202a38;border-color:#344050;color:#d7dde6}
@@ -8003,7 +8013,11 @@ function showView(id,btn,historyMode='push'){
   if(!currentSession&&['today','history','progress'].includes(id))return requireAccount(id==='today'?'today':id);
   const previous=document.querySelector('.view.active')?.id||'home';
   if(previous==='goalsPlan'&&id!=='goalsPlan'){
-    try{goalPlanCaptureCurrent();if(goalPlanState){saveGoalPlanLocal(false);goalPlanQueueRemoteSync(true)}}catch{}
+    try{
+      if(goalPlanMode==='checkin'){goalCheckinCapture();if(goalCheckinDraft)saveGoalCheckinDraft()}
+      goalPlanCaptureCurrent();
+      if(goalPlanState){saveGoalPlanLocal(false);goalPlanQueueRemoteSync(true)}
+    }catch{}
   }
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -8170,6 +8184,7 @@ function goalsPlanCopy(){
       },
       summary:{kicker:'TU PLAN',title:'Este es tu punto de partida',help:'Revísalo antes de guardarlo. Puedes editar cualquier parte.',labels:['Objetivo','Por qué importa','Evidencia de avance','Horizonte','Obstáculo principal','Primer paso','Cuándo y dónde'],edit:'Editar',save:'Guardar objetivo →',saveError:'No pudimos guardar tu objetivo. Tus respuestas siguen aquí; inténtalo de nuevo.',saved:'Objetivo guardado. Ya tienes un punto de partida claro.'},
       active:{kicker:'OBJETIVO ACTIVO',title:'Ya tienes un punto de partida claro',text:'Guardamos tu objetivo, la evidencia que quieres observar y tu primer paso. Podrás volver a editarlo cuando lo necesites.',view:'Ver mi objetivo →',back:'Volver a Objetivos'},
+      checkin:{kicker:'SEGUIMIENTO DE OBJETIVO',title:'Registra evidencia de avance',intro:'No necesitas haber avanzado mucho. Registra algo concreto que te ayude a entender qué está ocurriendo con tu objetivo.',q1:'¿Qué ocurrió desde la última vez que cuenta como avance?',h1:'Describe una acción, resultado o señal que puedas reconocer en la vida real.',p1:'Ej.: Estudié tres veces esta semana y terminé el módulo 4.',q2:'¿Qué facilitó o dificultó avanzar?',h2:'Puede ser algo que te ayudó o un obstáculo que apareció.',p2:'Ej.: Me ayudó dejar el teléfono fuera del escritorio; el cansancio del jueves me frenó.',q3:'¿Cuál es el próximo paso concreto?',h3:'Elige una acción que puedas empezar, no otra meta general.',p3:'Ej.: Completar el primer ejercicio del módulo 5 mañana después de cenar.',save:'Guardar avance →',saved:'Avance registrado. Tu siguiente paso ya quedó claro.',error:'Completa la evidencia de avance y el siguiente paso antes de guardar.',recent:'Avances recientes',none:'Todavía no has registrado avances.',currentNext:'Siguiente paso actual',open:'Registrar avance →',back:'Volver al objetivo',sync:'Estamos sincronizando tu objetivo. Inténtalo nuevamente en un momento.'},
       statuses:{none:'Explorar',draft:'Continuar',active:'Activo',paused:'En pausa',completed:'Completado'}
     },
     en:{
@@ -8190,6 +8205,7 @@ function goalsPlanCopy(){
       },
       summary:{kicker:'YOUR PLAN',title:'This is your starting point',help:'Review it before saving. You can edit any part.',labels:['Goal','Why it matters','Evidence of progress','Timeline','Main obstacle','First step','When and where'],edit:'Edit',save:'Save goal →',saveError:'We could not save your goal. Your answers are still here; please try again.',saved:'Goal saved. You now have a clear starting point.'},
       active:{kicker:'ACTIVE GOAL',title:'You now have a clear starting point',text:'We saved your goal, the evidence you want to look for, and your first step. You can come back and edit it whenever you need to.',view:'View my goal →',back:'Back to Goals'},
+      checkin:{kicker:'GOAL CHECK-IN',title:'Record evidence of progress',intro:'You do not need to have made a huge leap. Record something concrete that helps you understand what is happening with your goal.',q1:'What has happened since your last check-in that counts as progress?',h1:'Describe an action, result, or signal you can recognize in real life.',p1:'e.g., I studied three times this week and finished module 4.',q2:'What made progress easier or harder?',h2:'This can be something that helped you or an obstacle that showed up.',p2:'e.g., Keeping my phone away from my desk helped; being tired on Thursday got in the way.',q3:'What is your next concrete step?',h3:'Choose an action you can start, not another broad goal.',p3:'e.g., Complete the first exercise in module 5 tomorrow after dinner.',save:'Save progress →',saved:'Progress recorded. Your next step is clear.',error:'Complete the progress evidence and your next step before saving.',recent:'Recent progress',none:'You have not recorded any progress yet.',currentNext:'Current next step',open:'Record progress →',back:'Back to goal',sync:'We are syncing your goal. Please try again in a moment.'},
       statuses:{none:'Explore',draft:'Continue',active:'Active',paused:'Paused',completed:'Completed'}
     },
     fr:{
@@ -8210,6 +8226,7 @@ function goalsPlanCopy(){
       },
       summary:{kicker:'VOTRE PLAN',title:'Voici votre point de départ',help:'Relisez-le avant de l’enregistrer. Vous pouvez modifier chaque partie.',labels:['Objectif','Pourquoi c’est important','Preuves de progrès','Horizon','Principal obstacle','Premier pas','Quand et où'],edit:'Modifier',save:'Enregistrer l’objectif →',saveError:'Nous n’avons pas pu enregistrer votre objectif. Vos réponses sont toujours ici ; réessayez.',saved:'Objectif enregistré. Vous avez maintenant un point de départ clair.'},
       active:{kicker:'OBJECTIF ACTIF',title:'Vous avez maintenant un point de départ clair',text:'Nous avons enregistré votre objectif, les preuves que vous souhaitez observer et votre premier pas. Vous pourrez revenir le modifier quand vous en aurez besoin.',view:'Voir mon objectif →',back:'Retour aux objectifs'},
+      checkin:{kicker:'SUIVI DE L’OBJECTIF',title:'Notez une preuve de vos progrès',intro:'Vous n’avez pas besoin d’avoir fait un grand bond en avant. Notez un élément concret qui vous aide à comprendre ce qui se passe dans la poursuite de votre objectif.',q1:'Qu’est-ce qui s’est passé depuis votre dernier suivi et qui constitue un progrès ?',h1:'Décrivez une action, un résultat ou un signe que vous pouvez constater dans la vie réelle.',p1:'Ex. : J’ai étudié trois fois cette semaine et terminé le module 4.',q2:'Qu’est-ce qui a facilité ou freiné vos progrès ?',h2:'Il peut s’agir de quelque chose qui vous a aidé ou d’un obstacle qui s’est présenté.',p2:'Ex. : Laisser mon téléphone loin du bureau m’a aidé ; la fatigue de jeudi m’a freiné.',q3:'Quelle est votre prochaine action concrète ?',h3:'Choisissez une action que vous pouvez commencer, pas un nouvel objectif général.',p3:'Ex. : Faire le premier exercice du module 5 demain après le dîner.',save:'Enregistrer le progrès →',saved:'Progrès enregistré. Votre prochaine étape est claire.',error:'Complétez la preuve de progrès et votre prochaine étape avant d’enregistrer.',recent:'Progrès récents',none:'Vous n’avez encore enregistré aucun progrès.',currentNext:'Prochaine étape actuelle',open:'Enregistrer un progrès →',back:'Retour à l’objectif',sync:'Nous synchronisons votre objectif. Réessayez dans un instant.'},
       statuses:{none:'Découvrir',draft:'Continuer',active:'Actif',paused:'En pause',completed:'Terminé'}
     }
   })[lang]||null;
@@ -8223,10 +8240,13 @@ let goalPlanResumeNotice=false;
 let goalPlanJustActivated=false;
 let goalPlanSyncTimer=null;
 let goalPlanLocalSaveTimer=null;
+let goalCheckinDraft=null;
+let goalCheckins=[];
+let goalCheckinLocalSaveTimer=null;
 
 function defaultGoalPlanState(){
   return {
-    version:1,status:'draft',currentStep:1,
+    version:1,id:null,status:'draft',currentStep:1,
     goalText:'',whyText:'',evidenceText:'',
     horizonType:'',targetDate:'',reviewDate:'',
     obstacleText:'',firstStepText:'',startContextText:'',
@@ -8263,6 +8283,7 @@ function goalPlanRemoteToLocal(row){
   if(!row)return null;
   return {
     version:1,
+    id:row.id||null,
     status:row.status||'draft',
     currentStep:Math.max(1,Math.min(8,row.current_step||1)),
     goalText:row.goal_text||'',
@@ -8427,6 +8448,135 @@ function goalPlanOnInput(){
   goalPlanQueueLocalSave();
   goalPlanQueueRemoteSync(false);
 }
+function defaultGoalCheckinDraft(){
+  return {version:1,evidenceText:'',contextText:'',nextStepText:'',updatedAt:new Date().toISOString()};
+}
+function goalCheckinLocalKey(){
+  if(!currentSession?.id||!goalPlanState?.id)return null;
+  return `nexora_goal_checkin_v1_${currentSession.id}_${goalPlanState.id}_progress`;
+}
+function loadGoalCheckinDraft(){
+  const key=goalCheckinLocalKey(); if(!key)return null;
+  try{
+    const raw=JSON.parse(localStorage.getItem(key)||'null');
+    return raw&&raw.version===1?{...defaultGoalCheckinDraft(),...raw}:null;
+  }catch{return null}
+}
+function saveGoalCheckinDraft(){
+  const key=goalCheckinLocalKey(); if(!key||!goalCheckinDraft)return;
+  clearTimeout(goalCheckinLocalSaveTimer);
+  goalCheckinDraft.updatedAt=new Date().toISOString();
+  localStorage.setItem(key,JSON.stringify(goalCheckinDraft));
+}
+function queueGoalCheckinDraftSave(){
+  if(!goalCheckinDraft||!goalCheckinLocalKey())return;
+  clearTimeout(goalCheckinLocalSaveTimer);
+  goalCheckinLocalSaveTimer=setTimeout(saveGoalCheckinDraft,300);
+}
+function goalCheckinCapture(){
+  if(goalPlanMode!=='checkin'||!goalCheckinDraft)return;
+  const evidence=document.getElementById('goalCheckinEvidence');
+  const context=document.getElementById('goalCheckinContext');
+  const next=document.getElementById('goalCheckinNext');
+  if(evidence)goalCheckinDraft.evidenceText=evidence.value;
+  if(context)goalCheckinDraft.contextText=context.value;
+  if(next)goalCheckinDraft.nextStepText=next.value;
+}
+function goalCheckinOnInput(){
+  goalCheckinCapture();
+  queueGoalCheckinDraftSave();
+}
+function goalCheckinDate(row){
+  const value=row?.created_at||row?.updated_at;
+  if(!value)return '';
+  try{return new Date(value).toLocaleDateString(typeof nexoraLocale==='function'?nexoraLocale():undefined,{month:'short',day:'numeric',year:'numeric'})}catch{return ''}
+}
+function goalCurrentNextStep(){
+  return goalCheckins?.[0]?.next_step_text||goalPlanState?.firstStepText||'';
+}
+function goalCheckinRecentMarkup(x){
+  const rows=Array.isArray(goalCheckins)?goalCheckins:[];
+  if(!rows.length)return `<p class="muted">${escapeHtml(x.checkin.none)}</p>`;
+  return rows.map(row=>`<div class="q"><span class="tiny goal-checkin-recent-date">${escapeHtml(goalCheckinDate(row))}</span><p>${escapeHtml(row.evidence_text||'')}</p></div>`).join('');
+}
+async function loadGoalCheckins(){
+  if(!currentSession?.id||!goalPlanState?.id){goalCheckins=[];return}
+  const sessionId=currentSession.id,goalId=goalPlanState.id;
+  try{
+    const {data,error}=await nexoraDb.from('goal_checkins')
+      .select('id,entry_type,evidence_text,context_text,next_step_text,created_at,updated_at')
+      .eq('user_id',sessionId)
+      .eq('goal_plan_id',goalId)
+      .eq('entry_type','progress')
+      .order('created_at',{ascending:false})
+      .limit(5);
+    if(error)throw error;
+    if(currentSession?.id!==sessionId||goalPlanState?.id!==goalId)return;
+    goalCheckins=data||[];
+    if(document.querySelector('.view.active')?.id==='goalsPlan'&&goalPlanMode==='activeSummary')renderGoalsPlan();
+  }catch{}
+}
+async function startGoalCheckin(){
+  if(!currentSession?.id)return requireAccount('beginGoalPlan');
+  goalPlanEnsureLocal();
+  if(!goalPlanState?.id)await nexoraHydrateGoalPlanRemote().catch(()=>{});
+  if(!goalPlanState?.id){
+    toast(goalsPlanCopy().checkin.sync);
+    return;
+  }
+  goalCheckinDraft=loadGoalCheckinDraft()||defaultGoalCheckinDraft();
+  goalPlanMode='checkin';
+  goalPlanJustActivated=false;
+  renderGoalsPlan();
+  goalPlanWriteHistory('push');
+}
+async function saveGoalCheckin(){
+  const x=goalsPlanCopy();
+  goalCheckinCapture();
+  const evidence=(goalCheckinDraft?.evidenceText||'').trim();
+  const next=(goalCheckinDraft?.nextStepText||'').trim();
+  if(!evidence||!next){
+    toast(x.checkin.error);
+    (!evidence?document.getElementById('goalCheckinEvidence'):document.getElementById('goalCheckinNext'))?.focus();
+    return;
+  }
+  if(!currentSession?.id||!goalPlanState?.id){
+    toast(x.checkin.sync);
+    return;
+  }
+  saveGoalCheckinDraft();
+  const sessionId=currentSession.id,goalId=goalPlanState.id;
+  const payload={
+    user_id:sessionId,
+    goal_plan_id:goalId,
+    entry_type:'progress',
+    evidence_text:evidence,
+    context_text:(goalCheckinDraft?.contextText||'').trim()||null,
+    next_step_text:next
+  };
+  try{
+    const {data,error}=await nexoraDb.from('goal_checkins').insert(payload)
+      .select('id,entry_type,evidence_text,context_text,next_step_text,created_at,updated_at')
+      .single();
+    if(error)throw error;
+    if(currentSession?.id!==sessionId||goalPlanState?.id!==goalId)return;
+    const key=goalCheckinLocalKey(); if(key)localStorage.removeItem(key);
+    goalCheckinDraft=null;
+    goalCheckins=[data,...(goalCheckins||[]).filter(x=>x.id!==data.id)].slice(0,5);
+    goalPlanMode='activeSummary';
+    renderGoalsPlan();
+    goalPlanWriteHistory('replace');
+    toast(x.checkin.saved);
+    try{nexoraTrack('goal_progress_recorded',{goal_plan_id:goalId}).catch(()=>{})}catch{}
+  }catch{
+    toast(x.checkin.sync);
+  }
+}
+function goalCheckinBack(){
+  goalCheckinCapture();
+  if(goalCheckinDraft)saveGoalCheckinDraft();
+  history.back();
+}
 function goalPlanTodayString(){
   const d=new Date();
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
@@ -8470,8 +8620,9 @@ function goalPlanRestoreHistoryState(state){
   const requestedMode=state?.nexoraGoalMode||'intro';
   goalPlanEditingFromSummary=!!state?.nexoraGoalEdit;
   if(goalPlanState?.status==='active'&&requestedMode!=='intro'){
-    goalPlanMode='activeSummary';
+    goalPlanMode=requestedMode==='checkin'?'checkin':'activeSummary';
     goalPlanStep=8;
+    if(goalPlanMode==='checkin')goalCheckinDraft=loadGoalCheckinDraft()||defaultGoalCheckinDraft();
   }else{
     goalPlanMode=requestedMode;
     goalPlanStep=Math.max(1,Math.min(8,state?.nexoraGoalStep||goalPlanState?.currentStep||1));
@@ -8542,7 +8693,23 @@ function renderGoalsPlan(){
     return;
   }
 
-  if(goalPlanMode==='activeSummary'||goalPlanState?.status==='active'&&goalPlanMode!=='step'){
+  if(goalPlanMode==='checkin'&&goalPlanState?.status==='active'){
+    if(!goalCheckinDraft)goalCheckinDraft=loadGoalCheckinDraft()||defaultGoalCheckinDraft();
+    const cc=x.checkin;
+    root.innerHTML=`
+      <div class="eyebrow">${escapeHtml(cc.kicker)}</div>
+      <h1>${escapeHtml(cc.title)}</h1>
+      <p class="muted goal-plan-help">${escapeHtml(cc.intro)}</p>
+      <div class="goal-checkin-fields">
+        <div class="field"><label for="goalCheckinEvidence">${escapeHtml(cc.q1)}</label><div class="tiny" style="margin:0 0 7px">${escapeHtml(cc.h1)}</div><textarea id="goalCheckinEvidence" placeholder="${escapeHtml(cc.p1)}" oninput="goalCheckinOnInput()">${escapeHtml(goalCheckinDraft.evidenceText||'')}</textarea></div>
+        <div class="field"><label for="goalCheckinContext">${escapeHtml(cc.q2)}</label><div class="tiny" style="margin:0 0 7px">${escapeHtml(cc.h2)}</div><textarea id="goalCheckinContext" placeholder="${escapeHtml(cc.p2)}" oninput="goalCheckinOnInput()">${escapeHtml(goalCheckinDraft.contextText||'')}</textarea></div>
+        <div class="field"><label for="goalCheckinNext">${escapeHtml(cc.q3)}</label><div class="tiny" style="margin:0 0 7px">${escapeHtml(cc.h3)}</div><textarea id="goalCheckinNext" placeholder="${escapeHtml(cc.p3)}" oninput="goalCheckinOnInput()">${escapeHtml(goalCheckinDraft.nextStepText||'')}</textarea></div>
+      </div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="saveGoalCheckin()">${escapeHtml(cc.save)}</button><button class="ghost" type="button" onclick="goalCheckinBack()">${escapeHtml(cc.back)}</button></div>`;
+    return;
+  }
+
+  if(goalPlanMode==='activeSummary'||goalPlanState?.status==='active'&&goalPlanMode==='intro'){
     const values=goalPlanSummaryValues();
     root.innerHTML=`
       <div class="eyebrow">${escapeHtml(x.active.kicker)}</div>
@@ -8550,7 +8717,9 @@ function renderGoalsPlan(){
       <p class="muted goal-plan-help">${escapeHtml(x.active.text)}</p>
       <div class="goal-plan-summary">${values.map((value,i)=>`
         <div class="q"><div class="goal-plan-summary-head"><b>${escapeHtml(x.summary.labels[i])}</b><button class="examplebtn" type="button" onclick="goalPlanEditStep(${i+1>4?i+1:i+1})">${escapeHtml(x.summary.edit)}</button></div><p class="goal-plan-summary-value">${escapeHtml(value)}</p></div>`).join('')}</div>
-      <div class="goal-plan-actions"><button class="ghost" type="button" onclick="goalPlanReturnToGoals()">${escapeHtml(x.active.back)}</button></div>`;
+      <div class="practice-context goal-checkin-current"><div><b>${escapeHtml(x.checkin.currentNext)}</b><p>${escapeHtml(goalCurrentNextStep())}</p></div></div>
+      <div class="goal-checkin-recent"><div class="eyebrow">${escapeHtml(x.checkin.recent)}</div>${goalCheckinRecentMarkup(x)}</div>
+      <div class="goal-plan-actions"><button class="primary" type="button" onclick="startGoalCheckin()">${escapeHtml(x.checkin.open)}</button><button class="ghost" type="button" onclick="goalPlanReturnToGoals()">${escapeHtml(x.active.back)}</button></div>`;
     // Summary index 4..6 does not map directly to steps because Horizon is step 4.
     const buttons=root.querySelectorAll('.goal-plan-summary .examplebtn');
     const stepMap=[1,2,3,4,5,6,7];
@@ -8730,6 +8899,12 @@ function goalPlanReturnToGoals(){
   showView('experienceCategory');
 }
 function goalPlanBack(){
+  if(goalPlanMode==='checkin'){
+    goalCheckinCapture();
+    if(goalCheckinDraft)saveGoalCheckinDraft();
+    history.back();
+    return;
+  }
   goalPlanCaptureCurrent();
   if(goalPlanState){
     saveGoalPlanLocal(false);
@@ -8761,7 +8936,10 @@ function openGoalsPlan(){
   renderGoalsPlan();
   if(goalPlanMode==='step'&&goalPlanStep>1)goalPlanSeedResumeHistory(goalPlanStep);
   else goalPlanWriteHistory('replace');
-  if(currentSession?.id)nexoraHydrateGoalPlanRemote().catch(()=>{});
+  if(currentSession?.id){
+    nexoraHydrateGoalPlanRemote().then(()=>loadGoalCheckins()).catch(()=>{});
+    if(goalPlanState?.id)loadGoalCheckins().catch(()=>{});
+  }
 }
 
 function toggleJourney(){journeyOpen=!journeyOpen;updateJourneyVisibility()}
@@ -10630,6 +10808,8 @@ function nexoraResetFreshGuestHome(){
   goalPlanEditingFromSummary=false;
   goalPlanResumeNotice=false;
   goalPlanJustActivated=false;
+  goalCheckinDraft=null;
+  goalCheckins=[];
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
