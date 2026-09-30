@@ -2410,6 +2410,9 @@ body.modal-open{overflow:hidden}
           <div class="guest-banner-actions"><button class="primary" onclick="openAccountFor('signup')">Crear cuenta →</button><button class="ghost" onclick="openAccountFor('login')">Ya tengo cuenta</button></div>
         </section>
 
+      </section>
+
+      <section id="experienceHub" class="view">
         <div class="section-title program-section-title" id="pathsAnchor">
   <div class="program-section-heading">
     <div class="program-section-kicker">EXPLORA</div>
@@ -7934,7 +7937,7 @@ document.addEventListener('keydown',e=>{
 });
 const GUIDE_STEPS=[
   {target:'#accountBtn',title:'Tu cuenta',text:'Aquí creas tu cuenta o entras a la que ya tienes. Tu progreso en cada programa queda vinculado a tu perfil.',view:'home'},
-  {target:'#programChoices',title:'Elige un programa',text:'Empieza por cualquiera de los programas disponibles. Cada programa conserva su progreso por separado.',view:'home'},
+  {target:'#programChoices',title:'Elige un programa',text:'Empieza por cualquiera de los programas disponibles. Cada programa conserva su progreso por separado.',view:'experienceHub'},
   {target:'#navToday',title:'Hoy',text:'Este botón te lleva directamente a la práctica de hoy dentro del programa que estás trabajando.'},
   {target:'#navHistory',title:'Historia',text:'Aquí se reúne la evidencia real que vas dejando: respuestas, experiencias y momentos que muestran lo que estás construyendo.'},
   {target:'#navProgress',title:'Progreso',text:'Mira cuánto has recorrido, tus hitos y la etapa en la que te encuentras. No es solo una racha: buscamos evidencia de cambio.'},
@@ -7968,6 +7971,7 @@ function showView(id,btn,historyMode='push'){
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='home'){restoreExperienceItems();renderHome();}
+  if(id==='experienceHub')restoreExperienceItems();
   if(id==='experienceCategory'&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory);
   if(id==='history'){historyProgramId=null;renderHistory();}
   if(id==='progress')renderProgress();
@@ -8033,7 +8037,7 @@ try{
   }
 }catch{}
 function goHome(){closeOpenModal();previewDay=null;journeyOpen=false;showView('home')}
-function scrollToPaths(){document.getElementById('pathsAnchor')?.scrollIntoView({behavior:'smooth',block:'start'})}
+function scrollToPaths(){showView('experienceHub')}
 const NEXORA_EXPERIENCE_CATEGORY_COPY={
   programas:{es:['PROGRAMAS','Programas'],en:['PROGRAMS','Programs'],fr:['PROGRAMMES','Programmes']},
   entrenamientos:{es:['ENTRENAMIENTOS','Entrenamientos'],en:['TRAININGS','Trainings'],fr:['ENTRAÎNEMENTS','Entraînements']},
