@@ -7755,6 +7755,7 @@ function showView(id,btn,historyMode='push'){
   document.querySelectorAll('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
   window.scrollTo({top:0,behavior:'smooth'});
   if(id==='home'){restoreExperienceItems();renderHome();}
+  if(id==='experienceCategory'&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory);
   if(id==='history'){historyProgramId=null;renderHistory();}
   if(id==='progress')renderProgress();
   if(id==='help')renderFeedback();
@@ -7845,8 +7846,16 @@ function applyExperienceColorOrder(){
     cards.forEach((card,index)=>setSlot(card,index));
   });
 }
-function initializeExperienceCategories(){restoreExperienceItems();applyExperienceColorOrder()}
-function openExperienceCategory(type){
+let nexoraExperienceCategory='';
+try{nexoraExperienceCategory=sessionStorage.getItem('nexora_experience_category')||''}catch{}
+function rememberExperienceCategory(type){
+  if(!NEXORA_EXPERIENCE_CATEGORY_COPY[type])return;
+  nexoraExperienceCategory=type;
+  try{sessionStorage.setItem('nexora_experience_category',type)}catch{}
+}
+function populateExperienceCategory(type){
+  if(!NEXORA_EXPERIENCE_CATEGORY_COPY[type])return;
+  rememberExperienceCategory(type);
   restoreExperienceItems();
   const store=document.getElementById('experienceItemsStore');
   const holder=document.getElementById('experienceCategoryItems');
@@ -7858,8 +7867,21 @@ function openExperienceCategory(type){
   if(kicker)kicker.textContent=copy?.[0]||'EXPLORA';
   if(title)title.textContent=copy?.[1]||'Explora';
   if(back)back.textContent=lang==='en'?'Back':lang==='fr'?'Retour':'Volver';
+}
+function initializeExperienceCategories(){
+  const active=document.querySelector('.view.active')?.id==='experienceCategory';
+  const visibleType=document.querySelector('#experienceCategoryItems .experience-item')?.dataset.experienceType;
+  if(visibleType)rememberExperienceCategory(visibleType);
+  restoreExperienceItems();
+  applyExperienceColorOrder();
+  if(active&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory);
+}
+function openExperienceCategory(type){
+  populateExperienceCategory(type);
   showView('experienceCategory');
 }
+window.addEventListener('pageshow',()=>{if(document.querySelector('.view.active')?.id==='experienceCategory'&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory)});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&document.querySelector('.view.active')?.id==='experienceCategory'&&nexoraExperienceCategory)populateExperienceCategory(nexoraExperienceCategory)});
 function goalsPlanCopy(){
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   return ({
