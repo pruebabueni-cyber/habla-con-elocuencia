@@ -691,6 +691,20 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
 
 
 
+
+    .assessment-offer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px;margin-top:18px;padding:22px}
+    .assessment-offer[hidden]{display:none!important}
+    .assessment-offer h3{font-size:24px;margin:5px 0 7px}
+    .assessment-offer p{margin:0;line-height:1.55;max-width:680px}
+    .assessment-offer .primary{white-space:nowrap}
+    #assessmentModal .q b{display:block;line-height:1.45}
+    #assessmentModal .assessment-scale-labels{display:flex;justify-content:space-between;gap:12px}
+    html[data-theme="dark"] .assessment-offer{background:#151b24!important;border-color:#2a3340!important}
+    @media(max-width:700px){
+      .assessment-offer{grid-template-columns:1fr;padding:20px}
+      .assessment-offer .primary{width:100%}
+    }
+
     /* NEXORA premium bottom navigation v1 */
     .bottomnav{
       width:min(720px,calc(100% - 32px));
@@ -2681,6 +2695,15 @@ body.modal-open{overflow:hidden}
           </div>
         </section>
 
+        <section class="card assessment-offer" id="assessmentOffer" hidden>
+          <div>
+            <div class="eyebrow" id="assessmentOfferKicker">Revisión de progreso</div>
+            <h3 id="assessmentOfferTitle">Tu revisión está lista</h3>
+            <p class="muted" id="assessmentOfferText"></p>
+          </div>
+          <button class="primary" id="assessmentOfferBtn" type="button" onclick="openProgramAssessment()">Revisar mi progreso →</button>
+        </section>
+
         <div id="programJourneyDetails" class="journey-details">
           <div class="section-title"><div><h2>Seis etapas. Una progresión.</h2><p>Quince días por etapa.</p></div></div>
           <div class="stages" id="stageCards"></div>
@@ -2835,6 +2858,23 @@ body.modal-open{overflow:hidden}
     <div class="modal-actions">
       <button class="primary" style="flex:1" onclick="saveBaseline()">Guardar mi punto de partida →</button>
       <button class="ghost" onclick="closeModal('baselineModal')">Cerrar</button>
+    </div>
+  </div></div>
+
+
+  <div class="modal" id="assessmentModal" role="dialog" aria-modal="true" aria-labelledby="assessmentTitle"><div class="modalbox">
+    <div class="modalhead">
+      <div class="copy">
+        <div class="eyebrow" id="assessmentKicker">Revisión de progreso</div>
+        <h2 id="assessmentTitle">¿Cómo estás funcionando hoy?</h2>
+        <p class="muted" id="assessmentIntro" style="line-height:1.65"></p>
+      </div>
+      <button class="closex" id="assessmentCloseX" aria-label="Cerrar" onclick="closeProgramAssessment()">×</button>
+    </div>
+    <div id="assessmentQuestions"></div>
+    <div class="modal-actions">
+      <button class="primary" id="assessmentSaveBtn" style="flex:1" onclick="saveCurrentProgramAssessment()">Guardar revisión →</button>
+      <button class="ghost" id="assessmentCloseBtn" onclick="closeProgramAssessment()">Ahora no</button>
     </div>
   </div></div>
 
@@ -7902,11 +7942,11 @@ const PROGRAMS={
    Dormant infrastructure only. E1B will enable pilot programs and UI. */
 const NEXORA_ASSESSMENT_CONFIG=Object.freeze({
   gratitud:Object.freeze({
-    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    enabled:true,instrumentVersion:1,checkpoints:[30,60,90],
     directions:['positive','positive','positive','positive','positive']
   }),
   disciplina:Object.freeze({
-    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    enabled:true,instrumentVersion:1,checkpoints:[30,60,90],
     directions:['positive','positive','positive','positive','positive']
   }),
   confianza:Object.freeze({
@@ -8016,6 +8056,124 @@ function saveAssessmentDraft(programKey,checkpointTarget,answers={}){
 function clearAssessmentDraft(programKey,checkpointTarget){
   const key=assessmentDraftKey(programKey,checkpointTarget);
   if(key)localStorage.removeItem(key);
+}
+
+let nexoraAssessmentDraft=null;
+const nexoraAssessmentRowsCache=new Map();
+const nexoraAssessmentLoadPending=new Map();
+function assessmentCacheKey(programKey){
+  return currentSession?.id?currentSession.id+':'+programKey:null;
+}
+function assessmentCopy(){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  return ({
+    es:{kicker:'REVISIÓN DE PROGRESO',title:'¿Cómo estás funcionando hoy?',offerTitle:'Tu revisión del Día {day} está lista',offerText:'Ya alcanzaste este punto del programa. Responde las mismas preguntas de tu inicio para registrar cómo estás hoy. Puedes hacerlo ahora o después.',open:'Revisar mi progreso →',intro:'No es un examen ni una calificación. Repite las mismas preguntas de tu punto de partida para que NEXORA pueda comparar tu propia percepción con el tiempo.',low:'Casi nunca',high:'Muy frecuentemente',save:'Guardar revisión →',later:'Ahora no',incomplete:'Responde todas las preguntas antes de guardar.',saved:'Revisión guardada. NEXORA conservará este punto para comparar tu evolución.',sync:'No pudimos guardar la revisión. Tus respuestas siguen aquí; inténtalo nuevamente.'},
+    en:{kicker:'PROGRESS REVIEW',title:'How are you functioning today?',offerTitle:'Your Day {day} review is ready',offerText:'You have reached this point in the program. Answer the same questions you saw at the start to record how you are doing today. You can do it now or later.',open:'Review my progress →',intro:'This is not a test or a grade. Answer the same questions from your starting point so NEXORA can compare your own perception over time.',low:'Almost never',high:'Very frequently',save:'Save review →',later:'Not now',incomplete:'Answer all the questions before saving.',saved:'Review saved. NEXORA will keep this point so your progress can be compared over time.',sync:'We could not save the review. Your answers are still here; please try again.'},
+    fr:{kicker:'BILAN DE PROGRESSION',title:'Comment fonctionnez-vous aujourd’hui ?',offerTitle:'Votre bilan du jour {day} est prêt',offerText:'Vous avez atteint cette étape du programme. Répondez aux mêmes questions qu’au début pour noter où vous en êtes aujourd’hui. Vous pouvez le faire maintenant ou plus tard.',open:'Faire mon bilan →',intro:'Ce n’est ni un examen ni une note. Répondez aux mêmes questions qu’au point de départ afin que NEXORA puisse comparer votre propre perception au fil du temps.',low:'Presque jamais',high:'Très souvent',save:'Enregistrer le bilan →',later:'Pas maintenant',incomplete:'Répondez à toutes les questions avant d’enregistrer.',saved:'Bilan enregistré. NEXORA conservera ce point afin de comparer votre évolution au fil du temps.',sync:'Nous n’avons pas pu enregistrer le bilan. Vos réponses sont toujours ici ; réessayez.'}
+  })[lang]||null;
+}
+function assessmentRowsFromCache(programKey){
+  const key=assessmentCacheKey(programKey);
+  return key&&nexoraAssessmentRowsCache.has(key)?nexoraAssessmentRowsCache.get(key):null;
+}
+function setAssessmentRowsCache(programKey,rows){
+  const key=assessmentCacheKey(programKey);
+  if(key)nexoraAssessmentRowsCache.set(key,Array.isArray(rows)?rows:[]);
+}
+function renderProgramAssessmentOffer(programKey=appState?.selectedProgram){
+  const box=document.getElementById('assessmentOffer');
+  if(!box)return;
+  const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey];
+  if(!currentSession?.id||!cfg?.enabled||!s?.baselineDone){box.hidden=true;return}
+  const rows=assessmentRowsFromCache(programKey);
+  if(rows===null){box.hidden=true;return}
+  const target=assessmentDueCheckpoint(programKey,rows);
+  if(!target){box.hidden=true;return}
+  const cp=assessmentCopy();
+  document.getElementById('assessmentOfferKicker').textContent=cp.kicker;
+  document.getElementById('assessmentOfferTitle').textContent=cp.offerTitle.replace('{day}',target);
+  document.getElementById('assessmentOfferText').textContent=cp.offerText;
+  document.getElementById('assessmentOfferBtn').textContent=cp.open;
+  box.hidden=false;
+}
+async function refreshProgramAssessmentOffer(programKey=appState?.selectedProgram,force=false){
+  const cfg=assessmentConfig(programKey);
+  if(!currentSession?.id||!cfg?.enabled){renderProgramAssessmentOffer(programKey);return []}
+  const key=assessmentCacheKey(programKey);
+  if(!force&&key&&nexoraAssessmentRowsCache.has(key)){renderProgramAssessmentOffer(programKey);return nexoraAssessmentRowsCache.get(key)}
+  if(key&&nexoraAssessmentLoadPending.has(key))return nexoraAssessmentLoadPending.get(key);
+  const task=nexoraLoadProgramAssessments(programKey).then(rows=>{
+    setAssessmentRowsCache(programKey,rows);
+    if(appState?.selectedProgram===programKey)renderProgramAssessmentOffer(programKey);
+    return rows;
+  }).catch(()=>{
+    if(appState?.selectedProgram===programKey)document.getElementById('assessmentOffer')?.setAttribute('hidden','');
+    return [];
+  }).finally(()=>{if(key)nexoraAssessmentLoadPending.delete(key)});
+  if(key)nexoraAssessmentLoadPending.set(key,task);
+  return task;
+}
+function buildProgramAssessment(programKey,checkpointTarget,answers={}){
+  const p=PROGRAMS[programKey],cp=assessmentCopy(),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);
+  document.getElementById('assessmentKicker').textContent=cp.kicker+' · '+tx('Día '+checkpointTarget);
+  document.getElementById('assessmentTitle').textContent=cp.title;
+  document.getElementById('assessmentIntro').textContent=cp.intro;
+  document.getElementById('assessmentSaveBtn').textContent=cp.save;
+  document.getElementById('assessmentCloseBtn').textContent=cp.later;
+  document.getElementById('assessmentCloseX').setAttribute('aria-label',cp.later);
+  const wrap=document.getElementById('assessmentQuestions');
+  wrap.innerHTML=p.baseline.map((q,i)=>{
+    const selected=Number(answers?.[i]);
+    const buttons=[1,2,3,4,5].map(n=>'<button type="button" data-assessment-q="'+i+'" data-v="'+n+'" class="'+(selected===n?'sel':'')+'" onclick="selectAssessmentScale(this)">'+n+'</button>').join('');
+    return '<div class="q"><b>'+escapeHtml(tx(q))+'</b><div class="scale">'+buttons+'</div><div class="tiny assessment-scale-labels"><span>'+escapeHtml(cp.low)+'</span><span>'+escapeHtml(cp.high)+'</span></div></div>';
+  }).join('');
+}
+function selectAssessmentScale(button){
+  if(!nexoraAssessmentDraft)return;
+  const q=Number(button.dataset.assessmentQ),v=Number(button.dataset.v);
+  if(!Number.isInteger(q)||!Number.isInteger(v))return;
+  document.querySelectorAll('[data-assessment-q="'+q+'"]').forEach(x=>x.classList.remove('sel'));
+  button.classList.add('sel');
+  nexoraAssessmentDraft.answers[q]=v;
+  nexoraAssessmentDraft.updatedAt=new Date().toISOString();
+  saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+}
+async function openProgramAssessment(programKey=appState?.selectedProgram){
+  if(!currentSession?.id)return requireAccount('beginProgram');
+  const cfg=assessmentConfig(programKey);
+  if(!cfg?.enabled)return;
+  const rows=await refreshProgramAssessmentOffer(programKey,true);
+  const target=assessmentDueCheckpoint(programKey,rows);
+  if(!target){renderProgramAssessmentOffer(programKey);return}
+  const local=loadAssessmentDraft(programKey,target);
+  nexoraAssessmentDraft={programKey,checkpointTarget:target,answers:{...(local?.answers||{})},updatedAt:local?.updatedAt||new Date().toISOString()};
+  buildProgramAssessment(programKey,target,nexoraAssessmentDraft.answers);
+  openModal('assessmentModal');
+}
+function closeProgramAssessment(){
+  if(nexoraAssessmentDraft)saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+  closeModal('assessmentModal');
+}
+async function saveCurrentProgramAssessment(){
+  if(!nexoraAssessmentDraft)return;
+  const cp=assessmentCopy(),draft=nexoraAssessmentDraft;
+  if(!assessmentValidateAnswers(draft.programKey,draft.answers)){toast(cp.incomplete);return}
+  const btn=document.getElementById('assessmentSaveBtn');
+  if(btn)btn.disabled=true;
+  try{
+    const row=await nexoraSaveProgramAssessment(draft.programKey,draft.checkpointTarget,draft.answers,assessmentFurthestCompletedDay(draft.programKey));
+    const rows=(assessmentRowsFromCache(draft.programKey)||[]).filter(x=>!(Number(x.checkpoint_target)===Number(row.checkpoint_target)&&Number(x.instrument_version)===Number(row.instrument_version)));
+    rows.push(row);
+    setAssessmentRowsCache(draft.programKey,rows);
+    nexoraAssessmentDraft=null;
+    closeModal('assessmentModal');
+    renderProgramAssessmentOffer(draft.programKey);
+    toast(cp.saved);
+  }catch{
+    saveAssessmentDraft(draft.programKey,draft.checkpointTarget,draft.answers);
+    toast(cp.sync);
+  }finally{if(btn)btn.disabled=false}
 }
 
 const defaultProgramState=()=>({baselineDone:false,baseline:{},currentDay:1,completed:[],entries:[]});
@@ -9371,7 +9529,7 @@ function renderExercise(n,isPreview=false,isReview=false){const p=program(),s=ps
   <div class="completebox" style="padding:16px 18px"><div class="complete-actions"><button class="secondary" onclick="completeDay(${n},${isPreview})">${existing?'Actualizar evidencia':'Completar el día'} →</button>${isPreview?'<button class="ghost" style="color:white;border-color:#607087" onclick="openTester()">Ver otro día</button>':''}</div><p style="margin:10px 0 0">${existing?`Tus cambios se guardarán en el historial de este ${experienceNoun}.`:`Tus respuestas se guardarán como parte del historial de este ${experienceNoun}.`}</p></div>`}
 function completeDay(n,isPreview){if(!currentSession)return requireAccount('today');if(isPreview){toast('Vista tester: la práctica es solo de lectura y no modifica tu progreso.');return}const p=program(),s=pstate(),day=p.days[n-1],max=totalDays(p),answers=day.prompts.map((_,i)=>document.getElementById('ans_'+i).value.trim());if(answers.filter(Boolean).length===0){toast('Escribe al menos una respuesta antes de guardarlo.');return}const idx=s.entries.findIndex(e=>e.day===n);const item={day:n,title:day.title,answers,date:new Date().toISOString()};if(idx>=0)s.entries[idx]=item;else s.entries.unshift(item);if(!s.completed.includes(n))s.completed.push(n);s.completed.sort((a,b)=>a-b);if(!isPreview&&n===s.currentDay&&n<max)s.currentDay=n+1;save();toast(n===max?`Cierre de ${p.name} guardado.`:'Día completado. Tu evidencia ha sido guardada.');setTimeout(()=>{previewDay=null;journeyOpen=false;renderProgram();showView('program')},450)}
 function renderSwitch(target){const el=document.getElementById(target),tx=v=>(typeof translatePattern==='function'?translatePattern(v,typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'):v);let items=Object.values(PROGRAMS),selectedId=appState.selectedProgram;if(target==='progressSwitch'){items=items.filter(p=>{const state=pstate(p.id);return state.baselineDone||state.completed.length>0||state.entries.length>0});if(items.length&&!items.some(p=>p.id===selectedId))selectedId=items[0].id}el.innerHTML=items.map(p=>`<button class="switchbtn ${selectedId===p.id?'active':''}" onclick="appState.selectedProgram='${p.id}';previewDay=null;save();${target==='programSwitch'?'renderProgram();showView(\'program\')':'renderProgress();showView(\'progress\')'}">${tx(p.name)}</button>`).join('')}
-function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max)),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=tx(p.eyebrow);document.getElementById('programTitle').textContent=tx(p.title);document.getElementById('programSubtitle').textContent=tx(p.subtitle);document.getElementById('programGoal').textContent=tx(p.goal);document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${tx(x)}</div>`).join('');document.getElementById('programStartBtn').textContent=tx(!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →'));document.getElementById('journeyTitle').textContent=!currentSession?tx(p.exploreLabel||'Explora este programa'):(s.baselineDone?`${tx(`Día ${s.currentDay}`)} · ${tx(day.title)}`:tx('Tu proceso comienza aquí'));document.getElementById('journeyText').textContent=!currentSession?(lang==='en'?`You can explore ${tx(p.name)} before deciding. Create an account to take the starting assessment, complete the practices, and keep your progress.`:lang==='fr'?`Vous pouvez découvrir ${tx(p.name)} avant de vous décider. Créez un compte pour faire l’évaluation initiale, réaliser les pratiques et conserver votre progression.`:`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`):(s.baselineDone?tx(day.hook):(lang==='en'?`When you begin ${tx(p.name)}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:lang==='fr'?`Lorsque vous commencez ${tx(p.name)}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=tx(`${s.completed.length} / ${max} días completados`);document.getElementById('journeyStage').textContent=s.baselineDone?`${tx(st.name)} · ${tx(st.range)}`:tx('Aún no iniciado');document.querySelector('#programJourneyDetails .section-title h2').textContent=tx(`${p.stages.length} etapas. Una progresión.`);document.querySelector('#programJourneyDetails .section-title p').textContent=tx(p.journeyNote||(p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`));document.getElementById('mapEyebrow').textContent=tx(`Mapa de ${max} días`);const me=document.getElementById('programMethodEyebrow'),mt=document.getElementById('programMethodText'),mn=document.getElementById('programMethodNote');if(me)me.textContent=tx(p.type==='training'?'Método del entrenamiento':'Método del programa');if(mt)mt.textContent=tx(p.type==='training'?'La teoría está disponible para profundizar; la práctica cambia durante siete días para convertir claridad en un primer ciclo de acción.':'La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.');if(mn)mn.textContent=tx(p.stages.length+' etapas · más autonomía con el tiempo');renderStages();renderDays();updateJourneyVisibility()}
+function renderProgram(){const p=program(),s=pstate(),max=totalDays(p),pct=Math.round(s.completed.length/max*100),day=p.days[Math.min(s.currentDay-1,max-1)],st=stageForDay(p,Math.min(s.currentDay,max)),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('programCover').style.background=p.cover;document.getElementById('programEyebrow').textContent=tx(p.eyebrow);document.getElementById('programTitle').textContent=tx(p.title);document.getElementById('programSubtitle').textContent=tx(p.subtitle);document.getElementById('programGoal').textContent=tx(p.goal);document.getElementById('programChecklist').innerHTML=p.checklist.map(x=>`<div class="check">${tx(x)}</div>`).join('');document.getElementById('programStartBtn').textContent=tx(!currentSession?'Crear cuenta para comenzar →':(s.baselineDone?'Continuar mi proceso →':'Comenzar mi transformación →'));document.getElementById('journeyTitle').textContent=!currentSession?tx(p.exploreLabel||'Explora este programa'):(s.baselineDone?`${tx(`Día ${s.currentDay}`)} · ${tx(day.title)}`:tx('Tu proceso comienza aquí'));document.getElementById('journeyText').textContent=!currentSession?(lang==='en'?`You can explore ${tx(p.name)} before deciding. Create an account to take the starting assessment, complete the practices, and keep your progress.`:lang==='fr'?`Vous pouvez découvrir ${tx(p.name)} avant de vous décider. Créez un compte pour faire l’évaluation initiale, réaliser les pratiques et conserver votre progression.`:`Puedes conocer de qué se trata ${p.name} antes de decidir. Crea tu cuenta para iniciar la evaluación, hacer las prácticas y conservar tu progreso.`):(s.baselineDone?tx(day.hook):(lang==='en'?`When you begin ${tx(p.name)}, this is where you’ll see your progress, your current stage, and the next practice designed for you.`:lang==='fr'?`Lorsque vous commencez ${tx(p.name)}, vous retrouvez ici votre progression, votre étape actuelle et la prochaine pratique qui vous correspond.`:`Cuando comiences ${p.name}, aquí verás tu avance, la etapa en la que estás y la próxima práctica que te corresponde.`));document.getElementById('journeyPct').textContent=pct+'%';document.getElementById('journeyFill').style.width=pct+'%';document.getElementById('journeyFill').style.background=p.accent;document.getElementById('journeyDays').textContent=tx(`${s.completed.length} / ${max} días completados`);document.getElementById('journeyStage').textContent=s.baselineDone?`${tx(st.name)} · ${tx(st.range)}`:tx('Aún no iniciado');document.querySelector('#programJourneyDetails .section-title h2').textContent=tx(`${p.stages.length} etapas. Una progresión.`);document.querySelector('#programJourneyDetails .section-title p').textContent=tx(p.journeyNote||(p.stages.length===6?'Quince días por etapa.':`${max} días en el programa original.`));document.getElementById('mapEyebrow').textContent=tx(`Mapa de ${max} días`);const me=document.getElementById('programMethodEyebrow'),mt=document.getElementById('programMethodText'),mn=document.getElementById('programMethodNote');if(me)me.textContent=tx(p.type==='training'?'Método del entrenamiento':'Método del programa');if(mt)mt.textContent=tx(p.type==='training'?'La teoría está disponible para profundizar; la práctica cambia durante siete días para convertir claridad en un primer ciclo de acción.':'La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.');if(mn)mn.textContent=tx(p.stages.length+' etapas · más autonomía con el tiempo');renderStages();renderDays();updateJourneyVisibility();renderProgramAssessmentOffer(p.id);if(currentSession?.id&&assessmentConfig(p.id)?.enabled&&!assessmentRowsFromCache(p.id))refreshProgramAssessmentOffer(p.id).catch(()=>{})}
 function renderStages(){const p=program(),meta=PROGRAM_STAGE_META[p.id]||[],lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('stageCards').innerHTML=p.stages.map((s,i)=>{const m=meta[i]||{};return `<div class="stage"><div class="num">${tx(`Etapa ${i+1}`)} · ${tx(s.range)}</div><h3>${tx(s.name)}</h3><p>${tx(s.desc)}</p><div class="stage-meta"><span class="stage-chip">${tx(m.mode||'Práctica guiada')}</span><span class="stage-chip">${tx(m.autonomy||'Guía')}</span></div>${m.shift?`<p class="stage-shift"><b>${tx('Qué cambia aquí:')}</b> ${tx(m.shift)}</p>`:''}</div>`}).join('')}
 function renderDays(){const p=program(),s=pstate(),max=totalDays(p),limit=Math.min(s.currentDay,max),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);document.getElementById('daysGrid').innerHTML=p.days.map(d=>{const available=d.d<=limit||s.completed.includes(d.d);return `<button class="daydot ${s.completed.includes(d.d)?'done':''} ${d.d===s.currentDay?'current':''} ${available?'':'locked-day'}" title="${available?`${tx(p.name)} · ${tx(`Día ${d.d}`)}: ${tx(d.title)}`:tx('Disponible cuando avances hasta este día')}" ${available?'': 'disabled'} onclick="openProgramDay(${d.d})">${d.d}</button>`}).join('');document.getElementById('daysDoneLabel').textContent=tx(`${s.completed.length} / ${max} completados`)}
 
@@ -11131,6 +11289,9 @@ function nexoraResetFreshGuestHome(){
   goalCheckins=[];
   goalReviewDraft=null;
   goalReviewAdjustNotice=false;
+  nexoraAssessmentRowsCache.clear();
+  nexoraAssessmentLoadPending.clear();
+  nexoraAssessmentDraft=null;
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
