@@ -7898,6 +7898,126 @@ const PROGRAMS={
   }
 };
 
+/* NEXORA longitudinal assessment engine v1 — E1A
+   Dormant infrastructure only. E1B will enable pilot programs and UI. */
+const NEXORA_ASSESSMENT_CONFIG=Object.freeze({
+  gratitud:Object.freeze({
+    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    directions:['positive','positive','positive','positive','positive']
+  }),
+  disciplina:Object.freeze({
+    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    directions:['positive','positive','positive','positive','positive']
+  }),
+  confianza:Object.freeze({
+    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    directions:['positive','reverse','positive','positive','positive']
+  }),
+  enfoque:Object.freeze({
+    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    directions:['positive','reverse','positive','positive',null]
+  }),
+  comunicacion:Object.freeze({
+    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    directions:['positive','positive','positive','positive','positive']
+  })
+});
+function assessmentConfig(programKey=appState?.selectedProgram){
+  return NEXORA_ASSESSMENT_CONFIG[programKey]||null;
+}
+function assessmentNormalizeRating(value,direction){
+  const n=Number(value);
+  if(!Number.isInteger(n)||n<1||n>5)return null;
+  if(direction==='positive')return n;
+  if(direction==='reverse')return 6-n;
+  return null;
+}
+function assessmentNormalizeAnswers(programKey,answers={}){
+  const cfg=assessmentConfig(programKey);
+  if(!cfg)return {};
+  const normalized={};
+  cfg.directions.forEach((direction,index)=>{
+    if(!direction)return;
+    const value=assessmentNormalizeRating(answers?.[index],direction);
+    if(value!==null)normalized[index]=value;
+  });
+  return normalized;
+}
+function assessmentValidateAnswers(programKey,answers={}){
+  const p=PROGRAMS[programKey];
+  if(!p||!Array.isArray(p.baseline))return false;
+  return p.baseline.every((_,index)=>{
+    const n=Number(answers?.[index]);
+    return Number.isInteger(n)&&n>=1&&n<=5;
+  });
+}
+function assessmentFurthestCompletedDay(programKey){
+  const s=appState?.programs?.[programKey];
+  const days=Array.isArray(s?.completed)?s.completed.map(Number).filter(Number.isFinite):[];
+  return days.length?Math.max(...days):0;
+}
+function assessmentTargetForProgress(checkpoints=[],furthestDay=0,completedTargets=[]){
+  const eligible=checkpoints.map(Number).filter(n=>Number.isFinite(n)&&n<=furthestDay).sort((a,b)=>a-b);
+  if(!eligible.length)return null;
+  const done=[...new Set((completedTargets||[]).map(Number).filter(Number.isFinite))].sort((a,b)=>a-b);
+  if(!done.length)return eligible[eligible.length-1];
+  const latestDone=done[done.length-1];
+  const newer=eligible.filter(target=>target>latestDone&&!done.includes(target));
+  return newer.length?newer[newer.length-1]:null;
+}
+function assessmentDueCheckpoint(programKey,rows=[],includeInactive=false){
+  const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey];
+  if(!cfg||!s?.baselineDone||(!cfg.enabled&&!includeInactive))return null;
+  const completedTargets=(rows||[])
+    .filter(row=>row?.program_key===programKey&&Number(row?.instrument_version)===cfg.instrumentVersion)
+    .map(row=>Number(row.checkpoint_target));
+  return assessmentTargetForProgress(cfg.checkpoints,assessmentFurthestCompletedDay(programKey),completedTargets);
+}
+function assessmentCompare(programKey,currentAnswers={},baselineAnswers=appState?.programs?.[programKey]?.baseline||{}){
+  const cfg=assessmentConfig(programKey);
+  if(!cfg)return {rows:[],improved:0,same:0,attention:0,comparable:0};
+  const baseline=assessmentNormalizeAnswers(programKey,baselineAnswers);
+  const current=assessmentNormalizeAnswers(programKey,currentAnswers);
+  const rows=[];
+  cfg.directions.forEach((direction,index)=>{
+    if(!direction)return;
+    const start=baseline[index],now=current[index];
+    if(start==null||now==null)return;
+    const delta=now-start;
+    rows.push({index,start,now,delta,status:delta>0?'improved':delta<0?'attention':'same'});
+  });
+  return {
+    rows,
+    improved:rows.filter(r=>r.status==='improved').length,
+    same:rows.filter(r=>r.status==='same').length,
+    attention:rows.filter(r=>r.status==='attention').length,
+    comparable:rows.length
+  };
+}
+function assessmentDraftKey(programKey,checkpointTarget,instrumentVersion=assessmentConfig(programKey)?.instrumentVersion){
+  if(!currentSession?.id||!programKey||!checkpointTarget||!instrumentVersion)return null;
+  return 'nexora_assessment_draft_v1_'+currentSession.id+'_'+programKey+'_'+instrumentVersion+'_'+checkpointTarget;
+}
+function loadAssessmentDraft(programKey,checkpointTarget){
+  const key=assessmentDraftKey(programKey,checkpointTarget);
+  if(!key)return null;
+  try{
+    const raw=JSON.parse(localStorage.getItem(key)||'null');
+    return raw&&raw.version===1?raw:null;
+  }catch{return null}
+}
+function saveAssessmentDraft(programKey,checkpointTarget,answers={}){
+  const key=assessmentDraftKey(programKey,checkpointTarget);
+  if(!key)return false;
+  const payload={version:1,programKey,checkpointTarget,answers:{...answers},updatedAt:new Date().toISOString()};
+  localStorage.setItem(key,JSON.stringify(payload));
+  return true;
+}
+function clearAssessmentDraft(programKey,checkpointTarget){
+  const key=assessmentDraftKey(programKey,checkpointTarget);
+  if(key)localStorage.removeItem(key);
+}
+
 const defaultProgramState=()=>({baselineDone:false,baseline:{},currentDay:1,completed:[],entries:[]});
 const v1=JSON.parse(localStorage.getItem('nexora_v1_state')||'null');
 const defaultAppState=()=>({selectedProgram:'gratitud', programs:{
@@ -10628,6 +10748,40 @@ async function nexoraSyncEvidence(programKey,entry){
     answers:Array.isArray(entry.answers)?entry.answers:[],
     updated_at:new Date().toISOString()
   },{onConflict:'user_id,program_key,day'});
+}
+
+async function nexoraLoadProgramAssessments(programKey){
+  if(!currentSession?.id||!assessmentConfig(programKey))return [];
+  const {data,error}=await nexoraDb.from('program_assessments')
+    .select('id,program_key,instrument_version,checkpoint_target,completed_at_day,answers,created_at,updated_at')
+    .eq('user_id',currentSession.id)
+    .eq('program_key',programKey)
+    .order('checkpoint_target',{ascending:true});
+  if(error)throw error;
+  return data||[];
+}
+async function nexoraSaveProgramAssessment(programKey,checkpointTarget,answers,completedAtDay=assessmentFurthestCompletedDay(programKey)){
+  const cfg=assessmentConfig(programKey);
+  if(!currentSession?.id||!cfg)throw new Error('assessment_unavailable');
+  if(!cfg.checkpoints.includes(Number(checkpointTarget)))throw new Error('assessment_checkpoint_invalid');
+  if(!assessmentValidateAnswers(programKey,answers))throw new Error('assessment_answers_incomplete');
+  const day=Math.max(1,Number(completedAtDay)||1);
+  const payload={
+    user_id:currentSession.id,
+    program_key:programKey,
+    instrument_version:cfg.instrumentVersion,
+    checkpoint_target:Number(checkpointTarget),
+    completed_at_day:day,
+    answers:{...answers},
+    updated_at:new Date().toISOString()
+  };
+  const {data,error}=await nexoraDb.from('program_assessments')
+    .upsert(payload,{onConflict:'user_id,program_key,checkpoint_target,instrument_version'})
+    .select('id,program_key,instrument_version,checkpoint_target,completed_at_day,answers,created_at,updated_at')
+    .single();
+  if(error)throw error;
+  clearAssessmentDraft(programKey,checkpointTarget);
+  return data;
 }
 
 async function nexoraSyncAll(){
