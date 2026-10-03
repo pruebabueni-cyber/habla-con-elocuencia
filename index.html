@@ -2989,7 +2989,7 @@ body.modal-open{overflow:hidden}
     <div class="field" style="margin-top:18px">
       <label>QA · Revisión de progreso</label>
       <div class="tester"><select id="testerAssessmentCheckpoint"><option value="30">Día 30</option><option value="60">Día 60</option><option value="90">Día 90</option></select><button class="ghost" type="button" onclick="openTesterAssessment()">Previsualizar revisión</button></div>
-      <p class="tiny" style="margin-top:7px">Solo Gratitud y Disciplina. No modifica progreso ni guarda una revisión real.</p>
+      <p class="tiny" style="margin-top:7px">QA permite inspeccionar instrumentos configurados. Solo Gratitud y Disciplina están activos para usuarios. No modifica progreso ni guarda una revisión real.</p>
       <button class="ghost" type="button" style="width:100%;margin-top:10px" onclick="openTesterProgressChange()">Previsualizar “Tu cambio”</button>
       <p class="tiny" style="margin-top:7px">Usa las respuestas guardadas en esta previsualización. No crea una reevaluación real.</p>
     </div>
@@ -7941,9 +7941,9 @@ const PROGRAMS={
     baseline:[
       '¿Con qué frecuencia puedes trabajar en una sola tarea sin cambiar voluntariamente de foco?',
       '¿Con qué frecuencia revisas el teléfono o notificaciones sin haberlo decidido?',
-      '¿Sueles definir una prioridad concreta antes de empezar un bloque de trabajo?',
-      'Después de una interrupción, ¿qué tan rápido recuperas el contexto?',
-      '¿Tu entorno habitual facilita o dificulta concentrarte?'
+      '¿Con qué frecuencia defines una prioridad concreta antes de empezar un bloque de trabajo?',
+      '¿Con qué frecuencia recuperas rápidamente el contexto después de una interrupción?',
+      '¿Con qué frecuencia tu entorno habitual facilita que te concentres?'
     ],
     stages:FOCUS_STAGES, days:FOCUS_DAYS,
     accent:'#47647d', cover:'linear-gradient(135deg,#172739,#334f68)',
@@ -7964,9 +7964,9 @@ const PROGRAMS={
     baseline:[
       '¿Con qué frecuencia escuchas hasta el final antes de preparar tu respuesta?',
       '¿Con qué frecuencia haces preguntas para confirmar lo que entendiste?',
-      '¿Tus mensajes importantes suelen tener un punto principal claro?',
-      '¿Puedes expresar desacuerdo sin atacar ni retirarte automáticamente?',
-      '¿Antes de negociar tienes claro qué necesitas, qué puedes ceder y qué necesitas entender?'
+      '¿Con qué frecuencia tus mensajes importantes tienen un punto principal claro?',
+      '¿Con qué frecuencia expresas desacuerdo sin atacar ni retirarte automáticamente?',
+      '¿Con qué frecuencia tienes claro qué necesitas, qué puedes ceder y qué necesitas entender antes de negociar?'
     ],
     stages:COMMUNICATION_STAGES, days:COMMUNICATION_DAYS,
     accent:'#8a6f58', cover:'linear-gradient(135deg,#2a2c3b,#67554d)',
@@ -8016,7 +8016,7 @@ const NEXORA_ASSESSMENT_CONFIG=Object.freeze({
   }),
   enfoque:Object.freeze({
     enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
-    directions:['positive','reverse','positive','positive',null]
+    directions:['positive','reverse','positive','positive','positive']
   }),
   comunicacion:Object.freeze({
     enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
@@ -8320,7 +8320,7 @@ function openTesterAssessment(){
   if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}
   const programKey=document.getElementById('testerProgram')?.value||appState?.selectedProgram;
   const cfg=assessmentConfig(programKey);
-  if(!cfg?.enabled){toast('La reevaluación piloto está activa solo en Gratitud y Disciplina.');return}
+  if(!cfg){toast('Este programa todavía no tiene instrumento longitudinal configurado.');return}
   const checkpointTarget=Number(document.getElementById('testerAssessmentCheckpoint')?.value||30);
   if(!cfg.checkpoints.includes(checkpointTarget))return;
   const local=loadAssessmentPreviewDraft(programKey,checkpointTarget);
@@ -10750,6 +10750,15 @@ Object.assign(NEXORA_TRANSLATIONS,NEXORA_QA_TRANSLATIONS);
 
 const NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE={"Tu progreso":{"en":"Your progress","fr":"Votre progression"},"Continuar mi proceso →":{"en":"Continue my process →","fr":"Poursuivre mon processus →"},"Tu proceso comienza aquí":{"en":"Your process starts here","fr":"Votre processus commence ici"},"Este cierre no borra lo construido: resume lo aprendido y te ayuda a decidir qué seguir practicando.":{"en":"This milestone doesn’t erase what you’ve built. It brings your learning together and helps you decide what to keep practicing.","fr":"Cette étape n’efface pas ce que vous avez construit. Elle rassemble vos apprentissages et vous aide à décider ce qu’il vaut la peine de continuer à pratiquer."}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROCESS_LANGUAGE);
+const NEXORA_TRANSLATIONS_EXTRA_LONGITUDINAL_E1E={
+  "¿Con qué frecuencia defines una prioridad concreta antes de empezar un bloque de trabajo?":{"en":"How often do you define a specific priority before starting a work block?","fr":"À quelle fréquence définissez-vous une priorité précise avant de commencer une période de travail ?"},
+  "¿Con qué frecuencia recuperas rápidamente el contexto después de una interrupción?":{"en":"How often do you quickly regain context after an interruption?","fr":"À quelle fréquence retrouvez-vous rapidement le fil après une interruption ?"},
+  "¿Con qué frecuencia tu entorno habitual facilita que te concentres?":{"en":"How often does your usual environment make it easier for you to concentrate?","fr":"À quelle fréquence votre environnement habituel facilite-t-il votre concentration ?"},
+  "¿Con qué frecuencia tus mensajes importantes tienen un punto principal claro?":{"en":"How often do your important messages have a clear main point?","fr":"À quelle fréquence vos messages importants ont-ils un point principal clair ?"},
+  "¿Con qué frecuencia expresas desacuerdo sin atacar ni retirarte automáticamente?":{"en":"How often do you express disagreement without attacking or automatically withdrawing?","fr":"À quelle fréquence exprimez-vous un désaccord sans attaquer ni vous retirer automatiquement ?"},
+  "¿Con qué frecuencia tienes claro qué necesitas, qué puedes ceder y qué necesitas entender antes de negociar?":{"en":"How often are you clear about what you need, what you can concede, and what you need to understand before negotiating?","fr":"À quelle fréquence savez-vous clairement ce dont vous avez besoin, ce que vous pouvez concéder et ce que vous devez comprendre avant de négocier ?"}
+};
+Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_LONGITUDINAL_E1E);
 const NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1={"Método del programa":{"en":"Program method","fr":"Méthode du programme"},"Aprender cuando quieras. Practicar con progresión.":{"en":"Learn when you want. Practice through progression.","fr":"Apprenez quand vous le souhaitez. Progressez par la pratique."},"La teoría está disponible para profundizar; la práctica diaria cambia por etapas para evitar repetir la misma experiencia durante 90 días.":{"en":"The theory is available whenever you want to go deeper; daily practice changes by stage so the 90-day experience does not become repetitive.","fr":"La théorie reste disponible pour approfondir ; la pratique quotidienne évolue par étapes afin que l’expérience de 90 jours ne devienne pas répétitive."},"Explorar fundamentos":{"en":"Explore foundations","fr":"Explorer les fondements"},"Fundamentos del programa":{"en":"Program foundations","fr":"Fondements du programme"},"Biblioteca del programa":{"en":"Program library","fr":"Bibliothèque du programme"},"Cómo usar esta biblioteca":{"en":"How to use this library","fr":"Comment utiliser cette bibliothèque"},"Este material es opcional. Puedes estudiarlo cuando quieras, pero NEXORA no exige memorizar teoría para avanzar. El programa busca que el conocimiento se convierta en conducta mediante práctica, evidencia y revisión.":{"en":"This material is optional. Study it whenever you want, but NEXORA does not require you to memorize theory to move forward. The program is designed to turn knowledge into behavior through practice, evidence, and review.","fr":"Ce contenu est facultatif. Vous pouvez l’étudier quand vous le souhaitez, mais NEXORA ne vous demande pas de mémoriser la théorie pour avancer. Le programme vise à transformer les connaissances en comportements par la pratique, les preuves et la révision."},"Volver al programa":{"en":"Back to program","fr":"Retour au programme"},"Comprender":{"en":"Understand","fr":"Comprendre"},"Llévalo a la práctica":{"en":"Put it into practice","fr":"Passez à la pratique"},"Nueva etapa":{"en":"New stage","fr":"Nouvelle étape"}};
 Object.assign(NEXORA_TRANSLATIONS,NEXORA_TRANSLATIONS_EXTRA_PROGRESSIVE_V1);
 let nexoraI18nApplying=false;
