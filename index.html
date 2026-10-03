@@ -2932,6 +2932,11 @@ body.modal-open{overflow:hidden}
     </div>
     <div class="field"><label>Experiencia</label><select id="testerProgram" onchange="syncTesterMax()"><option value="gratitud">Gratitud</option><option value="motivacion">Motivación</option><option value="disciplina">Disciplina</option><option value="confianza">Confianza</option><option value="comunicacion">Comunicación</option><option value="enfoque">Enfoque</option><option value="elocuencia">Hablar con elocuencia</option></select></div>
     <div class="tester"><input id="testerDay" type="number" min="1" max="90" value="1"><button class="primary" onclick="jumpToDay()">Abrir día</button></div>
+    <div class="field" style="margin-top:18px">
+      <label>QA · Revisión de progreso</label>
+      <div class="tester"><select id="testerAssessmentCheckpoint"><option value="30">Día 30</option><option value="60">Día 60</option><option value="90">Día 90</option></select><button class="ghost" type="button" onclick="openTesterAssessment()">Previsualizar revisión</button></div>
+      <p class="tiny" style="margin-top:7px">Solo Gratitud y Disciplina. No modifica progreso ni guarda una revisión real.</p>
+    </div>
     <button class="ghost" style="width:100%;margin-top:10px" onclick="resetDemo()">Reiniciar datos de prueba</button>
     <p class="tiny" style="margin-top:14px">Vista interna de prueba. Las cuentas, el progreso y las sugerencias de usuarios autenticados se guardan en Supabase.</p>
     <div class="modal-actions">
@@ -8059,10 +8064,33 @@ function clearAssessmentDraft(programKey,checkpointTarget){
 }
 
 let nexoraAssessmentDraft=null;
+let nexoraAssessmentPreview=false;
 const nexoraAssessmentRowsCache=new Map();
 const nexoraAssessmentLoadPending=new Map();
 function assessmentCacheKey(programKey){
   return currentSession?.id?currentSession.id+':'+programKey:null;
+}
+function assessmentPreviewKey(programKey,checkpointTarget){
+  if(!currentSession?.id||!programKey||!checkpointTarget)return null;
+  return 'nexora_assessment_preview_v1_'+currentSession.id+'_'+programKey+'_'+checkpointTarget;
+}
+function loadAssessmentPreviewDraft(programKey,checkpointTarget){
+  const key=assessmentPreviewKey(programKey,checkpointTarget);
+  if(!key)return null;
+  try{
+    const raw=JSON.parse(localStorage.getItem(key)||'null');
+    return raw&&raw.version===1?raw:null;
+  }catch{return null}
+}
+function saveAssessmentPreviewDraft(programKey,checkpointTarget,answers={}){
+  const key=assessmentPreviewKey(programKey,checkpointTarget);
+  if(!key)return false;
+  localStorage.setItem(key,JSON.stringify({version:1,programKey,checkpointTarget,answers:{...answers},updatedAt:new Date().toISOString()}));
+  return true;
+}
+function clearAssessmentPreviewDraft(programKey,checkpointTarget){
+  const key=assessmentPreviewKey(programKey,checkpointTarget);
+  if(key)localStorage.removeItem(key);
 }
 function assessmentCopy(){
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
@@ -8137,12 +8165,31 @@ function selectAssessmentScale(button){
   button.classList.add('sel');
   nexoraAssessmentDraft.answers[q]=v;
   nexoraAssessmentDraft.updatedAt=new Date().toISOString();
-  saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+  if(nexoraAssessmentPreview)saveAssessmentPreviewDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+  else saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+}
+function openTesterAssessment(){
+  if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}
+  const programKey=document.getElementById('testerProgram')?.value||appState?.selectedProgram;
+  const cfg=assessmentConfig(programKey);
+  if(!cfg?.enabled){toast('La reevaluación piloto está activa solo en Gratitud y Disciplina.');return}
+  const checkpointTarget=Number(document.getElementById('testerAssessmentCheckpoint')?.value||30);
+  if(!cfg.checkpoints.includes(checkpointTarget))return;
+  const local=loadAssessmentPreviewDraft(programKey,checkpointTarget);
+  nexoraAssessmentPreview=true;
+  nexoraAssessmentDraft={programKey,checkpointTarget,answers:{...(local?.answers||{})},updatedAt:local?.updatedAt||new Date().toISOString()};
+  buildProgramAssessment(programKey,checkpointTarget,nexoraAssessmentDraft.answers);
+  document.getElementById('assessmentKicker').textContent='QA · '+document.getElementById('assessmentKicker').textContent;
+  document.getElementById('assessmentSaveBtn').textContent='Validar previsualización →';
+  document.getElementById('assessmentCloseBtn').textContent='Cerrar y conservar borrador';
+  closeModal('testerModal');
+  openModal('assessmentModal');
 }
 async function openProgramAssessment(programKey=appState?.selectedProgram){
   if(!currentSession?.id)return requireAccount('beginProgram');
   const cfg=assessmentConfig(programKey);
   if(!cfg?.enabled)return;
+  nexoraAssessmentPreview=false;
   const rows=await refreshProgramAssessmentOffer(programKey,true);
   const target=assessmentDueCheckpoint(programKey,rows);
   if(!target){renderProgramAssessmentOffer(programKey);return}
@@ -8152,13 +8199,24 @@ async function openProgramAssessment(programKey=appState?.selectedProgram){
   openModal('assessmentModal');
 }
 function closeProgramAssessment(){
-  if(nexoraAssessmentDraft)saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+  if(nexoraAssessmentDraft){
+    if(nexoraAssessmentPreview)saveAssessmentPreviewDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+    else saveAssessmentDraft(nexoraAssessmentDraft.programKey,nexoraAssessmentDraft.checkpointTarget,nexoraAssessmentDraft.answers);
+  }
   closeModal('assessmentModal');
 }
 async function saveCurrentProgramAssessment(){
   if(!nexoraAssessmentDraft)return;
   const cp=assessmentCopy(),draft=nexoraAssessmentDraft;
   if(!assessmentValidateAnswers(draft.programKey,draft.answers)){toast(cp.incomplete);return}
+  if(nexoraAssessmentPreview){
+    clearAssessmentPreviewDraft(draft.programKey,draft.checkpointTarget);
+    nexoraAssessmentDraft=null;
+    nexoraAssessmentPreview=false;
+    closeModal('assessmentModal');
+    toast('Vista tester: revisión validada. No se guardaron datos reales.');
+    return;
+  }
   const btn=document.getElementById('assessmentSaveBtn');
   if(btn)btn.disabled=true;
   try{
@@ -11292,6 +11350,7 @@ function nexoraResetFreshGuestHome(){
   nexoraAssessmentRowsCache.clear();
   nexoraAssessmentLoadPending.clear();
   nexoraAssessmentDraft=null;
+  nexoraAssessmentPreview=false;
   renderAll();
   updateAccountUI();
   try{applyNexoraLanguage(document.body)}catch{}
