@@ -8286,7 +8286,11 @@ function openModal(id){
   const box=modal.querySelector('.modalbox');
   if(box){
     box.setAttribute('tabindex','-1');
-    requestAnimationFrame(()=>box.focus());
+    box.scrollTop=0;
+    requestAnimationFrame(()=>{
+      box.scrollTop=0;
+      try{box.focus({preventScroll:true})}catch{box.focus()}
+    });
   }
 }
 function closeModal(id){
