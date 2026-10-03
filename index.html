@@ -9966,7 +9966,8 @@ function renderProgress(){
     const state=pstate(id);
     return state.baselineDone||state.completed.length>0||state.entries.length>0;
   });
-  const progressId=started.includes(appState.selectedProgram)?appState.selectedProgram:(started[0]||appState.selectedProgram);
+  const qaProgressId=nexoraProgressChangePreview?.programKey||null;
+  const progressId=qaProgressId||[appState.selectedProgram].filter(function(id){return started.includes(id)})[0]||(started[0]||appState.selectedProgram);
   const p=program(progressId),s=pstate(progressId),max=totalDays(p),pct=Math.round(s.completed.length/max*100);
   const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   const tx=function(v){return typeof translatePattern==='function'?translatePattern(v,lang):v};
