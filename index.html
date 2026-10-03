@@ -8122,6 +8122,7 @@ function clearAssessmentDraft(programKey,checkpointTarget){
 let nexoraAssessmentDraft=null;
 let nexoraAssessmentPreview=false;
 let nexoraProgressChangePreview=null;
+let nexoraProgressChangePreviewBaseline=null;
 const nexoraAssessmentRowsCache=new Map();
 const nexoraAssessmentLoadPending=new Map();
 function assessmentCacheKey(programKey){
@@ -8237,7 +8238,9 @@ function renderProgressChange(programKey=appState?.selectedProgram){
   const card=document.getElementById('progressChangeCard');
   if(!card)return;
   const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey],copy=progressChangeCopy();
-  if(!currentSession?.id||!cfg?.enabled||!s?.baselineDone){card.hidden=true;return}
+  const preview=nexoraProgressChangePreview?.programKey===programKey?nexoraProgressChangePreview:null;
+  const previewBaseline=preview?nexoraProgressChangePreviewBaseline:null;
+  if(!currentSession?.id||!cfg?.enabled||(!s?.baselineDone&&!preview)){card.hidden=true;return}
   card.hidden=false;
   document.getElementById('progressChangeKicker').textContent=copy.kicker;
   document.getElementById('progressChangeTitle').textContent=copy.title;
@@ -8253,7 +8256,6 @@ function renderProgressChange(programKey=appState?.selectedProgram){
   note.hidden=true;
   note.textContent='';
   const rows=assessmentRowsFromCache(programKey);
-  const preview=nexoraProgressChangePreview?.programKey===programKey?nexoraProgressChangePreview:null;
   const latest=preview||(rows===null?null:latestComparableAssessment(programKey,rows));
   if(!latest){
     intro.textContent=assessmentFurthestCompletedDay(programKey)>=15?copy.milestone:copy.waiting;
@@ -8264,7 +8266,7 @@ function renderProgressChange(programKey=appState?.selectedProgram){
     }
     return;
   }
-  const comparison=assessmentCompare(programKey,latest.answers,s.baseline||{});
+  const comparison=assessmentCompare(programKey,latest.answers,previewBaseline||(s.baseline||{}));
   if(!comparison.comparable){intro.textContent=copy.unavailable;return}
   intro.textContent='';
   meta.textContent=(preview?'QA · ':'')+copy.latest.replace('{day}',String(Number(latest.checkpoint_target)||Number(latest.completed_at_day)||''));
@@ -8284,7 +8286,7 @@ function renderProgressChange(programKey=appState?.selectedProgram){
       '</div>'+
     '</div>';
   }).join('');
-  note.textContent=copy.note;
+  note.textContent=(preview?'QA · Punto de partida simulado localmente para validar la interfaz. ':'')+copy.note;
   note.hidden=false;
 }
 function buildProgramAssessment(programKey,checkpointTarget,answers={}){
@@ -8331,18 +8333,26 @@ function openTesterAssessment(){
   closeModal('testerModal');
   openModal('assessmentModal');
 }
+function testerProgressBaseline(programKey){
+  const s=appState?.programs?.[programKey];
+  if(s?.baselineDone&&assessmentValidateAnswers(programKey,s.baseline||{}))return {...s.baseline};
+  const p=PROGRAMS?.[programKey];
+  const answers={};
+  (p?.baseline||[]).forEach(function(_,index){answers[index]=3});
+  return answers;
+}
 function openTesterProgressChange(){
   if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}
   const programKey=document.getElementById('testerProgram')?.value||appState?.selectedProgram;
-  const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey];
+  const cfg=assessmentConfig(programKey);
   if(!cfg?.enabled){toast('La comparación piloto está activa solo en Gratitud y Disciplina.');return}
-  if(!s?.baselineDone){toast('Este programa necesita un punto de partida guardado para comparar.');return}
   const checkpointTarget=Number(document.getElementById('testerAssessmentCheckpoint')?.value||30);
   const draft=loadAssessmentPreviewDraft(programKey,checkpointTarget);
   if(!assessmentValidateAnswers(programKey,draft?.answers||{})){
     toast('Completa primero las cinco respuestas de la previsualización y ciérrala conservando el borrador.');
     return;
   }
+  nexoraProgressChangePreviewBaseline=testerProgressBaseline(programKey);
   nexoraProgressChangePreview={
     programKey,
     checkpoint_target:checkpointTarget,
