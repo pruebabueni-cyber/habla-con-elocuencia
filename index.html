@@ -2403,6 +2403,10 @@ body.modal-open{overflow:hidden}
 .modal.open{overscroll-behavior:contain}
 .modalbox{-webkit-overflow-scrolling:touch}
 .modalbox:focus{outline:none}
+@media(max-width:700px){
+  .modal{align-items:flex-start;overflow-y:auto}
+  .modalbox{max-height:calc(100dvh - 36px)}
+}
 </style>
 
 <script data-nexora-theme="v1">
@@ -8286,10 +8290,19 @@ function openModal(id){
   const box=modal.querySelector('.modalbox');
   if(box){
     box.setAttribute('tabindex','-1');
-    box.scrollTop=0;
-    requestAnimationFrame(()=>{
+    const resetModalScroll=()=>{
+      modal.scrollTop=0;
       box.scrollTop=0;
-      try{box.focus({preventScroll:true})}catch{box.focus()}
+      try{box.scrollTo({top:0,left:0,behavior:'instant'})}catch{try{box.scrollTo(0,0)}catch{}}
+    };
+    resetModalScroll();
+    requestAnimationFrame(()=>{
+      resetModalScroll();
+      if(window.matchMedia?.('(min-width:701px)').matches){
+        try{box.focus({preventScroll:true})}catch{box.focus()}
+      }
+      requestAnimationFrame(resetModalScroll);
+      setTimeout(resetModalScroll,80);
     });
   }
 }
