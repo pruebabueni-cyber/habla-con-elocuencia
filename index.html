@@ -2990,6 +2990,8 @@ body.modal-open{overflow:hidden}
       <label>QA · Revisión de progreso</label>
       <div class="tester"><select id="testerAssessmentCheckpoint"><option value="30">Día 30</option><option value="60">Día 60</option><option value="90">Día 90</option></select><button class="ghost" type="button" onclick="openTesterAssessment()">Previsualizar revisión</button></div>
       <p class="tiny" style="margin-top:7px">Solo Gratitud y Disciplina. No modifica progreso ni guarda una revisión real.</p>
+      <button class="ghost" type="button" style="width:100%;margin-top:10px" onclick="openTesterProgressChange()">Previsualizar “Tu cambio”</button>
+      <p class="tiny" style="margin-top:7px">Usa las respuestas guardadas en esta previsualización. No crea una reevaluación real.</p>
     </div>
     <button class="ghost" style="width:100%;margin-top:10px" onclick="resetDemo()">Reiniciar datos de prueba</button>
     <p class="tiny" style="margin-top:14px">Vista interna de prueba. Las cuentas, el progreso y las sugerencias de usuarios autenticados se guardan en Supabase.</p>
@@ -8119,6 +8121,7 @@ function clearAssessmentDraft(programKey,checkpointTarget){
 
 let nexoraAssessmentDraft=null;
 let nexoraAssessmentPreview=false;
+let nexoraProgressChangePreview=null;
 const nexoraAssessmentRowsCache=new Map();
 const nexoraAssessmentLoadPending=new Map();
 function assessmentCacheKey(programKey){
@@ -8250,7 +8253,8 @@ function renderProgressChange(programKey=appState?.selectedProgram){
   note.hidden=true;
   note.textContent='';
   const rows=assessmentRowsFromCache(programKey);
-  const latest=rows===null?null:latestComparableAssessment(programKey,rows);
+  const preview=nexoraProgressChangePreview?.programKey===programKey?nexoraProgressChangePreview:null;
+  const latest=preview||(rows===null?null:latestComparableAssessment(programKey,rows));
   if(!latest){
     intro.textContent=assessmentFurthestCompletedDay(programKey)>=15?copy.milestone:copy.waiting;
     if(rows===null){
@@ -8263,7 +8267,7 @@ function renderProgressChange(programKey=appState?.selectedProgram){
   const comparison=assessmentCompare(programKey,latest.answers,s.baseline||{});
   if(!comparison.comparable){intro.textContent=copy.unavailable;return}
   intro.textContent='';
-  meta.textContent=copy.latest.replace('{day}',String(Number(latest.checkpoint_target)||Number(latest.completed_at_day)||''));
+  meta.textContent=(preview?'QA · ':'')+copy.latest.replace('{day}',String(Number(latest.checkpoint_target)||Number(latest.completed_at_day)||''));
   summary.innerHTML=
     '<span class="change-summary-chip improved"><b>'+comparison.improved+'</b> '+escapeHtml(copy.improvedCount)+'</span>'+
     '<span class="change-summary-chip"><b>'+comparison.same+'</b> '+escapeHtml(copy.sameCount)+'</span>'+
@@ -8326,6 +8330,30 @@ function openTesterAssessment(){
   document.getElementById('assessmentCloseBtn').textContent='Cerrar y conservar borrador';
   closeModal('testerModal');
   openModal('assessmentModal');
+}
+function openTesterProgressChange(){
+  if(!nexoraIsAdmin){toast('Vista tester disponible solo para administración.');return}
+  const programKey=document.getElementById('testerProgram')?.value||appState?.selectedProgram;
+  const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey];
+  if(!cfg?.enabled){toast('La comparación piloto está activa solo en Gratitud y Disciplina.');return}
+  if(!s?.baselineDone){toast('Este programa necesita un punto de partida guardado para comparar.');return}
+  const checkpointTarget=Number(document.getElementById('testerAssessmentCheckpoint')?.value||30);
+  const draft=loadAssessmentPreviewDraft(programKey,checkpointTarget);
+  if(!assessmentValidateAnswers(programKey,draft?.answers||{})){
+    toast('Completa primero las cinco respuestas de la previsualización y ciérrala conservando el borrador.');
+    return;
+  }
+  nexoraProgressChangePreview={
+    programKey,
+    checkpoint_target:checkpointTarget,
+    completed_at_day:checkpointTarget,
+    instrument_version:cfg.instrumentVersion,
+    answers:{...draft.answers},
+    qa:true
+  };
+  appState.selectedProgram=programKey;
+  closeModal('testerModal');
+  showView('progress',document.getElementById('navProgress'));
 }
 async function openProgramAssessment(programKey=appState?.selectedProgram){
   if(!currentSession?.id)return requireAccount('beginProgram');
