@@ -8255,7 +8255,7 @@ function renderProgressChange(programKey=appState?.selectedProgram){
     intro.textContent=assessmentFurthestCompletedDay(programKey)>=15?copy.milestone:copy.waiting;
     if(rows===null){
       refreshProgramAssessmentOffer(programKey,false).then(function(){
-        if((document.querySelector('.view.active')?.id||'')==='progress')renderProgressChange(programKey);
+        if(assessmentRowsFromCache(programKey)!==null&&(document.querySelector('.view.active')?.id||'')==='progress')renderProgressChange(programKey);
       }).catch(function(){});
     }
     return;
