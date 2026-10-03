@@ -692,6 +692,43 @@ window.setTimeout(window.__nexoraReleaseSplash,6500);
 
 
 
+    /* NEXORA E1D · longitudinal change inside Progress */
+    .progress-change-card{margin-top:18px}
+    .progress-change-card[hidden]{display:none!important}
+    .progress-change-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+    .progress-change-head h2{font-size:28px;letter-spacing:-.035em;margin:3px 0 7px}
+    .progress-change-meta{font-size:12px;color:var(--muted);font-weight:800;white-space:nowrap}
+    .progress-change-summary{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+    .change-summary-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border-radius:999px;border:1px solid var(--line);background:#faf7f1;font-size:12px;font-weight:800;color:var(--ink2)}
+    .change-summary-chip.improved{background:#eef3ed;border-color:#cfddcf;color:#47634d}
+    .change-summary-chip.attention{background:#f8f0e4;border-color:#ead8bd;color:#74562f}
+    .progress-change-rows{display:grid;gap:10px;margin-top:16px}
+    .progress-change-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:15px 0;border-top:1px solid var(--line)}
+    .progress-change-row:first-child{border-top:0}
+    .progress-change-label{font-weight:820;line-height:1.38}
+    .progress-change-values{display:flex;align-items:center;gap:8px}
+    .progress-change-value{min-width:66px;padding:8px 10px;border:1px solid var(--line);border-radius:13px;background:#faf7f1;text-align:center}
+    .progress-change-value span{display:block;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:850;margin-bottom:3px}
+    .progress-change-value b{font-size:20px}
+    .progress-change-arrow{color:var(--muted);font-weight:900}
+    .progress-change-status{display:inline-flex;margin-top:7px;font-size:11px;font-weight:850;color:var(--muted)}
+    .progress-change-status.improved{color:#56715b}
+    .progress-change-status.attention{color:#8a6532}
+    .progress-change-note{margin:14px 0 0;padding-top:13px;border-top:1px solid var(--line);font-size:12px;line-height:1.55;color:var(--muted)}
+    .progress-change-empty{margin:12px 0 0;line-height:1.6}
+    html[data-theme="dark"] .change-summary-chip,
+    html[data-theme="dark"] .progress-change-value{background:#171e28;border-color:#344050;color:#edf1f6}
+    html[data-theme="dark"] .change-summary-chip.improved{background:#203128;border-color:#35523d;color:#bfe0c5}
+    html[data-theme="dark"] .change-summary-chip.attention{background:#332a20;border-color:#5a4630;color:#f0cf9a}
+    html[data-theme="dark"] .progress-change-row{border-color:#344050}
+    @media(max-width:560px){
+      .progress-change-head{display:block}
+      .progress-change-meta{margin-top:5px;white-space:normal}
+      .progress-change-row{grid-template-columns:1fr;gap:10px}
+      .progress-change-values{justify-content:flex-start}
+      .progress-change-value{flex:1;max-width:120px}
+    }
+
     .assessment-offer{display:grid;grid-template-columns:1fr auto;align-items:center;gap:18px;margin-top:18px;padding:22px}
     .assessment-offer[hidden]{display:none!important}
     .assessment-offer h3{font-size:24px;margin:5px 0 7px}
@@ -2747,6 +2784,19 @@ body.modal-open{overflow:hidden}
             <div class="stat"><b id="statEvidence">0</b><span>evidencias</span></div>
             <div class="stat"><b id="statThird">0</b><span id="statThirdLabel">señales</span></div>
           </div>
+        </section>
+        <section class="card progress-change-card" id="progressChangeCard" hidden>
+          <div class="progress-change-head">
+            <div>
+              <div class="eyebrow" id="progressChangeKicker">Tu cambio</div>
+              <h2 id="progressChangeTitle">Tu cambio</h2>
+              <p class="muted progress-change-empty" id="progressChangeIntro"></p>
+            </div>
+            <div class="progress-change-meta" id="progressChangeMeta"></div>
+          </div>
+          <div class="progress-change-summary" id="progressChangeSummary" hidden></div>
+          <div class="progress-change-rows" id="progressChangeRows"></div>
+          <p class="progress-change-note" id="progressChangeNote" hidden></p>
         </section>
         <section class="card progress-milestone-card">
           <div class="eyebrow">Hitos</div>
@@ -8145,6 +8195,94 @@ async function refreshProgramAssessmentOffer(programKey=appState?.selectedProgra
   if(key)nexoraAssessmentLoadPending.set(key,task);
   return task;
 }
+function progressChangeCopy(){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  return ({
+    es:{kicker:'TU CAMBIO',title:'Tu cambio',waiting:'Tu punto de partida está guardado. La primera comparación aparecerá después de tu revisión del Día 30.',milestone:'Ya alcanzaste un primer hito de práctica. Todavía no es una medición de cambio; tu primera comparación llegará en el Día 30.',latest:'Última revisión · Día {day}',start:'Inicio',now:'Ahora',improved:'Mejoró',same:'Se mantuvo',attention:'Necesita atención',improvedCount:'mejoraron',sameCount:'se mantuvieron',attentionCount:'necesitan atención',note:'Comparamos tus respuestas con el mismo instrumento usado al comenzar. No es una puntuación global.',unavailable:'Tu punto de partida está guardado, pero esta comparación todavía no está disponible.'},
+    en:{kicker:'YOUR CHANGE',title:'Your change',waiting:'Your starting point is saved. Your first comparison will appear after your Day 30 progress review.',milestone:'You have reached an early practice milestone. This is not yet a measure of change; your first comparison comes at Day 30.',latest:'Latest review · Day {day}',start:'Start',now:'Now',improved:'Improved',same:'Stayed the same',attention:'Needs attention',improvedCount:'improved',sameCount:'stayed the same',attentionCount:'need attention',note:'We compare your answers with the same instrument used at the start. This is not a global score.',unavailable:'Your starting point is saved, but this comparison is not available yet.'},
+    fr:{kicker:'VOTRE ÉVOLUTION',title:'Votre évolution',waiting:'Votre point de départ est enregistré. La première comparaison apparaîtra après votre bilan du Jour 30.',milestone:'Vous avez atteint un premier jalon de pratique. Ce n’est pas encore une mesure d’évolution ; la première comparaison arrivera au Jour 30.',latest:'Dernier bilan · Jour {day}',start:'Départ',now:'Maintenant',improved:'En progrès',same:'Stable',attention:'À surveiller',improvedCount:'se sont améliorés',sameCount:'sont restés stables',attentionCount:'demandent de l’attention',note:'Nous comparons vos réponses avec le même instrument qu’au départ. Il ne s’agit pas d’un score global.',unavailable:'Votre point de départ est enregistré, mais cette comparaison n’est pas encore disponible.'}
+  })[lang]||null;
+}
+function progressChangeIndicatorLabel(programKey,index){
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const labels={
+    gratitud:{
+      es:['Atención a lo bueno','Apreciación en el momento','Expresión de gratitud','Perspectiva en días difíciles','Gratitud espontánea'],
+      en:['Noticing what is good','Appreciation in the moment','Expressing gratitude','Perspective on difficult days','Spontaneous gratitude'],
+      fr:['Attention portée au positif','Appréciation dans l’instant','Expression de la gratitude','Perspective dans les jours difficiles','Gratitude spontanée']
+    },
+    disciplina:{
+      es:['Compromisos contigo','Empezar sin postergar','Protección de la atención','Capacidad de retomar','Prioridades en la práctica'],
+      en:['Commitments to yourself','Starting without delaying','Protecting your attention','Ability to restart','Priorities in practice'],
+      fr:['Engagements envers vous-même','Commencer sans repousser','Protection de l’attention','Capacité à reprendre','Priorités dans la pratique']
+    }
+  };
+  return (labels[programKey]&&labels[programKey][lang]&&labels[programKey][lang][index])||PROGRAMS[programKey]?.baseline?.[index]||'';
+}
+function latestComparableAssessment(programKey,rows=[]){
+  const cfg=assessmentConfig(programKey);
+  if(!cfg)return null;
+  return (rows||[]).filter(function(row){
+    return row?.program_key===programKey&&Number(row?.instrument_version)===cfg.instrumentVersion&&assessmentValidateAnswers(programKey,row?.answers||{});
+  }).sort(function(a,b){
+    const checkpoint=Number(b.checkpoint_target)-Number(a.checkpoint_target);
+    if(checkpoint)return checkpoint;
+    return (Date.parse(b.updated_at||b.created_at||0)||0)-(Date.parse(a.updated_at||a.created_at||0)||0);
+  })[0]||null;
+}
+function renderProgressChange(programKey=appState?.selectedProgram){
+  const card=document.getElementById('progressChangeCard');
+  if(!card)return;
+  const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey],copy=progressChangeCopy();
+  if(!currentSession?.id||!cfg?.enabled||!s?.baselineDone){card.hidden=true;return}
+  card.hidden=false;
+  document.getElementById('progressChangeKicker').textContent=copy.kicker;
+  document.getElementById('progressChangeTitle').textContent=copy.title;
+  const intro=document.getElementById('progressChangeIntro');
+  const meta=document.getElementById('progressChangeMeta');
+  const summary=document.getElementById('progressChangeSummary');
+  const rowsWrap=document.getElementById('progressChangeRows');
+  const note=document.getElementById('progressChangeNote');
+  meta.textContent='';
+  summary.hidden=true;
+  summary.innerHTML='';
+  rowsWrap.innerHTML='';
+  note.hidden=true;
+  note.textContent='';
+  const rows=assessmentRowsFromCache(programKey);
+  const latest=rows===null?null:latestComparableAssessment(programKey,rows);
+  if(!latest){
+    intro.textContent=assessmentFurthestCompletedDay(programKey)>=15?copy.milestone:copy.waiting;
+    if(rows===null){
+      refreshProgramAssessmentOffer(programKey,false).then(function(){
+        if((document.querySelector('.view.active')?.id||'')==='progress')renderProgressChange(programKey);
+      }).catch(function(){});
+    }
+    return;
+  }
+  const comparison=assessmentCompare(programKey,latest.answers,s.baseline||{});
+  if(!comparison.comparable){intro.textContent=copy.unavailable;return}
+  intro.textContent='';
+  meta.textContent=copy.latest.replace('{day}',String(Number(latest.checkpoint_target)||Number(latest.completed_at_day)||''));
+  summary.innerHTML=
+    '<span class="change-summary-chip improved"><b>'+comparison.improved+'</b> '+escapeHtml(copy.improvedCount)+'</span>'+
+    '<span class="change-summary-chip"><b>'+comparison.same+'</b> '+escapeHtml(copy.sameCount)+'</span>'+
+    '<span class="change-summary-chip attention"><b>'+comparison.attention+'</b> '+escapeHtml(copy.attentionCount)+'</span>';
+  summary.hidden=false;
+  rowsWrap.innerHTML=comparison.rows.map(function(row){
+    const statusLabel=row.status==='improved'?copy.improved:(row.status==='attention'?copy.attention:copy.same);
+    return '<div class="progress-change-row">'+
+      '<div><div class="progress-change-label">'+escapeHtml(progressChangeIndicatorLabel(programKey,row.index))+'</div><span class="progress-change-status '+row.status+'">'+escapeHtml(statusLabel)+'</span></div>'+
+      '<div class="progress-change-values">'+
+        '<div class="progress-change-value"><span>'+escapeHtml(copy.start)+'</span><b>'+row.start+'</b></div>'+
+        '<span class="progress-change-arrow" aria-hidden="true">→</span>'+
+        '<div class="progress-change-value"><span>'+escapeHtml(copy.now)+'</span><b>'+row.now+'</b></div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  note.textContent=copy.note;
+  note.hidden=false;
+}
 function buildProgramAssessment(programKey,checkpointTarget,answers={}){
   const p=PROGRAMS[programKey],cp=assessmentCopy(),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
   const tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);
@@ -9784,7 +9922,36 @@ function renderHistory(){
   if(!entries.length){wrap.innerHTML=`<div class="card"><h3>${tx('Aún no hay evidencias')}</h3><p class="muted">${lang==='en'?'Complete a practice in this program and it will appear here.':lang==='fr'?'Terminez une pratique de ce programme et elle apparaîtra ici.':'Completa una práctica de este programa y aparecerá aquí.'}</p></div>`;return}
   wrap.innerHTML=entries.map(e=>{const ans=e.answers.filter(Boolean),more=ans.slice(1);return `<article class="evidence history-entry"><small>${tx(`Día ${e.day}`)} · ${new Date(e.date).toLocaleDateString(nexoraLocale(),{month:'short',day:'numeric'})}</small><h3>${escapeHtml(tx(e.title))}</h3><p>${escapeHtml(ans[0]||'')}</p>${more.length?`<details><summary>${lang==='en'?'See full entry':lang==='fr'?'Voir l’entrée complète':'Ver registro completo'}</summary><div class="answers">${more.map(a=>`<div class="answer">${escapeHtml(a)}</div>`).join('')}</div></details>`:''}</article>`}).join('')
 }
-function renderProgress(){renderSwitch('progressSwitch');const started=Object.keys(PROGRAMS).filter(id=>{const state=pstate(id);return state.baselineDone||state.completed.length>0||state.entries.length>0}),progressId=started.includes(appState.selectedProgram)?appState.selectedProgram:(started[0]||appState.selectedProgram),p=program(progressId),s=pstate(progressId),max=totalDays(p),pct=Math.round(s.completed.length/max*100),lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es'),tx=v=>(typeof translatePattern==='function'?translatePattern(v,lang):v);const pt=document.getElementById('progressTitle');if(pt)pt.textContent=lang==='en'?'Your progress':lang==='fr'?'Votre progression':'Tu avance';document.getElementById('progressPct').textContent=pct+'%';document.getElementById('progressProgramLabel').textContent=lang==='en'?`${tx(p.name)} · ${s.completed.length} of ${max} days completed`:lang==='fr'?`${tx(p.name)} · ${s.completed.length} jours sur ${max} terminés`:`${tx(p.name)} · ${s.completed.length} de ${max} días completados`;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressFill').style.background=p.accent;document.getElementById('statDays').textContent=s.completed.length;document.getElementById('statEvidence').textContent=s.entries.length;document.getElementById('statThird').textContent=p.thirdMetric(s);document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);const milestones=p.milestones||[15,30,60,90];document.getElementById('milestones').innerHTML=milestones.map(m=>`<div class="milestone ${s.completed.includes(m)||s.completed.length>=m?'reached':''}"><b>${tx(`Día ${m}`)}</b><span class="tiny">${tx(s.completed.includes(m)||s.completed.length>=m?'Hito alcanzado':'Pendiente')}</span></div>`).join('');const st=stageForDay(p,Math.min(s.currentDay,max));document.getElementById('currentStageTitle').textContent=tx(st.name);document.getElementById('currentStageDesc').textContent=tx(st.desc)}
+function renderProgress(){
+  renderSwitch('progressSwitch');
+  const started=Object.keys(PROGRAMS).filter(function(id){
+    const state=pstate(id);
+    return state.baselineDone||state.completed.length>0||state.entries.length>0;
+  });
+  const progressId=started.includes(appState.selectedProgram)?appState.selectedProgram:(started[0]||appState.selectedProgram);
+  const p=program(progressId),s=pstate(progressId),max=totalDays(p),pct=Math.round(s.completed.length/max*100);
+  const lang=(typeof getNexoraLanguage==='function'?getNexoraLanguage():'es');
+  const tx=function(v){return typeof translatePattern==='function'?translatePattern(v,lang):v};
+  const pt=document.getElementById('progressTitle');
+  if(pt)pt.textContent=lang==='en'?'Your progress':(lang==='fr'?'Votre progression':'Tu avance');
+  document.getElementById('progressPct').textContent=pct+'%';
+  document.getElementById('progressProgramLabel').textContent=lang==='en'?(tx(p.name)+' · '+s.completed.length+' of '+max+' days completed'):(lang==='fr'?(tx(p.name)+' · '+s.completed.length+' jours sur '+max+' terminés'):(tx(p.name)+' · '+s.completed.length+' de '+max+' días completados'));
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressFill').style.background=p.accent;
+  document.getElementById('statDays').textContent=s.completed.length;
+  document.getElementById('statEvidence').textContent=s.entries.length;
+  document.getElementById('statThird').textContent=p.thirdMetric(s);
+  document.getElementById('statThirdLabel').textContent=tx(p.thirdMetricLabel);
+  const milestones=p.milestones||[15,30,60,90];
+  document.getElementById('milestones').innerHTML=milestones.map(function(m){
+    const reached=s.completed.includes(m)||s.completed.length>=m;
+    return '<div class="milestone '+(reached?'reached':'')+'"><b>'+escapeHtml(tx('Día '+m))+'</b><span class="tiny">'+escapeHtml(tx(reached?'Hito alcanzado':'Pendiente'))+'</span></div>';
+  }).join('');
+  const st=stageForDay(p,Math.min(s.currentDay,max));
+  document.getElementById('currentStageTitle').textContent=tx(st.name);
+  document.getElementById('currentStageDesc').textContent=tx(st.desc);
+  renderProgressChange(progressId);
+}
 function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function renderAll(){initializeExperienceCategories();renderHome();renderGoalsPlan();renderProgram();renderHistory();renderProgress();renderFeedback();updateAccountUI()}
 renderAll();
