@@ -8011,7 +8011,7 @@ const NEXORA_ASSESSMENT_CONFIG=Object.freeze({
     directions:['positive','positive','positive','positive','positive']
   }),
   confianza:Object.freeze({
-    enabled:false,instrumentVersion:1,checkpoints:[30,60,90],
+    enabled:false,instrumentVersion:2,checkpoints:[30,60,90],requiresFreshBaseline:true,
     directions:['positive','reverse','positive','positive','positive']
   }),
   enfoque:Object.freeze({
@@ -8068,7 +8068,7 @@ function assessmentTargetForProgress(checkpoints=[],furthestDay=0,completedTarge
 }
 function assessmentDueCheckpoint(programKey,rows=[],includeInactive=false){
   const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey];
-  if(!cfg||!s?.baselineDone||(!cfg.enabled&&!includeInactive))return null;
+  if(!cfg||!s?.baselineDone||(!cfg.enabled&&!includeInactive)||(!includeInactive&&cfg.requiresFreshBaseline))return null;
   const completedTargets=(rows||[])
     .filter(row=>row?.program_key===programKey&&Number(row?.instrument_version)===cfg.instrumentVersion)
     .map(row=>Number(row.checkpoint_target));
@@ -8251,7 +8251,7 @@ function renderProgressChange(programKey=appState?.selectedProgram){
   const cfg=assessmentConfig(programKey),s=appState?.programs?.[programKey],copy=progressChangeCopy();
   const preview=nexoraProgressChangePreview?.programKey===programKey?nexoraProgressChangePreview:null;
   const previewBaseline=preview?nexoraProgressChangePreviewBaseline:null;
-  if(!currentSession?.id||!cfg||(!cfg.enabled&&!preview)||(!s?.baselineDone&&!preview)){card.hidden=true;return}
+  if(!currentSession?.id||!cfg||(!cfg.enabled&&!preview)||(!s?.baselineDone&&!preview)||(cfg.requiresFreshBaseline&&!preview)){card.hidden=true;return}
   card.hidden=false;
   document.getElementById('progressChangeKicker').textContent=copy.kicker;
   document.getElementById('progressChangeTitle').textContent=copy.title;
@@ -8345,8 +8345,8 @@ function openTesterAssessment(){
   openModal('assessmentModal');
 }
 function testerProgressBaseline(programKey){
-  const s=appState?.programs?.[programKey];
-  if(s?.baselineDone&&assessmentValidateAnswers(programKey,s.baseline||{}))return {...s.baseline};
+  const s=appState?.programs?.[programKey],cfg=assessmentConfig(programKey);
+  if(!cfg?.requiresFreshBaseline&&s?.baselineDone&&assessmentValidateAnswers(programKey,s.baseline||{}))return {...s.baseline};
   const p=PROGRAMS?.[programKey];
   const answers={};
   (p?.baseline||[]).forEach(function(_,index){answers[index]=3});
