@@ -8083,9 +8083,10 @@ function assessmentCompare(programKey,currentAnswers={},baselineAnswers=appState
   cfg.directions.forEach((direction,index)=>{
     if(!direction)return;
     const start=baseline[index],now=current[index];
-    if(start==null||now==null)return;
+    const rawStart=Number(baselineAnswers?.[index]),rawNow=Number(currentAnswers?.[index]);
+    if(start==null||now==null||!Number.isInteger(rawStart)||!Number.isInteger(rawNow))return;
     const delta=now-start;
-    rows.push({index,start,now,delta,status:delta>0?'improved':delta<0?'attention':'same'});
+    rows.push({index,start,now,rawStart,rawNow,delta,status:delta>0?'improved':delta<0?'attention':'same'});
   });
   return {
     rows,
@@ -8290,9 +8291,9 @@ function renderProgressChange(programKey=appState?.selectedProgram){
     return '<div class="progress-change-row">'+
       '<div><div class="progress-change-label">'+escapeHtml(progressChangeIndicatorLabel(programKey,row.index))+'</div><span class="progress-change-status '+row.status+'">'+escapeHtml(statusLabel)+'</span></div>'+
       '<div class="progress-change-values">'+
-        '<div class="progress-change-value"><span>'+escapeHtml(copy.start)+'</span><b>'+row.start+'</b></div>'+
+        '<div class="progress-change-value"><span>'+escapeHtml(copy.start)+'</span><b>'+row.rawStart+'</b></div>'+
         '<span class="progress-change-arrow" aria-hidden="true">→</span>'+
-        '<div class="progress-change-value"><span>'+escapeHtml(copy.now)+'</span><b>'+row.now+'</b></div>'+
+        '<div class="progress-change-value"><span>'+escapeHtml(copy.now)+'</span><b>'+row.rawNow+'</b></div>'+
       '</div>'+
     '</div>';
   }).join('');
